@@ -19,6 +19,11 @@ from aeroragx.ingestion.ntrs import NTRSClient, records_to_json_rows
 
 app = typer.Typer(no_args_is_help=True, help="AeroRAG-X development CLI.")
 console = Console()
+from aeroragx.ingestion.acquisition import (
+    download_documents,
+    load_manifest,
+    write_download_receipts,
+)
 
 
 @app.command()
@@ -149,6 +154,93 @@ def ntrs_build_manifest(
     console.print(f"Saved [bold]{len(entries)}[/bold] unique records to {output}")
     console.print(f"Records with PDF links: {pdf_count}")
     console.print(f"Records with full-text links: {fulltext_count}")
+
+
+@app.command(name="ntrs-download-documents")
+def ntrs_download_documents(
+    manifest: Annotated[
+        Path,
+        typer.Option(
+            "--manifest",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help="Input NTRS JSONL manifest.",
+        ),
+    ] = Path("data/manifests/ntrs_v0_1.jsonl"),
+    documents_dir: Annotated[
+        Path,
+        typer.Option(
+            "--documents-dir",
+            dir_okay=True,
+            file_okay=False,
+            help="Directory for downloaded PDF files.",
+        ),
+    ] = Path("data/raw/ntrs/v0_1"),
+    receipts_output: Annotated[
+        Path,
+        typer.Option(
+            "--receipts-output",
+            dir_okay=False,
+            help="Output JSONL download-receipt manifest.",
+        ),
+    ] = Path("data/manifests/ntrs_v0_1_downloads.jsonl"),
+    limit: Annotated[
+        int,
+        typer.Option(
+            "--limit",
+            min=1,
+            help="Maximum number of PDFs to process.",
+        ),
+    ] = 10,
+    overwrite: Annotated[
+        bool,
+        typer.Option(
+            "--overwrite",
+            help="Download files even when they already exist.",
+        ),
+    ] = False,
+    config: Annotated[
+        Path,
+        typer.Option(
+            "--config",
+            "-c",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/base.yaml"),
+) -> None:
+    """Download NTRS PDFs and generate checksum receipts."""
+
+    settings = load_config(config)
+    entries = load_manifest(manifest)
+
+    console.print(f"Loaded [bold]{len(entries)}[/bold] manifest records.")
+    console.print(f"Processing up to [bold]{limit}[/bold] downloadable PDFs...")
+
+    receipts = download_documents(
+        entries=entries,
+        output_dir=documents_dir,
+        limit=limit,
+        timeout_seconds=settings.ntrs.timeout_seconds,
+        overwrite=overwrite,
+    )
+
+    write_download_receipts(
+        path=receipts_output,
+        receipts=receipts,
+    )
+
+    downloaded_count = sum(receipt.status == "downloaded" for receipt in receipts)
+    skipped_count = sum(receipt.status == "skipped" for receipt in receipts)
+    failed_count = sum(receipt.status == "failed" for receipt in receipts)
+
+    console.print()
+    console.print(f"Downloaded: {downloaded_count}")
+    console.print(f"Skipped: {skipped_count}")
+    console.print(f"Failed: {failed_count}")
+    console.print(f"Receipts: {receipts_output}")
 
 
 if __name__ == "__main__":
