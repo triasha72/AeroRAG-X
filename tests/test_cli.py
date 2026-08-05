@@ -33,3 +33,15 @@ def test_download_documents_command_is_registered() -> None:
     assert "manifest" in result.stdout
     assert "documents-dir" in result.stdout
     assert "receipts-output" in result.stdout
+
+
+def test_extract_pages_command_is_registered() -> None:
+    result = runner.invoke(
+        app,
+        ["ntrs-extract-pages", "--help"],
+    )
+
+    assert result.exit_code == 0
+    assert "receipts-input" in result.stdout
+    assert "pages-output" in result.stdout
+    assert "max-size-mb" in result.stdout
