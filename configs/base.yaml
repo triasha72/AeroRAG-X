@@ -1,0 +1,5 @@
+project_name: AeroRAG-X
+data_dir: data
+ntrs:
+  base_url: https://ntrs.nasa.gov/api
+  timeout_seconds: 30

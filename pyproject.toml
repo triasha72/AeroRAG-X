@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aeroragx"
+version = "0.1.0"
+description = "A grounded multimodal RAG system for aerospace technical knowledge."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Triasha Sarkar" }]
+dependencies = [
+  "httpx>=0.27,<1.0",
+  "pydantic>=2.8,<3.0",
+  "pyyaml>=6.0,<7.0",
+  "rich>=13.7,<15.0",
+  "typer>=0.12,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.11,<2.0",
+  "pytest>=8.3,<10.0",
+  "pytest-cov>=5.0,<8.0",
+  "respx>=0.21,<1.0",
+  "ruff>=0.6,<1.0",
+  "types-PyYAML",
+]
+
+[project.scripts]
+aeroragx = "aeroragx.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib -q"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["aeroragx"]
