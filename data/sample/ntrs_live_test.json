@@ -1,0 +1,69 @@
+[
+  {
+    "document_id": 20240015017,
+    "title": "Thermoacoustic Thermal Management for Electric Aircraft",
+    "abstract": "Electric aircraft research and development is on the rise, necessitating an avant-garde thermal management system to effectively dissipate and reuse the typically wasted low-grade thermal energy generated on electric aircraft. Hence, the Thermal Recovery Exergy Efficient System (TREES) was successfully modeled, designed, built, and tested at NASA Glenn Research Center (NASA GRC) to demonstrate a solution. TREES demonstrates the ability to transport and amplify acoustic energy over various distances, with minimal energy dissipation, while creating a thermoacoustic heat pump that can deliver and absorb thermal energy. The in-house rig is now being utilized as a diagnostics testbed to understand the underlying physics of traveling wave thermoacoustics and to enhance future thermal management technology development.",
+    "downloads_available": true,
+    "keywords": [
+      "Thermoacoustics",
+      "Electric Aircraft",
+      "Thermal Management"
+    ],
+    "subject_categories": [
+      "Aircraft Propulsion and Power"
+    ]
+  },
+  {
+    "document_id": 20240016372,
+    "title": "Thermoacoustic Thermal Management for Electric Aircraft",
+    "abstract": "",
+    "downloads_available": true,
+    "keywords": [
+      "Thermoacoustics",
+      "Electric Aircraft",
+      "Thermal Management"
+    ],
+    "subject_categories": [
+      "Aircraft Propulsion and Power"
+    ]
+  },
+  {
+    "document_id": 20220013008,
+    "title": " Optimizing Thermal Management Systems in Electric Aircraft",
+    "abstract": "The development of electric aircraft poses significant gains for the environment; however, the integration of high-power systems increases the number of heat sources that need to be managed in-flight.  This 30-minute session discusses the importance of robust thermal management systems and reviews new design concepts to improve overall aircraft efficiency.",
+    "downloads_available": true,
+    "keywords": [],
+    "subject_categories": [
+      "Aircraft Propulsion And Power"
+    ]
+  },
+  {
+    "document_id": 20205004982,
+    "title": "Solid-State Exergy Optimized Electric Aircraft Thermal and Fault Management",
+    "abstract": "Future air vehicles will increasingly incorporate electrical powertrains that require very tight system level integration of power, propulsion, thermal, fault protection, and airframe technologies. This paper provides an overview of a new category of thermal energy conversion technology that can be used to enable a fully solid-state integrated thermal and fault management electric aircraft protection system, while synergistically managing and recycling both the low-grade waste heat from electrical components and the high-grade waste heat from engine components. This is achieved with exergy amplification of the powertrain waste-heat, a new class of fast flight-weight breakers, new class of long variable conductance heat pipe with multiple switchable condensers, new class of turbofan integrated heat exchangers and a gradient-based powertrain system optimizer.",
+    "downloads_available": true,
+    "keywords": [
+      "safety",
+      "acoustic",
+      "propulsion"
+    ],
+    "subject_categories": [
+      "Aircraft Propulsion And Power",
+      "Aircraft Design, Testing And Performance"
+    ]
+  },
+  {
+    "document_id": 20220005430,
+    "title": "Thermal Management for Electrified Aircraft",
+    "abstract": "This presentation was given to the Ohio Federal Research Network (OFRN) in 2022. The intent of the presentation is to provide an overview of what our group at NASA GRC is doing in relation to thermal management of electrified aircraft, and to identify areas of collaboration with small businesses.",
+    "downloads_available": true,
+    "keywords": [
+      "Thermal Management",
+      "Electrified Aircraft"
+    ],
+    "subject_categories": [
+      "Fluid Mechanics And Thermodynamics",
+      "Aircraft Design, Testing And Performance"
+    ]
+  }
+]
