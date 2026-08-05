@@ -1,0 +1,4 @@
+version: "0.1"
+
+chunk_words: 300
+overlap_words: 60
