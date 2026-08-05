@@ -1,0 +1,15 @@
+corpus_name: electrified-aircraft-thermal-management
+version: "0.1"
+
+description: >-
+  NASA technical reports related to electrified aircraft propulsion,
+  thermal management, battery systems, fuel cells, and propulsion safety.
+
+queries:
+  - electric aircraft thermal management
+  - electrified aircraft propulsion
+  - aircraft battery thermal management
+  - fuel cell aircraft thermal management
+  - hybrid electric aircraft propulsion safety
+
+max_records_per_query: 25
