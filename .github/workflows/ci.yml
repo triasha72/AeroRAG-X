@@ -21,4 +21,6 @@ jobs:
       - name: Ruff lint
         run: ruff check .
       - name: Tests
-        run: pytest --cov=aeroragx --cov-report=term-missing
+        run: pytest --cov=aeroragx --cov-report=term-missing 
+      - name: Type check
+        run: mypy src/aeroragx
