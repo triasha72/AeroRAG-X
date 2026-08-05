@@ -10,6 +10,11 @@ from rich.table import Table
 
 from aeroragx import __version__
 from aeroragx.config import load_config
+from aeroragx.ingestion.corpus import (
+    build_manifest,
+    load_corpus_definition,
+    write_manifest,
+)
 from aeroragx.ingestion.ntrs import NTRSClient, records_to_json_rows
 
 app = typer.Typer(no_args_is_help=True, help="AeroRAG-X development CLI.")
@@ -77,6 +82,73 @@ def ntrs_search(
             "yes" if record.downloads_available else "no/unknown",
         )
     console.print(table)
+
+
+@app.command(name="ntrs-build-manifest")
+def ntrs_build_manifest(
+    corpus_config: Annotated[
+        Path,
+        typer.Option(
+            "--corpus-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help="YAML file defining the NTRS corpus.",
+        ),
+    ] = Path("configs/corpus_v0_1.yaml"),
+    output: Annotated[
+        Path,
+        typer.Option(
+            "--output",
+            "-o",
+            dir_okay=False,
+            help="JSONL manifest output path.",
+        ),
+    ] = Path("data/manifests/ntrs_v0_1.jsonl"),
+    config: Annotated[
+        Path,
+        typer.Option(
+            "--config",
+            "-c",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help="Base AeroRAG-X configuration.",
+        ),
+    ] = Path("configs/base.yaml"),
+) -> None:
+    """Build a deduplicated NASA NTRS metadata manifest."""
+
+    settings = load_config(config)
+    corpus_definition = load_corpus_definition(corpus_config)
+
+    console.print(
+        f"Building corpus: [bold]{corpus_definition.corpus_name}[/bold] "
+        f"v{corpus_definition.version}"
+    )
+    console.print(f"Running {len(corpus_definition.queries)} search queries...")
+
+    with NTRSClient(
+        base_url=settings.ntrs.base_url,
+        timeout_seconds=settings.ntrs.timeout_seconds,
+    ) as client:
+        entries = build_manifest(
+            client=client,
+            definition=corpus_definition,
+        )
+
+    write_manifest(
+        path=output,
+        entries=entries,
+    )
+
+    pdf_count = sum(entry.pdf_url is not None for entry in entries)
+    fulltext_count = sum(entry.fulltext_url is not None for entry in entries)
+
+    console.print()
+    console.print(f"Saved [bold]{len(entries)}[/bold] unique records to {output}")
+    console.print(f"Records with PDF links: {pdf_count}")
+    console.print(f"Records with full-text links: {fulltext_count}")
 
 
 if __name__ == "__main__":

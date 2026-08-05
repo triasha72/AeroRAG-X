@@ -10,3 +10,14 @@ def test_info_command() -> None:
 
     assert result.exit_code == 0
     assert "AeroRAG-X 0.1.0" in result.stdout
+
+
+def test_build_manifest_command_is_registered() -> None:
+    result = runner.invoke(
+        app,
+        ["ntrs-build-manifest", "--help"],
+    )
+
+    assert result.exit_code == 0
+    assert "corpus-config" in result.stdout
+    assert "output" in result.stdout
