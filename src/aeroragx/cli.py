@@ -24,6 +24,13 @@ from aeroragx.ingestion.ntrs import (
     NTRSClient,
     records_to_json_rows,
 )
+from aeroragx.processing.chunking import (
+    build_chunks,
+    load_chunking_config,
+    load_page_records,
+    write_chunk_records,
+    write_chunking_receipts,
+)
 from aeroragx.processing.pdf import (
     load_download_receipts,
     process_downloaded_pdfs,
@@ -324,6 +331,69 @@ def ntrs_extract_pages(
     console.print(f"Empty pages: {empty_page_count}")
     console.print(f"Pages output: {pages_output}")
     console.print(f"Extraction receipts: {extraction_output}")
+
+
+@app.command(name="ntrs-build-chunks")
+def ntrs_build_chunks(
+    pages_input: Annotated[
+        Path,
+        typer.Option(
+            "--pages-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/pages.jsonl"),
+    chunking_config: Annotated[
+        Path,
+        typer.Option(
+            "--chunking-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/chunking_v0_1.yaml"),
+    chunks_output: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    receipts_output: Annotated[
+        Path,
+        typer.Option(
+            "--receipts-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/manifests/ntrs_v0_1_chunking.jsonl"),
+) -> None:
+    """Create citation-preserving overlapping chunks."""
+
+    pages = load_page_records(pages_input)
+    config = load_chunking_config(chunking_config)
+
+    chunks, receipts = build_chunks(
+        pages=pages,
+        config=config,
+    )
+
+    write_chunk_records(
+        path=chunks_output,
+        chunks=chunks,
+    )
+    write_chunking_receipts(
+        path=receipts_output,
+        receipts=receipts,
+    )
+
+    console.print(f"Loaded pages: {len(pages)}")
+    console.print(f"Generated chunks: {len(chunks)}")
+    console.print(f"Documents: {len(receipts)}")
+    console.print(f"Chunk size: {config.chunk_words} words")
+    console.print(f"Overlap: {config.overlap_words} words")
+    console.print(f"Chunks output: {chunks_output}")
+    console.print(f"Receipts output: {receipts_output}")
 
 
 if __name__ == "__main__":
