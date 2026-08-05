@@ -1,4 +1,6 @@
-from click.testing import Result
+from click import Command
+from typer.core import TyperGroup
+from typer.main import get_command
 from typer.testing import CliRunner
 
 from aeroragx.cli import app
@@ -6,15 +8,23 @@ from aeroragx.cli import app
 runner = CliRunner()
 
 
-def invoke_help(command: str) -> Result:
-    """Invoke command help using a deterministic terminal width."""
+def get_subcommand(command_name: str) -> Command:
+    """Return a registered AeroRAG-X subcommand."""
 
-    return runner.invoke(
-        app,
-        [command, "--help"],
-        color=False,
-        terminal_width=240,
-    )
+    root_command = get_command(app)
+
+    assert isinstance(root_command, TyperGroup)
+    assert command_name in root_command.commands
+
+    return root_command.commands[command_name]
+
+
+def option_names(command_name: str) -> set[str]:
+    """Return the internal option names for a command."""
+
+    command = get_subcommand(command_name)
+
+    return {parameter.name for parameter in command.params if parameter.name is not None}
 
 
 def test_info_command() -> None:
@@ -22,34 +32,71 @@ def test_info_command() -> None:
         app,
         ["info"],
         color=False,
-        terminal_width=240,
     )
 
     assert result.exit_code == 0
     assert "AeroRAG-X 0.1.0" in result.stdout
 
 
-def test_build_manifest_command_is_registered() -> None:
-    result = invoke_help("ntrs-build-manifest")
+def test_expected_commands_are_registered() -> None:
+    root_command = get_command(app)
 
-    assert result.exit_code == 0
-    assert "--corpus-config" in result.stdout
-    assert "--output" in result.stdout
+    assert isinstance(root_command, TyperGroup)
+
+    expected_commands = {
+        "info",
+        "validate-config",
+        "ntrs-search",
+        "ntrs-build-manifest",
+        "ntrs-download-documents",
+        "ntrs-extract-pages",
+        "ntrs-build-chunks",
+    }
+
+    assert expected_commands <= set(root_command.commands)
 
 
-def test_download_documents_command_is_registered() -> None:
-    result = invoke_help("ntrs-download-documents")
+def test_build_manifest_options_are_registered() -> None:
+    names = option_names("ntrs-build-manifest")
 
-    assert result.exit_code == 0
-    assert "--manifest" in result.stdout
-    assert "--documents-dir" in result.stdout
-    assert "--receipts-output" in result.stdout
+    assert {
+        "corpus_config",
+        "output",
+        "config",
+    } <= names
 
 
-def test_extract_pages_command_is_registered() -> None:
-    result = invoke_help("ntrs-extract-pages")
+def test_download_options_are_registered() -> None:
+    names = option_names("ntrs-download-documents")
 
-    assert result.exit_code == 0
-    assert "--receipts-input" in result.stdout
-    assert "--pages-output" in result.stdout
-    assert "--max-size-mb" in result.stdout
+    assert {
+        "manifest",
+        "documents_dir",
+        "receipts_output",
+        "limit",
+        "overwrite",
+        "config",
+    } <= names
+
+
+def test_extract_pages_options_are_registered() -> None:
+    names = option_names("ntrs-extract-pages")
+
+    assert {
+        "receipts_input",
+        "pages_output",
+        "extraction_output",
+        "limit",
+        "max_size_mb",
+    } <= names
+
+
+def test_build_chunks_options_are_registered() -> None:
+    names = option_names("ntrs-build-chunks")
+
+    assert {
+        "pages_input",
+        "chunking_config",
+        "chunks_output",
+        "receipts_output",
+    } <= names
