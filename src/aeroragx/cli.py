@@ -10,20 +10,32 @@ from rich.table import Table
 
 from aeroragx import __version__
 from aeroragx.config import load_config
-from aeroragx.ingestion.corpus import (
-    build_manifest,
-    load_corpus_definition,
-    write_manifest,
-)
-from aeroragx.ingestion.ntrs import NTRSClient, records_to_json_rows
-
-app = typer.Typer(no_args_is_help=True, help="AeroRAG-X development CLI.")
-console = Console()
 from aeroragx.ingestion.acquisition import (
     download_documents,
     load_manifest,
     write_download_receipts,
 )
+from aeroragx.ingestion.corpus import (
+    build_manifest,
+    load_corpus_definition,
+    write_manifest,
+)
+from aeroragx.ingestion.ntrs import (
+    NTRSClient,
+    records_to_json_rows,
+)
+from aeroragx.processing.pdf import (
+    load_download_receipts,
+    process_downloaded_pdfs,
+    write_extraction_receipts,
+    write_page_records,
+)
+
+app = typer.Typer(
+    no_args_is_help=True,
+    help="AeroRAG-X development CLI.",
+)
+console = Console()
 
 
 @app.command()
@@ -241,6 +253,77 @@ def ntrs_download_documents(
     console.print(f"Skipped: {skipped_count}")
     console.print(f"Failed: {failed_count}")
     console.print(f"Receipts: {receipts_output}")
+
+
+@app.command(name="ntrs-extract-pages")
+def ntrs_extract_pages(
+    receipts_input: Annotated[
+        Path,
+        typer.Option(
+            "--receipts-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/manifests/ntrs_v0_1_downloads.jsonl"),
+    pages_output: Annotated[
+        Path,
+        typer.Option(
+            "--pages-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/pages.jsonl"),
+    extraction_output: Annotated[
+        Path,
+        typer.Option(
+            "--extraction-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/manifests/ntrs_v0_1_extraction.jsonl"),
+    limit: Annotated[
+        int,
+        typer.Option(
+            "--limit",
+            min=1,
+        ),
+    ] = 5,
+    max_size_mb: Annotated[
+        int,
+        typer.Option(
+            "--max-size-mb",
+            min=1,
+        ),
+    ] = 20,
+) -> None:
+    """Extract page-level text from downloaded PDFs."""
+
+    receipts = load_download_receipts(receipts_input)
+
+    pages, extraction_receipts = process_downloaded_pdfs(
+        receipts=receipts,
+        limit=limit,
+        max_size_bytes=(max_size_mb * 1024 * 1024),
+    )
+
+    write_page_records(
+        path=pages_output,
+        pages=pages,
+    )
+    write_extraction_receipts(
+        path=extraction_output,
+        receipts=extraction_receipts,
+    )
+
+    processed_count = sum(receipt.status == "processed" for receipt in extraction_receipts)
+    failed_count = sum(receipt.status == "failed" for receipt in extraction_receipts)
+    empty_page_count = sum(page.extraction_status == "empty" for page in pages)
+
+    console.print(f"Processed documents: {processed_count}")
+    console.print(f"Failed documents: {failed_count}")
+    console.print(f"Extracted pages: {len(pages)}")
+    console.print(f"Empty pages: {empty_page_count}")
+    console.print(f"Pages output: {pages_output}")
+    console.print(f"Extraction receipts: {extraction_output}")
 
 
 if __name__ == "__main__":
