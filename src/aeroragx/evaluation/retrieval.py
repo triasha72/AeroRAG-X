@@ -4,6 +4,7 @@ import json
 import math
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Protocol
 
 from pydantic import (
     BaseModel,
@@ -12,8 +13,35 @@ from pydantic import (
     model_validator,
 )
 
+from aeroragx.processing.chunking import ChunkRecord
 from aeroragx.retrieval.bm25 import BM25Index
-from aeroragx.retrieval.dense import DenseIndex
+
+
+class RetrievalHit(Protocol):
+    """Common interface required from a ranked retrieval hit."""
+
+    @property
+    def rank(self) -> int:
+        """Return the one-based result rank."""
+
+    @property
+    def score(self) -> float:
+        """Return the retriever-specific score."""
+
+    @property
+    def chunk(self) -> ChunkRecord:
+        """Return the retrieved citation-preserving chunk."""
+
+
+class RetrievalIndex(Protocol):
+    """Common search interface used by retrieval evaluation."""
+
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+    ) -> Sequence[RetrievalHit]:
+        """Return ranked retrieval hits for a query."""
 
 
 class EvaluationQuery(BaseModel):
@@ -94,13 +122,22 @@ class QueryEvaluation(BaseModel):
     relevant_chunk_count: int = Field(ge=1)
     retrieved_chunk_ids: list[str]
     relevant_retrieved_ids: list[str]
-    recall_at_5: float = Field(ge=0.0, le=1.0)
-    recall_at_10: float = Field(ge=0.0, le=1.0)
+    recall_at_5: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+    recall_at_10: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
     reciprocal_rank_at_10: float = Field(
         ge=0.0,
         le=1.0,
     )
-    ndcg_at_10: float = Field(ge=0.0, le=1.0)
+    ndcg_at_10: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
 
 
 class RetrievalEvaluationReport(BaseModel):
@@ -112,10 +149,22 @@ class RetrievalEvaluationReport(BaseModel):
 
     model_name: str
     query_count: int = Field(ge=1)
-    recall_at_5: float = Field(ge=0.0, le=1.0)
-    recall_at_10: float = Field(ge=0.0, le=1.0)
-    mrr_at_10: float = Field(ge=0.0, le=1.0)
-    ndcg_at_10: float = Field(ge=0.0, le=1.0)
+    recall_at_5: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+    recall_at_10: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+    mrr_at_10: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+    ndcg_at_10: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
     per_query: list[QueryEvaluation]
 
 
@@ -214,6 +263,9 @@ def reciprocal_rank_at_k(
 ) -> float:
     """Calculate reciprocal rank of the first relevant hit."""
 
+    if k < 1:
+        raise ValueError("k must be at least 1.")
+
     relevant = set(relevant_chunk_ids)
 
     for rank, chunk_id in enumerate(
@@ -232,6 +284,9 @@ def ndcg_at_k(
     k: int,
 ) -> float:
     """Calculate binary normalized discounted gain."""
+
+    if k < 1:
+        raise ValueError("k must be at least 1.")
 
     relevant = set(relevant_chunk_ids)
 
@@ -268,7 +323,7 @@ def build_bm25_candidates(
     queries: Sequence[EvaluationQuery],
     top_k: int = 20,
 ) -> list[QueryCandidates]:
-    """Generate candidate pools for human annotation."""
+    """Generate BM25 candidate pools for annotation."""
 
     if top_k < 1:
         raise ValueError("top_k must be at least 1.")
@@ -285,12 +340,12 @@ def build_bm25_candidates(
             CandidateChunk(
                 rank=hit.rank,
                 score=hit.score,
-                chunk_id=hit.chunk.chunk_id,
-                document_id=hit.chunk.document_id,
-                page_start=hit.chunk.page_start,
-                page_end=hit.chunk.page_end,
+                chunk_id=(hit.chunk.chunk_id),
+                document_id=(hit.chunk.document_id),
+                page_start=(hit.chunk.page_start),
+                page_end=(hit.chunk.page_end),
                 text_preview=" ".join(hit.chunk.text.split())[:700],
-                citation_url=hit.chunk.citation_url,
+                citation_url=(hit.chunk.citation_url),
             )
             for hit in hits
         ]
@@ -306,30 +361,74 @@ def build_bm25_candidates(
     return query_candidates
 
 
-def evaluate_bm25(
-    index: BM25Index,
+def _build_judgment_lookup(
     queries: Sequence[EvaluationQuery],
     judgments: Sequence[RelevanceJudgment],
-    top_k: int = 10,
-) -> RetrievalEvaluationReport:
-    """Evaluate BM25 using human relevance judgments."""
+) -> dict[str, RelevanceJudgment]:
+    """Validate inputs and map query IDs to judgments."""
 
-    if top_k < 10:
-        raise ValueError("top_k must be at least 10.")
+    if not queries:
+        raise ValueError("At least one evaluation query is required.")
+
+    query_ids = [query.query_id for query in queries]
+
+    if len(query_ids) != len(set(query_ids)):
+        raise ValueError("Evaluation query IDs must be unique.")
+
+    judgment_ids = [judgment.query_id for judgment in judgments]
+
+    if len(judgment_ids) != len(set(judgment_ids)):
+        raise ValueError("Relevance judgment IDs must be unique.")
 
     judgment_by_query = {judgment.query_id: judgment for judgment in judgments}
 
-    query_ids = {query.query_id for query in queries}
-    judgment_ids = set(judgment_by_query)
+    query_id_set = set(query_ids)
+    judgment_id_set = set(judgment_by_query)
 
-    missing = query_ids - judgment_ids
-    unknown = judgment_ids - query_ids
+    missing = query_id_set - judgment_id_set
+    unknown = judgment_id_set - query_id_set
 
     if missing:
         raise ValueError("Missing relevance judgments for: " + ", ".join(sorted(missing)))
 
     if unknown:
         raise ValueError("Judgments contain unknown queries: " + ", ".join(sorted(unknown)))
+
+    return judgment_by_query
+
+
+def _mean_metric(
+    values: Sequence[float],
+) -> float:
+    """Return a rounded arithmetic mean."""
+
+    return round(
+        sum(values) / len(values),
+        6,
+    )
+
+
+def evaluate_retriever(
+    index: RetrievalIndex,
+    model_name: str,
+    queries: Sequence[EvaluationQuery],
+    judgments: Sequence[RelevanceJudgment],
+    top_k: int = 10,
+) -> RetrievalEvaluationReport:
+    """Evaluate any compatible retrieval index."""
+
+    normalized_model_name = model_name.strip()
+
+    if not normalized_model_name:
+        raise ValueError("model_name must not be empty.")
+
+    if top_k < 10:
+        raise ValueError("top_k must be at least 10.")
+
+    judgment_by_query = _build_judgment_lookup(
+        queries,
+        judgments,
+    )
 
     per_query: list[QueryEvaluation] = []
 
@@ -342,6 +441,9 @@ def evaluate_bm25(
         )
 
         retrieved_chunk_ids = [hit.chunk.chunk_id for hit in hits]
+
+        if len(retrieved_chunk_ids) != len(set(retrieved_chunk_ids)):
+            raise ValueError(f"Retriever returned duplicate chunks for query {query.query_id}.")
 
         relevant_set = set(judgment.relevant_chunk_ids)
 
@@ -381,128 +483,48 @@ def evaluate_bm25(
             )
         )
 
-    query_count = len(per_query)
-
     return RetrievalEvaluationReport(
-        model_name="bm25",
-        query_count=query_count,
-        recall_at_5=round(
-            sum(result.recall_at_5 for result in per_query) / query_count,
-            6,
-        ),
-        recall_at_10=round(
-            sum(result.recall_at_10 for result in per_query) / query_count,
-            6,
-        ),
-        mrr_at_10=round(
-            sum(result.reciprocal_rank_at_10 for result in per_query) / query_count,
-            6,
-        ),
-        ndcg_at_10=round(
-            sum(result.ndcg_at_10 for result in per_query) / query_count,
-            6,
-        ),
+        model_name=normalized_model_name,
+        query_count=len(per_query),
+        recall_at_5=_mean_metric([result.recall_at_5 for result in per_query]),
+        recall_at_10=_mean_metric([result.recall_at_10 for result in per_query]),
+        mrr_at_10=_mean_metric([result.reciprocal_rank_at_10 for result in per_query]),
+        ndcg_at_10=_mean_metric([result.ndcg_at_10 for result in per_query]),
         per_query=per_query,
     )
 
 
-def evaluate_dense(
-    index: DenseIndex,
+def evaluate_bm25(
+    index: RetrievalIndex,
     queries: Sequence[EvaluationQuery],
     judgments: Sequence[RelevanceJudgment],
     top_k: int = 10,
 ) -> RetrievalEvaluationReport:
-    """Evaluate dense retrieval using human judgments."""
+    """Evaluate BM25 using relevance judgments."""
 
-    if top_k < 10:
-        raise ValueError("top_k must be at least 10.")
+    return evaluate_retriever(
+        index=index,
+        model_name="bm25",
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
+    )
 
-    judgment_by_query = {judgment.query_id: judgment for judgment in judgments}
 
-    query_ids = {query.query_id for query in queries}
-    judgment_ids = set(judgment_by_query)
+def evaluate_dense(
+    index: RetrievalIndex,
+    queries: Sequence[EvaluationQuery],
+    judgments: Sequence[RelevanceJudgment],
+    top_k: int = 10,
+) -> RetrievalEvaluationReport:
+    """Evaluate dense retrieval using relevance judgments."""
 
-    missing = query_ids - judgment_ids
-    unknown = judgment_ids - query_ids
-
-    if missing:
-        raise ValueError("Missing relevance judgments for: " + ", ".join(sorted(missing)))
-
-    if unknown:
-        raise ValueError("Judgments contain unknown queries: " + ", ".join(sorted(unknown)))
-
-    per_query: list[QueryEvaluation] = []
-
-    for query in queries:
-        judgment = judgment_by_query[query.query_id]
-
-        hits = index.search(
-            query=query.query,
-            top_k=top_k,
-        )
-
-        retrieved_chunk_ids = [hit.chunk.chunk_id for hit in hits]
-
-        relevant_set = set(judgment.relevant_chunk_ids)
-
-        relevant_retrieved_ids = [
-            chunk_id for chunk_id in retrieved_chunk_ids if chunk_id in relevant_set
-        ]
-
-        per_query.append(
-            QueryEvaluation(
-                query_id=query.query_id,
-                query=query.query,
-                relevant_chunk_count=len(relevant_set),
-                retrieved_chunk_ids=(retrieved_chunk_ids),
-                relevant_retrieved_ids=(relevant_retrieved_ids),
-                recall_at_5=recall_at_k(
-                    retrieved_chunk_ids,
-                    judgment.relevant_chunk_ids,
-                    5,
-                ),
-                recall_at_10=recall_at_k(
-                    retrieved_chunk_ids,
-                    judgment.relevant_chunk_ids,
-                    10,
-                ),
-                reciprocal_rank_at_10=(
-                    reciprocal_rank_at_k(
-                        retrieved_chunk_ids,
-                        judgment.relevant_chunk_ids,
-                        10,
-                    )
-                ),
-                ndcg_at_10=ndcg_at_k(
-                    retrieved_chunk_ids,
-                    judgment.relevant_chunk_ids,
-                    10,
-                ),
-            )
-        )
-
-    query_count = len(per_query)
-
-    return RetrievalEvaluationReport(
+    return evaluate_retriever(
+        index=index,
         model_name="dense",
-        query_count=query_count,
-        recall_at_5=round(
-            sum(result.recall_at_5 for result in per_query) / query_count,
-            6,
-        ),
-        recall_at_10=round(
-            sum(result.recall_at_10 for result in per_query) / query_count,
-            6,
-        ),
-        mrr_at_10=round(
-            sum(result.reciprocal_rank_at_10 for result in per_query) / query_count,
-            6,
-        ),
-        ndcg_at_10=round(
-            sum(result.ndcg_at_10 for result in per_query) / query_count,
-            6,
-        ),
-        per_query=per_query,
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
     )
 
 
