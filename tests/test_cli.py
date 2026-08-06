@@ -52,6 +52,8 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-extract-pages",
         "ntrs-build-chunks",
         "ntrs-bm25-search",
+        "ntrs-build-evaluation-candidates",
+        "ntrs-evaluate-bm25",
     }
 
     assert expected_commands <= set(root_command.commands)
@@ -112,4 +114,29 @@ def test_bm25_search_options_are_registered() -> None:
         "bm25_config",
         "top_k",
         "output",
+    } <= names
+
+
+def test_evaluation_candidate_options() -> None:
+    names = option_names("ntrs-build-evaluation-candidates")
+
+    assert {
+        "queries_input",
+        "chunks_input",
+        "bm25_config",
+        "top_k",
+        "output",
+    } <= names
+
+
+def test_evaluate_bm25_options() -> None:
+    names = option_names("ntrs-evaluate-bm25")
+
+    assert {
+        "queries_input",
+        "qrels_input",
+        "chunks_input",
+        "bm25_config",
+        "top_k",
+        "report_output",
     } <= names
