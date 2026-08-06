@@ -56,6 +56,7 @@ The small query count makes aggregate scores sensitive to individual relevance d
 - `artifacts/evaluation/dense_v0_1.json`
 - `artifacts/evaluation/bm25_v0_2.json`
 - `artifacts/evaluation/dense_v0_2.json`
+- `artifacts/evaluation/hybrid_v0_2.json`
 
 ---
 
@@ -101,7 +102,7 @@ For every query:
 8. order blinded candidates deterministically using SHA-256 and shuffle seed `42`;
 9. assign a binary relevance label to every candidate;
 10. generate `qrels_v0_2.jsonl`;
-11. evaluate BM25 and dense retrieval against the same relevance set.
+11. evaluate BM25, dense retrieval, and Hybrid RRF against the same relevance set.
 
 ### v0.2 counts
 
@@ -139,6 +140,11 @@ A candidate is non-relevant when it:
 |---|---:|---:|---:|---:|
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+
+Hybrid RRF uses fixed parameters (`rrf_k=60`, BM25 depth `50`, dense
+depth `50`) and combines source ranks rather than raw retrieval scores.
+It has not been tuned against this eight-query benchmark.
 
 ---
 
@@ -246,6 +252,23 @@ aeroragx ntrs-evaluate-dense \
   --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
   --top-k 10 \
   --report-output artifacts/evaluation/dense_v0_2.json
+```
+
+### Evaluate Hybrid RRF
+
+```bash
+aeroragx ntrs-evaluate-hybrid \
+  --queries-input data/evaluation/queries_v0_1.jsonl \
+  --qrels-input data/evaluation/qrels_v0_2.jsonl \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --top-k 10 \
+  --report-output artifacts/evaluation/hybrid_v0_2.json
 ```
 
 ---
