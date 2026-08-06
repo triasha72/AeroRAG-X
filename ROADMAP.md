@@ -11,6 +11,7 @@ Reliable corpus
 → pooled evaluation
 → shared evaluation interfaces
 → hybrid retrieval
+→ cross-encoder reranking
 → grounded generation
 → multimodal retrieval
 → deployment
@@ -32,6 +33,8 @@ The repository currently includes:
 - exact dense-vector search over 3,233 chunks
 - shared retrieval interfaces and generic evaluation
 - reciprocal-rank-fusion hybrid retrieval
+- cross-encoder reranking over bounded hybrid candidate sets
+- measured scoring-only reranker latency
 - deterministic BM25+dense candidate pooling
 - blinded annotation records
 - pooled `v0.2` relevance judgments
@@ -39,7 +42,7 @@ The repository currently includes:
 - command-line workflows
 - automated tests, formatting, linting, type checking, and CI
 
-Shared retrieval evaluation and reciprocal-rank-fusion hybrid retrieval are complete. The immediate priority is cross-encoder reranking over hybrid candidates, followed by grounded answer generation.
+Shared evaluation, Hybrid RRF, and cross-encoder reranking are complete. The immediate priority is grounded answer generation with structured claims, citations, and insufficient-evidence behavior.
 
 ---
 
@@ -206,6 +209,8 @@ Shared retrieval evaluation and reciprocal-rank-fusion hybrid retrieval are comp
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
 | Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
 Annotation limitation: the initial labels were produced through conservative assistant-supported review of candidate text previews. An independent second-pass audit using fuller source context remains required before publication-grade claims.
 
@@ -268,16 +273,55 @@ they have not been tuned on the eight-query benchmark.
 
 ## Phase 8 — Cross-encoder reranking
 
-- [ ] Select a cross-encoder reranking model
-- [ ] Rerank the top hybrid candidates
-- [ ] Preserve original BM25, dense, and hybrid ranks
-- [ ] Add reranking configuration
-- [ ] Add reranking CLI
-- [ ] Add deterministic tests with a fake scorer
-- [ ] Measure reranking latency
-- [ ] Evaluate reranked Recall, MRR, and NDCG
-- [ ] Compare top-10 and top-20 reranking depths
-- [ ] Record model and hardware requirements
+- [x] Select a cross-encoder reranking model
+- [x] Rerank the top hybrid candidates
+- [x] Preserve original BM25, dense, and hybrid ranks
+- [x] Add reranking configuration
+- [x] Add reranking CLI
+- [x] Add deterministic tests with a fake scorer
+- [x] Measure reranking latency
+- [x] Evaluate reranked Recall, MRR, and NDCG
+- [x] Compare top-10 and top-20 reranking depths
+- [x] Record model and hardware requirements
+- [ ] Evaluate additional models on a separate development set
+- [ ] Compare CPU, MPS, and CUDA latency on documented hardware
+
+Baseline configuration:
+
+```yaml
+version: "0.1"
+model_name: "cross-encoder/ms-marco-MiniLM-L6-v2"
+candidate_top_k: 20
+default_top_k: 10
+batch_size: 16
+max_length: null
+device: "cpu"
+show_progress_bar: false
+```
+
+#### Initial reranker results
+
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
+
+The top-20 baseline improves MRR@10 and NDCG@10 over Hybrid RRF and
+can promote relevant candidates from Hybrid ranks 11–20 into the final
+top 10. BM25 retains the strongest overall recall on the current
+eight-query benchmark.
+
+#### CPU latency baseline
+
+| Field | Value |
+|---|---:|
+| Query count | 8 |
+| Scored pairs | 160 |
+| Total scoring seconds | 3.170787 |
+| Milliseconds per pair | 19.817420 |
+
+Hardware: MacBook Air, CPU baseline. Timing covers
+cross-encoder scoring only.
 
 ---
 
@@ -415,17 +459,18 @@ retrieval_metadata
 
 ## Immediate next milestone
 
-The next milestone is cross-encoder reranking over the Hybrid RRF
-candidate set:
+The next milestone is grounded answer generation over reranked,
+citation-preserving evidence:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 
-git switch -c feat/cross-encoder-reranking
-git push -u origin feat/cross-encoder-reranking
+git switch -c feat/grounded-answer-generation
+git push -u origin feat/grounded-answer-generation
 ```
 
-The reranking milestone should preserve BM25, dense, and hybrid ranks,
-score only a limited hybrid candidate set, measure latency, and evaluate
-the reranked results against `qrels_v0_2.jsonl`.
+The milestone should introduce an LLM-provider abstraction, a structured
+answer schema, claim-level citations, token-budget management,
+insufficient-evidence behavior, deterministic fake-provider tests, and a
+generation CLI without weakening retrieval provenance.

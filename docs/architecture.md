@@ -40,6 +40,9 @@ NASA Technical Reports Server
        Hybrid retrieval
                |
                v
+ Cross-encoder reranking
+               |
+               v
  Generic retrieval evaluation
                |
                v
@@ -210,6 +213,45 @@ Dense depth: 50
 Default output depth: 10
 ```
 
+### Cross-encoder reranking
+
+The reranking layer provides:
+
+- bounded reranking of Hybrid RRF candidates
+- joint query–chunk cross-encoder scoring
+- preservation of BM25, dense, and hybrid provenance
+- support for finite positive and negative raw logits
+- deterministic tie-breaking using Hybrid RRF rank and chunk ID
+- scoring-only latency measurement
+- generic evaluation compatibility
+
+Primary module and configuration:
+
+```text
+src/aeroragx/retrieval/reranker.py
+configs/reranker_v0_1.yaml
+```
+
+Fixed baseline:
+
+```text
+Model: cross-encoder/ms-marco-MiniLM-L6-v2
+Candidate depth: 20
+Returned depth: 10
+Batch size: 16
+Device: CPU
+```
+
+Measured scoring-only latency:
+
+```text
+Queries: 8
+Pairs: 160
+Total seconds: 3.170787
+Milliseconds per pair: 19.817420
+Hardware: MacBook Air, CPU baseline
+```
+
 ### Retrieval evaluation
 
 The evaluation layer provides:
@@ -227,6 +269,8 @@ The evaluation layer provides:
 - BM25 evaluation
 - dense evaluation
 - Hybrid RRF evaluation
+- cross-encoder reranker evaluation
+- top-10 and top-20 candidate-depth comparison
 
 Primary module:
 
@@ -242,6 +286,9 @@ artifacts/evaluation/dense_v0_1.json
 artifacts/evaluation/bm25_v0_2.json
 artifacts/evaluation/dense_v0_2.json
 artifacts/evaluation/hybrid_v0_2.json
+artifacts/evaluation/reranker_top10_v0_2.json
+artifacts/evaluation/reranker_top20_v0_2.json
+artifacts/evaluation/reranker_latency_v0_1.json
 ```
 
 ---
@@ -303,11 +350,14 @@ and Hybrid RRF are evaluated against the same qrels.
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
 | Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
-Hybrid RRF improves early relevant-result placement as measured by
-MRR@10, while BM25 retains higher recall and NDCG on this small
-benchmark. The initial labels were produced from candidate previews and
-require an independent second-pass audit before publication-grade use.
+The top-20 reranker produces the highest MRR@10 and NDCG@10 among
+the implemented retrieval stages and improves Recall@10 over Hybrid RRF.
+BM25 retains the highest overall Recall@5 and Recall@10. The initial
+labels were produced from candidate previews and require an independent
+second-pass audit before publication-grade use.
 
 ## Design principles
 
@@ -340,8 +390,8 @@ Future answers must:
 
 ## Next architectural milestone
 
-The next component is cross-encoder reranking over a bounded number of
-Hybrid RRF candidates:
+The next component is grounded answer generation over the reranked,
+citation-preserving evidence set:
 
 ```text
 BM25 retrieval -------+
@@ -349,24 +399,28 @@ BM25 retrieval -------+
 Dense retrieval ------+--> Reciprocal Rank Fusion
                                       |
                                       v
-                              Top hybrid candidates
+                             Hybrid candidates
                                       |
                                       v
-                              Cross-encoder scorer
+                         Cross-encoder reranking
                                       |
                                       v
-                               Reranked evidence
+                             Reranked evidence
                                       |
                                       v
-                         Generic retrieval evaluation
+                         Grounded LLM generation
+                                      |
+                                      v
+                     Claims + citations + refusal
 ```
 
-The reranker must preserve:
+The generation layer must preserve:
 
-- original BM25 rank and score;
-- original dense rank and score;
-- Hybrid RRF rank and score;
-- chunk, document, page, checksum, and citation provenance;
-- deterministic output when model scores are tied.
+- chunk, document, page, checksum, and URL provenance;
+- final reranker rank and score;
+- original Hybrid RRF, BM25, and dense ranks and scores;
+- explicit claim-to-evidence relationships;
+- an insufficient-evidence state;
+- deterministic tests through a fake provider.
 
-The reranking milestone will precede grounded answer generation.
+Grounded generation will be evaluated separately from retrieval.

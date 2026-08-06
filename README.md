@@ -12,7 +12,8 @@ Every retrieved result preserves its source document, page range, NASA citation 
 
 ## Current status
 
-AeroRAG-X currently implements an end-to-end text-retrieval and pooled-evaluation pipeline over a curated NASA NTRS corpus:
+AeroRAG-X currently implements an end-to-end text-retrieval and
+pooled-evaluation pipeline over a curated NASA NTRS corpus:
 
 ```text
 NASA NTRS metadata
@@ -40,7 +41,10 @@ BM25 lexical retrieval     Dense semantic retrieval
         Reciprocal Rank Fusion
                      |
                      v
-              Hybrid ranking
+           Hybrid top-k candidates
+                     |
+                     v
+       Cross-encoder reranking
                      |
                      v
        Generic retrieval evaluation
@@ -62,9 +66,11 @@ Implemented capabilities include:
 - Sentence Transformer dense retrieval
 - persistent NumPy embedding indexes
 - shared retrieval-hit and retrieval-index protocols
-- generic BM25, dense, and hybrid evaluation
+- generic BM25, dense, hybrid, and reranker evaluation
 - reciprocal-rank-fusion hybrid retrieval
-- preserved BM25 and dense source ranks and scores
+- cross-encoder reranking over bounded hybrid candidates
+- preserved BM25, dense, hybrid, and reranker provenance
+- scoring-only reranker latency measurement
 - curated aerospace evaluation queries
 - deterministic BM25+dense candidate pooling
 - deduplication by `chunk_id`
@@ -76,7 +82,10 @@ Implemented capabilities include:
 - Typer command-line interface
 - Ruff, pytest, mypy, coverage, and GitHub Actions
 
-The retrieval stack now includes a shared evaluation interface and reciprocal-rank-fusion hybrid search. The next major milestone is cross-encoder reranking over the hybrid candidate set.
+The retrieval stack now includes lexical retrieval, dense retrieval,
+reciprocal-rank fusion, and cross-encoder reranking. The next major
+milestone is grounded answer generation with claim-level citations and
+insufficient-evidence behavior.
 
 ---
 
@@ -84,7 +93,8 @@ The retrieval stack now includes a shared evaluation interface and reciprocal-ra
 
 ### Benchmark v0.1
 
-The original benchmark contains eight aerospace queries and chunk-level relevance judgments selected from a BM25-generated candidate pool.
+The original benchmark contains eight aerospace queries and chunk-level
+relevance judgments selected from a BM25-generated candidate pool.
 
 | Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
 |---|---:|---:|---:|---:|
@@ -93,11 +103,14 @@ The original benchmark contains eight aerospace queries and chunk-level relevanc
 
 #### Limitation
 
-The `v0.1` relevance judgments were created from BM25 candidates only. This can favor BM25 because relevant chunks retrieved only by dense search were absent from the annotation pool.
+The `v0.1` relevance judgments were created from BM25 candidates only.
+This can favor BM25 because relevant chunks retrieved only by dense
+search were absent from the annotation pool.
 
 ### Pooled benchmark v0.2
 
-The `v0.2` benchmark pools results from both retrievers before relevance assessment.
+The `v0.2` benchmark pools results from both retrievers before relevance
+assessment.
 
 | Property | Value |
 |---|---:|
@@ -115,30 +128,32 @@ The protocol:
 1. retrieve the top 20 BM25 candidates for every query;
 2. retrieve the top 20 dense candidates for every query;
 3. combine and deduplicate candidates by `chunk_id`;
-4. preserve retriever identity, rank, and score only in an internal record;
+4. preserve retriever identity, rank, and score only internally;
 5. carry forward relevant `v0.1` chunks for re-review;
 6. assign deterministic blinded order using SHA-256 and seed `42`;
-7. label each blinded candidate as relevant or non-relevant;
+7. label each blinded candidate;
 8. generate `qrels_v0_2.jsonl`;
-9. re-evaluate BM25 and dense retrieval against the same pooled judgments.
+9. evaluate all retrieval stages against the same judgments.
 
 | Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
 |---|---:|---:|---:|---:|
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
 | Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
-The fixed Hybrid RRF baseline achieves the highest MRR@10 of the three
-retrievers, while BM25 retains the highest Recall@5, Recall@10, and
-NDCG@10. On the eight-query benchmark, hybrid retrieval is strongest on
-early relevant-result placement rather than total relevant-result recall.
+The fixed top-20 cross-encoder baseline achieves the highest MRR@10 and
+NDCG@10 among the current retrieval stages and improves Recall@10
+relative to Hybrid RRF. BM25 retains the highest overall Recall@5 and
+Recall@10 on this eight-query benchmark.
 
-Query-level inspection shows strong hybrid Recall@10 for `q001` and
-`q002`, but no relevant result in the top 10 for `q004`. For `q008`, the
-first relevant result appears at rank 9. These results motivate
-cross-encoder reranking and a larger independently audited query set.
-They should not be interpreted as a definitive ranking of retrieval
-methods.
+Reranking only the Hybrid top 10 changes ordering but cannot recover
+relevant chunks outside that candidate set. Reranking the Hybrid top 20
+can promote relevant chunks from ranks 11–20 into the final top 10.
+
+These are fixed exploratory baselines. The model, candidate depth, and
+batch size were not tuned on the eight-query benchmark.
 
 Benchmark artifacts:
 
@@ -148,6 +163,9 @@ artifacts/evaluation/dense_v0_1.json
 artifacts/evaluation/bm25_v0_2.json
 artifacts/evaluation/dense_v0_2.json
 artifacts/evaluation/hybrid_v0_2.json
+artifacts/evaluation/reranker_top10_v0_2.json
+artifacts/evaluation/reranker_top20_v0_2.json
+artifacts/evaluation/reranker_latency_v0_1.json
 ```
 
 Evaluation data:
@@ -163,7 +181,10 @@ data/evaluation/qrels_v0_2.jsonl
 
 ### Annotation-quality note
 
-The initial `v0.2` labels were assigned through a conservative assistant-supported review of the stored text previews. Ambiguous candidates were generally marked non-relevant unless the preview contained substantive evidence for the query. The dataset should receive an independent second-pass audit, preferably with full-page or full-document context, before it is presented as a publication-grade benchmark.
+The initial `v0.2` labels were assigned through conservative
+assistant-supported review of stored text previews. An independent
+second-pass audit with fuller source context remains required before
+publication-grade use.
 
 ---
 
@@ -203,14 +224,18 @@ AeroRAG-X/
 │       ├── dense_v0_1.json
 │       ├── bm25_v0_2.json
 │       ├── dense_v0_2.json
-│       └── hybrid_v0_2.json
+│       ├── hybrid_v0_2.json
+│       ├── reranker_top10_v0_2.json
+│       ├── reranker_top20_v0_2.json
+│       └── reranker_latency_v0_1.json
 ├── configs/
 │   ├── base.yaml
 │   ├── bm25_v0_1.yaml
 │   ├── chunking_v0_1.yaml
 │   ├── corpus_v0_1.yaml
 │   ├── dense_v0_1.yaml
-│   └── hybrid_v0_1.yaml
+│   ├── hybrid_v0_1.yaml
+│   └── reranker_v0_1.yaml
 ├── data/
 │   ├── evaluation/
 │   │   ├── README.md
@@ -239,7 +264,8 @@ AeroRAG-X/
 │       ├── retrieval/
 │       │   ├── bm25.py
 │       │   ├── dense.py
-│       │   └── hybrid.py
+│       │   ├── hybrid.py
+│       │   └── reranker.py
 │       ├── cli.py
 │       └── config.py
 ├── tests/
@@ -385,6 +411,27 @@ Hybrid retrieval combines source ranks using Reciprocal Rank Fusion. It
 preserves BM25 and dense scores for provenance but does not add or
 normalize those incomparable raw scores.
 
+### Cross-encoder reranked search
+
+```bash
+aeroragx ntrs-reranker-search \
+  --query "How can thermal runaway spread between aircraft battery cells?" \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --reranker-config configs/reranker_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --candidate-top-k 20 \
+  --top-k 10
+```
+
+The cross-encoder scores query–chunk pairs jointly and preserves the
+original BM25, dense, and Hybrid RRF ranks and scores. Raw finite logits,
+including negative values, are retained for provenance.
+
 ---
 
 ## Retrieval evaluation workflow
@@ -458,6 +505,44 @@ aeroragx ntrs-evaluate-hybrid \
   --report-output artifacts/evaluation/hybrid_v0_2.json
 ```
 
+### Evaluate top-20 cross-encoder reranking on v0.2
+
+```bash
+aeroragx ntrs-evaluate-reranker \
+  --queries-input data/evaluation/queries_v0_1.jsonl \
+  --qrels-input data/evaluation/qrels_v0_2.jsonl \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --reranker-config configs/reranker_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --candidate-top-k 20 \
+  --top-k 10 \
+  --report-output artifacts/evaluation/reranker_top20_v0_2.json \
+  --latency-output artifacts/evaluation/reranker_latency_v0_1.json \
+  --hardware-note "MacBook Air, CPU baseline"
+```
+
+### Reranker latency baseline
+
+| Setting | Value |
+|---|---|
+| Model | `cross-encoder/ms-marco-MiniLM-L6-v2` |
+| Device | `cpu` |
+| Candidate depth | 20 |
+| Batch size | 16 |
+| Evaluation queries | 8 |
+| Query–chunk pairs | 160 |
+| Scoring time | 3.170787 seconds |
+| Mean scoring latency | 19.817420 ms/pair |
+| Hardware note | MacBook Air, CPU baseline |
+
+The timing measures cross-encoder scoring only. It excludes corpus
+loading, BM25 construction, dense-index loading, Hybrid RRF candidate
+generation, and result serialization.
 ---
 
 ## Design principles
