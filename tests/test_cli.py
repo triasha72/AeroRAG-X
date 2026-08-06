@@ -51,6 +51,7 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-download-documents",
         "ntrs-extract-pages",
         "ntrs-build-chunks",
+        "ntrs-bm25-search",
     }
 
     assert expected_commands <= set(root_command.commands)
@@ -99,4 +100,16 @@ def test_build_chunks_options_are_registered() -> None:
         "chunking_config",
         "chunks_output",
         "receipts_output",
+    } <= names
+
+
+def test_bm25_search_options_are_registered() -> None:
+    names = option_names("ntrs-bm25-search")
+
+    assert {
+        "query",
+        "chunks_input",
+        "bm25_config",
+        "top_k",
+        "output",
     } <= names
