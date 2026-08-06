@@ -1,51 +1,427 @@
 # AeroRAG-X Roadmap
 
+AeroRAG-X is being developed as a production-oriented, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.
+
+The project follows a retrieval-first development strategy:
+
+```text
+Reliable corpus
+→ verified document processing
+→ retrieval baselines
+→ fair evaluation
+→ hybrid retrieval
+→ grounded generation
+→ multimodal retrieval
+→ deployment
+```
+
+---
+
+## Current project status
+
+The repository currently includes:
+
+- NASA NTRS metadata ingestion
+- reproducible corpus manifests
+- PDF acquisition and checksum validation
+- page-level PDF extraction
+- citation-preserving overlapping chunks
+- BM25 lexical retrieval
+- Sentence Transformer dense retrieval
+- chunk-level relevance judgments
+- Recall@5, Recall@10, MRR@10, and NDCG@10
+- command-line workflows
+- automated tests, formatting, linting, type checking, and CI
+
+The immediate priority is to create pooled BM25 and dense relevance judgments for a less biased `v0.2` retrieval benchmark.
+
+---
+
 ## Phase 1 — Repository foundation
 
-- [x] Python package with `src/` layout
-- [x] Ruff, pytest, mypy, and GitHub Actions
-- [x] YAML configuration
-- [x] NASA NTRS metadata-search client
-- [x] CLI commands
-- [ ] Create GitHub repository and merge first pull request
+- [x] Create Python package with `src/` layout
+- [x] Add `pyproject.toml`
+- [x] Add editable installation
+- [x] Add Typer command-line interface
+- [x] Add YAML configuration support
+- [x] Add Ruff formatting and linting
+- [x] Add pytest
+- [x] Add coverage reporting
+- [x] Add strict mypy checking
+- [x] Add GitHub Actions
+- [x] Establish feature-branch and pull-request workflow
+- [x] Add MIT license
+- [ ] Enable branch protection for `main`
+- [ ] Require passing CI before merge
+- [ ] Add an enforced coverage threshold
 
-## Phase 2 — Reproducible corpus acquisition
+---
 
-- [ ] Define a narrow initial aerospace topic
-- [ ] Download and validate NTRS metadata
-- [ ] Resolve public PDF links
-- [ ] Create document manifest with checksums
-- [ ] Add ASRS CSV import
-- [ ] Add dataset card and source limitations
+## Phase 2 — Reproducible NASA corpus acquisition
 
-## Phase 3 — Document processing
+- [x] Define a narrow initial aerospace corpus
+- [x] Implement NASA NTRS metadata search
+- [x] Normalize NTRS records
+- [x] Create a versioned corpus configuration
+- [x] Build document manifests
+- [x] Resolve public PDF links
+- [x] Stream PDF downloads
+- [x] Use temporary `.part` files during acquisition
+- [x] Validate downloads
+- [x] Calculate document checksums
+- [x] Record acquisition receipts
+- [x] Preserve NASA citation and source URLs
+- [ ] Add a formal dataset card
+- [ ] Document corpus inclusion and exclusion criteria
+- [ ] Add corpus version comparison tooling
+- [ ] Add ASRS CSV ingestion
+- [ ] Document ASRS-specific limitations and attribution
 
-- [ ] Extract PDF text and page boundaries
-- [ ] Detect tables and figures
-- [ ] Normalize metadata
-- [ ] Implement fixed and semantic chunking
-- [ ] Preserve page-level citations
+---
+
+## Phase 3 — Document processing and provenance
+
+- [x] Validate source checksums before processing
+- [x] Extract PDF text
+- [x] Preserve page boundaries
+- [x] Preserve empty pages
+- [x] Generate page-level records
+- [x] Generate extraction receipts
+- [x] Add deterministic overlapping word chunks
+- [x] Preserve document identifiers
+- [x] Preserve page identifiers
+- [x] Preserve page ranges
+- [x] Preserve citation URLs
+- [x] Preserve source URLs
+- [x] Preserve source-document checksums
+- [x] Generate chunking receipts
+- [ ] Add document-title and publication-date metadata to every chunk
+- [ ] Add semantic chunking experiment
+- [ ] Compare fixed and semantic chunking
+- [ ] Detect tables
+- [ ] Extract structured tables
+- [ ] Detect figures
+- [ ] Extract figure images and captions
+- [ ] Add OCR only for pages where native extraction is unavailable
+
+---
 
 ## Phase 4 — Retrieval baselines
 
-- [ ] BM25 baseline
-- [ ] Dense embedding baseline
-- [ ] Vector database integration
-- [ ] Hybrid retrieval
-- [ ] Cross-encoder reranking
+### BM25 lexical retrieval
 
-## Phase 5 — Grounded generation
+- [x] Implement tokenization
+- [x] Implement an inverted index
+- [x] Implement configurable BM25 `k1`
+- [x] Implement configurable BM25 `b`
+- [x] Add deterministic tie-breaking
+- [x] Preserve complete chunk provenance in results
+- [x] Add BM25 search CLI
+- [x] Add BM25 unit tests
+- [x] Run searches against the NASA corpus
 
-- [ ] LLM abstraction
-- [ ] Citation-enforced prompting
-- [ ] Refusal when evidence is insufficient
-- [ ] Structured answer schema
+### Dense semantic retrieval
 
-## Phase 6 — Evaluation and productization
+- [x] Add Sentence Transformers
+- [x] Add dense retrieval configuration
+- [x] Encode corpus chunks
+- [x] Encode queries separately from documents
+- [x] Normalize embeddings
+- [x] Persist embeddings as a NumPy matrix
+- [x] Persist aligned chunk metadata
+- [x] Add a versioned index manifest
+- [x] Implement exact cosine-similarity search
+- [x] Add dense index construction CLI
+- [x] Add dense search CLI
+- [x] Add deterministic dense unit tests
+- [x] Build an index over 3,233 chunks
+- [x] Run real semantic searches
+- [ ] Evaluate alternative embedding models
+- [ ] Add embedding-batch performance measurements
+- [ ] Add approximate nearest-neighbor indexing when corpus scale requires it
+- [ ] Add optional vector-database integration
 
-- [ ] Curated question and relevance set
-- [ ] Recall@K, MRR, and NDCG
-- [ ] Faithfulness and citation correctness
-- [ ] FastAPI and interactive UI
-- [ ] Docker image and deployment
-- [ ] Demo video and final model card
+---
+
+## Phase 5 — Retrieval evaluation
+
+### Evaluation framework v0.1
+
+- [x] Create eight aerospace evaluation queries
+- [x] Generate BM25 annotation candidates
+- [x] Add human chunk-level relevance judgments
+- [x] Validate relevance IDs against the corpus
+- [x] Implement Recall@5
+- [x] Implement Recall@10
+- [x] Implement MRR@10
+- [x] Implement NDCG@10
+- [x] Store aggregate metrics
+- [x] Store per-query metrics
+- [x] Add BM25 evaluation CLI
+- [x] Add dense evaluation CLI
+- [x] Add evaluation tests
+- [x] Generate BM25 benchmark report
+- [x] Generate dense benchmark report
+- [x] Document BM25 candidate-pool bias
+
+### Current v0.1 results
+
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.7500 | 0.9167 | 0.6771 | 0.7046 |
+| Dense | 0.2292 | 0.3958 | 0.3376 | 0.2812 |
+
+### Pooled evaluation framework v0.2
+
+- [ ] Retrieve top-20 BM25 candidates for every query
+- [ ] Retrieve top-20 dense candidates for every query
+- [ ] Combine candidate lists
+- [ ] Deduplicate candidates by `chunk_id`
+- [ ] Preserve internal retriever provenance
+- [ ] Produce a blinded annotation file
+- [ ] Randomize annotation order with a fixed seed
+- [ ] Carry forward relevant `v0.1` chunks
+- [ ] Manually annotate the pooled candidates
+- [ ] Produce `qrels_v0_2.jsonl`
+- [ ] Re-evaluate BM25 against `v0.2`
+- [ ] Re-evaluate dense retrieval against `v0.2`
+- [ ] Store `bm25_v0_2.json`
+- [ ] Store `dense_v0_2.json`
+- [ ] Compare per-query retrieval failures
+- [ ] Expand the benchmark to approximately 25–40 queries
+
+---
+
+## Phase 6 — Evaluation refactoring
+
+- [ ] Introduce a shared retrieval-index protocol
+- [ ] Introduce a common retrieval-hit interface
+- [ ] Replace duplicated BM25 and dense evaluation logic
+- [ ] Implement a generic `evaluate_retriever` function
+- [ ] Preserve compatibility wrappers for BM25 and dense retrieval
+- [ ] Add reusable benchmark-comparison utilities
+- [ ] Add `scripts/compare_retrieval_reports.py`
+- [ ] Add machine-readable benchmark summaries
+- [ ] Add regression checks for benchmark changes
+
+---
+
+## Phase 7 — Hybrid retrieval
+
+- [ ] Create `configs/hybrid_v0_1.yaml`
+- [ ] Implement reciprocal-rank fusion
+- [ ] Retrieve candidates independently from BM25 and dense search
+- [ ] Fuse rankings rather than raw scores
+- [ ] Preserve contributing retrievers and original ranks
+- [ ] Add deterministic hybrid ranking
+- [ ] Add hybrid search CLI
+- [ ] Add hybrid unit tests
+- [ ] Evaluate hybrid retrieval on `qrels_v0_2.jsonl`
+- [ ] Store `hybrid_v0_2.json`
+- [ ] Compare BM25, dense, and hybrid retrieval
+- [ ] Tune RRF constant and candidate depths
+- [ ] Document query-level wins and failures
+
+Initial configuration target:
+
+```yaml
+version: "0.1"
+rrf_k: 60
+bm25_top_k: 50
+dense_top_k: 50
+default_top_k: 10
+```
+
+---
+
+## Phase 8 — Cross-encoder reranking
+
+- [ ] Select a cross-encoder reranking model
+- [ ] Rerank the top hybrid candidates
+- [ ] Preserve original BM25, dense, and hybrid ranks
+- [ ] Add reranking configuration
+- [ ] Add reranking CLI
+- [ ] Add deterministic tests with a fake scorer
+- [ ] Measure reranking latency
+- [ ] Evaluate reranked Recall, MRR, and NDCG
+- [ ] Compare top-10 and top-20 reranking depths
+- [ ] Record model and hardware requirements
+
+---
+
+## Phase 9 — Grounded answer generation
+
+- [ ] Define an LLM-provider abstraction
+- [ ] Support local or API-based generation backends
+- [ ] Define a structured answer schema
+- [ ] Pass retrieved chunks with provenance
+- [ ] Require citations for technical claims
+- [ ] Refuse when retrieved evidence is insufficient
+- [ ] Prevent claims outside retrieved evidence
+- [ ] Add source-list generation
+- [ ] Add page-aware citation formatting
+- [ ] Add answer-generation CLI
+- [ ] Add deterministic generation tests using a fake provider
+- [ ] Add token-budget management
+- [ ] Add context deduplication
+- [ ] Add neighboring-chunk expansion
+
+Planned answer schema:
+
+```text
+answer
+claims
+citations
+source_documents
+insufficient_evidence
+retrieval_metadata
+```
+
+---
+
+## Phase 10 — Citation verification and answer evaluation
+
+- [ ] Map generated claims to supporting chunks
+- [ ] Validate cited chunk identifiers
+- [ ] Validate cited page ranges
+- [ ] Validate source URLs
+- [ ] Detect citations that do not support a claim
+- [ ] Detect uncited technical claims
+- [ ] Add citation coverage
+- [ ] Add citation correctness
+- [ ] Add answer faithfulness evaluation
+- [ ] Add answer relevance evaluation
+- [ ] Add insufficient-evidence test cases
+- [ ] Add adversarial unsupported-question tests
+- [ ] Store generation-evaluation reports
+
+---
+
+## Phase 11 — Multimodal report processing
+
+- [ ] Extract figure images
+- [ ] Extract figure captions
+- [ ] Link figures to source pages
+- [ ] Extract table structures
+- [ ] Preserve row and column context
+- [ ] Generate figure embeddings
+- [ ] Generate table representations
+- [ ] Implement figure retrieval
+- [ ] Implement table retrieval
+- [ ] Combine text, table, and figure candidates
+- [ ] Add multimodal citation metadata
+- [ ] Add multimodal evaluation queries
+- [ ] Add figure and table relevance judgments
+
+---
+
+## Phase 12 — API and interactive interface
+
+### FastAPI service
+
+- [ ] Add application factory
+- [ ] Add health endpoint
+- [ ] Add lexical search endpoint
+- [ ] Add dense search endpoint
+- [ ] Add hybrid search endpoint
+- [ ] Add grounded-answer endpoint
+- [ ] Add request and response schemas
+- [ ] Add structured error handling
+- [ ] Add API tests
+- [ ] Add OpenAPI documentation
+
+### User interface
+
+- [ ] Add query input
+- [ ] Add retriever selection
+- [ ] Display answer with inline citations
+- [ ] Display source chunks
+- [ ] Display NASA report links
+- [ ] Display page numbers
+- [ ] Display retrieval scores and ranks
+- [ ] Display figures and tables
+- [ ] Add insufficient-evidence state
+- [ ] Add benchmark demonstration mode
+
+---
+
+## Phase 13 — Deployment and release
+
+- [ ] Add Dockerfile
+- [ ] Add Docker Compose configuration
+- [ ] Add environment-variable documentation
+- [ ] Add reproducible index-building instructions
+- [ ] Add deployment health checks
+- [ ] Add structured logging
+- [ ] Add performance measurements
+- [ ] Add caching strategy
+- [ ] Add security and dependency scanning
+- [ ] Add release checklist
+- [ ] Record a demonstration video
+- [ ] Add architecture diagrams
+- [ ] Add benchmark charts
+- [ ] Publish release `v0.1.0`
+- [ ] Create final model and dataset cards
+
+---
+
+## Project hardening
+
+- [ ] Protect the `main` branch
+- [ ] Require pull requests for merges
+- [ ] Require CI status checks
+- [ ] Prevent force pushes to `main`
+- [ ] Add `--cov-fail-under`
+- [ ] Add dependency vulnerability scanning
+- [ ] Add pre-commit configuration
+- [ ] Add issue and pull-request templates
+- [ ] Add changelog
+- [ ] Add release automation
+- [ ] Add reproducibility test for tracked benchmark reports
+
+---
+
+## Immediate next milestone
+
+The next branch should be:
+
+```bash
+git switch main
+git pull --ff-only origin main
+
+git switch -c feat/pooled-qrels-v0-2
+git push -u origin feat/pooled-qrels-v0-2
+```
+
+The milestone should produce:
+
+```text
+src/aeroragx/evaluation/pooling.py
+tests/test_candidate_pooling.py
+data/evaluation/candidates_v0_2_internal.jsonl
+data/evaluation/candidates_v0_2_annotation.jsonl
+data/evaluation/qrels_v0_2.jsonl
+```
+
+The required workflow is:
+
+```text
+BM25 top-20
+        +
+Dense top-20
+        |
+        v
+Deduplicated candidate pool
+        |
+        v
+Blinded manual annotation
+        |
+        v
+Pooled qrels v0.2
+        |
+        v
+Fair BM25 and dense comparison
+        |
+        v
+Hybrid retrieval
+```
