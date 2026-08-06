@@ -57,6 +57,7 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-hybrid-search",
         "ntrs-reranker-search",
         "ntrs-grounded-answer",
+        "ntrs-evaluate-generation",
         "ntrs-build-evaluation-candidates",
         "ntrs-evaluate-bm25",
         "ntrs-evaluate-dense",
@@ -286,6 +287,26 @@ def test_grounded_answer_options() -> None:
         "candidate_top_k",
         "evidence_top_k",
         "output",
+    } <= names
+
+
+def test_evaluate_generation_options() -> None:
+    names = option_names("ntrs-evaluate-generation")
+
+    assert {
+        "queries_input",
+        "chunks_input",
+        "bm25_config",
+        "dense_config",
+        "hybrid_config",
+        "reranker_config",
+        "generation_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "candidate_top_k",
+        "evidence_top_k",
+        "report_output",
     } <= names
 
 

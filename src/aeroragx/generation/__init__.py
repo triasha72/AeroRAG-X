@@ -1,5 +1,13 @@
 """Grounded answer generation for AeroRAG-X."""
 
+from aeroragx.generation.evaluation import (
+    GenerationEvaluationQuery,
+    GenerationEvaluationReport,
+    GenerationQueryEvaluation,
+    evaluate_grounded_generation,
+    load_generation_evaluation_queries,
+    write_generation_evaluation_report,
+)
 from aeroragx.generation.grounded import (
     AnswerCitation,
     GenerationConfig,
@@ -28,8 +36,11 @@ __all__ = [
     "AnswerCitation",
     "DeterministicGenerationProvider",
     "GenerationConfig",
+    "GenerationEvaluationQuery",
+    "GenerationEvaluationReport",
     "GenerationEvidence",
     "GenerationProvider",
+    "GenerationQueryEvaluation",
     "GroundedAnswer",
     "GroundedAnswerGenerator",
     "GroundedClaim",
@@ -41,7 +52,10 @@ __all__ = [
     "StaticGenerationProvider",
     "build_generation_evidence",
     "create_generation_provider",
+    "evaluate_grounded_generation",
     "load_generation_config",
+    "load_generation_evaluation_queries",
     "with_evidence_top_k",
+    "write_generation_evaluation_report",
     "write_grounded_answer",
 ]

@@ -28,6 +28,11 @@ from aeroragx.evaluation.retrieval import (
     write_candidate_records,
     write_evaluation_report,
 )
+from aeroragx.generation.evaluation import (
+    evaluate_grounded_generation,
+    load_generation_evaluation_queries,
+    write_generation_evaluation_report,
+)
 from aeroragx.generation.grounded import (
     GenerationConfig,
     GroundedAnswerGenerator,
@@ -2275,6 +2280,201 @@ def ntrs_grounded_answer(
             )
 
         console.print(citation_table)
+
+
+@app.command(name="ntrs-evaluate-generation")
+def ntrs_evaluate_generation(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/generation_queries_v0_1.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    reranker_config: Annotated[
+        Path,
+        typer.Option(
+            "--reranker-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/reranker_v0_1.yaml"),
+    generation_config: Annotated[
+        Path,
+        typer.Option(
+            "--generation-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/generation_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    candidate_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--candidate-top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    evidence_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--evidence-top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    report_output: Annotated[
+        Path,
+        typer.Option(
+            "--report-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/evaluation/generation_v0_1.json"),
+) -> None:
+    """Evaluate grounded answers on labeled generation queries."""
+
+    queries = load_generation_evaluation_queries(queries_input)
+
+    (
+        generator,
+        reranker_settings,
+        generation_settings,
+    ) = _load_grounded_answer_generator(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        reranker_config=reranker_config,
+        generation_config=generation_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+        candidate_top_k=candidate_top_k,
+        evidence_top_k=evidence_top_k,
+    )
+
+    report = evaluate_grounded_generation(
+        generator=generator,
+        queries=queries,
+        generation_provider=(generation_settings.provider),
+        generation_model=(generation_settings.model_name),
+        reranker_model=(reranker_settings.model_name),
+    )
+
+    write_generation_evaluation_report(
+        report_output,
+        report,
+    )
+
+    table = Table(title="Grounded-generation evaluation")
+    table.add_column("Metric")
+    table.add_column("Value")
+    table.add_row(
+        "Queries",
+        str(report.query_count),
+    )
+    table.add_row(
+        "Answerability accuracy",
+        f"{report.answerability_accuracy:.4f}",
+    )
+    table.add_row(
+        "Answerable completion",
+        f"{report.answerable_completion_rate:.4f}",
+    )
+    table.add_row(
+        "Unsupported refusal",
+        f"{report.unsupported_refusal_rate:.4f}",
+    )
+    table.add_row(
+        "Claim citation coverage",
+        f"{report.claim_citation_coverage_rate:.4f}",
+    )
+    table.add_row(
+        "Citation validity",
+        f"{report.citation_reference_validity_rate:.4f}",
+    )
+    table.add_row(
+        "Source coverage",
+        f"{report.source_document_coverage_rate:.4f}",
+    )
+    table.add_row(
+        "Expected-term recall",
+        f"{report.expected_term_recall:.4f}",
+    )
+    table.add_row(
+        "Structural validity",
+        f"{report.structural_validity_rate:.4f}",
+    )
+
+    console.print(table)
+    console.print(f"Report: {report_output}")
 
 
 if __name__ == "__main__":
