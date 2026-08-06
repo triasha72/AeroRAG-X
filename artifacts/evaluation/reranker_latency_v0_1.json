@@ -1,0 +1,11 @@
+{
+  "model_name": "cross-encoder/ms-marco-MiniLM-L6-v2",
+  "device": "cpu",
+  "candidate_top_k": 20,
+  "batch_size": 16,
+  "query_count": 8,
+  "pair_count": 160,
+  "total_seconds": 3.170787,
+  "milliseconds_per_pair": 19.81742,
+  "hardware_note": "MacBook Air, CPU baseline"
+}
