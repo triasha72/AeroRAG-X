@@ -76,6 +76,15 @@ from aeroragx.retrieval.hybrid import (
     load_hybrid_config,
     write_hybrid_search_results,
 )
+from aeroragx.retrieval.reranker import (
+    RerankerConfig,
+    RerankerIndex,
+    load_cross_encoder_scorer,
+    load_reranker_config,
+    with_candidate_top_k,
+    write_reranked_search_results,
+    write_reranker_latency_report,
+)
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -1586,6 +1595,413 @@ def ntrs_evaluate_hybrid(
 
     console.print(table)
     console.print(f"Report: {report_output}")
+
+
+def _load_reranker_index_from_paths(
+    chunks_input: Path,
+    bm25_config: Path,
+    dense_config: Path,
+    hybrid_config: Path,
+    reranker_config: Path,
+    embeddings_input: Path,
+    metadata_input: Path,
+    manifest_input: Path,
+    candidate_top_k: int | None,
+) -> tuple[RerankerIndex, RerankerConfig]:
+    """Load the complete Hybrid RRF and cross-encoder stack."""
+
+    hybrid_index, _ = _load_hybrid_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+    )
+
+    reranker_settings = with_candidate_top_k(
+        load_reranker_config(reranker_config),
+        candidate_top_k,
+    )
+    scorer = load_cross_encoder_scorer(reranker_settings)
+
+    return (
+        RerankerIndex(
+            hybrid_index=hybrid_index,
+            scorer=scorer,
+            config=reranker_settings,
+        ),
+        reranker_settings,
+    )
+
+
+@app.command(name="ntrs-reranker-search")
+def ntrs_reranker_search(
+    query: Annotated[
+        str,
+        typer.Option(
+            "--query",
+            "-q",
+            help="Query to retrieve and rerank.",
+        ),
+    ],
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    reranker_config: Annotated[
+        Path,
+        typer.Option(
+            "--reranker-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/reranker_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    candidate_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--candidate-top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            dir_okay=False,
+        ),
+    ] = None,
+) -> None:
+    """Retrieve with Hybrid RRF and rerank with a cross-encoder."""
+
+    index, settings = _load_reranker_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        reranker_config=reranker_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+        candidate_top_k=candidate_top_k,
+    )
+
+    result_limit = top_k if top_k is not None else settings.default_top_k
+
+    hits = index.search(
+        query=query,
+        top_k=result_limit,
+    )
+
+    if output is not None:
+        write_reranked_search_results(
+            path=output,
+            hits=hits,
+        )
+        console.print(f"Saved {len(hits)} results to {output}")
+        return
+
+    table = Table(title=f"Cross-encoder reranked results: {query}")
+    table.add_column("Rank")
+    table.add_column("CE score")
+    table.add_column("Hybrid rank")
+    table.add_column("RRF score")
+    table.add_column("Sources")
+    table.add_column("BM25 rank")
+    table.add_column("Dense rank")
+    table.add_column("Chunk")
+    table.add_column("Pages")
+    table.add_column("Text")
+
+    for hit in hits:
+        chunk = hit.chunk
+        table.add_row(
+            str(hit.rank),
+            f"{hit.score:.6f}",
+            str(hit.hybrid_rank),
+            f"{hit.hybrid_score:.6f}",
+            "+".join(hit.retrieved_by),
+            (str(hit.bm25_rank) if hit.bm25_rank is not None else "-"),
+            (str(hit.dense_rank) if hit.dense_rank is not None else "-"),
+            chunk.chunk_id,
+            f"{chunk.page_start}-{chunk.page_end}",
+            " ".join(chunk.text.split())[:180],
+        )
+
+    console.print(table)
+    console.print(f"Model: {settings.model_name}")
+    console.print(f"Reranked candidates: {index.last_pair_count}")
+    console.print(f"Cross-encoder scoring seconds: {index.last_scoring_seconds:.4f}")
+
+
+@app.command(name="ntrs-evaluate-reranker")
+def ntrs_evaluate_reranker(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    qrels_input: Annotated[
+        Path,
+        typer.Option(
+            "--qrels-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/qrels_v0_2.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    reranker_config: Annotated[
+        Path,
+        typer.Option(
+            "--reranker-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/reranker_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    candidate_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--candidate-top-k",
+            min=10,
+            max=100,
+        ),
+    ] = None,
+    top_k: Annotated[
+        int,
+        typer.Option(
+            "--top-k",
+            min=10,
+            max=100,
+        ),
+    ] = 10,
+    report_output: Annotated[
+        Path,
+        typer.Option(
+            "--report-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/evaluation/reranker_top20_v0_2.json"),
+    latency_output: Annotated[
+        Path | None,
+        typer.Option(
+            "--latency-output",
+            dir_okay=False,
+        ),
+    ] = None,
+    hardware_note: Annotated[
+        str | None,
+        typer.Option("--hardware-note"),
+    ] = None,
+) -> None:
+    """Evaluate cross-encoder reranking on pooled judgments."""
+
+    queries = load_evaluation_queries(queries_input)
+    judgments = load_relevance_judgments(qrels_input)
+
+    index, settings = _load_reranker_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        reranker_config=reranker_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+        candidate_top_k=candidate_top_k,
+    )
+
+    index.reset_timing()
+
+    report = evaluate_retriever(
+        index=index,
+        model_name="cross_encoder_reranker",
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
+    )
+
+    write_evaluation_report(
+        path=report_output,
+        report=report,
+    )
+
+    latency_report = index.build_latency_report(hardware_note=hardware_note)
+
+    if latency_output is not None:
+        write_reranker_latency_report(
+            path=latency_output,
+            report=latency_report,
+        )
+
+    table = Table(title="Cross-encoder reranker evaluation")
+    table.add_column("Metric")
+    table.add_column("Score")
+    table.add_row(
+        "Recall@5",
+        f"{report.recall_at_5:.4f}",
+    )
+    table.add_row(
+        "Recall@10",
+        f"{report.recall_at_10:.4f}",
+    )
+    table.add_row(
+        "MRR@10",
+        f"{report.mrr_at_10:.4f}",
+    )
+    table.add_row(
+        "NDCG@10",
+        f"{report.ndcg_at_10:.4f}",
+    )
+
+    console.print(table)
+    console.print(f"Model: {settings.model_name}")
+    console.print(f"Candidate depth: {settings.candidate_top_k}")
+    console.print(f"Scored pairs: {latency_report.pair_count}")
+    console.print(f"Scoring seconds: {latency_report.total_seconds:.4f}")
+    console.print(f"Milliseconds per pair: {latency_report.milliseconds_per_pair:.4f}")
+    console.print(f"Report: {report_output}")
+
+    if latency_output is not None:
+        console.print(f"Latency report: {latency_output}")
 
 
 if __name__ == "__main__":
