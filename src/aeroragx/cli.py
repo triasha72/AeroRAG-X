@@ -37,6 +37,12 @@ from aeroragx.processing.pdf import (
     write_extraction_receipts,
     write_page_records,
 )
+from aeroragx.retrieval.bm25 import (
+    BM25Index,
+    load_bm25_config,
+    load_chunk_records,
+    write_search_results,
+)
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -394,6 +400,100 @@ def ntrs_build_chunks(
     console.print(f"Overlap: {config.overlap_words} words")
     console.print(f"Chunks output: {chunks_output}")
     console.print(f"Receipts output: {receipts_output}")
+
+
+@app.command(name="ntrs-bm25-search")
+def ntrs_bm25_search(
+    query: Annotated[
+        str,
+        typer.Option(
+            "--query",
+            "-q",
+            help="Lexical search query.",
+        ),
+    ],
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            dir_okay=False,
+        ),
+    ] = None,
+) -> None:
+    """Search citation-preserving chunks using BM25."""
+
+    config = load_bm25_config(bm25_config)
+    chunks = load_chunk_records(chunks_input)
+
+    index = BM25Index(
+        chunks=chunks,
+        config=config,
+    )
+
+    result_limit = top_k if top_k is not None else config.default_top_k
+
+    hits = index.search(
+        query=query,
+        top_k=result_limit,
+    )
+
+    if output is not None:
+        write_search_results(
+            path=output,
+            hits=hits,
+        )
+        console.print(f"Saved {len(hits)} results to {output}")
+        return
+
+    table = Table(title=f"BM25 results: {query}")
+    table.add_column("Rank")
+    table.add_column("Score")
+    table.add_column("Chunk")
+    table.add_column("Pages")
+    table.add_column("Text")
+
+    for hit in hits:
+        chunk = hit.chunk
+
+        preview = chunk.text.replace("\n", " ")[:180]
+
+        table.add_row(
+            str(hit.rank),
+            f"{hit.score:.4f}",
+            chunk.chunk_id,
+            (f"{chunk.page_start}-{chunk.page_end}"),
+            preview,
+        )
+
+    console.print(f"Indexed chunks: {index.document_count}")
+    console.print(table)
 
 
 if __name__ == "__main__":
