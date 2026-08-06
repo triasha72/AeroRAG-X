@@ -57,6 +57,8 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-build-evaluation-candidates",
         "ntrs-evaluate-bm25",
         "ntrs-evaluate-dense",
+        "ntrs-build-pooled-candidates",
+        "ntrs-build-qrels-from-annotations",
     }
 
     assert expected_commands <= set(root_command.commands)
@@ -183,4 +185,32 @@ def test_evaluate_dense_options() -> None:
         "manifest_input",
         "top_k",
         "report_output",
+    } <= names
+
+
+def test_build_pooled_candidates_options() -> None:
+    names = option_names("ntrs-build-pooled-candidates")
+
+    assert {
+        "queries_input",
+        "previous_qrels_input",
+        "chunks_input",
+        "bm25_config",
+        "dense_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "top_k_per_retriever",
+        "shuffle_seed",
+        "internal_output",
+        "annotation_output",
+    } <= names
+
+
+def test_build_qrels_from_annotations_options() -> None:
+    names = option_names("ntrs-build-qrels-from-annotations")
+
+    assert {
+        "annotations_input",
+        "output",
     } <= names
