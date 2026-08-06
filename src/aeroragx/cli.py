@@ -51,6 +51,15 @@ from aeroragx.retrieval.bm25 import (
     load_chunk_records,
     write_search_results,
 )
+from aeroragx.retrieval.dense import (
+    DenseIndex,
+    encode_chunks,
+    load_dense_config,
+    load_dense_encoder,
+    load_dense_index,
+    write_dense_index,
+    write_dense_search_results,
+)
 
 app = typer.Typer(
     no_args_is_help=True,
@@ -677,6 +686,204 @@ def ntrs_evaluate_bm25(
 
     console.print(table)
     console.print(f"Report: {report_output}")
+
+
+@app.command(name="ntrs-build-dense-index")
+def ntrs_build_dense_index(
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    embeddings_output: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_output: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_output: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+) -> None:
+    """Build the exact dense retrieval index."""
+
+    config = load_dense_config(dense_config)
+    chunks = load_chunk_records(chunks_input)
+    encoder = load_dense_encoder(config)
+
+    embeddings = encode_chunks(
+        chunks=chunks,
+        config=config,
+        encoder=encoder,
+    )
+
+    manifest = write_dense_index(
+        embeddings_path=embeddings_output,
+        metadata_path=metadata_output,
+        manifest_path=manifest_output,
+        embeddings=embeddings,
+        chunks=chunks,
+        config=config,
+    )
+
+    console.print(f"Indexed chunks: {manifest.chunk_count}")
+    console.print(f"Embedding dimension: {manifest.embedding_dimension}")
+    console.print(f"Model: {manifest.model_name}")
+    console.print(f"Embeddings: {embeddings_output}")
+    console.print(f"Metadata: {metadata_output}")
+    console.print(f"Manifest: {manifest_output}")
+
+
+@app.command(name="ntrs-dense-search")
+def ntrs_dense_search(
+    query: Annotated[
+        str,
+        typer.Option(
+            "--query",
+            "-q",
+            help="Semantic search query.",
+        ),
+    ],
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            dir_okay=False,
+        ),
+    ] = None,
+) -> None:
+    """Search the NASA corpus using dense vectors."""
+
+    config = load_dense_config(dense_config)
+
+    (
+        embeddings,
+        chunks,
+        manifest,
+    ) = load_dense_index(
+        embeddings_path=embeddings_input,
+        metadata_path=metadata_input,
+        manifest_path=manifest_input,
+    )
+
+    if manifest.model_name != config.model_name:
+        raise typer.BadParameter("Dense configuration model differs from the index manifest.")
+
+    encoder = load_dense_encoder(config)
+
+    index = DenseIndex(
+        embeddings=embeddings,
+        chunks=chunks,
+        config=config,
+        encoder=encoder,
+    )
+
+    result_limit = top_k if top_k is not None else config.default_top_k
+
+    hits = index.search(
+        query=query,
+        top_k=result_limit,
+    )
+
+    if output is not None:
+        write_dense_search_results(
+            path=output,
+            hits=hits,
+        )
+
+        console.print(f"Saved {len(hits)} results to {output}")
+        return
+
+    table = Table(title=f"Dense results: {query}")
+    table.add_column("Rank")
+    table.add_column("Score")
+    table.add_column("Chunk")
+    table.add_column("Pages")
+    table.add_column("Text")
+
+    for hit in hits:
+        chunk = hit.chunk
+
+        table.add_row(
+            str(hit.rank),
+            f"{hit.score:.4f}",
+            chunk.chunk_id,
+            (f"{chunk.page_start}-{chunk.page_end}"),
+            " ".join(chunk.text.split())[:180],
+        )
+
+    console.print(f"Indexed chunks: {index.document_count}")
+    console.print(table)
 
 
 if __name__ == "__main__":

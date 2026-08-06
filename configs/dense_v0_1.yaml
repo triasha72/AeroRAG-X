@@ -1,0 +1,7 @@
+version: "0.1"
+
+model_name: "sentence-transformers/all-MiniLM-L6-v2"
+batch_size: 32
+normalize_embeddings: true
+default_top_k: 10
+device: "cpu"
