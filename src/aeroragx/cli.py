@@ -43,6 +43,10 @@ from aeroragx.generation.grounded import (
 from aeroragx.generation.provider import (
     create_generation_provider,
 )
+from aeroragx.generation.sufficiency import (
+    EvidenceSufficiencyAssessor,
+    load_sufficiency_config,
+)
 from aeroragx.ingestion.acquisition import (
     download_documents,
     load_manifest,
@@ -2026,6 +2030,7 @@ def _load_grounded_answer_generator(
     hybrid_config: Path,
     reranker_config: Path,
     generation_config: Path,
+    sufficiency_config: Path,
     embeddings_input: Path,
     metadata_input: Path,
     manifest_input: Path,
@@ -2069,10 +2074,13 @@ def _load_grounded_answer_generator(
             param_hint=("--generation-config"),
         ) from exc
 
+    sufficiency_assessor = EvidenceSufficiencyAssessor(load_sufficiency_config(sufficiency_config))
+
     generator = GroundedAnswerGenerator(
         index=reranker_index,
         provider=provider,
         config=generation_settings,
+        sufficiency_assessor=sufficiency_assessor,
     )
 
     return (
@@ -2146,6 +2154,15 @@ def ntrs_grounded_answer(
             readable=True,
         ),
     ] = Path("configs/generation_v0_1.yaml"),
+    sufficiency_config: Annotated[
+        Path,
+        typer.Option(
+            "--sufficiency-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/sufficiency_v0_1.yaml"),
     embeddings_input: Annotated[
         Path,
         typer.Option(
@@ -2211,6 +2228,7 @@ def ntrs_grounded_answer(
         hybrid_config=hybrid_config,
         reranker_config=reranker_config,
         generation_config=generation_config,
+        sufficiency_config=sufficiency_config,
         embeddings_input=embeddings_input,
         metadata_input=metadata_input,
         manifest_input=manifest_input,
@@ -2347,6 +2365,15 @@ def ntrs_evaluate_generation(
             readable=True,
         ),
     ] = Path("configs/generation_v0_1.yaml"),
+    sufficiency_config: Annotated[
+        Path,
+        typer.Option(
+            "--sufficiency-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/sufficiency_v0_1.yaml"),
     embeddings_input: Annotated[
         Path,
         typer.Option(
@@ -2396,7 +2423,7 @@ def ntrs_evaluate_generation(
             "--report-output",
             dir_okay=False,
         ),
-    ] = Path("artifacts/evaluation/generation_v0_1.json"),
+    ] = Path("artifacts/evaluation/generation_v0_2.json"),
 ) -> None:
     """Evaluate grounded answers on labeled generation queries."""
 
@@ -2413,6 +2440,7 @@ def ntrs_evaluate_generation(
         hybrid_config=hybrid_config,
         reranker_config=reranker_config,
         generation_config=generation_config,
+        sufficiency_config=sufficiency_config,
         embeddings_input=embeddings_input,
         metadata_input=metadata_input,
         manifest_input=manifest_input,

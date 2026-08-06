@@ -31,10 +31,18 @@ from aeroragx.generation.provider import (
     StaticGenerationProvider,
     create_generation_provider,
 )
+from aeroragx.generation.sufficiency import (
+    EvidenceSufficiencyAssessor,
+    EvidenceSufficiencyResult,
+    SufficiencyConfig,
+    load_sufficiency_config,
+)
 
 __all__ = [
     "AnswerCitation",
     "DeterministicGenerationProvider",
+    "EvidenceSufficiencyAssessor",
+    "EvidenceSufficiencyResult",
     "GenerationConfig",
     "GenerationEvaluationQuery",
     "GenerationEvaluationReport",
@@ -50,11 +58,13 @@ __all__ = [
     "RetrievalMetadata",
     "SourceDocument",
     "StaticGenerationProvider",
+    "SufficiencyConfig",
     "build_generation_evidence",
     "create_generation_provider",
     "evaluate_grounded_generation",
     "load_generation_config",
     "load_generation_evaluation_queries",
+    "load_sufficiency_config",
     "with_evidence_top_k",
     "write_generation_evaluation_report",
     "write_grounded_answer",
