@@ -1,0 +1,5 @@
+version: "0.1"
+rrf_k: 60
+bm25_top_k: 50
+dense_top_k: 50
+default_top_k: 10
