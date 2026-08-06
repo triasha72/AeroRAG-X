@@ -57,6 +57,9 @@ The small query count makes aggregate scores sensitive to individual relevance d
 - `artifacts/evaluation/bm25_v0_2.json`
 - `artifacts/evaluation/dense_v0_2.json`
 - `artifacts/evaluation/hybrid_v0_2.json`
+- `artifacts/evaluation/reranker_top10_v0_2.json`
+- `artifacts/evaluation/reranker_top20_v0_2.json`
+- `artifacts/evaluation/reranker_latency_v0_1.json`
 
 ---
 
@@ -102,7 +105,7 @@ For every query:
 8. order blinded candidates deterministically using SHA-256 and shuffle seed `42`;
 9. assign a binary relevance label to every candidate;
 10. generate `qrels_v0_2.jsonl`;
-11. evaluate BM25, dense retrieval, and Hybrid RRF against the same relevance set.
+11. evaluate BM25, dense retrieval, Hybrid RRF, and cross-encoder reranking against the same relevance set.
 
 ### v0.2 counts
 
@@ -141,10 +144,15 @@ A candidate is non-relevant when it:
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
 | Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
 Hybrid RRF uses fixed parameters (`rrf_k=60`, BM25 depth `50`, dense
 depth `50`) and combines source ranks rather than raw retrieval scores.
-It has not been tuned against this eight-query benchmark.
+The reranker uses
+`cross-encoder/ms-marco-MiniLM-L6-v2`, batch size `16`, and CPU
+inference. Neither stage has been tuned against this eight-query
+benchmark.
 
 ---
 
@@ -270,6 +278,39 @@ aeroragx ntrs-evaluate-hybrid \
   --top-k 10 \
   --report-output artifacts/evaluation/hybrid_v0_2.json
 ```
+
+### Evaluate cross-encoder reranking
+
+```bash
+aeroragx ntrs-evaluate-reranker \
+  --queries-input data/evaluation/queries_v0_1.jsonl \
+  --qrels-input data/evaluation/qrels_v0_2.jsonl \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --reranker-config configs/reranker_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --candidate-top-k 20 \
+  --top-k 10 \
+  --report-output artifacts/evaluation/reranker_top20_v0_2.json \
+  --latency-output artifacts/evaluation/reranker_latency_v0_1.json \
+  --hardware-note "MacBook Air, CPU baseline"
+```
+
+### Reranker latency result
+
+| Field | Value |
+|---|---:|
+| Queries | 8 |
+| Query–chunk pairs | 160 |
+| Total scoring seconds | 3.170787 |
+| Milliseconds per pair | 19.817420 |
+
+Latency is scoring-only and was measured on
+MacBook Air, CPU baseline.
 
 ---
 
