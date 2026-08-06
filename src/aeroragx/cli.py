@@ -10,6 +10,14 @@ from rich.table import Table
 
 from aeroragx import __version__
 from aeroragx.config import load_config
+from aeroragx.evaluation.pooling import (
+    build_pooled_candidate_records,
+    build_qrels_from_annotations,
+    load_annotation_records,
+    write_annotation_candidate_records,
+    write_internal_candidate_records,
+    write_relevance_judgments,
+)
 from aeroragx.evaluation.retrieval import (
     build_bm25_candidates,
     evaluate_bm25,
@@ -1022,6 +1030,232 @@ def ntrs_evaluate_dense(
 
     console.print(table)
     console.print(f"Report: {report_output}")
+
+
+@app.command(name="ntrs-build-pooled-candidates")
+def ntrs_build_pooled_candidates(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    previous_qrels_input: Annotated[
+        Path,
+        typer.Option(
+            "--previous-qrels-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/qrels_v0_1.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    top_k_per_retriever: Annotated[
+        int,
+        typer.Option(
+            "--top-k-per-retriever",
+            min=1,
+            max=100,
+        ),
+    ] = 20,
+    shuffle_seed: Annotated[
+        int,
+        typer.Option("--shuffle-seed"),
+    ] = 42,
+    internal_output: Annotated[
+        Path,
+        typer.Option(
+            "--internal-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/evaluation/candidates_v0_2_internal.jsonl"),
+    annotation_output: Annotated[
+        Path,
+        typer.Option(
+            "--annotation-output",
+            dir_okay=False,
+        ),
+    ] = Path("data/evaluation/candidates_v0_2_annotation.jsonl"),
+) -> None:
+    """Build blinded BM25 and dense candidate pools."""
+
+    queries = load_evaluation_queries(queries_input)
+    previous_judgments = load_relevance_judgments(previous_qrels_input)
+    chunks = load_chunk_records(chunks_input)
+
+    bm25_settings = load_bm25_config(bm25_config)
+    dense_settings = load_dense_config(dense_config)
+
+    bm25_index = BM25Index(
+        chunks=chunks,
+        config=bm25_settings,
+    )
+
+    (
+        embeddings,
+        dense_chunks,
+        manifest,
+    ) = load_dense_index(
+        embeddings_path=embeddings_input,
+        metadata_path=metadata_input,
+        manifest_path=manifest_input,
+    )
+
+    if manifest.model_name != dense_settings.model_name:
+        raise typer.BadParameter("Dense configuration model differs from the index manifest.")
+
+    corpus_chunk_ids = [chunk.chunk_id for chunk in chunks]
+    dense_chunk_ids = [chunk.chunk_id for chunk in dense_chunks]
+
+    if len(corpus_chunk_ids) != len(set(corpus_chunk_ids)):
+        raise typer.BadParameter("The corpus contains duplicate chunk IDs.")
+
+    if len(dense_chunk_ids) != len(set(dense_chunk_ids)):
+        raise typer.BadParameter("Dense metadata contains duplicate chunk IDs.")
+
+    if set(corpus_chunk_ids) != set(dense_chunk_ids):
+        raise typer.BadParameter("The BM25 corpus and dense metadata contain different chunk IDs.")
+
+    encoder = load_dense_encoder(dense_settings)
+
+    dense_index = DenseIndex(
+        embeddings=embeddings,
+        chunks=dense_chunks,
+        config=dense_settings,
+        encoder=encoder,
+    )
+
+    (
+        internal_records,
+        annotation_records,
+    ) = build_pooled_candidate_records(
+        queries=queries,
+        previous_judgments=(previous_judgments),
+        chunks=chunks,
+        bm25_index=bm25_index,
+        dense_index=dense_index,
+        top_k_per_retriever=(top_k_per_retriever),
+        shuffle_seed=shuffle_seed,
+    )
+
+    write_internal_candidate_records(
+        path=internal_output,
+        records=internal_records,
+    )
+    write_annotation_candidate_records(
+        path=annotation_output,
+        records=annotation_records,
+    )
+
+    table = Table(title="Pooled candidate generation")
+    table.add_column("Query")
+    table.add_column("Candidates")
+
+    for record in internal_records:
+        table.add_row(
+            record.query_id,
+            str(len(record.candidates)),
+        )
+
+    total_candidates = sum(len(record.candidates) for record in internal_records)
+
+    console.print(table)
+    console.print(f"Total candidates: {total_candidates}")
+    console.print(f"Internal output: {internal_output}")
+    console.print(f"Annotation output: {annotation_output}")
+
+
+@app.command(name="ntrs-build-qrels-from-annotations")
+def ntrs_build_qrels_from_annotations(
+    annotations_input: Annotated[
+        Path,
+        typer.Option(
+            "--annotations-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/candidates_v0_2_annotation.jsonl"),
+    output: Annotated[
+        Path,
+        typer.Option(
+            "--output",
+            dir_okay=False,
+        ),
+    ] = Path("data/evaluation/qrels_v0_2.jsonl"),
+) -> None:
+    """Create qrels from completed annotations."""
+
+    annotation_records = load_annotation_records(annotations_input)
+
+    judgments = build_qrels_from_annotations(annotation_records)
+
+    write_relevance_judgments(
+        path=output,
+        judgments=judgments,
+    )
+
+    relevant_count = sum(len(judgment.relevant_chunk_ids) for judgment in judgments)
+
+    console.print(f"Queries: {len(judgments)}")
+    console.print(f"Relevant chunks: {relevant_count}")
+    console.print(f"Output: {output}")
 
 
 if __name__ == "__main__":

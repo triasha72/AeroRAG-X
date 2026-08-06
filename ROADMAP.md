@@ -8,7 +8,8 @@ The project follows a retrieval-first development strategy:
 Reliable corpus
 → verified document processing
 → retrieval baselines
-→ fair evaluation
+→ pooled evaluation
+→ shared evaluation interfaces
 → hybrid retrieval
 → grounded generation
 → multimodal retrieval
@@ -28,12 +29,15 @@ The repository currently includes:
 - citation-preserving overlapping chunks
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
-- chunk-level relevance judgments
+- exact dense-vector search over 3,233 chunks
+- deterministic BM25+dense candidate pooling
+- blinded annotation records
+- pooled `v0.2` relevance judgments
 - Recall@5, Recall@10, MRR@10, and NDCG@10
 - command-line workflows
 - automated tests, formatting, linting, type checking, and CI
 
-The immediate priority is to create pooled BM25 and dense relevance judgments for a less biased `v0.2` retrieval benchmark.
+The immediate priority is to replace duplicated BM25 and dense evaluation logic with a shared retrieval interface and generic evaluator. The following milestone is reciprocal-rank-fusion hybrid retrieval.
 
 ---
 
@@ -149,7 +153,7 @@ The immediate priority is to create pooled BM25 and dense relevance judgments fo
 
 - [x] Create eight aerospace evaluation queries
 - [x] Generate BM25 annotation candidates
-- [x] Add human chunk-level relevance judgments
+- [x] Add chunk-level relevance judgments
 - [x] Validate relevance IDs against the corpus
 - [x] Implement Recall@5
 - [x] Implement Recall@10
@@ -164,7 +168,7 @@ The immediate priority is to create pooled BM25 and dense relevance judgments fo
 - [x] Generate dense benchmark report
 - [x] Document BM25 candidate-pool bias
 
-### Current v0.1 results
+#### v0.1 results
 
 | Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
 |---|---:|---:|---:|---:|
@@ -173,22 +177,34 @@ The immediate priority is to create pooled BM25 and dense relevance judgments fo
 
 ### Pooled evaluation framework v0.2
 
-- [ ] Retrieve top-20 BM25 candidates for every query
-- [ ] Retrieve top-20 dense candidates for every query
-- [ ] Combine candidate lists
-- [ ] Deduplicate candidates by `chunk_id`
-- [ ] Preserve internal retriever provenance
-- [ ] Produce a blinded annotation file
-- [ ] Randomize annotation order with a fixed seed
-- [ ] Carry forward relevant `v0.1` chunks
-- [ ] Manually annotate the pooled candidates
-- [ ] Produce `qrels_v0_2.jsonl`
-- [ ] Re-evaluate BM25 against `v0.2`
-- [ ] Re-evaluate dense retrieval against `v0.2`
-- [ ] Store `bm25_v0_2.json`
-- [ ] Store `dense_v0_2.json`
-- [ ] Compare per-query retrieval failures
+- [x] Retrieve top-20 BM25 candidates for every query
+- [x] Retrieve top-20 dense candidates for every query
+- [x] Combine candidate lists
+- [x] Deduplicate candidates by `chunk_id`
+- [x] Preserve internal retriever provenance
+- [x] Produce a blinded annotation file
+- [x] Randomize annotation order deterministically with seed `42`
+- [x] Carry forward relevant `v0.1` chunks
+- [x] Review and label 278 pooled candidates
+- [x] Record 101 relevant and 177 non-relevant labels
+- [x] Produce `qrels_v0_2.jsonl`
+- [x] Re-evaluate BM25 against `v0.2`
+- [x] Re-evaluate dense retrieval against `v0.2`
+- [x] Store `bm25_v0_2.json`
+- [x] Store `dense_v0_2.json`
+- [ ] Independently audit preview-based relevance labels
+- [ ] Compare per-query retrieval failures in a dedicated analysis
 - [ ] Expand the benchmark to approximately 25–40 queries
+- [ ] Add multiple assessors and inter-annotator agreement
+
+#### v0.2 results
+
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
+| Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+
+Annotation limitation: the initial labels were produced through conservative assistant-supported review of candidate text previews. An independent second-pass audit using fuller source context remains required before publication-grade claims.
 
 ---
 
@@ -383,45 +399,45 @@ retrieval_metadata
 
 ## Immediate next milestone
 
-The next branch should be:
+Create the generic-evaluation branch after the pooled-benchmark pull request is merged:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 
-git switch -c feat/pooled-qrels-v0-2
-git push -u origin feat/pooled-qrels-v0-2
+git switch -c refactor/generic-retrieval-evaluation
+git push -u origin refactor/generic-retrieval-evaluation
 ```
 
-The milestone should produce:
+The milestone should update:
 
 ```text
-src/aeroragx/evaluation/pooling.py
-tests/test_candidate_pooling.py
-data/evaluation/candidates_v0_2_internal.jsonl
-data/evaluation/candidates_v0_2_annotation.jsonl
-data/evaluation/qrels_v0_2.jsonl
+src/aeroragx/evaluation/retrieval.py
+tests/test_retrieval_evaluation.py
 ```
 
 The required workflow is:
 
 ```text
-BM25 top-20
-        +
-Dense top-20
-        |
-        v
-Deduplicated candidate pool
-        |
-        v
-Blinded manual annotation
-        |
-        v
-Pooled qrels v0.2
-        |
-        v
-Fair BM25 and dense comparison
-        |
-        v
-Hybrid retrieval
+BM25 index ----+
+               |
+               v
+       Shared retrieval protocol
+               |
+Dense index ---+
+               |
+               v
+     Generic retrieval evaluator
+               |
+               v
+Compatible BM25 and dense wrappers
+               |
+               v
+Hybrid-retrieval-ready evaluation
+```
+
+After this refactor, begin:
+
+```text
+feat/hybrid-retrieval
 ```
