@@ -11,18 +11,22 @@ from aeroragx.generation.grounded import (
     SourceDocument,
     build_generation_evidence,
     load_generation_config,
+    with_evidence_top_k,
     write_grounded_answer,
 )
 from aeroragx.generation.provider import (
+    DeterministicGenerationProvider,
     GenerationProvider,
     ProviderClaim,
     ProviderEvidence,
     ProviderResponse,
     StaticGenerationProvider,
+    create_generation_provider,
 )
 
 __all__ = [
     "AnswerCitation",
+    "DeterministicGenerationProvider",
     "GenerationConfig",
     "GenerationEvidence",
     "GenerationProvider",
@@ -36,6 +40,8 @@ __all__ = [
     "SourceDocument",
     "StaticGenerationProvider",
     "build_generation_evidence",
+    "create_generation_provider",
     "load_generation_config",
+    "with_evidence_top_k",
     "write_grounded_answer",
 ]

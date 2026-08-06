@@ -28,6 +28,16 @@ from aeroragx.evaluation.retrieval import (
     write_candidate_records,
     write_evaluation_report,
 )
+from aeroragx.generation.grounded import (
+    GenerationConfig,
+    GroundedAnswerGenerator,
+    load_generation_config,
+    with_evidence_top_k,
+    write_grounded_answer,
+)
+from aeroragx.generation.provider import (
+    create_generation_provider,
+)
 from aeroragx.ingestion.acquisition import (
     download_documents,
     load_manifest,
@@ -2002,6 +2012,269 @@ def ntrs_evaluate_reranker(
 
     if latency_output is not None:
         console.print(f"Latency report: {latency_output}")
+
+
+def _load_grounded_answer_generator(
+    chunks_input: Path,
+    bm25_config: Path,
+    dense_config: Path,
+    hybrid_config: Path,
+    reranker_config: Path,
+    generation_config: Path,
+    embeddings_input: Path,
+    metadata_input: Path,
+    manifest_input: Path,
+    candidate_top_k: int | None,
+    evidence_top_k: int | None,
+) -> tuple[
+    GroundedAnswerGenerator,
+    RerankerConfig,
+    GenerationConfig,
+]:
+    """Load retrieval, reranking, and grounded-generation components."""
+
+    (
+        reranker_index,
+        reranker_settings,
+    ) = _load_reranker_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        reranker_config=reranker_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+        candidate_top_k=candidate_top_k,
+    )
+
+    generation_settings = with_evidence_top_k(
+        load_generation_config(generation_config),
+        evidence_top_k,
+    )
+
+    if generation_settings.evidence_top_k > reranker_settings.candidate_top_k:
+        raise typer.BadParameter("evidence_top_k must not exceed the reranker candidate_top_k.")
+
+    try:
+        provider = create_generation_provider(generation_settings.provider)
+    except ValueError as exc:
+        raise typer.BadParameter(
+            str(exc),
+            param_hint=("--generation-config"),
+        ) from exc
+
+    generator = GroundedAnswerGenerator(
+        index=reranker_index,
+        provider=provider,
+        config=generation_settings,
+    )
+
+    return (
+        generator,
+        reranker_settings,
+        generation_settings,
+    )
+
+
+@app.command(name="ntrs-grounded-answer")
+def ntrs_grounded_answer(
+    query: Annotated[
+        str,
+        typer.Option(
+            "--query",
+            "-q",
+            help=("Question answered from reranked NASA evidence."),
+        ),
+    ],
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    reranker_config: Annotated[
+        Path,
+        typer.Option(
+            "--reranker-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/reranker_v0_1.yaml"),
+    generation_config: Annotated[
+        Path,
+        typer.Option(
+            "--generation-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/generation_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    candidate_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--candidate-top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    evidence_top_k: Annotated[
+        int | None,
+        typer.Option(
+            "--evidence-top-k",
+            min=1,
+            max=100,
+        ),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            dir_okay=False,
+        ),
+    ] = None,
+) -> None:
+    """Generate a citation-verified answer from reranked evidence."""
+
+    (
+        generator,
+        reranker_settings,
+        generation_settings,
+    ) = _load_grounded_answer_generator(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        reranker_config=reranker_config,
+        generation_config=generation_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+        candidate_top_k=candidate_top_k,
+        evidence_top_k=evidence_top_k,
+    )
+
+    answer = generator.generate(
+        query,
+        reranker_model=(reranker_settings.model_name),
+    )
+
+    if output is not None:
+        write_grounded_answer(
+            output,
+            answer,
+        )
+        console.print(f"Saved grounded answer to {output}")
+        return
+
+    console.rule("[bold]Grounded answer[/bold]")
+    console.print(answer.answer)
+    console.print()
+    console.print(f"Insufficient evidence: {answer.insufficient_evidence}")
+    console.print(f"Generation provider: {generation_settings.provider}")
+    console.print(f"Generation model: {generation_settings.model_name}")
+    console.print(f"Reranker model: {reranker_settings.model_name}")
+
+    if answer.claims:
+        claims_table = Table(title="Grounded claims")
+        claims_table.add_column("Claim")
+        claims_table.add_column("Text")
+        claims_table.add_column("Citations")
+
+        for claim in answer.claims:
+            claims_table.add_row(
+                claim.claim_id,
+                claim.text,
+                ", ".join(claim.citation_ids),
+            )
+
+        console.print(claims_table)
+
+    if answer.citations:
+        citation_table = Table(title="Authoritative citations")
+        citation_table.add_column("Citation")
+        citation_table.add_column("Document")
+        citation_table.add_column("Pages")
+        citation_table.add_column("Chunk")
+        citation_table.add_column("Reranker rank")
+        citation_table.add_column("NASA citation")
+
+        for citation in answer.citations:
+            pages = (
+                str(citation.page_start)
+                if (citation.page_start == citation.page_end)
+                else (f"{citation.page_start}-{citation.page_end}")
+            )
+
+            citation_table.add_row(
+                citation.citation_id,
+                str(citation.document_id),
+                pages,
+                citation.chunk_id,
+                str(citation.reranker_rank),
+                citation.citation_url,
+            )
+
+        console.print(citation_table)
 
 
 if __name__ == "__main__":

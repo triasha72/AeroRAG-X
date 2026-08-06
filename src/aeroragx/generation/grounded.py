@@ -272,6 +272,21 @@ def load_generation_config(path: Path) -> GenerationConfig:
     return GenerationConfig.model_validate(raw_data)
 
 
+def with_evidence_top_k(
+    config: GenerationConfig,
+    evidence_top_k: int | None,
+) -> GenerationConfig:
+    """Return a validated config with an optional evidence-depth override."""
+
+    if evidence_top_k is None:
+        return config
+
+    values = config.model_dump(mode="python")
+    values["evidence_top_k"] = evidence_top_k
+
+    return GenerationConfig.model_validate(values)
+
+
 def _build_evidence_record(
     hit: RerankedSearchHit,
     *,
