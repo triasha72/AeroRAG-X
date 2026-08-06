@@ -1,33 +1,34 @@
-# Python
+# macOS
+.DS_Store
+
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
-*.egg-info/
-
-# Testing and type checking
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
-# Virtual environments
-.venv/
-venv/
-env/
+# Coverage
+.coverage
+htmlcov/
 
-# Build outputs
+# Packaging
+*.egg-info/
 build/
 dist/
 
-# Environment variables
+# Virtual environments and local environment files
+.venv/
+venv/
 .env
-.env.*
 
-# macOS
-.DS_Store
+# Temporary backup files
+*.backup
+*.bak
 
-# IDE
-.vscode/
-.idea/
+# Generated dense retrieval indexes
+artifacts/embeddings/*.npy
+artifacts/embeddings/*_metadata.jsonl
 
-# Generated project data
-data/raw/
-data/processed/
+# Generated search demonstrations
+data/results/

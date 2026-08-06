@@ -52,6 +52,8 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-extract-pages",
         "ntrs-build-chunks",
         "ntrs-bm25-search",
+        "ntrs-build-dense-index",
+        "ntrs-dense-search",
         "ntrs-build-evaluation-candidates",
         "ntrs-evaluate-bm25",
     }
@@ -139,4 +141,30 @@ def test_evaluate_bm25_options() -> None:
         "bm25_config",
         "top_k",
         "report_output",
+    } <= names
+
+
+def test_build_dense_index_options() -> None:
+    names = option_names("ntrs-build-dense-index")
+
+    assert {
+        "chunks_input",
+        "dense_config",
+        "embeddings_output",
+        "metadata_output",
+        "manifest_output",
+    } <= names
+
+
+def test_dense_search_options() -> None:
+    names = option_names("ntrs-dense-search")
+
+    assert {
+        "query",
+        "dense_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "top_k",
+        "output",
     } <= names
