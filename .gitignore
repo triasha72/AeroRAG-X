@@ -32,3 +32,10 @@ artifacts/embeddings/*_metadata.jsonl
 
 # Generated search demonstrations
 data/results/
+
+# Local editor configuration
+.vscode/
+
+# Generated and downloaded corpus data
+data/raw/
+data/processed/
