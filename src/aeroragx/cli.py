@@ -13,6 +13,7 @@ from aeroragx.config import load_config
 from aeroragx.evaluation.retrieval import (
     build_bm25_candidates,
     evaluate_bm25,
+    evaluate_dense,
     load_evaluation_queries,
     load_relevance_judgments,
     write_candidate_records,
@@ -884,6 +885,143 @@ def ntrs_dense_search(
 
     console.print(f"Indexed chunks: {index.document_count}")
     console.print(table)
+
+
+@app.command(name="ntrs-evaluate-dense")
+def ntrs_evaluate_dense(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    qrels_input: Annotated[
+        Path,
+        typer.Option(
+            "--qrels-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/qrels_v0_1.jsonl"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    top_k: Annotated[
+        int,
+        typer.Option(
+            "--top-k",
+            min=10,
+            max=100,
+        ),
+    ] = 10,
+    report_output: Annotated[
+        Path,
+        typer.Option(
+            "--report-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/evaluation/dense_v0_1.json"),
+) -> None:
+    """Evaluate the dense retrieval baseline."""
+
+    queries = load_evaluation_queries(queries_input)
+    judgments = load_relevance_judgments(qrels_input)
+    config = load_dense_config(dense_config)
+
+    (
+        embeddings,
+        chunks,
+        manifest,
+    ) = load_dense_index(
+        embeddings_path=embeddings_input,
+        metadata_path=metadata_input,
+        manifest_path=manifest_input,
+    )
+
+    if manifest.model_name != config.model_name:
+        raise typer.BadParameter("Dense configuration model differs from the index manifest.")
+
+    encoder = load_dense_encoder(config)
+
+    index = DenseIndex(
+        embeddings=embeddings,
+        chunks=chunks,
+        config=config,
+        encoder=encoder,
+    )
+
+    report = evaluate_dense(
+        index=index,
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
+    )
+
+    write_evaluation_report(
+        path=report_output,
+        report=report,
+    )
+
+    table = Table(title="Dense retrieval evaluation")
+    table.add_column("Metric")
+    table.add_column("Score")
+
+    table.add_row(
+        "Recall@5",
+        f"{report.recall_at_5:.4f}",
+    )
+    table.add_row(
+        "Recall@10",
+        f"{report.recall_at_10:.4f}",
+    )
+    table.add_row(
+        "MRR@10",
+        f"{report.mrr_at_10:.4f}",
+    )
+    table.add_row(
+        "NDCG@10",
+        f"{report.ndcg_at_10:.4f}",
+    )
+
+    console.print(table)
+    console.print(f"Report: {report_output}")
 
 
 if __name__ == "__main__":

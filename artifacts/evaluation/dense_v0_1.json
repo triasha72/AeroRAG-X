@@ -1,0 +1,202 @@
+{
+  "model_name": "dense",
+  "query_count": 8,
+  "recall_at_5": 0.229167,
+  "recall_at_10": 0.395833,
+  "mrr_at_10": 0.337649,
+  "ndcg_at_10": 0.281167,
+  "per_query": [
+    {
+      "query_id": "q001",
+      "query": "battery thermal runaway propagation in electric aircraft",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20240016127:chunk:00000",
+        "20220007525:chunk:00000",
+        "20210025384:chunk:00040",
+        "20170007959:chunk:00000",
+        "20205004080:chunk:00034",
+        "20170007959:chunk:00014",
+        "20205011477:chunk:00037",
+        "20220012064:chunk:00000",
+        "20220012064:chunk:00003",
+        "20205004982:chunk:00002"
+      ],
+      "relevant_retrieved_ids": [
+        "20220007525:chunk:00000",
+        "20170007959:chunk:00014"
+      ],
+      "recall_at_5": 0.3333333333333333,
+      "recall_at_10": 0.6666666666666666,
+      "reciprocal_rank_at_10": 0.5,
+      "ndcg_at_10": 0.4632423659320675
+    },
+    {
+      "query_id": "q002",
+      "query": "fuel cell aircraft thermal management",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20205006797:chunk:00000",
+        "20240015505:chunk:00033",
+        "20260000381:chunk:00001",
+        "20260003867:chunk:00010",
+        "20250010867:chunk:00008",
+        "20240015017:chunk:00001",
+        "20210018359:chunk:00000",
+        "20240003885:chunk:00007",
+        "20240015017:chunk:00020",
+        "20090021990:chunk:00083"
+      ],
+      "relevant_retrieved_ids": [
+        "20090021990:chunk:00083"
+      ],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.3333333333333333,
+      "reciprocal_rank_at_10": 0.1,
+      "ndcg_at_10": 0.13565197343244778
+    },
+    {
+      "query_id": "q003",
+      "query": "hybrid electric propulsion system safety",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20170006610:chunk:00004",
+        "20170006610:chunk:00000",
+        "20230017796:chunk:00032",
+        "20205004982:chunk:00002",
+        "20230017796:chunk:00002",
+        "20230017521:chunk:00000",
+        "20230017521:chunk:00030",
+        "20190031945:chunk:00003",
+        "20205003005:chunk:00000",
+        "20180004867:chunk:00017"
+      ],
+      "relevant_retrieved_ids": [
+        "20170006610:chunk:00000"
+      ],
+      "recall_at_5": 0.3333333333333333,
+      "recall_at_10": 0.3333333333333333,
+      "reciprocal_rank_at_10": 0.5,
+      "ndcg_at_10": 0.2960819109658652
+    },
+    {
+      "query_id": "q004",
+      "query": "distributed electric propulsion aircraft",
+      "relevant_chunk_count": 2,
+      "retrieved_chunk_ids": [
+        "20140011913:chunk:00044",
+        "20230017796:chunk:00032",
+        "20140011913:chunk:00004",
+        "20170007959:chunk:00020",
+        "20140011913:chunk:00011",
+        "20140011913:chunk:00002",
+        "20230017521:chunk:00032",
+        "20210026284:chunk:00002",
+        "20240008067:chunk:00004",
+        "20170006235:chunk:00042"
+      ],
+      "relevant_retrieved_ids": [],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.0,
+      "reciprocal_rank_at_10": 0.0,
+      "ndcg_at_10": 0.0
+    },
+    {
+      "query_id": "q005",
+      "query": "hydrogen aircraft cryogenic fuel storage",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20240008078:chunk:00004",
+        "20250002550:chunk:00007",
+        "20240008370:chunk:00003",
+        "20250002550:chunk:00000",
+        "20250002550:chunk:00003",
+        "20250010867:chunk:00010",
+        "20240008370:chunk:00001",
+        "20250010867:chunk:00001",
+        "20250010867:chunk:00003",
+        "20240003885:chunk:00001"
+      ],
+      "relevant_retrieved_ids": [
+        "20240008370:chunk:00003",
+        "20250002550:chunk:00000"
+      ],
+      "recall_at_5": 0.6666666666666666,
+      "recall_at_10": 0.6666666666666666,
+      "reciprocal_rank_at_10": 0.3333333333333333,
+      "ndcg_at_10": 0.4367467095119258
+    },
+    {
+      "query_id": "q006",
+      "query": "aircraft battery cooling system",
+      "relevant_chunk_count": 2,
+      "retrieved_chunk_ids": [
+        "20240014672:chunk:00001",
+        "20240016127:chunk:00000",
+        "20240015505:chunk:00040",
+        "20240015505:chunk:00019",
+        "20180004867:chunk:00014",
+        "20240015505:chunk:00017",
+        "20220012921:chunk:00000",
+        "20180004867:chunk:00000",
+        "20260000381:chunk:00001",
+        "20230000051:chunk:00001"
+      ],
+      "relevant_retrieved_ids": [
+        "20240014672:chunk:00001"
+      ],
+      "recall_at_5": 0.5,
+      "recall_at_10": 0.5,
+      "reciprocal_rank_at_10": 1.0,
+      "ndcg_at_10": 0.6131471927654584
+    },
+    {
+      "query_id": "q007",
+      "query": "power electronics thermal management for electric aircraft",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20205006797:chunk:00000",
+        "20240015505:chunk:00033",
+        "20170007959:chunk:00000",
+        "20210018359:chunk:00000",
+        "20205004982:chunk:00000",
+        "20205004982:chunk:00001",
+        "20240015017:chunk:00001",
+        "20205004982:chunk:00006",
+        "20205004080:chunk:00000",
+        "20240015017:chunk:00020"
+      ],
+      "relevant_retrieved_ids": [
+        "20205004982:chunk:00006"
+      ],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.3333333333333333,
+      "reciprocal_rank_at_10": 0.125,
+      "ndcg_at_10": 0.1480409554829326
+    },
+    {
+      "query_id": "q008",
+      "query": "lithium ion battery fire detection in aviation",
+      "relevant_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "20210025384:chunk:00004",
+        "20210025384:chunk:00040",
+        "20060054003:chunk:00129",
+        "20090021990:chunk:00219",
+        "20090021990:chunk:00220",
+        "20220007525:chunk:00000",
+        "20220012921:chunk:00000",
+        "20210025384:chunk:00008",
+        "20210025384:chunk:00039",
+        "20050228985:chunk:00064"
+      ],
+      "relevant_retrieved_ids": [
+        "20220012921:chunk:00000"
+      ],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.3333333333333333,
+      "reciprocal_rank_at_10": 0.14285714285714285,
+      "ndcg_at_10": 0.15642624200758548
+    }
+  ]
+}
