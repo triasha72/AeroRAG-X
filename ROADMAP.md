@@ -210,11 +210,11 @@ Annotation limitation: the initial labels were produced through conservative ass
 
 ## Phase 6 — Evaluation refactoring
 
-- [ ] Introduce a shared retrieval-index protocol
-- [ ] Introduce a common retrieval-hit interface
-- [ ] Replace duplicated BM25 and dense evaluation logic
-- [ ] Implement a generic `evaluate_retriever` function
-- [ ] Preserve compatibility wrappers for BM25 and dense retrieval
+- [x] Introduce a shared retrieval-index protocol
+- [x] Introduce a common retrieval-hit interface
+- [x] Replace duplicated BM25 and dense evaluation logic
+- [x] Implement a generic `evaluate_retriever` function
+- [x] Preserve compatibility wrappers for BM25 and dense retrieval
 - [ ] Add reusable benchmark-comparison utilities
 - [ ] Add `scripts/compare_retrieval_reports.py`
 - [ ] Add machine-readable benchmark summaries
@@ -399,45 +399,11 @@ retrieval_metadata
 
 ## Immediate next milestone
 
-Create the generic-evaluation branch after the pooled-benchmark pull request is merged:
+The next milestone is reciprocal-rank-fusion hybrid retrieval:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 
-git switch -c refactor/generic-retrieval-evaluation
-git push -u origin refactor/generic-retrieval-evaluation
-```
-
-The milestone should update:
-
-```text
-src/aeroragx/evaluation/retrieval.py
-tests/test_retrieval_evaluation.py
-```
-
-The required workflow is:
-
-```text
-BM25 index ----+
-               |
-               v
-       Shared retrieval protocol
-               |
-Dense index ---+
-               |
-               v
-     Generic retrieval evaluator
-               |
-               v
-Compatible BM25 and dense wrappers
-               |
-               v
-Hybrid-retrieval-ready evaluation
-```
-
-After this refactor, begin:
-
-```text
-feat/hybrid-retrieval
-```
+git switch -c feat/hybrid-retrieval
+git push -u origin feat/hybrid-retrieval
