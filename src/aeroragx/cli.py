@@ -10,6 +10,14 @@ from rich.table import Table
 
 from aeroragx import __version__
 from aeroragx.config import load_config
+from aeroragx.evaluation.retrieval import (
+    build_bm25_candidates,
+    evaluate_bm25,
+    load_evaluation_queries,
+    load_relevance_judgments,
+    write_candidate_records,
+    write_evaluation_report,
+)
 from aeroragx.ingestion.acquisition import (
     download_documents,
     load_manifest,
@@ -494,6 +502,181 @@ def ntrs_bm25_search(
 
     console.print(f"Indexed chunks: {index.document_count}")
     console.print(table)
+
+
+@app.command(name="ntrs-build-evaluation-candidates")
+def ntrs_build_evaluation_candidates(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    top_k: Annotated[
+        int,
+        typer.Option(
+            "--top-k",
+            min=1,
+            max=100,
+        ),
+    ] = 20,
+    output: Annotated[
+        Path,
+        typer.Option(
+            "--output",
+            dir_okay=False,
+        ),
+    ] = Path("data/evaluation/candidates_v0_1.jsonl"),
+) -> None:
+    """Generate BM25 candidates for annotation."""
+
+    queries = load_evaluation_queries(queries_input)
+    chunks = load_chunk_records(chunks_input)
+    config = load_bm25_config(bm25_config)
+
+    index = BM25Index(
+        chunks=chunks,
+        config=config,
+    )
+
+    candidates = build_bm25_candidates(
+        index=index,
+        queries=queries,
+        top_k=top_k,
+    )
+
+    write_candidate_records(
+        path=output,
+        records=candidates,
+    )
+
+    console.print(f"Queries: {len(queries)}")
+    console.print(f"Candidates per query: {top_k}")
+    console.print(f"Output: {output}")
+
+
+@app.command(name="ntrs-evaluate-bm25")
+def ntrs_evaluate_bm25(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    qrels_input: Annotated[
+        Path,
+        typer.Option(
+            "--qrels-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/qrels_v0_1.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    top_k: Annotated[
+        int,
+        typer.Option(
+            "--top-k",
+            min=10,
+            max=100,
+        ),
+    ] = 10,
+    report_output: Annotated[
+        Path,
+        typer.Option(
+            "--report-output",
+            dir_okay=False,
+        ),
+    ] = Path("artifacts/evaluation/bm25_v0_1.json"),
+) -> None:
+    """Evaluate the BM25 retrieval baseline."""
+
+    queries = load_evaluation_queries(queries_input)
+    judgments = load_relevance_judgments(qrels_input)
+    chunks = load_chunk_records(chunks_input)
+    config = load_bm25_config(bm25_config)
+
+    index = BM25Index(
+        chunks=chunks,
+        config=config,
+    )
+
+    report = evaluate_bm25(
+        index=index,
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
+    )
+
+    write_evaluation_report(
+        path=report_output,
+        report=report,
+    )
+
+    table = Table(title="BM25 retrieval evaluation")
+    table.add_column("Metric")
+    table.add_column("Score")
+
+    table.add_row(
+        "Recall@5",
+        f"{report.recall_at_5:.4f}",
+    )
+    table.add_row(
+        "Recall@10",
+        f"{report.recall_at_10:.4f}",
+    )
+    table.add_row(
+        "MRR@10",
+        f"{report.mrr_at_10:.4f}",
+    )
+    table.add_row(
+        "NDCG@10",
+        f"{report.ndcg_at_10:.4f}",
+    )
+
+    console.print(table)
+    console.print(f"Report: {report_output}")
 
 
 if __name__ == "__main__":
