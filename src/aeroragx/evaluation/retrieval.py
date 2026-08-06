@@ -13,6 +13,7 @@ from pydantic import (
 )
 
 from aeroragx.retrieval.bm25 import BM25Index
+from aeroragx.retrieval.dense import DenseIndex
 
 
 class EvaluationQuery(BaseModel):
@@ -384,6 +385,106 @@ def evaluate_bm25(
 
     return RetrievalEvaluationReport(
         model_name="bm25",
+        query_count=query_count,
+        recall_at_5=round(
+            sum(result.recall_at_5 for result in per_query) / query_count,
+            6,
+        ),
+        recall_at_10=round(
+            sum(result.recall_at_10 for result in per_query) / query_count,
+            6,
+        ),
+        mrr_at_10=round(
+            sum(result.reciprocal_rank_at_10 for result in per_query) / query_count,
+            6,
+        ),
+        ndcg_at_10=round(
+            sum(result.ndcg_at_10 for result in per_query) / query_count,
+            6,
+        ),
+        per_query=per_query,
+    )
+
+
+def evaluate_dense(
+    index: DenseIndex,
+    queries: Sequence[EvaluationQuery],
+    judgments: Sequence[RelevanceJudgment],
+    top_k: int = 10,
+) -> RetrievalEvaluationReport:
+    """Evaluate dense retrieval using human judgments."""
+
+    if top_k < 10:
+        raise ValueError("top_k must be at least 10.")
+
+    judgment_by_query = {judgment.query_id: judgment for judgment in judgments}
+
+    query_ids = {query.query_id for query in queries}
+    judgment_ids = set(judgment_by_query)
+
+    missing = query_ids - judgment_ids
+    unknown = judgment_ids - query_ids
+
+    if missing:
+        raise ValueError("Missing relevance judgments for: " + ", ".join(sorted(missing)))
+
+    if unknown:
+        raise ValueError("Judgments contain unknown queries: " + ", ".join(sorted(unknown)))
+
+    per_query: list[QueryEvaluation] = []
+
+    for query in queries:
+        judgment = judgment_by_query[query.query_id]
+
+        hits = index.search(
+            query=query.query,
+            top_k=top_k,
+        )
+
+        retrieved_chunk_ids = [hit.chunk.chunk_id for hit in hits]
+
+        relevant_set = set(judgment.relevant_chunk_ids)
+
+        relevant_retrieved_ids = [
+            chunk_id for chunk_id in retrieved_chunk_ids if chunk_id in relevant_set
+        ]
+
+        per_query.append(
+            QueryEvaluation(
+                query_id=query.query_id,
+                query=query.query,
+                relevant_chunk_count=len(relevant_set),
+                retrieved_chunk_ids=(retrieved_chunk_ids),
+                relevant_retrieved_ids=(relevant_retrieved_ids),
+                recall_at_5=recall_at_k(
+                    retrieved_chunk_ids,
+                    judgment.relevant_chunk_ids,
+                    5,
+                ),
+                recall_at_10=recall_at_k(
+                    retrieved_chunk_ids,
+                    judgment.relevant_chunk_ids,
+                    10,
+                ),
+                reciprocal_rank_at_10=(
+                    reciprocal_rank_at_k(
+                        retrieved_chunk_ids,
+                        judgment.relevant_chunk_ids,
+                        10,
+                    )
+                ),
+                ndcg_at_10=ndcg_at_k(
+                    retrieved_chunk_ids,
+                    judgment.relevant_chunk_ids,
+                    10,
+                ),
+            )
+        )
+
+    query_count = len(per_query)
+
+    return RetrievalEvaluationReport(
+        model_name="dense",
         query_count=query_count,
         recall_at_5=round(
             sum(result.recall_at_5 for result in per_query) / query_count,

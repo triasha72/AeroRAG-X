@@ -56,6 +56,7 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-dense-search",
         "ntrs-build-evaluation-candidates",
         "ntrs-evaluate-bm25",
+        "ntrs-evaluate-dense",
     }
 
     assert expected_commands <= set(root_command.commands)
@@ -167,4 +168,19 @@ def test_dense_search_options() -> None:
         "manifest_input",
         "top_k",
         "output",
+    } <= names
+
+
+def test_evaluate_dense_options() -> None:
+    names = option_names("ntrs-evaluate-dense")
+
+    assert {
+        "queries_input",
+        "qrels_input",
+        "dense_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "top_k",
+        "report_output",
     } <= names

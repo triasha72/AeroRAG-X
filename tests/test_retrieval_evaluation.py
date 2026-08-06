@@ -1,4 +1,5 @@
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -7,6 +8,7 @@ from aeroragx.evaluation.retrieval import (
     RelevanceJudgment,
     build_bm25_candidates,
     evaluate_bm25,
+    evaluate_dense,
     load_evaluation_queries,
     load_relevance_judgments,
     ndcg_at_k,
@@ -68,6 +70,98 @@ def make_index() -> BM25Index:
             ),
         ]
     )
+
+
+class FakeDenseIndex:
+    """Deterministic dense index for evaluation tests."""
+
+    def __init__(
+        self,
+        chunks: list[ChunkRecord],
+    ) -> None:
+        self._chunks = chunks
+
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+    ) -> list[SimpleNamespace]:
+        """Return query-specific ranked chunks."""
+
+        if "battery" in query.lower():
+            ordered_ids = [
+                "101:chunk:00000",
+                "103:chunk:00000",
+                "102:chunk:00000",
+            ]
+        elif "fuel cell" in query.lower():
+            ordered_ids = [
+                "102:chunk:00000",
+                "103:chunk:00000",
+                "101:chunk:00000",
+            ]
+        else:
+            ordered_ids = [chunk.chunk_id for chunk in self._chunks]
+
+        chunk_by_id = {chunk.chunk_id: chunk for chunk in self._chunks}
+
+        return [SimpleNamespace(chunk=chunk_by_id[chunk_id]) for chunk_id in ordered_ids[:top_k]]
+
+
+def test_evaluate_dense() -> None:
+    chunks = [
+        make_chunk(
+            "101:chunk:00000",
+            101,
+            ("battery thermal runaway propagation cooling aircraft"),
+        ),
+        make_chunk(
+            "102:chunk:00000",
+            102,
+            ("fuel cell aircraft thermal management cooling"),
+        ),
+        make_chunk(
+            "103:chunk:00000",
+            103,
+            "airport traffic operations",
+        ),
+    ]
+
+    queries = [
+        EvaluationQuery(
+            query_id="q001",
+            query="battery thermal runaway",
+        ),
+        EvaluationQuery(
+            query_id="q002",
+            query="fuel cell thermal management",
+        ),
+    ]
+
+    judgments = [
+        RelevanceJudgment(
+            query_id="q001",
+            relevant_chunk_ids=["101:chunk:00000"],
+        ),
+        RelevanceJudgment(
+            query_id="q002",
+            relevant_chunk_ids=["102:chunk:00000"],
+        ),
+    ]
+
+    report = evaluate_dense(
+        index=FakeDenseIndex(chunks),  # type: ignore[arg-type]
+        queries=queries,
+        judgments=judgments,
+        top_k=10,
+    )
+
+    assert report.model_name == "dense"
+    assert report.query_count == 2
+    assert report.recall_at_5 == 1.0
+    assert report.recall_at_10 == 1.0
+    assert report.mrr_at_10 == 1.0
+    assert report.ndcg_at_10 == 1.0
 
 
 def test_retrieval_metrics() -> None:
