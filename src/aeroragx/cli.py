@@ -22,6 +22,7 @@ from aeroragx.evaluation.retrieval import (
     build_bm25_candidates,
     evaluate_bm25,
     evaluate_dense,
+    evaluate_retriever,
     load_evaluation_queries,
     load_relevance_judgments,
     write_candidate_records,
@@ -68,6 +69,12 @@ from aeroragx.retrieval.dense import (
     load_dense_index,
     write_dense_index,
     write_dense_search_results,
+)
+from aeroragx.retrieval.hybrid import (
+    HybridConfig,
+    HybridIndex,
+    load_hybrid_config,
+    write_hybrid_search_results,
 )
 
 app = typer.Typer(
@@ -1256,6 +1263,329 @@ def ntrs_build_qrels_from_annotations(
     console.print(f"Queries: {len(judgments)}")
     console.print(f"Relevant chunks: {relevant_count}")
     console.print(f"Output: {output}")
+
+
+def _load_hybrid_index_from_paths(
+    chunks_input: Path,
+    bm25_config: Path,
+    dense_config: Path,
+    hybrid_config: Path,
+    embeddings_input: Path,
+    metadata_input: Path,
+    manifest_input: Path,
+) -> tuple[HybridIndex, HybridConfig]:
+    """Load compatible BM25, dense, and hybrid indexes."""
+
+    chunks = load_chunk_records(chunks_input)
+    bm25_settings = load_bm25_config(bm25_config)
+    dense_settings = load_dense_config(dense_config)
+    hybrid_settings = load_hybrid_config(hybrid_config)
+
+    bm25_index = BM25Index(
+        chunks=chunks,
+        config=bm25_settings,
+    )
+
+    (
+        embeddings,
+        dense_chunks,
+        manifest,
+    ) = load_dense_index(
+        embeddings_path=embeddings_input,
+        metadata_path=metadata_input,
+        manifest_path=manifest_input,
+    )
+
+    if manifest.model_name != dense_settings.model_name:
+        raise typer.BadParameter("Dense configuration model differs from the index manifest.")
+
+    corpus_chunk_ids = [chunk.chunk_id for chunk in chunks]
+    dense_chunk_ids = [chunk.chunk_id for chunk in dense_chunks]
+
+    if len(corpus_chunk_ids) != len(set(corpus_chunk_ids)):
+        raise typer.BadParameter("The BM25 corpus contains duplicate chunk IDs.")
+
+    if len(dense_chunk_ids) != len(set(dense_chunk_ids)):
+        raise typer.BadParameter("Dense metadata contains duplicate chunk IDs.")
+
+    if set(corpus_chunk_ids) != set(dense_chunk_ids):
+        raise typer.BadParameter("The BM25 corpus and dense metadata contain different chunk IDs.")
+
+    encoder = load_dense_encoder(dense_settings)
+
+    dense_index = DenseIndex(
+        embeddings=embeddings,
+        chunks=dense_chunks,
+        config=dense_settings,
+        encoder=encoder,
+    )
+
+    return (
+        HybridIndex(
+            bm25_index=bm25_index,
+            dense_index=dense_index,
+            config=hybrid_settings,
+        ),
+        hybrid_settings,
+    )
+
+
+@app.command(name="ntrs-hybrid-search")
+def ntrs_hybrid_search(
+    query: Annotated[
+        str,
+        typer.Option(
+            "--query",
+            "-q",
+            help="Hybrid lexical and semantic query.",
+        ),
+    ],
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    top_k: Annotated[
+        int | None,
+        typer.Option("--top-k", min=1, max=100),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", dir_okay=False),
+    ] = None,
+) -> None:
+    """Search using BM25+dense reciprocal-rank fusion."""
+
+    index, hybrid_settings = _load_hybrid_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+    )
+
+    result_limit = top_k if top_k is not None else hybrid_settings.default_top_k
+
+    hits = index.search(query=query, top_k=result_limit)
+
+    if output is not None:
+        write_hybrid_search_results(path=output, hits=hits)
+        console.print(f"Saved {len(hits)} results to {output}")
+        return
+
+    table = Table(title=f"Hybrid RRF results: {query}")
+    table.add_column("Rank")
+    table.add_column("RRF score")
+    table.add_column("Sources")
+    table.add_column("BM25 rank")
+    table.add_column("Dense rank")
+    table.add_column("Chunk")
+    table.add_column("Pages")
+    table.add_column("Text")
+
+    for hit in hits:
+        chunk = hit.chunk
+        table.add_row(
+            str(hit.rank),
+            f"{hit.score:.6f}",
+            "+".join(hit.retrieved_by),
+            str(hit.bm25_rank) if hit.bm25_rank is not None else "-",
+            str(hit.dense_rank) if hit.dense_rank is not None else "-",
+            chunk.chunk_id,
+            f"{chunk.page_start}-{chunk.page_end}",
+            " ".join(chunk.text.split())[:180],
+        )
+
+    console.print(table)
+
+
+@app.command(name="ntrs-evaluate-hybrid")
+def ntrs_evaluate_hybrid(
+    queries_input: Annotated[
+        Path,
+        typer.Option(
+            "--queries-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/queries_v0_1.jsonl"),
+    qrels_input: Annotated[
+        Path,
+        typer.Option(
+            "--qrels-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/evaluation/qrels_v0_2.jsonl"),
+    chunks_input: Annotated[
+        Path,
+        typer.Option(
+            "--chunks-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("data/processed/ntrs/v0_1/chunks.jsonl"),
+    bm25_config: Annotated[
+        Path,
+        typer.Option(
+            "--bm25-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/bm25_v0_1.yaml"),
+    dense_config: Annotated[
+        Path,
+        typer.Option(
+            "--dense-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/dense_v0_1.yaml"),
+    hybrid_config: Annotated[
+        Path,
+        typer.Option(
+            "--hybrid-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("configs/hybrid_v0_1.yaml"),
+    embeddings_input: Annotated[
+        Path,
+        typer.Option(
+            "--embeddings-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1.npy"),
+    metadata_input: Annotated[
+        Path,
+        typer.Option(
+            "--metadata-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
+    manifest_input: Annotated[
+        Path,
+        typer.Option(
+            "--manifest-input",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+        ),
+    ] = Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
+    top_k: Annotated[
+        int,
+        typer.Option("--top-k", min=10, max=100),
+    ] = 10,
+    report_output: Annotated[
+        Path,
+        typer.Option("--report-output", dir_okay=False),
+    ] = Path("artifacts/evaluation/hybrid_v0_2.json"),
+) -> None:
+    """Evaluate reciprocal-rank-fusion retrieval."""
+
+    queries = load_evaluation_queries(queries_input)
+    judgments = load_relevance_judgments(qrels_input)
+
+    index, _ = _load_hybrid_index_from_paths(
+        chunks_input=chunks_input,
+        bm25_config=bm25_config,
+        dense_config=dense_config,
+        hybrid_config=hybrid_config,
+        embeddings_input=embeddings_input,
+        metadata_input=metadata_input,
+        manifest_input=manifest_input,
+    )
+
+    report = evaluate_retriever(
+        index=index,
+        model_name="hybrid_rrf",
+        queries=queries,
+        judgments=judgments,
+        top_k=top_k,
+    )
+
+    write_evaluation_report(path=report_output, report=report)
+
+    table = Table(title="Hybrid RRF retrieval evaluation")
+    table.add_column("Metric")
+    table.add_column("Score")
+    table.add_row("Recall@5", f"{report.recall_at_5:.4f}")
+    table.add_row("Recall@10", f"{report.recall_at_10:.4f}")
+    table.add_row("MRR@10", f"{report.mrr_at_10:.4f}")
+    table.add_row("NDCG@10", f"{report.ndcg_at_10:.4f}")
+
+    console.print(table)
+    console.print(f"Report: {report_output}")
 
 
 if __name__ == "__main__":

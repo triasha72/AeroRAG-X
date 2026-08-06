@@ -54,9 +54,11 @@ def test_expected_commands_are_registered() -> None:
         "ntrs-bm25-search",
         "ntrs-build-dense-index",
         "ntrs-dense-search",
+        "ntrs-hybrid-search",
         "ntrs-build-evaluation-candidates",
         "ntrs-evaluate-bm25",
         "ntrs-evaluate-dense",
+        "ntrs-evaluate-hybrid",
         "ntrs-build-pooled-candidates",
         "ntrs-build-qrels-from-annotations",
     }
@@ -180,6 +182,41 @@ def test_evaluate_dense_options() -> None:
         "queries_input",
         "qrels_input",
         "dense_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "top_k",
+        "report_output",
+    } <= names
+
+
+def test_hybrid_search_options() -> None:
+    names = option_names("ntrs-hybrid-search")
+
+    assert {
+        "query",
+        "chunks_input",
+        "bm25_config",
+        "dense_config",
+        "hybrid_config",
+        "embeddings_input",
+        "metadata_input",
+        "manifest_input",
+        "top_k",
+        "output",
+    } <= names
+
+
+def test_evaluate_hybrid_options() -> None:
+    names = option_names("ntrs-evaluate-hybrid")
+
+    assert {
+        "queries_input",
+        "qrels_input",
+        "chunks_input",
+        "bm25_config",
+        "dense_config",
+        "hybrid_config",
         "embeddings_input",
         "metadata_input",
         "manifest_input",

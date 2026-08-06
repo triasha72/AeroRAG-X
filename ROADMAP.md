@@ -30,6 +30,8 @@ The repository currently includes:
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
 - exact dense-vector search over 3,233 chunks
+- shared retrieval interfaces and generic evaluation
+- reciprocal-rank-fusion hybrid retrieval
 - deterministic BM25+dense candidate pooling
 - blinded annotation records
 - pooled `v0.2` relevance judgments
@@ -37,7 +39,7 @@ The repository currently includes:
 - command-line workflows
 - automated tests, formatting, linting, type checking, and CI
 
-The immediate priority is to replace duplicated BM25 and dense evaluation logic with a shared retrieval interface and generic evaluator. The following milestone is reciprocal-rank-fusion hybrid retrieval.
+Shared retrieval evaluation and reciprocal-rank-fusion hybrid retrieval are complete. The immediate priority is cross-encoder reranking over hybrid candidates, followed by grounded answer generation.
 
 ---
 
@@ -203,6 +205,7 @@ The immediate priority is to replace duplicated BM25 and dense evaluation logic 
 |---|---:|---:|---:|---:|
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
 
 Annotation limitation: the initial labels were produced through conservative assistant-supported review of candidate text previews. An independent second-pass audit using fuller source context remains required before publication-grade claims.
 
@@ -224,21 +227,21 @@ Annotation limitation: the initial labels were produced through conservative ass
 
 ## Phase 7 — Hybrid retrieval
 
-- [ ] Create `configs/hybrid_v0_1.yaml`
-- [ ] Implement reciprocal-rank fusion
-- [ ] Retrieve candidates independently from BM25 and dense search
-- [ ] Fuse rankings rather than raw scores
-- [ ] Preserve contributing retrievers and original ranks
-- [ ] Add deterministic hybrid ranking
-- [ ] Add hybrid search CLI
-- [ ] Add hybrid unit tests
-- [ ] Evaluate hybrid retrieval on `qrels_v0_2.jsonl`
-- [ ] Store `hybrid_v0_2.json`
-- [ ] Compare BM25, dense, and hybrid retrieval
-- [ ] Tune RRF constant and candidate depths
-- [ ] Document query-level wins and failures
+- [x] Create `configs/hybrid_v0_1.yaml`
+- [x] Implement reciprocal-rank fusion
+- [x] Retrieve candidates independently from BM25 and dense search
+- [x] Fuse rankings rather than raw scores
+- [x] Preserve contributing retrievers and original ranks
+- [x] Add deterministic hybrid ranking
+- [x] Add hybrid search CLI
+- [x] Add hybrid unit tests
+- [x] Evaluate hybrid retrieval on `qrels_v0_2.jsonl`
+- [x] Store `hybrid_v0_2.json`
+- [x] Compare BM25, dense, and hybrid retrieval
+- [ ] Tune RRF constant and candidate depths on a separate development set
+- [x] Document initial query-level wins and failures
 
-Initial configuration target:
+Initial configuration:
 
 ```yaml
 version: "0.1"
@@ -247,6 +250,19 @@ bm25_top_k: 50
 dense_top_k: 50
 default_top_k: 10
 ```
+
+#### Initial Hybrid RRF results
+
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+
+The hybrid baseline produces the highest MRR@10 among the current
+retrievers but lower recall than BM25. It performs strongly on `q001`
+and `q002`, retrieves no relevant top-10 chunk for `q004`, and places
+the first relevant `q008` chunk at rank 9. RRF parameters remain fixed;
+they have not been tuned on the eight-query benchmark.
+
 
 ---
 
@@ -399,11 +415,17 @@ retrieval_metadata
 
 ## Immediate next milestone
 
-The next milestone is reciprocal-rank-fusion hybrid retrieval:
+The next milestone is cross-encoder reranking over the Hybrid RRF
+candidate set:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 
-git switch -c feat/hybrid-retrieval
-git push -u origin feat/hybrid-retrieval
+git switch -c feat/cross-encoder-reranking
+git push -u origin feat/cross-encoder-reranking
+```
+
+The reranking milestone should preserve BM25, dense, and hybrid ranks,
+score only a limited hybrid candidate set, measure latency, and evaluate
+the reranked results against `qrels_v0_2.jsonl`.

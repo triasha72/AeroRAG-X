@@ -34,7 +34,13 @@ NASA Technical Reports Server
        +-------+-------+
                |
                v
-    Independent evaluation
+ Reciprocal Rank Fusion
+               |
+               v
+       Hybrid retrieval
+               |
+               v
+ Generic retrieval evaluation
                |
                v
  Recall@5, Recall@10,
@@ -177,6 +183,33 @@ Embedding dimension: 384
 Normalization: enabled
 ```
 
+### Hybrid retrieval
+
+The hybrid layer provides:
+
+- independent BM25 and dense candidate retrieval
+- reciprocal-rank-fusion scoring
+- deterministic cross-retriever deduplication
+- preservation of original source ranks and scores
+- rank-based fusion without combining raw BM25 and cosine scores
+- citation-preserving hybrid results
+
+Primary module and configuration:
+
+```text
+src/aeroragx/retrieval/hybrid.py
+configs/hybrid_v0_1.yaml
+```
+
+Fixed baseline:
+
+```text
+RRF constant: 60
+BM25 depth: 50
+Dense depth: 50
+Default output depth: 10
+```
+
 ### Retrieval evaluation
 
 The evaluation layer provides:
@@ -189,8 +222,11 @@ The evaluation layer provides:
 - NDCG@10
 - aggregate reports
 - per-query reports
+- shared retrieval-hit and retrieval-index protocols
+- generic retrieval evaluation
 - BM25 evaluation
 - dense evaluation
+- Hybrid RRF evaluation
 
 Primary module:
 
@@ -203,6 +239,9 @@ Tracked reports:
 ```text
 artifacts/evaluation/bm25_v0_1.json
 artifacts/evaluation/dense_v0_1.json
+artifacts/evaluation/bm25_v0_2.json
+artifacts/evaluation/dense_v0_2.json
+artifacts/evaluation/hybrid_v0_2.json
 ```
 
 ---
@@ -253,32 +292,22 @@ Answer-generation evaluation will be introduced separately and will include:
 
 ---
 
-## Current evaluation limitation
+## Current benchmark state
 
-The `v0.1` relevance judgments were selected from a BM25-generated candidate pool.
+The pooled `v0.2` benchmark contains eight queries, 278 reviewed
+candidates, and 101 relevant chunk judgments. BM25, dense retrieval,
+and Hybrid RRF are evaluated against the same qrels.
 
-This creates a possible lexical-retrieval bias because dense-only candidates were not available during the original annotation process.
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
+| Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
 
-The next evaluation version will:
-
-```text
-BM25 top-20 candidates
-          +
-Dense top-20 candidates
-          |
-          v
-Deduplicated candidate pool
-          |
-          v
-Blinded annotation
-          |
-          v
-Pooled qrels v0.2
-```
-
-Hybrid retrieval will be evaluated only after the pooled benchmark is created.
-
----
+Hybrid RRF improves early relevant-result placement as measured by
+MRR@10, while BM25 retains higher recall and NDCG on this small
+benchmark. The initial labels were produced from candidate previews and
+require an independent second-pass audit before publication-grade use.
 
 ## Design principles
 
@@ -311,22 +340,33 @@ Future answers must:
 
 ## Next architectural milestone
 
-The next component is pooled candidate generation:
+The next component is cross-encoder reranking over a bounded number of
+Hybrid RRF candidates:
 
 ```text
-src/aeroragx/evaluation/pooling.py
+BM25 retrieval -------+
+                      |
+Dense retrieval ------+--> Reciprocal Rank Fusion
+                                      |
+                                      v
+                              Top hybrid candidates
+                                      |
+                                      v
+                              Cross-encoder scorer
+                                      |
+                                      v
+                               Reranked evidence
+                                      |
+                                      v
+                         Generic retrieval evaluation
 ```
 
-It will combine BM25 and dense candidates while preserving internal retriever provenance and producing a blinded file for manual annotation.
+The reranker must preserve:
 
-The pooled relevance judgments will then support:
+- original BM25 rank and score;
+- original dense rank and score;
+- Hybrid RRF rank and score;
+- chunk, document, page, checksum, and citation provenance;
+- deterministic output when model scores are tied.
 
-```text
-fair BM25 evaluation
-        |
-fair dense evaluation
-        |
-hybrid reciprocal-rank fusion
-        |
-cross-encoder reranking
-```
+The reranking milestone will precede grounded answer generation.

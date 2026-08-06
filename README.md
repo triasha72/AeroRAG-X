@@ -37,10 +37,13 @@ BM25 lexical retrieval     Dense semantic retrieval
         +------------+------------+
                      |
                      v
-        Deduplicated pooled candidates
+        Reciprocal Rank Fusion
                      |
                      v
-       Blinded relevance annotation
+              Hybrid ranking
+                     |
+                     v
+       Generic retrieval evaluation
                      |
                      v
           Retrieval benchmark v0.2
@@ -58,6 +61,10 @@ Implemented capabilities include:
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
 - persistent NumPy embedding indexes
+- shared retrieval-hit and retrieval-index protocols
+- generic BM25, dense, and hybrid evaluation
+- reciprocal-rank-fusion hybrid retrieval
+- preserved BM25 and dense source ranks and scores
 - curated aerospace evaluation queries
 - deterministic BM25+dense candidate pooling
 - deduplication by `chunk_id`
@@ -69,7 +76,7 @@ Implemented capabilities include:
 - Typer command-line interface
 - Ruff, pytest, mypy, coverage, and GitHub Actions
 
-The next major milestone is a shared retrieval-evaluation interface, followed by reciprocal-rank-fusion hybrid retrieval.
+The retrieval stack now includes a shared evaluation interface and reciprocal-rank-fusion hybrid search. The next major milestone is cross-encoder reranking over the hybrid candidate set.
 
 ---
 
@@ -119,6 +126,19 @@ The protocol:
 |---|---:|---:|---:|---:|
 | BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
 | Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+
+The fixed Hybrid RRF baseline achieves the highest MRR@10 of the three
+retrievers, while BM25 retains the highest Recall@5, Recall@10, and
+NDCG@10. On the eight-query benchmark, hybrid retrieval is strongest on
+early relevant-result placement rather than total relevant-result recall.
+
+Query-level inspection shows strong hybrid Recall@10 for `q001` and
+`q002`, but no relevant result in the top 10 for `q004`. For `q008`, the
+first relevant result appears at rank 9. These results motivate
+cross-encoder reranking and a larger independently audited query set.
+They should not be interpreted as a definitive ranking of retrieval
+methods.
 
 Benchmark artifacts:
 
@@ -127,6 +147,7 @@ artifacts/evaluation/bm25_v0_1.json
 artifacts/evaluation/dense_v0_1.json
 artifacts/evaluation/bm25_v0_2.json
 artifacts/evaluation/dense_v0_2.json
+artifacts/evaluation/hybrid_v0_2.json
 ```
 
 Evaluation data:
@@ -181,13 +202,15 @@ AeroRAG-X/
 │       ├── bm25_v0_1.json
 │       ├── dense_v0_1.json
 │       ├── bm25_v0_2.json
-│       └── dense_v0_2.json
+│       ├── dense_v0_2.json
+│       └── hybrid_v0_2.json
 ├── configs/
 │   ├── base.yaml
 │   ├── bm25_v0_1.yaml
 │   ├── chunking_v0_1.yaml
 │   ├── corpus_v0_1.yaml
-│   └── dense_v0_1.yaml
+│   ├── dense_v0_1.yaml
+│   └── hybrid_v0_1.yaml
 ├── data/
 │   ├── evaluation/
 │   │   ├── README.md
@@ -215,7 +238,8 @@ AeroRAG-X/
 │       │   └── pdf.py
 │       ├── retrieval/
 │       │   ├── bm25.py
-│       │   └── dense.py
+│       │   ├── dense.py
+│       │   └── hybrid.py
 │       ├── cli.py
 │       └── config.py
 ├── tests/
@@ -342,6 +366,25 @@ aeroragx ntrs-dense-search \
   --top-k 5
 ```
 
+### Hybrid reciprocal-rank-fusion search
+
+```bash
+aeroragx ntrs-hybrid-search \
+  --query "How can thermal runaway spread between aircraft battery cells?" \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --top-k 5
+```
+
+Hybrid retrieval combines source ranks using Reciprocal Rank Fusion. It
+preserves BM25 and dense scores for provenance but does not add or
+normalize those incomparable raw scores.
+
 ---
 
 ## Retrieval evaluation workflow
@@ -396,6 +439,23 @@ aeroragx ntrs-evaluate-dense \
   --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
   --top-k 10 \
   --report-output artifacts/evaluation/dense_v0_2.json
+```
+
+### Evaluate Hybrid RRF on v0.2
+
+```bash
+aeroragx ntrs-evaluate-hybrid \
+  --queries-input data/evaluation/queries_v0_1.jsonl \
+  --qrels-input data/evaluation/qrels_v0_2.jsonl \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --top-k 10 \
+  --report-output artifacts/evaluation/hybrid_v0_2.json
 ```
 
 ---
