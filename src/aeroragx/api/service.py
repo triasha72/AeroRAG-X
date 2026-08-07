@@ -8,6 +8,10 @@ from aeroragx.generation.grounded import (
     GroundedAnswer,
     GroundedAnswerGenerator,
 )
+from aeroragx.runtime import (
+    RuntimeConfig,
+    load_grounded_runtime,
+)
 
 
 class QueryService(Protocol):
@@ -44,3 +48,16 @@ class GroundedAnswerQueryService:
             query,
             reranker_model=self._reranker_model,
         )
+
+
+def load_query_service(
+    config: RuntimeConfig,
+) -> GroundedAnswerQueryService:
+    """Construct the production HTTP query service."""
+
+    runtime = load_grounded_runtime(config)
+
+    return GroundedAnswerQueryService(
+        runtime.generator,
+        reranker_model=(runtime.reranker_settings.model_name),
+    )

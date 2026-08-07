@@ -169,3 +169,47 @@ def test_openapi_document_is_available() -> None:
     assert "/health" in schema["paths"]
     assert "/ready" in schema["paths"]
     assert "/v1/query" in schema["paths"]
+
+
+def test_runtime_loader_sets_ready_during_lifespan() -> None:
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+
+    loaded_configs: list[RuntimeConfig] = []
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        loaded_configs.append(config)
+        return service
+
+    runtime_config = RuntimeConfig(
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+    )
+
+    with TestClient(application) as client:
+        readiness = client.get("/ready")
+
+        assert readiness.status_code == 200
+
+        assert readiness.json() == {
+            "status": "ready",
+            "ready": True,
+        }
+
+        response = client.post(
+            "/v1/query",
+            json={"query": ("Why is aircraft thermal management important?")},
+        )
+
+        assert response.status_code == 200
+
+    assert loaded_configs == [runtime_config]
