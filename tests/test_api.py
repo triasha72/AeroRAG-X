@@ -110,7 +110,13 @@ def test_query_is_unavailable_without_service() -> None:
 
     assert response.status_code == 503
 
-    assert response.json() == {"detail": ("AeroRAG-X runtime is not ready.")}
+    data = response.json()
+
+    assert data["error"]["code"] == ("runtime_unavailable")
+
+    assert data["error"]["message"] == ("AeroRAG-X runtime is not ready.")
+
+    assert data["error"]["request_id"] == response.headers["x-request-id"]
 
 
 def test_blank_query_is_rejected() -> None:
@@ -213,3 +219,107 @@ def test_runtime_loader_sets_ready_during_lifespan() -> None:
         assert response.status_code == 200
 
     assert loaded_configs == [runtime_config]
+
+
+def test_success_response_has_request_id() -> None:
+    from uuid import UUID
+
+    service = FakeQueryService()
+
+    client = TestClient(create_app(query_service=service))
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "test query"},
+    )
+
+    assert response.status_code == 200
+
+    request_id = response.headers["x-request-id"]
+
+    UUID(request_id)
+
+
+def test_validation_error_is_structured() -> None:
+    from uuid import UUID
+
+    service = FakeQueryService()
+
+    client = TestClient(create_app(query_service=service))
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "   "},
+    )
+
+    assert response.status_code == 422
+
+    data = response.json()
+
+    assert data["error"]["code"] == ("invalid_request")
+
+    assert data["error"]["request_id"] == response.headers["x-request-id"]
+
+    UUID(data["error"]["request_id"])
+
+
+def test_provider_failure_is_structured() -> None:
+    from aeroragx.generation.structured_provider import (
+        ProviderTransportError,
+    )
+
+    class ProviderFailureService:
+        def query(
+            self,
+            query: str,
+        ) -> GroundedAnswer:
+            del query
+
+            raise ProviderTransportError(
+                "simulated provider failure",
+                retryable=False,
+            )
+
+    client = TestClient(create_app(query_service=(ProviderFailureService())))
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "test query"},
+    )
+
+    assert response.status_code == 502
+
+    data = response.json()
+
+    assert data["error"]["code"] == ("provider_failure")
+
+    assert data["error"]["request_id"] == response.headers["x-request-id"]
+
+
+def test_unexpected_failure_is_structured() -> None:
+    class UnexpectedFailureService:
+        def query(
+            self,
+            query: str,
+        ) -> GroundedAnswer:
+            del query
+
+            raise RuntimeError("simulated internal failure")
+
+    client = TestClient(
+        create_app(query_service=(UnexpectedFailureService())),
+        raise_server_exceptions=False,
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "test query"},
+    )
+
+    assert response.status_code == 500
+
+    data = response.json()
+
+    assert data["error"]["code"] == ("internal_error")
+
+    assert data["error"]["request_id"] == response.headers["x-request-id"]

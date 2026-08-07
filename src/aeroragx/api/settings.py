@@ -10,7 +10,6 @@ from typing import Literal
 
 from aeroragx.runtime import RuntimeConfig
 
-
 type RuntimeMode = Literal[
     "local",
     "openai",

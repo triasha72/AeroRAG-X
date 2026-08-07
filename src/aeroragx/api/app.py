@@ -8,13 +8,27 @@ from collections.abc import (
 )
 from contextlib import asynccontextmanager
 from typing import cast
+from uuid import uuid4
 
 from fastapi import (
     FastAPI,
-    HTTPException,
+    Request,
     status,
 )
+from fastapi.exceptions import (
+    RequestValidationError,
+)
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import (
+    RequestResponseEndpoint,
+)
+from starlette.responses import Response
 
+from aeroragx.api.errors import (
+    ApiErrorDetail,
+    ApiErrorResponse,
+    RuntimeUnavailableError,
+)
 from aeroragx.api.schemas import (
     HealthResponse,
     QueryRequest,
@@ -29,6 +43,9 @@ from aeroragx.api.settings import (
 )
 from aeroragx.generation.grounded import (
     GroundedAnswer,
+)
+from aeroragx.generation.structured_provider import (
+    StructuredProviderError,
 )
 from aeroragx.runtime import RuntimeConfig
 
@@ -60,6 +77,7 @@ def create_app(
 
         try:
             yield
+
         finally:
             application.state.query_service = None
 
@@ -78,6 +96,122 @@ def create_app(
         return cast(
             QueryService | None,
             app.state.query_service,
+        )
+
+    def current_request_id(
+        request: Request,
+    ) -> str:
+        """Return the current request identifier."""
+
+        return cast(
+            str,
+            request.state.request_id,
+        )
+
+    def error_response(
+        *,
+        request: Request,
+        status_code: int,
+        code: str,
+        message: str,
+    ) -> JSONResponse:
+        """Build one stable structured API error."""
+
+        request_id = current_request_id(request)
+
+        payload = ApiErrorResponse(
+            error=ApiErrorDetail(
+                code=code,
+                message=message,
+                request_id=request_id,
+            )
+        )
+
+        return JSONResponse(
+            status_code=status_code,
+            content=payload.model_dump(),
+            headers={
+                "X-Request-ID": request_id,
+            },
+        )
+
+    @app.middleware("http")
+    async def request_id_middleware(
+        request: Request,
+        call_next: RequestResponseEndpoint,
+    ) -> Response:
+        """Attach one request ID to every HTTP request."""
+
+        request_id = str(uuid4())
+
+        request.state.request_id = request_id
+
+        response = await call_next(request)
+
+        response.headers["X-Request-ID"] = request_id
+
+        return response
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error_handler(
+        request: Request,
+        error: RequestValidationError,
+    ) -> JSONResponse:
+        """Return a stable validation error."""
+
+        del error
+
+        return error_response(
+            request=request,
+            status_code=(status.HTTP_422_UNPROCESSABLE_CONTENT),
+            code="invalid_request",
+            message=("Request validation failed."),
+        )
+
+    @app.exception_handler(RuntimeUnavailableError)
+    async def runtime_error_handler(
+        request: Request,
+        error: RuntimeUnavailableError,
+    ) -> JSONResponse:
+        """Return runtime-unavailable response."""
+
+        return error_response(
+            request=request,
+            status_code=(status.HTTP_503_SERVICE_UNAVAILABLE),
+            code="runtime_unavailable",
+            message=str(error),
+        )
+
+    @app.exception_handler(StructuredProviderError)
+    async def provider_error_handler(
+        request: Request,
+        error: StructuredProviderError,
+    ) -> JSONResponse:
+        """Hide provider details behind a stable API error."""
+
+        del error
+
+        return error_response(
+            request=request,
+            status_code=(status.HTTP_502_BAD_GATEWAY),
+            code="provider_failure",
+            message=("The generation provider failed to complete the request."),
+        )
+
+    @app.exception_handler(Exception)
+    async def unexpected_error_handler(
+        request: Request,
+        error: Exception,
+    ) -> JSONResponse:
+        """Return a safe internal-error response."""
+
+        del error
+
+        return error_response(
+            request=request,
+            status_code=(status.HTTP_500_INTERNAL_SERVER_ERROR),
+            code="internal_error",
+            message=("An unexpected internal error occurred."),
         )
 
     @app.get(
@@ -120,10 +254,7 @@ def create_app(
         service = current_query_service()
 
         if service is None:
-            raise HTTPException(
-                status_code=(status.HTTP_503_SERVICE_UNAVAILABLE),
-                detail=("AeroRAG-X runtime is not ready."),
-            )
+            raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
 
         return service.query(request.query)
 
