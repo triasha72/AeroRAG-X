@@ -1,0 +1,32 @@
+{"query_id":"core_001","query":"How can battery thermal runaway propagate in electric aircraft?","expected_answerable":true,"expected_terms":["battery","thermal","runaway"]}
+{"query_id":"core_002","query":"What thermal-management considerations apply to fuel-cell aircraft?","expected_answerable":true,"expected_terms":["fuel","cell","thermal"]}
+{"query_id":"core_003","query":"What safety concerns arise in hybrid-electric aircraft propulsion systems?","expected_answerable":true,"expected_terms":["hybrid","electric","safety"]}
+{"query_id":"core_004","query":"What characterizes distributed electric propulsion aircraft?","expected_answerable":true,"expected_terms":["distributed","electric","propulsion"]}
+{"query_id":"core_005","query":"What challenges affect cryogenic hydrogen storage in aircraft?","expected_answerable":true,"expected_terms":["hydrogen","cryogenic","storage"]}
+{"query_id":"core_006","query":"How are aircraft battery systems cooled?","expected_answerable":true,"expected_terms":["battery","cooling"]}
+{"query_id":"core_007","query":"How is power-electronics thermal management handled in electric aircraft?","expected_answerable":true,"expected_terms":["power","thermal","electric"]}
+{"query_id":"core_008","query":"How can lithium-ion battery fires be detected in aviation applications?","expected_answerable":true,"expected_terms":["battery","fire","detection"]}
+{"query_id":"para_001","query":"What physical mechanisms can allow battery thermal runaway to spread from one cell to another?","expected_answerable":true,"expected_terms":["thermal","runaway","cell"]}
+{"query_id":"para_002","query":"What role does heat transfer play in propagation of battery thermal events in aircraft?","expected_answerable":true,"expected_terms":["heat","battery","thermal"]}
+{"query_id":"para_003","query":"Why is waste-heat management important for fuel-cell aircraft propulsion?","expected_answerable":true,"expected_terms":["fuel","cell","heat"]}
+{"query_id":"para_004","query":"What hazards should be considered when designing hybrid-electric aircraft propulsion?","expected_answerable":true,"expected_terms":["hybrid","electric","propulsion"]}
+{"query_id":"para_005","query":"What engineering characteristics distinguish distributed electric propulsion from conventional propulsion layouts?","expected_answerable":true,"expected_terms":["distributed","electric","propulsion"]}
+{"query_id":"para_006","query":"Why is storing cryogenic hydrogen aboard aircraft technically challenging?","expected_answerable":true,"expected_terms":["hydrogen","cryogenic","storage"]}
+{"query_id":"para_007","query":"What approaches are used to manage heat in aircraft battery systems?","expected_answerable":true,"expected_terms":["battery","heat"]}
+{"query_id":"para_008","query":"Why do power-electronics components require thermal management in electrified aircraft?","expected_answerable":true,"expected_terms":["power","thermal","aircraft"]}
+{"query_id":"para_009","query":"What methods can help detect hazardous lithium-ion battery thermal events in aviation?","expected_answerable":true,"expected_terms":["battery","detection","thermal"]}
+{"query_id":"synth_001","query":"What thermal-management challenges are shared by battery-electric and fuel-cell aircraft?","expected_answerable":true,"expected_terms":["thermal","battery","fuel"]}
+{"query_id":"synth_002","query":"How do high-power electrified propulsion components create thermal-management demands in aircraft?","expected_answerable":true,"expected_terms":["power","electric","thermal"]}
+{"query_id":"synth_003","query":"What safety and thermal-management issues should designers consider across electrified aircraft propulsion systems?","expected_answerable":true,"expected_terms":["safety","thermal","electric"]}
+{"query_id":"exact_001","query":"What was the exact passenger ticket price of NASA's 2035 hydrogen airliner?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"fiction_001","query":"Which fictional Zephyr-X battery received FAA certification on January 1, 2040?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"fiction_002","query":"What was the exact certified mass of the fictional NovaCell-900 aircraft battery pack in NASA's 2038 fleet?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"fiction_003","query":"On what exact date did the fictional H2Skyliner receive FAA hydrogen-airliner certification in 2044?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"over_001","query":"What universal maximum battery-cell temperature does NASA mandate for every electric aircraft?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"over_002","query":"Which single coolant does the FAA require for every battery-electric aircraft thermal-management system?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"over_003","query":"What exact cryogenic hydrogen tank pressure is legally required for every hydrogen aircraft worldwide?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"over_004","query":"What exact failure probability does NASA assign to every hybrid-electric aircraft propulsion system?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"fiction_004","query":"Which FAA certificate was issued to the fictional Project AetherWing superconducting aircraft motor?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"fiction_005","query":"What chemical formula does NASA specify for the fictional ThermoShield-X aviation battery coolant?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"exact_002","query":"What exact 2042 retail price did NASA set for a kilogram of aviation hydrogen at every U.S. airport?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"over_005","query":"Which battery chemistry does NASA mandate for every electric aircraft entering service in 2040?","expected_answerable":false,"expected_terms":[]}

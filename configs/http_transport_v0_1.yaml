@@ -1,0 +1,8 @@
+version: "0.1"
+
+endpoint_url: "https://example.invalid/v1/aeroragx/generate"
+api_key_env_var: "AERORAGX_PROVIDER_API_KEY"
+authorization_scheme: "Bearer"
+request_id_header: "x-request-id"
+
+user_agent: "AeroRAG-X/0.1.0"

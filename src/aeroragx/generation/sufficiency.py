@@ -18,6 +18,7 @@ _STOP_WORDS = {
     "an",
     "and",
     "are",
+    "aboard",
     "as",
     "at",
     "be",
@@ -43,6 +44,7 @@ _STOP_WORDS = {
     "the",
     "their",
     "this",
+    "technically",
     "to",
     "was",
     "were",
@@ -64,9 +66,40 @@ _TOKEN_ALIASES = {
     "detecting": "detect",
     "detection": "detect",
     "fires": "fire",
+    "challenging": "challenge",
+    "issued": "issue",
+    "mandated": "mandate",
+    "assigned": "assign",
+    "stored": "storage",
+    "stores": "storage",
+    "storing": "storage",
     "propagated": "propagate",
     "propagates": "propagate",
     "propagation": "propagate",
+}
+
+_CLAIM_QUALIFIER_ALIASES = {
+    "assign": "assign",
+    "assigned": "assign",
+    "assigns": "assign",
+    "certified": "certify",
+    "certifies": "certify",
+    "certify": "certify",
+    "every": "every",
+    "issued": "issue",
+    "legal": "legal",
+    "legally": "legal",
+    "mandate": "mandate",
+    "mandated": "mandate",
+    "mandates": "mandate",
+    "official": "official",
+    "officially": "official",
+    "require": "require",
+    "required": "require",
+    "requires": "require",
+    "universal": "universal",
+    "universally": "universal",
+    "worldwide": "worldwide",
 }
 
 
@@ -110,6 +143,7 @@ class SufficiencyConfig(BaseModel):
 
     require_all_numeric_terms: bool = True
     require_named_anchors: bool = True
+    require_claim_qualifiers: bool = False
 
     @model_validator(mode="after")
     def validate_thresholds(self) -> Self:
@@ -143,6 +177,9 @@ class EvidenceSufficiencyResult(BaseModel):
 
     required_named_anchors: list[str]
     supported_named_anchors: list[str]
+
+    required_claim_qualifiers: list[str] = Field(default_factory=list)
+    supported_claim_qualifiers: list[str] = Field(default_factory=list)
 
     reasons: list[str]
 
@@ -212,6 +249,11 @@ class EvidenceSufficiencyAssessor:
             term for term in required_named_anchors if term in combined_evidence_terms
         ]
 
+        required_claim_qualifiers = _claim_qualifiers(normalized_query)
+        supported_claim_qualifiers = [
+            term for term in required_claim_qualifiers if term in combined_evidence_terms
+        ]
+
         required_coverage = (
             self._config.exact_query_minimum_coverage
             if "exact" in query_terms
@@ -245,6 +287,11 @@ class EvidenceSufficiencyAssessor:
         ):
             reasons.append("missing_named_anchor_support")
 
+        if self._config.require_claim_qualifiers and set(required_claim_qualifiers) != set(
+            supported_claim_qualifiers
+        ):
+            reasons.append("missing_claim_qualifier_support")
+
         return EvidenceSufficiencyResult(
             sufficient=not reasons,
             evidence_count=len(evidence_token_sets),
@@ -257,6 +304,8 @@ class EvidenceSufficiencyAssessor:
             supported_numeric_terms=supported_numeric_terms,
             required_named_anchors=required_named_anchors,
             supported_named_anchors=supported_named_anchors,
+            required_claim_qualifiers=(required_claim_qualifiers),
+            supported_claim_qualifiers=(supported_claim_qualifiers),
             reasons=reasons,
         )
 
@@ -376,13 +425,13 @@ def _named_anchors(
 
             continue
 
-        if "-" not in token:
-            continue
-
-        has_uppercase = any(character.isupper() for character in token)
+        has_internal_uppercase = any(character.isupper() for character in token[1:])
         has_digit = any(character.isdigit() for character in token)
 
-        if not (has_uppercase or has_digit):
+        if "-" in token:
+            if not (has_internal_uppercase or has_digit):
+                continue
+        elif not has_internal_uppercase:
             continue
 
         for part in parts:
@@ -392,6 +441,22 @@ def _named_anchors(
                 anchors.append(normalized)
 
     return anchors
+
+
+def _claim_qualifiers(
+    query: str,
+) -> list[str]:
+    """Return assertion-defining terms requiring support."""
+
+    qualifiers: list[str] = []
+
+    for token in _SIMPLE_TOKEN_RE.findall(query.casefold()):
+        qualifier = _CLAIM_QUALIFIER_ALIASES.get(token)
+
+        if qualifier is not None and qualifier not in qualifiers:
+            qualifiers.append(qualifier)
+
+    return qualifiers
 
 
 def _safe_ratio(

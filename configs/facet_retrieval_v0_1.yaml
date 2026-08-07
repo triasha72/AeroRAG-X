@@ -1,0 +1,6 @@
+version: "0.1"
+enabled: true
+facet_search_top_k: 15
+per_facet_quota: 2
+original_quota: 1
+minimum_semantic_matches_per_facet: 1

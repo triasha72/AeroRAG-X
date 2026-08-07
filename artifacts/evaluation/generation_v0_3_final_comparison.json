@@ -1,0 +1,78 @@
+{
+  "benchmark": "generation-v0.3",
+  "query_count": 32,
+  "runs": {
+    "baseline": {
+      "generation": {
+        "answerability_accuracy": 0.9375,
+        "answerable_completion_rate": 0.9,
+        "unsupported_refusal_rate": 1.0,
+        "claim_citation_coverage_rate": 1.0,
+        "citation_reference_validity_rate": 1.0,
+        "expected_term_recall": 0.9137931034482759,
+        "structural_validity_rate": 1.0
+      },
+      "provider": {
+        "provider_call_count": 22,
+        "provider_bypass_count": 10,
+        "provider_call_policy_accuracy": 0.875,
+        "provider_total_tokens": 63638,
+        "provider_total_estimated_cost_usd": 0.10573300000000001
+      }
+    },
+    "sufficiency_v02": {
+      "generation": {
+        "answerability_accuracy": 0.90625,
+        "answerable_completion_rate": 0.85,
+        "unsupported_refusal_rate": 1.0,
+        "claim_citation_coverage_rate": 1.0,
+        "citation_reference_validity_rate": 1.0,
+        "expected_term_recall": 0.8793103448275862,
+        "structural_validity_rate": 1.0
+      },
+      "provider": {
+        "provider_call_count": 18,
+        "provider_bypass_count": 14,
+        "provider_call_policy_accuracy": 0.9375,
+        "provider_total_tokens": 52677,
+        "provider_total_estimated_cost_usd": 0.090782
+      }
+    },
+    "final": {
+      "generation": {
+        "answerability_accuracy": 1.0,
+        "answerable_completion_rate": 1.0,
+        "unsupported_refusal_rate": 1.0,
+        "claim_citation_coverage_rate": 1.0,
+        "citation_reference_validity_rate": 1.0,
+        "expected_term_recall": 0.9310344827586207,
+        "structural_validity_rate": 1.0
+      },
+      "provider": {
+        "provider_call_count": 20,
+        "provider_bypass_count": 12,
+        "provider_call_policy_accuracy": 1.0,
+        "provider_total_tokens": 58915,
+        "provider_total_estimated_cost_usd": 0.103745
+      }
+    }
+  },
+  "baseline_to_final_delta": {
+    "generation": {
+      "answerability_accuracy": 0.0625,
+      "answerable_completion_rate": 0.09999999999999998,
+      "unsupported_refusal_rate": 0.0,
+      "claim_citation_coverage_rate": 0.0,
+      "citation_reference_validity_rate": 0.0,
+      "expected_term_recall": 0.01724137931034475,
+      "structural_validity_rate": 0.0
+    },
+    "provider": {
+      "provider_call_count": -2,
+      "provider_bypass_count": 2,
+      "provider_call_policy_accuracy": 0.125,
+      "provider_total_tokens": -4723,
+      "provider_total_estimated_cost_usd": -0.0019880000000000037
+    }
+  }
+}
