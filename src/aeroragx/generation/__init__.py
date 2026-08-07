@@ -33,6 +33,11 @@ from aeroragx.generation.http_transport import (
     HttpTransportConfig,
     load_http_transport_config,
 )
+from aeroragx.generation.model_adapter import (
+    GenericStructuredModelAdapter,
+    OpenAIResponsesAdapter,
+    StructuredModelAdapter,
+)
 from aeroragx.generation.prompting import (
     GroundedPrompt,
     ProviderHardeningConfig,
@@ -77,12 +82,14 @@ __all__ = [
     "GenerationEvidence",
     "GenerationProvider",
     "GenerationQueryEvaluation",
+    "GenericStructuredModelAdapter",
     "GroundedAnswer",
     "GroundedAnswerGenerator",
     "GroundedClaim",
     "GroundedPrompt",
     "HttpStructuredModelTransport",
     "HttpTransportConfig",
+    "OpenAIResponsesAdapter",
     "PromptInjectionAssessment",
     "PromptInjectionFinding",
     "ProviderClaim",
@@ -97,6 +104,7 @@ __all__ = [
     "SourceDocument",
     "StaticGenerationProvider",
     "StructuredGenerationProvider",
+    "StructuredModelAdapter",
     "StructuredModelRequest",
     "StructuredModelResult",
     "StructuredModelTransport",

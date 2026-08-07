@@ -5,15 +5,18 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Self
+from typing import Self
 
 import httpx
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
+from aeroragx.generation.model_adapter import (
+    GenericStructuredModelAdapter,
+    StructuredModelAdapter,
+)
 from aeroragx.generation.structured_provider import (
     ProviderTransportError,
-    ProviderUsage,
     StructuredModelRequest,
     StructuredModelResult,
 )
@@ -61,40 +64,18 @@ def load_http_transport_config(
 
 
 class HttpStructuredModelTransport:
-    """POST structured model requests to a JSON HTTP endpoint.
-
-    Request contract:
-
-    {
-      "model": "...",
-      "system_prompt": "...",
-      "user_prompt": "...",
-      "response_schema": {...}
-    }
-
-    Expected response contract:
-
-    {
-      "payload": {...},
-      "request_id": "optional",
-      "usage": {
-        "input_tokens": 123,
-        "output_tokens": 45
-      }
-    }
-
-    A configured request-id response header is used as a fallback when
-    ``request_id`` is not present in the JSON response.
-    """
+    """POST structured-model requests to a JSON HTTP endpoint."""
 
     def __init__(
         self,
         *,
         config: HttpTransportConfig,
+        adapter: StructuredModelAdapter | None = None,
         client: httpx.Client | None = None,
         environment: dict[str, str] | None = None,
     ) -> None:
         self._config = config
+        self._adapter = GenericStructuredModelAdapter() if adapter is None else adapter
         self._environment = os.environ if environment is None else environment
 
         self._api_key = self._resolve_api_key()
@@ -108,7 +89,7 @@ class HttpStructuredModelTransport:
 
     @property
     def config(self) -> HttpTransportConfig:
-        """Return a defensive copy of the transport configuration."""
+        """Return a defensive copy of transport configuration."""
 
         return self._config.model_copy(deep=True)
 
@@ -118,13 +99,13 @@ class HttpStructuredModelTransport:
         request: StructuredModelRequest,
         timeout_seconds: float,
     ) -> StructuredModelResult:
-        """Execute one HTTP request and return the structured result."""
+        """Execute one HTTP request and parse the provider result."""
 
         if timeout_seconds <= 0.0:
             raise ValueError("timeout_seconds must be positive.")
 
         headers = self._build_headers()
-        payload = self._build_request_payload(request)
+        payload = self._adapter.build_request_payload(request)
 
         try:
             response = self._client.post(
@@ -147,7 +128,7 @@ class HttpStructuredModelTransport:
         if not response.is_success:
             raise ProviderTransportError(
                 (f"Structured model endpoint returned HTTP {response.status_code}."),
-                retryable=_is_retryable_status(response.status_code),
+                retryable=(_is_retryable_status(response.status_code)),
             )
 
         try:
@@ -164,43 +145,14 @@ class HttpStructuredModelTransport:
                 retryable=False,
             )
 
-        payload_value = data.get("payload")
+        fallback_request_id = _normalized_header(
+            response,
+            self._config.request_id_header,
+        )
 
-        if not isinstance(
-            payload_value,
-            dict,
-        ):
-            raise ProviderTransportError(
-                "Structured model endpoint response is missing object field 'payload'.",
-                retryable=False,
-            )
-
-        usage = _parse_usage(data.get("usage"))
-
-        request_id = data.get("request_id")
-
-        if request_id is not None:
-            if not isinstance(
-                request_id,
-                str,
-            ):
-                raise ProviderTransportError(
-                    "Structured model endpoint field 'request_id' must be a string.",
-                    retryable=False,
-                )
-
-            request_id = request_id.strip() or None
-
-        if request_id is None:
-            request_id = _normalized_header(
-                response,
-                self._config.request_id_header,
-            )
-
-        return StructuredModelResult(
-            payload=_string_key_dict(payload_value),
-            request_id=request_id,
-            usage=usage,
+        return self._adapter.parse_response(
+            _string_key_dict(data),
+            fallback_request_id=(fallback_request_id),
         )
 
     def close(self) -> None:
@@ -228,8 +180,10 @@ class HttpStructuredModelTransport:
 
         self.close()
 
-    def _resolve_api_key(self) -> str | None:
-        """Resolve the configured API key without storing its variable name."""
+    def _resolve_api_key(
+        self,
+    ) -> str | None:
+        """Resolve the configured API key."""
 
         variable_name = self._config.api_key_env_var
 
@@ -246,11 +200,11 @@ class HttpStructuredModelTransport:
     def _build_headers(
         self,
     ) -> dict[str, str]:
-        """Build non-secret and authorization request headers."""
+        """Build HTTP request headers."""
 
         headers = {
             "Accept": "application/json",
-            "Content-Type": "application/json",
+            "Content-Type": ("application/json"),
             "User-Agent": (self._config.user_agent),
         }
 
@@ -258,19 +212,6 @@ class HttpStructuredModelTransport:
             headers["Authorization"] = f"{self._config.authorization_scheme} {self._api_key}"
 
         return headers
-
-    @staticmethod
-    def _build_request_payload(
-        request: StructuredModelRequest,
-    ) -> dict[str, object]:
-        """Serialize the provider-neutral request contract."""
-
-        return {
-            "model": request.model_name,
-            "system_prompt": (request.system_prompt),
-            "user_prompt": (request.user_prompt),
-            "response_schema": (request.response_schema),
-        }
 
 
 def _is_retryable_status(
@@ -289,23 +230,6 @@ def _is_retryable_status(
     )
 
 
-def _parse_usage(
-    value: object,
-) -> ProviderUsage | None:
-    """Parse optional token-usage metadata."""
-
-    if value is None:
-        return None
-
-    if not isinstance(value, dict):
-        raise ProviderTransportError(
-            "Structured model endpoint field 'usage' must be an object.",
-            retryable=False,
-        )
-
-    return ProviderUsage.model_validate(_string_key_dict(value))
-
-
 def _normalized_header(
     response: httpx.Response,
     name: str,
@@ -321,9 +245,9 @@ def _normalized_header(
 
 
 def _string_key_dict(
-    value: dict[Any, Any],
+    value: dict[object, object],
 ) -> dict[str, object]:
-    """Return a dictionary while rejecting non-string JSON keys."""
+    """Return a dictionary while rejecting non-string keys."""
 
     result: dict[str, object] = {}
 
