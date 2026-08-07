@@ -4,7 +4,7 @@ adapter: "openai-responses"
 schema_name: "aeroragx_grounded_answer"
 
 priced_model_name: "gpt-5.6-luna"
-input_cost_per_million_tokens: 0.20
-output_cost_per_million_tokens: 1.20
+input_cost_per_million_tokens: 1.00
+output_cost_per_million_tokens: 6.00
 pricing_snapshot_date: "2026-08-07"
 pricing_basis: "standard_short_context"

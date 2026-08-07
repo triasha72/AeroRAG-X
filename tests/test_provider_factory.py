@@ -92,8 +92,8 @@ def write_runtime_config(
             'adapter: "openai-responses"\n'
             'schema_name: "aeroragx_grounded_answer"\n'
             f'priced_model_name: "{model_name}"\n'
-            "input_cost_per_million_tokens: 0.20\n"
-            "output_cost_per_million_tokens: 1.20\n"
+            "input_cost_per_million_tokens: 1.00\n"
+            "output_cost_per_million_tokens: 6.00\n"
             'pricing_snapshot_date: "2026-08-07"\n'
             'pricing_basis: "standard_short_context"\n'
         ),
@@ -115,8 +115,8 @@ def test_load_provider_runtime_config(
     )
     assert config.adapter == "openai-responses"
     assert config.priced_model_name == "gpt-5.6-luna"
-    assert config.input_cost_per_million_tokens == pytest.approx(0.20)
-    assert config.output_cost_per_million_tokens == pytest.approx(1.20)
+    assert config.input_cost_per_million_tokens == pytest.approx(1.00)
+    assert config.output_cost_per_million_tokens == pytest.approx(6.00)
 
 
 @pytest.mark.parametrize(
