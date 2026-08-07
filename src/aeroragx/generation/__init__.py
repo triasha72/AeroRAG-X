@@ -28,6 +28,11 @@ from aeroragx.generation.guardrails import (
     assess_prompt_injection,
     enforce_prompt_injection_policy,
 )
+from aeroragx.generation.http_transport import (
+    HttpStructuredModelTransport,
+    HttpTransportConfig,
+    load_http_transport_config,
+)
 from aeroragx.generation.prompting import (
     GroundedPrompt,
     ProviderHardeningConfig,
@@ -76,6 +81,8 @@ __all__ = [
     "GroundedAnswerGenerator",
     "GroundedClaim",
     "GroundedPrompt",
+    "HttpStructuredModelTransport",
+    "HttpTransportConfig",
     "PromptInjectionAssessment",
     "PromptInjectionFinding",
     "ProviderClaim",
@@ -103,6 +110,7 @@ __all__ = [
     "evaluate_grounded_generation",
     "load_generation_config",
     "load_generation_evaluation_queries",
+    "load_http_transport_config",
     "load_provider_hardening_config",
     "load_sufficiency_config",
     "with_evidence_top_k",
