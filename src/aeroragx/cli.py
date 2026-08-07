@@ -40,8 +40,8 @@ from aeroragx.generation.grounded import (
     with_evidence_top_k,
     write_grounded_answer,
 )
-from aeroragx.generation.provider import (
-    create_generation_provider,
+from aeroragx.generation.provider_factory import (
+    create_configured_generation_provider,
 )
 from aeroragx.generation.sufficiency import (
     EvidenceSufficiencyAssessor,
@@ -2031,6 +2031,9 @@ def _load_grounded_answer_generator(
     reranker_config: Path,
     generation_config: Path,
     sufficiency_config: Path,
+    provider_config: Path | None,
+    http_transport_config: Path | None,
+    provider_runtime_config: Path | None,
     embeddings_input: Path,
     metadata_input: Path,
     manifest_input: Path,
@@ -2067,11 +2070,21 @@ def _load_grounded_answer_generator(
         raise typer.BadParameter("evidence_top_k must not exceed the reranker candidate_top_k.")
 
     try:
-        provider = create_generation_provider(generation_settings.provider)
+        provider = create_configured_generation_provider(
+            generation_config=generation_settings,
+            provider_config=provider_config,
+            http_transport_config=http_transport_config,
+            provider_runtime_config=provider_runtime_config,
+        )
     except ValueError as exc:
         raise typer.BadParameter(
             str(exc),
-            param_hint=("--generation-config"),
+            param_hint=(
+                "--generation-config / "
+                "--provider-config / "
+                "--http-transport-config / "
+                "--provider-runtime-config"
+            ),
         ) from exc
 
     sufficiency_assessor = EvidenceSufficiencyAssessor(load_sufficiency_config(sufficiency_config))
@@ -2163,6 +2176,36 @@ def ntrs_grounded_answer(
             readable=True,
         ),
     ] = Path("configs/sufficiency_v0_1.yaml"),
+    provider_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--provider-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Provider-hardening configuration required for remote generation providers."),
+        ),
+    ] = None,
+    http_transport_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--http-transport-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("HTTP transport configuration required for remote generation providers."),
+        ),
+    ] = None,
+    provider_runtime_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--provider-runtime-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Provider-specific adapter and pricing configuration for remote providers."),
+        ),
+    ] = None,
     embeddings_input: Annotated[
         Path,
         typer.Option(
@@ -2229,6 +2272,9 @@ def ntrs_grounded_answer(
         reranker_config=reranker_config,
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
+        provider_config=provider_config,
+        http_transport_config=http_transport_config,
+        provider_runtime_config=provider_runtime_config,
         embeddings_input=embeddings_input,
         metadata_input=metadata_input,
         manifest_input=manifest_input,
@@ -2374,6 +2420,36 @@ def ntrs_evaluate_generation(
             readable=True,
         ),
     ] = Path("configs/sufficiency_v0_1.yaml"),
+    provider_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--provider-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Provider-hardening configuration required for remote generation providers."),
+        ),
+    ] = None,
+    http_transport_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--http-transport-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("HTTP transport configuration required for remote generation providers."),
+        ),
+    ] = None,
+    provider_runtime_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--provider-runtime-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Provider-specific adapter and pricing configuration for remote providers."),
+        ),
+    ] = None,
     embeddings_input: Annotated[
         Path,
         typer.Option(
@@ -2441,6 +2517,9 @@ def ntrs_evaluate_generation(
         reranker_config=reranker_config,
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
+        provider_config=provider_config,
+        http_transport_config=http_transport_config,
+        provider_runtime_config=provider_runtime_config,
         embeddings_input=embeddings_input,
         metadata_input=metadata_input,
         manifest_input=manifest_input,
