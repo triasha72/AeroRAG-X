@@ -24,6 +24,9 @@ from aeroragx.api.service import (
     QueryService,
     load_query_service,
 )
+from aeroragx.api.settings import (
+    load_api_runtime_settings,
+)
 from aeroragx.generation.grounded import (
     GroundedAnswer,
 )
@@ -127,9 +130,4 @@ def create_app(
     return app
 
 
-app = create_app(
-    runtime_config=RuntimeConfig(
-        candidate_top_k=20,
-        evidence_top_k=5,
-    )
-)
+app = create_app(runtime_config=(load_api_runtime_settings().to_runtime_config()))
