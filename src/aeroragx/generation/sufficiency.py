@@ -86,9 +86,7 @@ _CLAIM_QUALIFIER_ALIASES = {
     "certifies": "certify",
     "certify": "certify",
     "every": "every",
-    "issue": "issue",
     "issued": "issue",
-    "issues": "issue",
     "legal": "legal",
     "legally": "legal",
     "mandate": "mandate",
@@ -430,10 +428,10 @@ def _named_anchors(
         has_internal_uppercase = any(character.isupper() for character in token[1:])
         has_digit = any(character.isdigit() for character in token)
 
-        if "-" not in token and not has_internal_uppercase:
-            continue
-
-        if not (has_internal_uppercase or has_digit or "-" in token):
+        if "-" in token:
+            if not (has_internal_uppercase or has_digit):
+                continue
+        elif not has_internal_uppercase:
             continue
 
         for part in parts:
