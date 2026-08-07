@@ -33,24 +33,10 @@ from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
 )
-from aeroragx.generation.facet_retrieval import (
-    FacetAwareEvidenceIndex,
-    load_facet_retrieval_config,
-)
 from aeroragx.generation.grounded import (
     GenerationConfig,
     GroundedAnswerGenerator,
-    RerankedEvidenceIndex,
-    load_generation_config,
-    with_evidence_top_k,
     write_grounded_answer,
-)
-from aeroragx.generation.provider_factory import (
-    create_configured_generation_provider,
-)
-from aeroragx.generation.sufficiency import (
-    EvidenceSufficiencyAssessor,
-    load_sufficiency_config,
 )
 from aeroragx.ingestion.acquisition import (
     download_documents,
@@ -108,6 +94,11 @@ from aeroragx.retrieval.reranker import (
     with_candidate_top_k,
     write_reranked_search_results,
     write_reranker_latency_report,
+)
+from aeroragx.runtime import (
+    RuntimeConfig,
+    RuntimeConfigurationError,
+    load_grounded_runtime,
 )
 
 app = typer.Typer(
@@ -2050,70 +2041,36 @@ def _load_grounded_answer_generator(
     RerankerConfig,
     GenerationConfig,
 ]:
-    """Load retrieval, reranking, and grounded-generation components."""
+    """Load grounded generation through the shared runtime factory."""
 
-    (
-        reranker_index,
-        reranker_settings,
-    ) = _load_reranker_index_from_paths(
+    config = RuntimeConfig(
         chunks_input=chunks_input,
         bm25_config=bm25_config,
         dense_config=dense_config,
         hybrid_config=hybrid_config,
         reranker_config=reranker_config,
+        generation_config=generation_config,
+        sufficiency_config=sufficiency_config,
+        facet_retrieval_config=(facet_retrieval_config),
+        provider_config=provider_config,
+        http_transport_config=(http_transport_config),
+        provider_runtime_config=(provider_runtime_config),
         embeddings_input=embeddings_input,
         metadata_input=metadata_input,
         manifest_input=manifest_input,
         candidate_top_k=candidate_top_k,
+        evidence_top_k=evidence_top_k,
     )
-
-    generation_index: RerankedEvidenceIndex = reranker_index
-
-    if facet_retrieval_config is not None:
-        generation_index = FacetAwareEvidenceIndex(
-            reranker_index,
-            load_facet_retrieval_config(facet_retrieval_config),
-        )
-
-    generation_settings = with_evidence_top_k(
-        load_generation_config(generation_config),
-        evidence_top_k,
-    )
-
-    if generation_settings.evidence_top_k > reranker_settings.candidate_top_k:
-        raise typer.BadParameter("evidence_top_k must not exceed the reranker candidate_top_k.")
 
     try:
-        provider = create_configured_generation_provider(
-            generation_config=generation_settings,
-            provider_config=provider_config,
-            http_transport_config=http_transport_config,
-            provider_runtime_config=provider_runtime_config,
-        )
-    except ValueError as exc:
-        raise typer.BadParameter(
-            str(exc),
-            param_hint=(
-                "--generation-config / "
-                "--provider-config / "
-                "--http-transport-config / "
-                "--provider-runtime-config"
-            ),
-        ) from exc
-
-    sufficiency_assessor = EvidenceSufficiencyAssessor(load_sufficiency_config(sufficiency_config))
-
-    generator = GroundedAnswerGenerator(
-        index=generation_index,
-        provider=provider,
-        config=generation_settings,
-        sufficiency_assessor=sufficiency_assessor,
-    )
+        runtime = load_grounded_runtime(config)
+    except RuntimeConfigurationError as exc:
+        raise typer.BadParameter(str(exc)) from exc
 
     return (
-        generator,
-        reranker_settings,
-        generation_settings,
+        runtime.generator,
+        runtime.reranker_settings,
+        runtime.generation_settings,
     )
 
 
