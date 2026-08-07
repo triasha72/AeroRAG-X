@@ -16,6 +16,10 @@ from aeroragx.generation.provider import (
     ProviderEvidence,
     ProviderResponse,
 )
+from aeroragx.generation.structured_provider import (
+    ProviderTelemetry,
+    StructuredGenerationProvider,
+)
 from aeroragx.generation.sufficiency import (
     EvidenceSufficiencyAssessor,
     EvidenceSufficiencyResult,
@@ -205,6 +209,7 @@ class RetrievalMetadata(BaseModel):
     generation_provider: str = Field(min_length=1)
     generation_model: str = Field(min_length=1)
     evidence_sufficiency: EvidenceSufficiencyResult | None = None
+    provider_telemetry: ProviderTelemetry | None = None
 
 
 class GroundedAnswer(BaseModel):
@@ -374,6 +379,7 @@ def _retrieval_metadata(
     used_evidence_count: int,
     reranker_model: str | None,
     evidence_sufficiency: EvidenceSufficiencyResult | None,
+    provider_telemetry: ProviderTelemetry | None = None,
 ) -> RetrievalMetadata | None:
     """Build optional retrieval and generation metadata."""
 
@@ -389,6 +395,7 @@ def _retrieval_metadata(
         generation_provider=config.provider,
         generation_model=config.model_name,
         evidence_sufficiency=evidence_sufficiency,
+        provider_telemetry=provider_telemetry,
     )
 
 
@@ -401,6 +408,7 @@ def _insufficient_answer(
     used_evidence_count: int,
     reranker_model: str | None,
     evidence_sufficiency: EvidenceSufficiencyResult | None,
+    provider_telemetry: ProviderTelemetry | None = None,
 ) -> GroundedAnswer:
     """Build a validated insufficient-evidence response."""
 
@@ -417,6 +425,7 @@ def _insufficient_answer(
             used_evidence_count=used_evidence_count,
             reranker_model=reranker_model,
             evidence_sufficiency=evidence_sufficiency,
+            provider_telemetry=provider_telemetry,
         ),
     )
 
@@ -576,6 +585,15 @@ class GroundedAnswerGenerator:
             max_claims=self._config.max_claims,
         )
 
+        provider_telemetry = (
+            self._provider.last_telemetry
+            if isinstance(
+                self._provider,
+                StructuredGenerationProvider,
+            )
+            else None
+        )
+
         return self._resolve_response(
             query=normalized_query,
             response=response,
@@ -583,6 +601,7 @@ class GroundedAnswerGenerator:
             returned_evidence_count=len(hits),
             reranker_model=reranker_model,
             evidence_sufficiency=evidence_sufficiency,
+            provider_telemetry=provider_telemetry,
         )
 
     def _resolve_response(
@@ -594,6 +613,7 @@ class GroundedAnswerGenerator:
         returned_evidence_count: int,
         reranker_model: str | None,
         evidence_sufficiency: EvidenceSufficiencyResult | None,
+        provider_telemetry: ProviderTelemetry | None,
     ) -> GroundedAnswer:
         """Resolve provider evidence IDs into authoritative citations."""
 
@@ -619,6 +639,7 @@ class GroundedAnswerGenerator:
                 used_evidence_count=len(evidence),
                 reranker_model=reranker_model,
                 evidence_sufficiency=evidence_sufficiency,
+                provider_telemetry=provider_telemetry,
             )
 
         if not response.claims:
@@ -689,6 +710,7 @@ class GroundedAnswerGenerator:
                 used_evidence_count=len(evidence),
                 reranker_model=reranker_model,
                 evidence_sufficiency=evidence_sufficiency,
+                provider_telemetry=provider_telemetry,
             ),
         )
 
