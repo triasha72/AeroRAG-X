@@ -53,6 +53,11 @@ from aeroragx.generation.provider import (
     StaticGenerationProvider,
     create_generation_provider,
 )
+from aeroragx.generation.provider_factory import (
+    ProviderRuntimeConfig,
+    create_configured_generation_provider,
+    load_provider_runtime_config,
+)
 from aeroragx.generation.structured_provider import (
     ProviderResponseValidationError,
     ProviderTelemetry,
@@ -97,6 +102,7 @@ __all__ = [
     "ProviderHardeningConfig",
     "ProviderResponse",
     "ProviderResponseValidationError",
+    "ProviderRuntimeConfig",
     "ProviderTelemetry",
     "ProviderTransportError",
     "ProviderUsage",
@@ -113,6 +119,7 @@ __all__ = [
     "assess_prompt_injection",
     "build_generation_evidence",
     "build_grounded_prompt",
+    "create_configured_generation_provider",
     "create_generation_provider",
     "enforce_prompt_injection_policy",
     "evaluate_grounded_generation",
@@ -120,6 +127,7 @@ __all__ = [
     "load_generation_evaluation_queries",
     "load_http_transport_config",
     "load_provider_hardening_config",
+    "load_provider_runtime_config",
     "load_sufficiency_config",
     "with_evidence_top_k",
     "write_generation_evaluation_report",
