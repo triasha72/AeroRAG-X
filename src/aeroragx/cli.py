@@ -33,9 +33,14 @@ from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
 )
+from aeroragx.generation.facet_retrieval import (
+    FacetAwareEvidenceIndex,
+    load_facet_retrieval_config,
+)
 from aeroragx.generation.grounded import (
     GenerationConfig,
     GroundedAnswerGenerator,
+    RerankedEvidenceIndex,
     load_generation_config,
     with_evidence_top_k,
     write_grounded_answer,
@@ -2039,6 +2044,7 @@ def _load_grounded_answer_generator(
     manifest_input: Path,
     candidate_top_k: int | None,
     evidence_top_k: int | None,
+    facet_retrieval_config: Path | None = None,
 ) -> tuple[
     GroundedAnswerGenerator,
     RerankerConfig,
@@ -2060,6 +2066,14 @@ def _load_grounded_answer_generator(
         manifest_input=manifest_input,
         candidate_top_k=candidate_top_k,
     )
+
+    generation_index: RerankedEvidenceIndex = reranker_index
+
+    if facet_retrieval_config is not None:
+        generation_index = FacetAwareEvidenceIndex(
+            reranker_index,
+            load_facet_retrieval_config(facet_retrieval_config),
+        )
 
     generation_settings = with_evidence_top_k(
         load_generation_config(generation_config),
@@ -2090,7 +2104,7 @@ def _load_grounded_answer_generator(
     sufficiency_assessor = EvidenceSufficiencyAssessor(load_sufficiency_config(sufficiency_config))
 
     generator = GroundedAnswerGenerator(
-        index=reranker_index,
+        index=generation_index,
         provider=provider,
         config=generation_settings,
         sufficiency_assessor=sufficiency_assessor,
@@ -2176,6 +2190,16 @@ def ntrs_grounded_answer(
             readable=True,
         ),
     ] = Path("configs/sufficiency_v0_1.yaml"),
+    facet_retrieval_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--facet-retrieval-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Optional facet-aware evidence retrieval configuration for synthesis queries."),
+        ),
+    ] = None,
     provider_config: Annotated[
         Path | None,
         typer.Option(
@@ -2272,6 +2296,7 @@ def ntrs_grounded_answer(
         reranker_config=reranker_config,
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
+        facet_retrieval_config=facet_retrieval_config,
         provider_config=provider_config,
         http_transport_config=http_transport_config,
         provider_runtime_config=provider_runtime_config,
@@ -2420,6 +2445,16 @@ def ntrs_evaluate_generation(
             readable=True,
         ),
     ] = Path("configs/sufficiency_v0_1.yaml"),
+    facet_retrieval_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--facet-retrieval-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Optional facet-aware evidence retrieval configuration for synthesis queries."),
+        ),
+    ] = None,
     provider_config: Annotated[
         Path | None,
         typer.Option(
@@ -2517,6 +2552,7 @@ def ntrs_evaluate_generation(
         reranker_config=reranker_config,
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
+        facet_retrieval_config=facet_retrieval_config,
         provider_config=provider_config,
         http_transport_config=http_transport_config,
         provider_runtime_config=provider_runtime_config,

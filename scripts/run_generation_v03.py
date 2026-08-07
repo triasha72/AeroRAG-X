@@ -37,6 +37,11 @@ def parse_args() -> argparse.Namespace:
         default=Path("configs/sufficiency_v0_1.yaml"),
     )
     parser.add_argument(
+        "--facet-retrieval-config",
+        type=Path,
+        default=None,
+    )
+    parser.add_argument(
         "--provider-config",
         type=Path,
         default=None,
@@ -91,6 +96,7 @@ def main() -> None:
         reranker_config=Path("configs/reranker_v0_1.yaml"),
         generation_config=args.generation_config,
         sufficiency_config=args.sufficiency_config,
+        facet_retrieval_config=(args.facet_retrieval_config),
         provider_config=args.provider_config,
         http_transport_config=(args.http_transport_config),
         provider_runtime_config=(args.provider_runtime_config),
