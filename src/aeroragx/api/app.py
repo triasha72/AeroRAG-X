@@ -29,7 +29,7 @@ from aeroragx.generation.grounded import (
 )
 from aeroragx.runtime import RuntimeConfig
 
-ServiceLoader = Callable[
+type ServiceLoader = Callable[
     [RuntimeConfig],
     QueryService,
 ]
