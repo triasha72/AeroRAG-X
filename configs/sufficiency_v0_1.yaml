@@ -1,0 +1,11 @@
+version: "0.1"
+
+minimum_evidence_count: 1
+minimum_supported_terms: 2
+
+minimum_query_term_coverage: 0.60
+minimum_single_evidence_coverage: 0.35
+exact_query_minimum_coverage: 0.75
+
+require_all_numeric_terms: true
+require_named_anchors: true

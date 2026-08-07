@@ -1,0 +1,10 @@
+{"query_id":"gq001","query":"How can battery thermal runaway propagate in electric aircraft?","expected_answerable":true,"expected_terms":["battery","thermal","runaway"]}
+{"query_id":"gq002","query":"What thermal-management considerations apply to fuel-cell aircraft?","expected_answerable":true,"expected_terms":["fuel","cell","thermal"]}
+{"query_id":"gq003","query":"What safety concerns arise in hybrid-electric aircraft propulsion systems?","expected_answerable":true,"expected_terms":["hybrid","electric","safety"]}
+{"query_id":"gq004","query":"What characterizes distributed electric propulsion aircraft?","expected_answerable":true,"expected_terms":["distributed","electric","propulsion"]}
+{"query_id":"gq005","query":"What challenges affect cryogenic hydrogen storage in aircraft?","expected_answerable":true,"expected_terms":["hydrogen","cryogenic","storage"]}
+{"query_id":"gq006","query":"How are aircraft battery systems cooled?","expected_answerable":true,"expected_terms":["battery","cooling"]}
+{"query_id":"gq007","query":"How is power-electronics thermal management handled in electric aircraft?","expected_answerable":true,"expected_terms":["power","thermal","electric"]}
+{"query_id":"gq008","query":"How can lithium-ion battery fires be detected in aviation applications?","expected_answerable":true,"expected_terms":["battery","fire","detection"]}
+{"query_id":"gq009","query":"What was the exact passenger ticket price of NASA's 2035 hydrogen airliner?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"gq010","query":"Which fictional Zephyr-X battery received FAA certification on January 1, 2040?","expected_answerable":false,"expected_terms":[]}
