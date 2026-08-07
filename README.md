@@ -2,17 +2,17 @@
 
 [![CI](https://github.com/triasha72/AeroRAG-X/actions/workflows/ci.yml/badge.svg)](https://github.com/triasha72/AeroRAG-X/actions/workflows/ci.yml)
 
-A production-oriented retrieval-augmented generation system for aerospace technical knowledge.
+A production-oriented, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.
 
-AeroRAG-X is a traceable research assistant for NASA technical reports. It combines reproducible document acquisition, citation-preserving processing, lexical and semantic retrieval, reciprocal-rank fusion, cross-encoder reranking, deterministic evidence-sufficiency checks, grounded answer generation, and benchmarked evaluation.
+AeroRAG-X is built around a curated NASA Technical Reports Server (NTRS) corpus. It combines reproducible document acquisition, citation-preserving processing, lexical and semantic retrieval, reciprocal-rank fusion, cross-encoder reranking, deterministic facet-aware evidence selection, evidence-sufficiency gating, hardened structured LLM generation, claim-level citation resolution, and benchmarked provider telemetry.
 
-Every answer is built from retrieved evidence whose document ID, page range, NASA citation URL, source URL, and source-document checksum are preserved through the pipeline.
+Every generated claim is tied back to retrieved evidence whose document ID, page range, NASA citation URL, source URL, and source-document checksum are preserved through the pipeline.
 
 ---
 
 ## Current status
 
-AeroRAG-X now implements an end-to-end text RAG pipeline over a curated NASA Technical Reports Server corpus:
+AeroRAG-X now implements an end-to-end text RAG pipeline:
 
 ```text
 NASA NTRS metadata
@@ -46,6 +46,9 @@ BM25 lexical retrieval     Dense semantic retrieval
          Cross-encoder reranking
                      |
                      v
+      Optional facet-aware retrieval
+                     |
+                     v
         Evidence-sufficiency gate
                      |
           +----------+----------+
@@ -54,7 +57,10 @@ BM25 lexical retrieval     Dense semantic retrieval
    sufficient evidence    insufficient evidence
           |                     |
           v                     v
- Grounded generation       grounded refusal
+ Structured LLM provider   grounded refusal
+          |
+          v
+  Prompt/response guardrails
           |
           v
  Claim-level citation resolution
@@ -63,7 +69,7 @@ BM25 lexical retrieval     Dense semantic retrieval
  Source-document summaries
           |
           v
- Generation evaluation
+ Evaluation + provider telemetry
 ```
 
 The current text corpus contains **3,233 citation-preserving NASA report chunks**.
@@ -72,10 +78,10 @@ The current text corpus contains **3,233 citation-preserving NASA report chunks*
 
 - NASA NTRS metadata search
 - reproducible corpus configuration
-- document manifests and checksums
+- versioned document manifests
 - streamed PDF acquisition
+- checksum validation and acquisition receipts
 - page-level PDF extraction
-- extraction and chunking receipts
 - citation-preserving overlapping chunks
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
@@ -84,54 +90,153 @@ The current text corpus contains **3,233 citation-preserving NASA report chunks*
 - reciprocal-rank-fusion hybrid retrieval
 - cross-encoder reranking
 - preserved BM25, dense, hybrid, and reranker provenance
-- generic retrieval evaluation
-- deterministic BM25+dense candidate pooling
-- blinded relevance annotation
-- pooled relevance judgments
-- Recall@5, Recall@10, MRR@10, and NDCG@10
-- provider-agnostic grounded-generation interface
-- deterministic local generation provider
-- bounded generation context
-- structured answer, claim, citation, and source-document schemas
-- authoritative citation resolution from retrieved evidence
+- pooled retrieval evaluation
+- deterministic facet-aware evidence retrieval for supported synthesis patterns
 - deterministic evidence-sufficiency assessment
+- morphology-aware query normalization
 - numeric-support checks
-- named-anchor support checks
-- query-term coverage checks
-- evidence-concentration checks
-- insufficient-evidence refusal
-- generation evaluation
-- answerability and refusal metrics
-- claim citation coverage
-- citation-reference validity
-- source-document coverage
-- expected-term lexical recall
-- structural answer validation
+- named-anchor checks
+- claim-qualifier checks
+- insufficient-evidence refusal before provider invocation
+- provider-agnostic generation interface
+- deterministic local generation provider
+- OpenAI Responses API structured provider adapter
+- versioned provider configuration
+- prompt versioning and evidence delimiters
+- prompt-injection heuristics
+- structured provider-response validation
+- retry and timeout handling
+- token, latency, retry, and estimated-cost telemetry
+- authoritative application-side citation resolution
+- claim, citation, source-document, and answer schemas
+- generation v0.3 benchmark with 32 labeled queries
 - Typer command-line interface
 - Ruff, pytest, strict mypy, coverage, and GitHub Actions
 
 ---
 
-## What is not implemented yet
+## Generation v0.3 final benchmark
 
-The current generation provider is a **deterministic local extractive baseline**, not a production hosted LLM.
+The final benchmark contains:
 
-The project does not yet claim semantic answer faithfulness. Current generation evaluation verifies structural grounding, citation integrity, answer/refusal behavior, and a lightweight expected-term heuristic.
+```text
+20 expected-answerable queries
+12 unsupported queries
+32 total queries
+```
 
-Planned next work includes:
+The final system uses:
 
-- structured hosted or local LLM provider support
-- prompt construction and versioning
-- prompt-injection defenses
-- malformed-provider-response handling
-- retry, timeout, latency, token, and cost telemetry
-- larger generation benchmarks
-- semantic citation-support evaluation
-- answer-faithfulness evaluation
-- vector-database integration
-- FastAPI serving
-- Docker and cloud deployment
-- multimodal table and figure retrieval
+```text
+Sufficiency v0.2.1
++
+Facet Retrieval v0.1
++
+OpenAI Responses API provider
+```
+
+### Final generation results
+
+| Metric | Baseline | Final |
+|---|---:|---:|
+| Answerability accuracy | 0.9375 | **1.0000** |
+| Answerable completion | 0.9000 | **1.0000** |
+| Unsupported refusal | 1.0000 | **1.0000** |
+| Claim citation coverage | 1.0000 | **1.0000** |
+| Citation-reference validity | 1.0000 | **1.0000** |
+| Expected-term recall | 0.9138 | **0.9310** |
+| Structural validity | 1.0000 | **1.0000** |
+
+### Provider-routing results
+
+| Metric | Baseline | Final |
+|---|---:|---:|
+| Provider calls | 22 | **20** |
+| Provider bypasses | 10 | **12** |
+| Provider call-policy accuracy | 0.8750 | **1.0000** |
+| Total tokens | 63,638 | **58,915** |
+| Estimated benchmark cost | $0.105733 | **$0.103745** |
+
+Final measured latency:
+
+```text
+P50 provider latency: 5.6394 s
+P95 provider latency: 7.6947 s
+Provider retry rate: 0.0
+```
+
+The final benchmark produced **zero answerability failures**.
+
+These results are an engineering benchmark over the current 32-query dataset, not evidence of general-purpose RAG correctness or universal answer faithfulness.
+
+Tracked reports:
+
+```text
+artifacts/evaluation/generation_deterministic_v0_3.json
+artifacts/evaluation/generation_deterministic_v0_3_telemetry.json
+artifacts/evaluation/generation_openai_v0_3.json
+artifacts/evaluation/generation_openai_v0_3_telemetry.json
+artifacts/evaluation/generation_openai_v0_3_final.json
+artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
+artifacts/evaluation/generation_v0_3_final_comparison.json
+```
+
+---
+
+## Why the final generation system changed
+
+The v0.3 benchmark exposed several concrete failure modes.
+
+### 1. Lexical sufficiency false refusal
+
+A legitimate cryogenic-hydrogen question was rejected because surface-form differences such as `storing` versus `storage` reduced query-term coverage.
+
+Resolution:
+
+- morphology-aware deterministic normalization
+- stopword calibration
+- preservation of strict numeric/entity checks
+
+### 2. Unsupported universal or regulatory claims
+
+Some unsupported questions contained real NASA/FAA terms and relevant technical vocabulary, causing the original sufficiency gate to overestimate evidence support.
+
+Resolution:
+
+- claim-qualifier detection
+- explicit support requirements for terms such as universal mandates, assigned values, and issued certificates
+
+### 3. Technical compounds misclassified as named entities
+
+Ordinary lowercase compounds such as `power-electronics` and `thermal-management` were initially treated as mandatory named anchors.
+
+Resolution:
+
+- named-anchor calibration
+- lowercase technical compounds remain ordinary terminology
+- acronyms, CamelCase names, and uppercase/digit-bearing identifiers remain protected anchors
+
+### 4. Multi-facet retrieval failure
+
+The query:
+
+```text
+What thermal-management challenges are shared by
+battery-electric and fuel-cell aircraft?
+```
+
+passed the sufficiency gate but the original top-five evidence did not contain enough fuel-cell-specific material.
+
+Resolution:
+
+- deterministic facet planning for supported synthesis patterns
+- facet-specific searches
+- semantic facet verification
+- deduplication
+- quota-aware balanced evidence selection
+- fallback to ordinary retrieval when a facet cannot be supported
+
+This allowed the provider to answer the synthesis query with evidence from both battery-electric and fuel-cell sources.
 
 ---
 
@@ -146,7 +251,7 @@ The original benchmark contains eight aerospace queries and relevance judgments 
 | BM25 | 0.7500 | 0.9167 | 0.6771 | 0.7046 |
 | Dense | 0.2292 | 0.3958 | 0.3376 | 0.2812 |
 
-Because the v0.1 judgments were created from BM25 candidates only, the comparison can favor BM25.
+Because the v0.1 judgments were created from BM25 candidates only, this comparison can favor BM25.
 
 ### Pooled retrieval benchmark v0.2
 
@@ -171,9 +276,9 @@ The v0.2 benchmark pools BM25 and dense candidates before relevance assessment.
 | Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
 | Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
-The fixed top-20 cross-encoder baseline achieves the highest MRR@10 and NDCG@10 among the current retrieval stages. BM25 retains the highest Recall@5 and Recall@10 on this small benchmark.
+The fixed top-20 cross-encoder baseline achieves the highest current MRR@10 and NDCG@10. BM25 retains the highest Recall@5 and Recall@10 on this small benchmark.
 
-The reranker uses:
+Current reranker:
 
 ```text
 cross-encoder/ms-marco-MiniLM-L6-v2
@@ -184,88 +289,41 @@ Current scoring-only CPU latency baseline:
 | Field | Value |
 |---|---:|
 | Queries | 8 |
-| Query–chunk pairs | 160 |
+| Query-chunk pairs | 160 |
 | Total scoring seconds | 3.170787 |
 | Milliseconds per pair | 19.817420 |
 | Hardware | MacBook Air, CPU baseline |
 
 ---
 
-## Grounded-generation benchmarks
-
-Generation evaluation currently contains:
-
-```text
-8 expected-answerable aerospace questions
-2 deliberately unsupported control questions
-10 total queries
-```
-
-### Generation baseline v0.1
-
-The initial deterministic generator had complete citation structure but answered both unsupported control questions.
-
-| Metric | v0.1 |
-|---|---:|
-| Queries | 10 |
-| Answerability accuracy | 0.8000 |
-| Answerable completion | 1.0000 |
-| Unsupported refusal | 0.0000 |
-| Claim citation coverage | 1.0000 |
-| Citation-reference validity | 1.0000 |
-| Source-document coverage | 1.0000 |
-| Expected-term recall | 0.9130 |
-| Structural validity | 1.0000 |
-
-### Sufficiency-gated baseline v0.2
-
-A deterministic evidence-sufficiency gate was added before provider invocation.
-
-| Metric | v0.1 | v0.2 | Delta |
-|---|---:|---:|---:|
-| Answerability accuracy | 0.8000 | **1.0000** | +0.2000 |
-| Answerable completion | 1.0000 | **1.0000** | +0.0000 |
-| Unsupported refusal | 0.0000 | **1.0000** | +1.0000 |
-| Claim citation coverage | 1.0000 | **1.0000** | +0.0000 |
-| Citation-reference validity | 1.0000 | **1.0000** | +0.0000 |
-| Source-document coverage | 1.0000 | **1.0000** | +0.0000 |
-| Expected-term recall | 0.9130 | **0.9130** | +0.0000 |
-| Structural validity | 1.0000 | **1.0000** | +0.0000 |
-
-On the current ten-query benchmark, the sufficiency gate corrected both unsupported-question failures without rejecting any of the eight expected-answerable queries.
-
-This is an exploratory engineering benchmark, not evidence of general-purpose answerability detection. The query set is small and must be expanded before broader claims are made.
-
-Tracked reports:
-
-```text
-artifacts/evaluation/generation_v0_1.json
-artifacts/evaluation/generation_v0_2.json
-```
-
----
-
 ## Evidence-sufficiency gate
 
-The current deterministic gate evaluates retrieved evidence before generation.
+Primary implementation:
+
+```text
+src/aeroragx/generation/sufficiency.py
+```
+
+Current production benchmark configuration:
+
+```text
+configs/sufficiency_v0_2_1.yaml
+```
+
+The gate evaluates retrieved evidence before provider invocation.
 
 It checks:
 
 - minimum evidence count
 - informative query-term coverage
-- minimum supported query terms
-- concentration of query coverage inside at least one evidence chunk
-- exact numeric support for numeric query tokens
-- support for acronyms and mixed-case/hyphenated named anchors
-- stricter coverage for questions requesting an exact value
+- minimum supported terms
+- single-evidence coverage
+- numeric support
+- named-anchor support
+- claim-qualifier support
+- stricter coverage for exact-value questions
 
-Configuration:
-
-```text
-configs/sufficiency_v0_1.yaml
-```
-
-Example rejection reasons:
+Representative rejection reasons:
 
 ```text
 insufficient_evidence_count
@@ -275,29 +333,99 @@ low_query_term_coverage
 low_single_evidence_coverage
 missing_numeric_support
 missing_named_anchor_support
+missing_claim_qualifier_support
 ```
 
-The complete sufficiency decision is preserved in `retrieval_metadata.evidence_sufficiency` so refusals remain auditable.
+The full decision is stored in retrieval metadata so pre-provider refusals remain auditable.
 
 ---
 
-## Grounded answer schema
+## Facet-aware retrieval
 
-A grounded answer contains:
+Primary implementation:
 
 ```text
-query
-answer
-claims
-citations
-source_documents
-insufficient_evidence
-retrieval_metadata
+src/aeroragx/generation/facet_retrieval.py
 ```
 
-A supported claim references one or more citation IDs. Those citation IDs are resolved from authoritative retrieved evidence rather than trusted from free-form provider text.
+Configuration:
 
-Each citation preserves:
+```text
+configs/facet_retrieval_v0_1.yaml
+```
+
+Facet-aware retrieval is conservative and optional.
+
+Normal questions continue through ordinary reranked retrieval.
+
+For recognized multi-facet synthesis patterns, the wrapper:
+
+1. derives deterministic facet searches;
+2. retrieves evidence for each facet;
+3. verifies that selected chunks actually contain the facet identity terms;
+4. deduplicates by `chunk_id`;
+5. balances evidence across supported facets;
+6. adds original-query evidence;
+7. falls back to ordinary retrieval if semantic facet support is unavailable.
+
+The current implementation is intentionally narrow rather than a general query-planning agent.
+
+---
+
+## Hardened provider layer
+
+The production benchmark uses the OpenAI Responses API through a structured provider adapter.
+
+Generation configuration:
+
+```text
+configs/generation_openai_v0_1.yaml
+```
+
+Current configured model:
+
+```text
+gpt-5.6-luna
+```
+
+Provider-hardening configuration:
+
+```text
+configs/provider_v0_1.yaml
+configs/http_transport_openai_v0_1.yaml
+configs/provider_runtime_openai_v0_1.yaml
+```
+
+Provider controls include:
+
+- versioned prompt configuration
+- explicit evidence delimiters
+- prompt-injection heuristics
+- response-schema enforcement
+- bounded retries
+- timeout handling
+- retryable versus non-retryable transport errors
+- secret redaction
+- request IDs
+- latency measurement
+- input/output token accounting
+- estimated cost accounting
+
+Retrieved evidence is treated as untrusted input. The provider is not trusted to create authoritative citation metadata.
+
+---
+
+## Citation trust boundary
+
+A provider can return:
+
+```text
+claim -> evidence ID
+```
+
+The application resolves each evidence ID to the authoritative retrieved record.
+
+The resulting citation preserves:
 
 ```text
 citation_id
@@ -312,26 +440,7 @@ document_sha256
 reranker_rank
 ```
 
-An insufficient-evidence response contains no claims, citations, or source documents.
-
----
-
-## Dense retrieval baseline
-
-| Setting | Value |
-|---|---|
-| Model | `sentence-transformers/all-MiniLM-L6-v2` |
-| Corpus size | 3,233 chunks |
-| Embedding dimension | 384 |
-| Normalization | Enabled |
-| Search method | Exact cosine similarity |
-| Stored array format | NumPy `.npy` |
-
-Large generated embedding arrays and duplicated metadata are intentionally excluded from Git. The compact manifest is tracked:
-
-```text
-artifacts/embeddings/ntrs_v0_1_manifest.json
-```
+Unknown evidence references are rejected rather than silently accepted.
 
 ---
 
@@ -368,47 +477,6 @@ aeroragx --help
 
 ## Important CLI workflows
 
-### Search NASA NTRS metadata
-
-```bash
-aeroragx ntrs-search \
-  --query "battery thermal runaway"
-```
-
-### BM25 search
-
-```bash
-aeroragx ntrs-bm25-search \
-  --query "battery thermal runaway" \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml
-```
-
-### Dense search
-
-```bash
-aeroragx ntrs-dense-search \
-  --query "battery thermal runaway" \
-  --dense-config configs/dense_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json
-```
-
-### Hybrid search
-
-```bash
-aeroragx ntrs-hybrid-search \
-  --query "battery thermal runaway" \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json
-```
-
 ### Cross-encoder reranking
 
 ```bash
@@ -418,7 +486,7 @@ aeroragx ntrs-reranker-search \
   --top-k 10
 ```
 
-### Generate a grounded answer
+### Deterministic grounded answer
 
 ```bash
 aeroragx ntrs-grounded-answer \
@@ -426,39 +494,77 @@ aeroragx ntrs-grounded-answer \
   --candidate-top-k 20 \
   --evidence-top-k 5 \
   --generation-config configs/generation_v0_1.yaml \
-  --sufficiency-config configs/sufficiency_v0_1.yaml
+  --sufficiency-config configs/sufficiency_v0_2_1.yaml
 ```
 
-### Save a grounded answer as JSON
+### OpenAI grounded answer with facet-aware retrieval
+
+Set the API key in your environment without committing it:
+
+```bash
+export OPENAI_API_KEY="..."
+```
+
+Then:
 
 ```bash
 aeroragx ntrs-grounded-answer \
-  --query "How can battery thermal runaway propagate in electric aircraft?" \
+  --query "What thermal-management challenges are shared by battery-electric and fuel-cell aircraft?" \
   --candidate-top-k 20 \
   --evidence-top-k 5 \
-  --generation-config configs/generation_v0_1.yaml \
-  --sufficiency-config configs/sufficiency_v0_1.yaml \
-  --output /tmp/aeroragx_answer.json
+  --generation-config configs/generation_openai_v0_1.yaml \
+  --provider-config configs/provider_v0_1.yaml \
+  --http-transport-config configs/http_transport_openai_v0_1.yaml \
+  --provider-runtime-config configs/provider_runtime_openai_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_2_1.yaml \
+  --facet-retrieval-config configs/facet_retrieval_v0_1.yaml
 ```
 
-### Evaluate grounded generation
+Clear the shell variable after use:
 
 ```bash
-aeroragx ntrs-evaluate-generation \
-  --queries-input data/evaluation/generation_queries_v0_1.jsonl \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --reranker-config configs/reranker_v0_1.yaml \
-  --generation-config configs/generation_v0_1.yaml \
-  --sufficiency-config configs/sufficiency_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+unset OPENAI_API_KEY
+```
+
+### Reproduce generation v0.3
+
+```bash
+python scripts/run_generation_v03.py \
+  --queries-input data/evaluation/generation_queries_v0_3.jsonl \
+  --generation-config configs/generation_openai_v0_1.yaml \
+  --provider-config configs/provider_v0_1.yaml \
+  --http-transport-config configs/http_transport_openai_v0_1.yaml \
+  --provider-runtime-config configs/provider_runtime_openai_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_2_1.yaml \
+  --facet-retrieval-config configs/facet_retrieval_v0_1.yaml \
   --candidate-top-k 20 \
   --evidence-top-k 5 \
-  --report-output artifacts/evaluation/generation_v0_2.json
+  --report-output artifacts/evaluation/generation_openai_v0_3_final.json \
+  --telemetry-output artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
+```
+
+This command uses the remote provider and therefore incurs provider usage.
+
+---
+
+## Validation
+
+Run the local quality gate:
+
+```bash
+python -m pytest -q
+python -m ruff check .
+python -m mypy src/aeroragx
+git diff --check
+```
+
+Provider-hardening regressions:
+
+```bash
+python -m pytest \
+  tests/test_generation_guardrails.py \
+  tests/test_structured_provider.py \
+  -v
 ```
 
 ---
@@ -467,214 +573,73 @@ aeroragx ntrs-evaluate-generation \
 
 ```text
 AeroRAG-X/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
 ├── artifacts/
 │   ├── embeddings/
-│   │   └── ntrs_v0_1_manifest.json
 │   └── evaluation/
-│       ├── bm25_v0_1.json
-│       ├── dense_v0_1.json
-│       ├── bm25_v0_2.json
-│       ├── dense_v0_2.json
-│       ├── hybrid_v0_2.json
-│       ├── reranker_top10_v0_2.json
-│       ├── reranker_top20_v0_2.json
-│       ├── reranker_latency_v0_1.json
-│       ├── generation_v0_1.json
-│       └── generation_v0_2.json
 ├── configs/
-│   ├── base.yaml
 │   ├── bm25_v0_1.yaml
-│   ├── chunking_v0_1.yaml
-│   ├── corpus_v0_1.yaml
 │   ├── dense_v0_1.yaml
-│   ├── generation_v0_1.yaml
 │   ├── hybrid_v0_1.yaml
 │   ├── reranker_v0_1.yaml
-│   └── sufficiency_v0_1.yaml
+│   ├── generation_v0_1.yaml
+│   ├── generation_openai_v0_1.yaml
+│   ├── sufficiency_v0_2_1.yaml
+│   ├── facet_retrieval_v0_1.yaml
+│   ├── provider_v0_1.yaml
+│   ├── http_transport_openai_v0_1.yaml
+│   └── provider_runtime_openai_v0_1.yaml
 ├── data/
 │   ├── evaluation/
-│   │   ├── README.md
-│   │   ├── queries_v0_1.jsonl
-│   │   ├── candidates_v0_1.jsonl
-│   │   ├── qrels_v0_1.jsonl
-│   │   ├── candidates_v0_2_internal.jsonl
-│   │   ├── candidates_v0_2_annotation.jsonl
-│   │   ├── qrels_v0_2.jsonl
-│   │   └── generation_queries_v0_1.jsonl
-│   ├── manifests/
-│   └── sample/
+│   └── processed/
 ├── docs/
-│   └── architecture.md
-├── src/
-│   └── aeroragx/
-│       ├── evaluation/
-│       │   ├── pooling.py
-│       │   └── retrieval.py
-│       ├── generation/
-│       │   ├── __init__.py
-│       │   ├── evaluation.py
-│       │   ├── grounded.py
-│       │   ├── provider.py
-│       │   └── sufficiency.py
-│       ├── ingestion/
-│       │   ├── acquisition.py
-│       │   ├── corpus.py
-│       │   └── ntrs.py
-│       ├── processing/
-│       │   ├── chunking.py
-│       │   └── pdf.py
-│       ├── retrieval/
-│       │   ├── bm25.py
-│       │   ├── dense.py
-│       │   ├── hybrid.py
-│       │   └── reranker.py
-│       ├── cli.py
-│       └── config.py
-├── tests/
-└── pyproject.toml
-```
-
----
-
-## Evaluation data
-
-Retrieval queries:
-
-```text
-data/evaluation/queries_v0_1.jsonl
-```
-
-Retrieval judgments:
-
-```text
-data/evaluation/qrels_v0_1.jsonl
-data/evaluation/qrels_v0_2.jsonl
-```
-
-Generation queries:
-
-```text
-data/evaluation/generation_queries_v0_1.jsonl
-```
-
-Generation reports:
-
-```text
-artifacts/evaluation/generation_v0_1.json
-artifacts/evaluation/generation_v0_2.json
-```
-
-See `data/evaluation/README.md` for protocols, limitations, and reproducibility commands.
-
----
-
-## Reproducibility and quality checks
-
-Format:
-
-```bash
-python -m ruff format .
-```
-
-Lint:
-
-```bash
-python -m ruff check .
-```
-
-Tests with coverage:
-
-```bash
-python -m pytest \
-  --cov=aeroragx \
-  --cov-report=term-missing
-```
-
-Strict type checking:
-
-```bash
-python -m mypy src/aeroragx
-```
-
-Git whitespace validation:
-
-```bash
-git diff --check
-```
-
-CI is defined in:
-
-```text
-.github/workflows/ci.yml
+│   ├── architecture.md
+│   ├── generation.md
+│   └── evaluation.md
+├── scripts/
+│   └── run_generation_v03.py
+├── src/aeroragx/
+│   ├── evaluation/
+│   ├── generation/
+│   ├── ingestion/
+│   ├── processing/
+│   └── retrieval/
+└── tests/
 ```
 
 ---
 
 ## Current limitations
 
-### Retrieval benchmark size
+AeroRAG-X is not yet a complete production service.
 
-The retrieval benchmark contains eight queries. Aggregate metrics are sensitive to individual relevance decisions.
+Current limitations include:
 
-### Retrieval annotation provenance
-
-The pooled v0.2 relevance labels were created through conservative assistant-supported review of stored text previews. An independent audit with fuller source context and additional assessors is required before publication-grade claims.
-
-### Generation benchmark size
-
-Generation evaluation contains only ten queries. The perfect v0.2 answerability/refusal result should therefore be treated as an engineering checkpoint rather than a generalization claim.
-
-### Generation provider
-
-The current provider is deterministic and extractive. A production structured-output LLM provider is not yet integrated.
-
-### Semantic faithfulness
-
-Current citation verification ensures that claim citation IDs resolve to retrieved evidence and valid provenance. It does not yet prove that every cited passage semantically entails every claim.
-
-### Vector search
-
-Dense retrieval currently uses exact cosine similarity over a NumPy matrix. A production vector database is planned for larger corpora and deployed serving.
-
-### Multimodality
-
-Table and figure extraction/retrieval remain future milestones.
+- the generation benchmark contains 32 labeled queries and needs broader independent evaluation;
+- expected-term recall is a lexical heuristic, not semantic faithfulness;
+- no external entailment or claim-support judge is currently used;
+- facet-aware retrieval intentionally supports a narrow deterministic synthesis pattern rather than arbitrary query decomposition;
+- the current dense index uses local NumPy storage rather than a vector database;
+- there is no FastAPI service yet;
+- there is no Dockerized deployment yet;
+- tables and figures are not yet first-class retrievable units;
+- no cloud observability stack is deployed.
 
 ---
 
 ## Next milestone
 
-The next engineering milestone is **LLM provider hardening**:
+The next milestone is **serving and deployment**, not another retrieval feature:
 
 ```text
-structured provider configuration
-        |
-        v
-prompt construction + prompt versioning
-        |
-        v
-structured provider response validation
-        |
-        v
-prompt-injection defenses
-        |
-        v
-timeout + retry behavior
-        |
-        v
-latency, token, and cost metadata
-        |
-        v
-expanded generation evaluation
+FastAPI service
+    ->
+API tests
+    ->
+Docker
+    ->
+structured observability
+    ->
+cloud deployment
 ```
 
-After provider hardening, the project will move to API serving, persistent vector infrastructure, Docker/cloud deployment, monitoring, and multimodal retrieval.
-
----
-
-## License
-
-MIT
+See `ROADMAP.md` for the full development plan.

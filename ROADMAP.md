@@ -2,141 +2,160 @@
 
 AeroRAG-X is a production-oriented, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.
 
-The project follows a retrieval-first and evaluation-first development strategy:
+The project follows an evaluation-first development strategy:
 
 ```text
 Reliable corpus
-→ verified processing
-→ lexical + semantic retrieval
-→ pooled relevance evaluation
-→ hybrid retrieval
-→ cross-encoder reranking
-→ grounded generation
-→ evidence-sufficiency gating
-→ generation evaluation
-→ provider hardening
-→ API + vector infrastructure
-→ deployment
-→ multimodal retrieval
+-> verified processing
+-> lexical + semantic retrieval
+-> pooled relevance evaluation
+-> hybrid retrieval
+-> cross-encoder reranking
+-> grounded generation
+-> evidence-sufficiency gating
+-> hardened provider
+-> facet-aware synthesis retrieval
+-> generation v0.3 benchmark
+-> API serving
+-> containerization
+-> deployment + observability
+-> persistent vector infrastructure
+-> multimodal retrieval
 ```
 
 ---
 
 ## Current project status
 
-Implemented:
+### Completed text-RAG milestone
 
-- NASA NTRS metadata ingestion
-- reproducible corpus manifests
-- PDF acquisition and checksum validation
-- page-level PDF extraction
-- citation-preserving overlapping chunks
-- BM25 lexical retrieval
-- Sentence Transformer dense retrieval
-- exact cosine search over 3,233 chunks
-- generic retrieval interfaces and evaluation
-- reciprocal-rank-fusion hybrid retrieval
-- cross-encoder reranking
-- reranker latency measurement
-- deterministic BM25+dense candidate pooling
-- blinded annotation records
-- pooled v0.2 relevance judgments
-- retrieval metrics
-- provider-agnostic grounded-generation core
-- deterministic local generation provider
-- structured claims and authoritative citations
-- source-document summaries
-- generation evaluation
-- deterministic evidence-sufficiency gating
-- unsupported-query refusal
-- generation baseline v0.1 and sufficiency-gated v0.2
+- [x] NASA NTRS metadata ingestion
+- [x] reproducible corpus manifests
+- [x] PDF acquisition and checksum validation
+- [x] page-level PDF extraction
+- [x] citation-preserving overlapping chunks
+- [x] BM25 lexical retrieval
+- [x] Sentence Transformer dense retrieval
+- [x] exact cosine search over 3,233 chunks
+- [x] reciprocal-rank-fusion hybrid retrieval
+- [x] cross-encoder reranking
+- [x] pooled relevance evaluation
+- [x] provider-agnostic grounded generation
+- [x] deterministic local provider
+- [x] OpenAI Responses API provider adapter
+- [x] structured provider responses
+- [x] prompt versioning
+- [x] prompt-injection heuristics
+- [x] timeout and bounded retry behavior
+- [x] latency/token/cost telemetry
+- [x] deterministic evidence-sufficiency gating
+- [x] numeric support checks
+- [x] named-anchor support checks
+- [x] claim-qualifier support checks
+- [x] Sufficiency v0.2.1 calibration
+- [x] deterministic facet-aware evidence retrieval
+- [x] semantic facet verification
+- [x] generation v0.3 telemetry benchmark
+- [x] 32-query final generation benchmark
+- [x] zero answerability failures on the current benchmark
+- [x] frozen final benchmark artifacts
 
-Current generation results:
+### Final generation v0.3 results
 
-| Metric | v0.1 | v0.2 |
+| Metric | Baseline | Final |
 |---|---:|---:|
-| Answerability accuracy | 0.8000 | 1.0000 |
-| Answerable completion | 1.0000 | 1.0000 |
-| Unsupported refusal | 0.0000 | 1.0000 |
-| Claim citation coverage | 1.0000 | 1.0000 |
-| Citation-reference validity | 1.0000 | 1.0000 |
-| Source-document coverage | 1.0000 | 1.0000 |
-| Expected-term recall | 0.9130 | 0.9130 |
-| Structural validity | 1.0000 | 1.0000 |
+| Answerability accuracy | 0.9375 | **1.0000** |
+| Answerable completion | 0.9000 | **1.0000** |
+| Unsupported refusal | 1.0000 | **1.0000** |
+| Claim citation coverage | 1.0000 | **1.0000** |
+| Citation-reference validity | 1.0000 | **1.0000** |
+| Expected-term recall | 0.9138 | **0.9310** |
+| Structural validity | 1.0000 | **1.0000** |
+| Provider call-policy accuracy | 0.8750 | **1.0000** |
 
-The immediate priority is a real structured-output generation provider plus prompt/response hardening and a larger generation benchmark.
+Final provider telemetry:
+
+```text
+Provider calls: 20
+Provider bypasses: 12
+Total tokens: 58,915
+Estimated benchmark cost: $0.103745
+P50 provider latency: 5.6394 s
+P95 provider latency: 7.6947 s
+Retry rate: 0.0
+```
+
+The immediate priority is now **FastAPI serving, API validation, Docker, and observability**.
 
 ---
 
 ## Phase 1 — Repository foundation
 
-- [x] Create Python package with `src/` layout
-- [x] Add `pyproject.toml`
-- [x] Add editable installation
-- [x] Add Typer CLI
-- [x] Add YAML configuration
-- [x] Add Ruff
-- [x] Add pytest
-- [x] Add coverage reporting
-- [x] Add strict mypy checking
-- [x] Add GitHub Actions
-- [x] Establish feature-branch and pull-request workflow
-- [x] Add MIT license
-- [ ] Protect `main`
-- [ ] Require passing CI before merge
-- [ ] Prevent force pushes to `main`
-- [ ] Add enforced coverage threshold
-- [ ] Add pre-commit hooks
+- [x] Python package with `src/` layout
+- [x] `pyproject.toml`
+- [x] editable installation
+- [x] Typer CLI
+- [x] YAML configuration
+- [x] Ruff
+- [x] pytest
+- [x] coverage reporting
+- [x] strict mypy
+- [x] GitHub Actions
+- [x] feature-branch and pull-request workflow
+- [x] MIT license
+- [ ] protect `main`
+- [ ] require passing CI before merge
+- [ ] prevent force pushes to `main`
+- [ ] enforce coverage threshold
+- [ ] add pre-commit hooks
 
 ---
 
 ## Phase 2 — Reproducible NASA corpus acquisition
 
-- [x] Define initial aerospace corpus
-- [x] Implement NASA NTRS metadata search
-- [x] Normalize NTRS records
-- [x] Add versioned corpus configuration
-- [x] Build document manifests
-- [x] Resolve PDF links
-- [x] Stream PDF downloads
-- [x] Use temporary `.part` files
-- [x] Validate downloads
-- [x] Calculate checksums
-- [x] Record acquisition receipts
-- [x] Preserve NASA citation and source URLs
-- [ ] Add formal dataset card
-- [ ] Document corpus inclusion/exclusion criteria
-- [ ] Add corpus-version comparison tooling
-- [ ] Add ASRS ingestion
-- [ ] Document ASRS-specific limitations and attribution
+- [x] define initial aerospace corpus
+- [x] NASA NTRS metadata search
+- [x] normalize NTRS records
+- [x] versioned corpus configuration
+- [x] document manifests
+- [x] PDF-link resolution
+- [x] streamed downloads
+- [x] `.part` temporary files
+- [x] download validation
+- [x] checksums
+- [x] acquisition receipts
+- [x] NASA citation/source URLs
+- [ ] formal dataset card
+- [ ] corpus inclusion/exclusion criteria
+- [ ] corpus-version comparison tooling
+- [ ] additional approved aerospace sources
 
 ---
 
 ## Phase 3 — Processing and provenance
 
-- [x] Verify source checksums before extraction
-- [x] Extract PDF text
-- [x] Preserve page boundaries
-- [x] Preserve empty pages
-- [x] Generate page-level records
-- [x] Generate extraction receipts
-- [x] Add deterministic overlapping chunks
-- [x] Preserve document identifiers
-- [x] Preserve page identifiers
-- [x] Preserve page ranges
-- [x] Preserve citation URLs
-- [x] Preserve source URLs
-- [x] Preserve source-document checksums
-- [x] Generate chunking receipts
-- [ ] Add document title to every chunk
-- [ ] Add publication date to every chunk
-- [ ] Add semantic chunking experiment
-- [ ] Compare fixed and semantic chunking
-- [ ] Detect tables
-- [ ] Extract structured tables
-- [ ] Detect figures
-- [ ] Extract figure images/captions
-- [ ] Add OCR only when native extraction is unavailable
+- [x] source-checksum verification
+- [x] PDF text extraction
+- [x] page-boundary preservation
+- [x] empty-page preservation
+- [x] page-level records
+- [x] extraction receipts
+- [x] deterministic overlapping chunks
+- [x] document/page identifiers
+- [x] page ranges
+- [x] citation URLs
+- [x] source URLs
+- [x] source-document checksums
+- [x] chunking receipts
+- [ ] add document title to every chunk
+- [ ] add publication date to every chunk
+- [ ] semantic chunking experiment
+- [ ] fixed versus semantic chunking comparison
+- [ ] table detection
+- [ ] structured table extraction
+- [ ] figure detection
+- [ ] figure image/caption extraction
+- [ ] OCR fallback only when native extraction is unavailable
 
 ---
 
@@ -144,36 +163,31 @@ The immediate priority is a real structured-output generation provider plus prom
 
 ### BM25
 
-- [x] Tokenization
-- [x] Inverted index
-- [x] Configurable `k1`
-- [x] Configurable `b`
-- [x] Deterministic tie-breaking
-- [x] Full chunk provenance
-- [x] Search CLI
-- [x] Unit tests
-- [x] Real NASA corpus search
+- [x] tokenization
+- [x] inverted index
+- [x] configurable `k1`
+- [x] configurable `b`
+- [x] deterministic tie-breaking
+- [x] full chunk provenance
+- [x] CLI
+- [x] tests
+- [x] real NASA corpus search
 
 ### Dense retrieval
 
 - [x] Sentence Transformers
-- [x] Dense retrieval configuration
-- [x] Corpus encoding
-- [x] Separate query encoding
-- [x] Normalized embeddings
+- [x] normalized embeddings
 - [x] NumPy persistence
-- [x] Aligned JSONL metadata
-- [x] Versioned index manifest
-- [x] Exact cosine similarity
-- [x] Dense-index CLI
-- [x] Dense-search CLI
-- [x] Unit tests
-- [x] Build index over 3,233 chunks
-- [x] Real semantic searches
-- [ ] Evaluate alternative embedding models
-- [ ] Measure embedding throughput
-- [ ] Add ANN indexing when scale requires it
-- [ ] Add vector database integration
+- [x] aligned metadata
+- [x] versioned manifest
+- [x] exact cosine similarity
+- [x] CLI
+- [x] tests
+- [x] index over 3,233 chunks
+- [ ] evaluate alternative embedding models
+- [ ] embedding-throughput benchmark
+- [ ] ANN indexing when scale requires it
+- [ ] vector database integration
 
 ---
 
@@ -181,114 +195,63 @@ The immediate priority is a real structured-output generation provider plus prom
 
 ### v0.1
 
-- [x] Eight aerospace queries
+- [x] eight aerospace queries
 - [x] BM25 annotation candidates
-- [x] Chunk-level relevance judgments
-- [x] Validate qrel IDs
+- [x] relevance judgments
 - [x] Recall@5
 - [x] Recall@10
 - [x] MRR@10
 - [x] NDCG@10
-- [x] Aggregate reports
-- [x] Per-query reports
-- [x] BM25 evaluation CLI
-- [x] Dense evaluation CLI
-- [x] Evaluation tests
-- [x] BM25 report
-- [x] Dense report
-- [x] Document BM25 candidate-pool bias
+- [x] aggregate/per-query reports
+- [x] BM25 and dense reports
+- [x] candidate-pool bias documented
 
-### Pooled v0.2
+### pooled v0.2
 
-- [x] Top-20 BM25 candidate retrieval
-- [x] Top-20 dense candidate retrieval
-- [x] Candidate combination
-- [x] Deduplication by `chunk_id`
-- [x] Internal retriever provenance
-- [x] Blinded annotation records
-- [x] Deterministic SHA-256 ordering with seed 42
-- [x] Carry-forward v0.1 positives
-- [x] Review 278 candidates
-- [x] Record 101 relevant / 177 non-relevant labels
-- [x] Generate `qrels_v0_2.jsonl`
-- [x] Re-evaluate BM25
-- [x] Re-evaluate dense retrieval
-- [x] Evaluate Hybrid RRF
-- [x] Evaluate cross-encoder reranker
-- [ ] Independent second-pass relevance audit
-- [ ] Expand to 25–40 retrieval queries
-- [ ] Add multiple assessors
-- [ ] Measure inter-annotator agreement
-- [ ] Add dedicated per-query error analysis
-
-### Retrieval v0.2 results
-
-| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
-|---|---:|---:|---:|---:|
-| BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
-| Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
-| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
-| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
-| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
+- [x] top-20 BM25 candidates
+- [x] top-20 dense candidates
+- [x] candidate combination/deduplication
+- [x] blinded annotation records
+- [x] deterministic ordering
+- [x] 278 candidates reviewed
+- [x] 101 relevant / 177 non-relevant labels
+- [x] BM25 reevaluation
+- [x] dense reevaluation
+- [x] Hybrid RRF evaluation
+- [x] cross-encoder reranker evaluation
+- [ ] independent second-pass relevance audit
+- [ ] expand to 25–40 retrieval queries
+- [ ] multiple assessors
+- [ ] inter-annotator agreement
+- [ ] regression thresholds
 
 ---
 
-## Phase 6 — Evaluation refactoring
+## Phase 6 — Hybrid retrieval
 
-- [x] Shared retrieval-index protocol
-- [x] Common retrieval-hit interface
-- [x] Generic `evaluate_retriever`
-- [x] Preserve BM25 compatibility wrapper
-- [x] Preserve dense compatibility wrapper
-- [x] Add Hybrid evaluation
-- [x] Add reranker evaluation
-- [ ] Add reusable report-comparison module
-- [ ] Add benchmark-regression checks
-- [ ] Add machine-readable summary index
-
----
-
-## Phase 7 — Hybrid retrieval
-
-- [x] `configs/hybrid_v0_1.yaml`
 - [x] Reciprocal Rank Fusion
-- [x] Independent BM25/dense candidate retrieval
-- [x] Rank fusion rather than raw-score addition
-- [x] Preserve contributing retrievers
-- [x] Preserve source ranks and scores
-- [x] Deterministic ranking
-- [x] Hybrid CLI
-- [x] Hybrid unit tests
-- [x] Evaluate on v0.2 qrels
-- [x] Store `hybrid_v0_2.json`
-- [ ] Tune RRF parameters on a separate development set
-
-Fixed configuration:
-
-```yaml
-version: "0.1"
-rrf_k: 60
-bm25_top_k: 50
-dense_top_k: 50
-default_top_k: 10
-```
+- [x] independent BM25/dense retrieval
+- [x] deterministic candidate deduplication
+- [x] source ranks and scores
+- [x] retrieval provenance
+- [x] CLI
+- [x] unit tests
+- [x] pooled benchmark
+- [ ] tune RRF parameters on separate development data
 
 ---
 
-## Phase 8 — Cross-encoder reranking
+## Phase 7 — Cross-encoder reranking
 
-- [x] Select cross-encoder
-- [x] Rerank Hybrid RRF candidates
-- [x] Preserve lexical/dense/hybrid provenance
-- [x] Reranker configuration
-- [x] Reranker CLI
-- [x] Fake-scorer deterministic tests
-- [x] Reranker latency measurement
-- [x] Retrieval evaluation
-- [x] Top-10 vs top-20 candidate-depth comparison
-- [x] Record model/hardware settings
-- [ ] Evaluate alternate rerankers on a separate development set
-- [ ] Compare CPU/MPS/CUDA latency on documented hardware
+- [x] cross-encoder model
+- [x] bounded Hybrid RRF candidate reranking
+- [x] retrieval provenance
+- [x] CLI
+- [x] deterministic fake-scorer tests
+- [x] scoring latency
+- [x] pooled evaluation
+- [ ] alternate reranker benchmark
+- [ ] CPU/MPS/CUDA comparison
 
 Current model:
 
@@ -298,289 +261,291 @@ cross-encoder/ms-marco-MiniLM-L6-v2
 
 ---
 
-## Phase 9 — Grounded answer generation
+## Phase 8 — Grounded answer generation
 
 ### Core
 
-- [x] Define generation-provider protocol
-- [x] Implement deterministic local provider
-- [x] Define structured provider response
-- [x] Define structured grounded-answer schema
-- [x] Define structured claim schema
-- [x] Define authoritative citation schema
-- [x] Define source-document schema
-- [x] Pass reranked chunks with provenance
-- [x] Bound evidence depth
-- [x] Bound total context characters
-- [x] Bound per-chunk characters
-- [x] Limit maximum claims
-- [x] Preserve retrieval metadata
-- [x] Require citation IDs for technical claims when configured
-- [x] Resolve provider evidence IDs to authoritative citations
-- [x] Reject unknown evidence IDs
-- [x] Reject invalid answer states
-- [x] Generate source-document summaries
-- [x] Add page-aware citation metadata
-- [x] Add grounded-answer JSON writer
-- [x] Add grounded-answer CLI
-- [x] Add deterministic fake-provider tests
-- [x] Add deterministic extractive provider
-- [ ] Add production API-based provider
-- [ ] Add local neural LLM provider
-- [ ] Add neighboring-chunk expansion
-- [ ] Add explicit near-duplicate context removal
+- [x] provider protocol
+- [x] deterministic provider
+- [x] structured provider response
+- [x] grounded-answer schema
+- [x] claim schema
+- [x] authoritative citation schema
+- [x] source-document schema
+- [x] bounded evidence/context
+- [x] citation-ID requirements
+- [x] application-side citation resolution
+- [x] invalid state rejection
+- [x] source-document summaries
+- [x] JSON writer
+- [x] CLI
+- [x] OpenAI Responses API adapter
+- [ ] local neural LLM provider
+- [ ] neighboring-chunk expansion experiment
+- [ ] near-duplicate context-removal experiment
 
 ### Evidence sufficiency
 
-- [x] Add deterministic sufficiency configuration
-- [x] Add informative query-term coverage
-- [x] Add minimum supported-term check
-- [x] Add single-evidence concentration check
-- [x] Add numeric-support check
-- [x] Add named-anchor support check
-- [x] Add exact-query stricter threshold
-- [x] Add auditable rejection reasons
-- [x] Store sufficiency result in retrieval metadata
-- [x] Refuse before provider invocation
-- [x] Preserve previous behavior when assessor is disabled
-- [x] Add integration tests
+- [x] deterministic sufficiency configuration
+- [x] informative query-term coverage
+- [x] minimum supported-term check
+- [x] single-evidence coverage
+- [x] numeric-support check
+- [x] named-anchor support check
+- [x] exact-query threshold
+- [x] morphology normalization
+- [x] claim-qualifier support
+- [x] calibrated technical-compound handling
+- [x] auditable rejection reasons
+- [x] refusal before provider invocation
+- [x] Sufficiency v0.2.1
+
+### Facet-aware evidence
+
+- [x] deterministic shared-facet planning
+- [x] facet-specific retrieval
+- [x] semantic facet verification
+- [x] deduplication
+- [x] balanced evidence selection
+- [x] ordinary-retrieval fallback
+- [x] integrated CLI support
+- [x] integrated generation benchmark support
+- [ ] broaden facet planner only after additional benchmark coverage
 
 ---
 
-## Phase 10 — Grounded-generation evaluation
-
-### Implemented structural evaluation
-
-- [x] Add answerability-labeled generation queries
-- [x] Add expected-answerable cases
-- [x] Add unsupported controls
-- [x] Add answerability accuracy
-- [x] Add answerable completion rate
-- [x] Add unsupported refusal rate
-- [x] Add claim citation coverage
-- [x] Add citation-reference validity
-- [x] Add source-document coverage
-- [x] Add expected-term lexical recall
-- [x] Add structural-validity checks
-- [x] Preserve per-query results
-- [x] Add evaluation CLI
-- [x] Store v0.1 report
-- [x] Store sufficiency-gated v0.2 report
-- [x] Add deterministic evaluation tests
-
-### v0.1 → v0.2 results
-
-| Metric | v0.1 | v0.2 |
-|---|---:|---:|
-| Answerability accuracy | 0.8000 | 1.0000 |
-| Answerable completion | 1.0000 | 1.0000 |
-| Unsupported refusal | 0.0000 | 1.0000 |
-| Claim citation coverage | 1.0000 | 1.0000 |
-| Citation-reference validity | 1.0000 | 1.0000 |
-| Source-document coverage | 1.0000 | 1.0000 |
-| Expected-term recall | 0.9130 | 0.9130 |
-| Structural validity | 1.0000 | 1.0000 |
-
-### Still required
-
-- [ ] Expand generation benchmark to at least 30–40 questions
-- [ ] Add multi-document synthesis cases
-- [ ] Add conflicting-evidence cases
-- [ ] Add partial-evidence cases
-- [ ] Add prompt-injection cases
-- [ ] Add malformed-provider-response cases
-- [ ] Add timeout/retry cases
-- [ ] Add semantic citation-support scoring
-- [ ] Add answer-faithfulness evaluation
-- [ ] Add semantic answer-relevance evaluation
-- [ ] Add independent human review
-- [ ] Add regression thresholds for generation metrics
-
----
-
-## Phase 11 — Provider hardening and agent safety
+## Phase 9 — Provider hardening and safety
 
 ### Provider infrastructure
 
-- [ ] Add versioned provider configuration
-- [ ] Add structured prompt builder
-- [ ] Add prompt version identifier
-- [ ] Add real structured-output API provider
-- [ ] Add provider timeout handling
-- [ ] Add bounded retries
-- [ ] Add rate-limit handling
-- [ ] Add malformed JSON/structured-output recovery policy
-- [ ] Record provider latency
-- [ ] Record input/output token usage
-- [ ] Record estimated cost
-- [ ] Redact secrets from logs
+- [x] versioned provider configuration
+- [x] structured prompt builder
+- [x] prompt version identifier
+- [x] OpenAI structured-output adapter
+- [x] HTTP transport
+- [x] provider factory
+- [x] timeout handling
+- [x] bounded retries
+- [x] retryable/non-retryable transport errors
+- [x] structured-response validation
+- [x] latency telemetry
+- [x] input/output token telemetry
+- [x] estimated cost telemetry
+- [x] secret redaction
 
 ### Guardrails
 
-- [ ] Treat retrieved documents as untrusted data
-- [ ] Add prompt-injection detection heuristics
-- [ ] Ensure retrieved text cannot override system instructions
-- [ ] Add output-schema validation failures
-- [ ] Add unsupported citation-ID rejection tests
-- [ ] Add prompt-injection regression tests
-- [ ] Add provider-error regression tests
-- [ ] Add adversarial evaluation set
+- [x] retrieved evidence treated as untrusted input
+- [x] prompt-injection detection heuristics
+- [x] explicit evidence delimiters
+- [x] hidden/system prompt extraction patterns
+- [x] role-reassignment detection
+- [x] tool-execution injection detection
+- [x] unknown evidence-ID rejection
+- [x] malformed-provider-payload rejection
+- [x] provider-error regression tests
+- [x] prompt-injection regression tests
 
-### Narrow research-agent tools
+### Future hardening
 
-- [ ] Define explicit tool protocol
-- [ ] NASA NTRS metadata-search tool
-- [ ] corpus-search tool
-- [ ] report-comparison tool
-- [ ] deterministic unit-conversion/calculator tool
-- [ ] tool-call audit records
-- [ ] human approval before expensive/destructive operations
-
----
-
-## Phase 12 — Persistent vector infrastructure and serving
-
-### Vector infrastructure
-
-- [ ] Add PostgreSQL + pgvector development configuration
-- [ ] Add vector-schema migrations
-- [ ] Persist embeddings and provenance
-- [ ] Add metadata filtering
-- [ ] Add document upsert
-- [ ] Add document deletion
-- [ ] Add index/version metadata
-- [ ] Add pgvector retrieval implementation
-- [ ] Compare pgvector vs exact NumPy baseline
-- [ ] Add retrieval latency benchmark
-- [ ] Add backup/restore instructions
-
-### FastAPI
-
-- [ ] Add application factory
-- [ ] Add health endpoint
-- [ ] Add readiness endpoint
-- [ ] Add lexical-search endpoint
-- [ ] Add semantic-search endpoint
-- [ ] Add hybrid-search endpoint
-- [ ] Add grounded-answer endpoint
-- [ ] Add request/response schemas
-- [ ] Add structured error handling
-- [ ] Add request IDs
-- [ ] Add API tests
-- [ ] Add OpenAPI documentation
+- [ ] broaden adversarial evaluation dataset
+- [ ] add semantic prompt-injection classifier experiment
+- [ ] add provider circuit-breaker policy
+- [ ] add rate-limit specific integration tests
+- [ ] add fault-injection benchmark
+- [ ] add production secret manager integration
 
 ---
 
-## Phase 13 — Deployment and observability
+## Phase 10 — Generation evaluation
 
-- [ ] Add Dockerfile
-- [ ] Add Docker Compose
-- [ ] Add environment-variable documentation
-- [ ] Add secrets-management guidance
-- [ ] Add structured logging
-- [ ] Add OpenTelemetry instrumentation
-- [ ] Add latency histograms
-- [ ] Add error counters
-- [ ] Add retrieval/generation timing breakdown
-- [ ] Add health/readiness checks
-- [ ] Add load testing
-- [ ] Measure P50/P95 latency
-- [ ] Estimate deployment cost
-- [ ] Add GitHub Actions deployment workflow
-- [ ] Add Terraform
-- [ ] Deploy to Cloud Run or AWS Fargate
-- [ ] Add rollback procedure
-
----
-
-## Phase 14 — Multimodal report processing
-
-- [ ] Detect figure images
-- [ ] Extract figure captions
-- [ ] Link figures to source pages
-- [ ] Detect tables
-- [ ] Extract structured tables
-- [ ] Preserve table row/column context
-- [ ] Generate figure embeddings
-- [ ] Generate table representations
-- [ ] Add figure retrieval
-- [ ] Add table retrieval
-- [ ] Combine text/table/figure candidates
-- [ ] Add multimodal citation metadata
-- [ ] Add multimodal evaluation queries
-- [ ] Add figure/table relevance judgments
+- [x] answerability-labeled queries
+- [x] unsupported controls
+- [x] answerability accuracy
+- [x] answerable completion
+- [x] unsupported refusal
+- [x] claim citation coverage
+- [x] citation-reference validity
+- [x] source-document coverage
+- [x] expected-term recall
+- [x] structural-validity checks
+- [x] per-query results
+- [x] telemetry evaluation
+- [x] deterministic provider baseline
+- [x] OpenAI provider baseline
+- [x] expanded v0.3 dataset: 32 queries
+- [x] multi-document synthesis cases
+- [x] provider call/bypass policy metric
+- [x] latency/token/cost telemetry
+- [x] final 32-query run with zero answerability failures
+- [x] final comparison artifact
+- [ ] semantic citation-support scoring
+- [ ] semantic answer-faithfulness evaluation
+- [ ] semantic answer-relevance evaluation
+- [ ] independent human review
+- [ ] multiple benchmark assessors
+- [ ] larger benchmark
+- [ ] generation regression thresholds in CI
 
 ---
 
-## Phase 15 — Model adaptation
+## Phase 11 — FastAPI serving — NEXT
 
-- [ ] Create train/dev/test split for retrieval/reranking adaptation
-- [ ] Fine-tune an aerospace sentence retriever or reranker
-- [ ] Use PyTorch + Hugging Face Transformers
-- [ ] Add PEFT/LoRA when appropriate
-- [ ] Track experiments
-- [ ] Evaluate retrieval quality before/after adaptation
-- [ ] Measure inference latency
-- [ ] Measure memory
-- [ ] Evaluate quantization
-- [ ] Add model card
+### Application
+
+- [ ] add FastAPI dependency
+- [ ] add application factory
+- [ ] configure dependency injection
+- [ ] add startup/shutdown lifecycle
+- [ ] load retrieval/generation components once per process
+
+### Endpoints
+
+- [ ] `GET /health`
+- [ ] `GET /ready`
+- [ ] `POST /v1/query`
+- [ ] request/response Pydantic schemas
+- [ ] structured error responses
+- [ ] request IDs
+- [ ] optional debug metadata policy
+- [ ] OpenAPI documentation
+
+### API tests
+
+- [ ] health endpoint
+- [ ] readiness endpoint
+- [ ] supported query
+- [ ] unsupported query
+- [ ] blank query rejection
+- [ ] invalid request rejection
+- [ ] citation preservation
+- [ ] provider bypass behavior
+- [ ] provider error behavior
+- [ ] facet-aware query behavior
 
 ---
 
-## Phase 16 — Release hardening
+## Phase 12 — Docker and local service deployment
 
-- [ ] Protect `main`
-- [ ] Require pull requests
-- [ ] Require CI checks
-- [ ] Add coverage failure threshold
-- [ ] Add dependency vulnerability scanning
-- [ ] Add pre-commit configuration
-- [ ] Add issue template
-- [ ] Add PR template
-- [ ] Add changelog
-- [ ] Add release automation
-- [ ] Add benchmark-regression checks
-- [ ] Add dataset card
-- [ ] Add final model card
-- [ ] Add architecture diagram
-- [ ] Add benchmark charts
-- [ ] Record demo video
-- [ ] Publish `v0.1.0`
+- [ ] Dockerfile
+- [ ] `.dockerignore`
+- [ ] reproducible container build
+- [ ] non-root runtime user
+- [ ] environment-variable documentation
+- [ ] health check
+- [ ] local container smoke test
+- [ ] image-size review
+- [ ] dependency caching
+- [ ] Docker Compose only if additional services require it
 
 ---
 
-## Immediate next milestone
+## Phase 13 — Observability and reliability
 
-Create a new feature branch after merging grounded generation:
+- [ ] structured JSON logging
+- [ ] request ID propagation
+- [ ] retrieval latency
+- [ ] reranker latency
+- [ ] facet-retrieval usage
+- [ ] sufficiency result
+- [ ] provider called/bypassed
+- [ ] provider attempts/retries
+- [ ] provider latency
+- [ ] token counts
+- [ ] estimated cost
+- [ ] citation count
+- [ ] error counters
+- [ ] P50/P95 request latency
+- [ ] redaction verification
+- [ ] OpenTelemetry instrumentation
+- [ ] load test
+- [ ] failure-mode runbook
 
-```bash
-git switch main
-git pull --ff-only origin main
+---
 
-git switch -c feat/llm-provider-hardening
-git push -u origin feat/llm-provider-hardening
-```
+## Phase 14 — Cloud deployment
 
-Implement:
+- [ ] select deployment target
+- [ ] container registry
+- [ ] managed secret storage
+- [ ] deploy service
+- [ ] health/readiness configuration
+- [ ] structured logs
+- [ ] deployment CI workflow
+- [ ] rollback procedure
+- [ ] cost estimate
+- [ ] public demo policy and abuse limits
+
+---
+
+## Phase 15 — Persistent vector infrastructure
+
+Do this only when the service requirements justify it.
+
+- [ ] PostgreSQL + pgvector development configuration
+- [ ] vector-schema migration
+- [ ] embeddings/provenance persistence
+- [ ] metadata filtering
+- [ ] document upsert/delete
+- [ ] index-version metadata
+- [ ] pgvector retrieval implementation
+- [ ] compare pgvector with exact NumPy baseline
+- [ ] retrieval latency benchmark
+- [ ] backup/restore instructions
+
+---
+
+## Phase 16 — Multimodal report processing
+
+- [ ] figure detection
+- [ ] figure-caption extraction
+- [ ] page linkage
+- [ ] table detection
+- [ ] structured table extraction
+- [ ] multimodal retrieval records
+- [ ] image/table citation representation
+- [ ] multimodal evaluation dataset
+- [ ] multimodal answer tests
+- [ ] OCR fallback policy
+
+---
+
+## Phase 17 — Evaluation maturity
+
+- [ ] larger retrieval benchmark
+- [ ] larger generation benchmark
+- [ ] conflicting-evidence cases
+- [ ] partial-evidence cases
+- [ ] adversarial prompt-injection benchmark
+- [ ] semantic citation support
+- [ ] claim-level entailment evaluation
+- [ ] independent human evaluation
+- [ ] regression thresholds in CI
+- [ ] benchmark versioning policy
+- [ ] experiment registry
+
+---
+
+## Release criteria for the next serving milestone
+
+The FastAPI/Docker milestone is complete only when:
 
 ```text
-provider_v0_1.yaml
-prompting.py
-guardrails.py
-structured provider backend
-provider telemetry
-expanded generation benchmark
-prompt-injection tests
-provider-failure tests
+local quality gate passes
++
+API tests pass
++
+supported query returns grounded citations
++
+unsupported query bypasses provider when appropriate
++
+facet-aware synthesis query works through the API
++
+Docker image builds
++
+container health/readiness checks pass
++
+secrets are not logged
++
+request/provider telemetry is structured
 ```
-
-Acceptance criteria:
-
-- current deterministic provider remains supported;
-- no secrets are committed;
-- retrieved text is treated as untrusted data;
-- provider outputs are schema validated;
-- unsupported evidence IDs remain rejected;
-- timeout and retry behavior are tested;
-- prompt-injection cases are included in evaluation;
-- all existing retrieval and generation benchmarks remain reproducible.

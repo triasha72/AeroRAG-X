@@ -2,7 +2,7 @@
 
 AeroRAG-X is a retrieval-first, evidence-grounded system for aerospace technical knowledge.
 
-The design keeps acquisition, processing, retrieval, reranking, sufficiency assessment, generation, citation resolution, and evaluation separable so that each stage can be tested and benchmarked independently.
+The architecture separates acquisition, processing, retrieval, reranking, facet-aware evidence selection, evidence sufficiency, provider execution, citation resolution, and evaluation so that each stage can be tested independently.
 
 ---
 
@@ -43,6 +43,9 @@ NASA Technical Reports Server
  Cross-encoder reranking
                |
                v
+ Optional facet-aware evidence selection
+               |
+               v
  Evidence-sufficiency assessment
                |
         +------+------+
@@ -51,7 +54,11 @@ NASA Technical Reports Server
   sufficient      insufficient
         |             |
         v             v
- generation       grounded refusal
+ hardened LLM     grounded refusal
+ provider
+        |
+        v
+ structured response validation
         |
         v
  claim/evidence validation
@@ -63,7 +70,7 @@ NASA Technical Reports Server
  source-document summaries
         |
         v
- generation evaluation
+ generation + provider telemetry
 ```
 
 The current text pipeline operates over **3,233 citation-preserving NASA report chunks**.
@@ -74,43 +81,39 @@ The current text pipeline operates over **3,233 citation-preserving NASA report 
 
 ### Retrieval first
 
-Generation is downstream of retrieval and reranking. The generator does not directly search the corpus.
+Generation is downstream of retrieval. The provider never directly searches the corpus.
 
 ### Provenance first
 
-Document ID, page ranges, URLs, chunk IDs, and source-document checksums are preserved from processing through final citations.
+Document IDs, page ranges, URLs, chunk IDs, and source-document checksums survive from processing through final citations.
 
 ### Provider distrust
 
-The provider is allowed to produce structured claims and refer to evidence IDs. It is not trusted to invent authoritative citation metadata.
+The provider may produce structured claims and refer to evidence IDs. It is not trusted to create authoritative citation metadata.
 
-### Fail closed on invalid citations
+### Retrieved text is untrusted input
 
-Unknown evidence IDs and invalid answer states are rejected.
+Retrieved documents are evidence, not instructions. Provider prompts use explicit evidence delimiters and prompt-injection checks.
 
-### Refuse before generation when possible
+### Fail closed
 
-The evidence-sufficiency gate can stop unsupported questions before a provider call.
+Unknown evidence IDs, malformed structured outputs, unsupported answer states, and insufficient evidence are rejected rather than silently accepted.
+
+### Refuse before paying when possible
+
+The evidence-sufficiency gate can bypass the remote provider for unsupported questions.
+
+### Narrow deterministic complexity before agentic complexity
+
+Facet-aware retrieval uses a deterministic planner for a supported synthesis pattern instead of an unconstrained LLM query planner.
 
 ### Evaluation before optimization
 
-Each major retrieval/generation stage has a reproducible benchmark before additional complexity is added.
+Every major retrieval/generation capability is paired with a benchmark or deterministic regression test before the next architectural layer is added.
 
 ---
 
 ## Ingestion layer
-
-Provides:
-
-- NASA NTRS metadata search
-- record normalization
-- versioned corpus definitions
-- manifest generation
-- public PDF-link resolution
-- streamed downloads
-- `.part` temporary files
-- checksum calculation
-- acquisition receipts
 
 Primary modules:
 
@@ -120,22 +123,22 @@ src/aeroragx/ingestion/corpus.py
 src/aeroragx/ingestion/acquisition.py
 ```
 
+Responsibilities:
+
+- NASA NTRS metadata search
+- record normalization
+- versioned corpus definitions
+- manifest generation
+- PDF-link resolution
+- streamed downloads
+- temporary `.part` files
+- checksum calculation
+- acquisition receipts
+- NASA citation/source URL preservation
+
 ---
 
-## Document-processing layer
-
-Provides:
-
-- checksum verification
-- page-level PDF extraction
-- empty-page preservation
-- extraction receipts
-- deterministic overlapping chunks
-- page/document provenance
-- citation URLs
-- source URLs
-- source-document checksums
-- chunking receipts
+## Processing layer
 
 Primary modules:
 
@@ -144,7 +147,7 @@ src/aeroragx/processing/pdf.py
 src/aeroragx/processing/chunking.py
 ```
 
-Every processed chunk preserves:
+Each `ChunkRecord` preserves:
 
 ```text
 chunk_id
@@ -162,111 +165,57 @@ source_url
 document_sha256
 ```
 
+The processing layer is deterministic and provenance preserving.
+
 ---
 
-## BM25 retrieval
+## Retrieval stack
 
-Provides:
-
-- tokenization
-- in-memory inverted index
-- configurable `k1`
-- configurable `b`
-- deterministic ranking
-- citation-preserving results
-
-Primary module:
+### BM25
 
 ```text
 src/aeroragx/retrieval/bm25.py
 ```
 
----
+Provides lexical retrieval with deterministic ranking and chunk provenance.
 
-## Dense retrieval
-
-Provides:
-
-- Sentence Transformer embeddings
-- separate query/document encoding
-- normalized embeddings
-- NumPy persistence
-- aligned chunk metadata
-- versioned index manifest
-- exact cosine-similarity search
-
-Primary module:
+### Dense retrieval
 
 ```text
 src/aeroragx/retrieval/dense.py
 ```
 
-Current index:
+Current baseline:
 
 ```text
 Model: sentence-transformers/all-MiniLM-L6-v2
 Chunks: 3,233
-Embedding dimension: 384
+Dimension: 384
 Normalization: enabled
 Search: exact cosine similarity
+Storage: NumPy
 ```
 
----
-
-## Hybrid retrieval
-
-Provides:
-
-- independent BM25 and dense retrieval
-- Reciprocal Rank Fusion
-- rank-based combination instead of raw-score addition
-- deterministic candidate deduplication
-- BM25/dense provenance preservation
-
-Primary module:
+### Hybrid retrieval
 
 ```text
 src/aeroragx/retrieval/hybrid.py
 ```
 
-Configuration:
+Uses Reciprocal Rank Fusion instead of adding incompatible lexical and dense raw scores.
 
-```text
-configs/hybrid_v0_1.yaml
-```
-
-Fixed baseline:
+Baseline:
 
 ```text
 RRF k: 60
 BM25 depth: 50
 Dense depth: 50
-Default output: 10
 ```
 
----
-
-## Cross-encoder reranking
-
-Provides:
-
-- bounded reranking of Hybrid RRF candidates
-- joint query/chunk scoring
-- preservation of BM25, dense, and hybrid provenance
-- deterministic tie-breaking
-- scoring-only latency measurement
-- generic retrieval-evaluation compatibility
-
-Primary module:
+### Cross-encoder reranking
 
 ```text
 src/aeroragx/retrieval/reranker.py
-```
-
-Configuration:
-
-```text
-configs/reranker_v0_1.yaml
 ```
 
 Current model:
@@ -275,66 +224,133 @@ Current model:
 cross-encoder/ms-marco-MiniLM-L6-v2
 ```
 
-Default baseline:
+Generation currently reranks a bounded hybrid candidate set with:
 
 ```text
 candidate_top_k: 20
-default_top_k: 10
-batch_size: 16
-device: cpu
+evidence_top_k: 5
 ```
 
 ---
 
-## Retrieval evaluation
-
-Provides:
-
-- natural-language query records
-- relevance judgments
-- Recall@5
-- Recall@10
-- MRR@10
-- NDCG@10
-- per-query metrics
-- aggregate metrics
-- shared retrieval protocols
-- BM25 evaluation
-- dense evaluation
-- Hybrid RRF evaluation
-- reranker evaluation
-
-Primary modules:
-
-```text
-src/aeroragx/evaluation/retrieval.py
-src/aeroragx/evaluation/pooling.py
-```
-
-Tracked reports:
-
-```text
-artifacts/evaluation/bm25_v0_1.json
-artifacts/evaluation/dense_v0_1.json
-artifacts/evaluation/bm25_v0_2.json
-artifacts/evaluation/dense_v0_2.json
-artifacts/evaluation/hybrid_v0_2.json
-artifacts/evaluation/reranker_top10_v0_2.json
-artifacts/evaluation/reranker_top20_v0_2.json
-artifacts/evaluation/reranker_latency_v0_1.json
-```
-
----
-
-## Generation provider layer
+## Facet-aware evidence selection
 
 Primary module:
 
 ```text
-src/aeroragx/generation/provider.py
+src/aeroragx/generation/facet_retrieval.py
 ```
 
-The provider interface receives:
+Configuration:
+
+```text
+configs/facet_retrieval_v0_1.yaml
+```
+
+This layer wraps the reranked index.
+
+### Ordinary query
+
+```text
+query
+  |
+  v
+RerankerIndex.search()
+  |
+  v
+top-k evidence
+```
+
+### Supported multi-facet synthesis query
+
+```text
+original synthesis query
+        |
+        v
+deterministic facet plan
+   +----+----+
+   |         |
+   v         v
+facet A    facet B
+search     search
+   |         |
+   +----+----+
+        |
+        v
+semantic facet verification
+        |
+        v
+deduplicate by chunk_id
+        |
+        v
+round-robin facet balancing
+        |
+        v
+add original-query evidence
+        |
+        v
+bounded final evidence set
+```
+
+The semantic verifier requires the selected chunk to contain the facet identity terms. A hit does not qualify as facet evidence merely because it ranked for a facet query.
+
+If a required facet lacks semantic matches, the wrapper falls back to ordinary original-query retrieval.
+
+Current scope is intentionally narrow. It is not a general-purpose query decomposition engine.
+
+---
+
+## Evidence-sufficiency layer
+
+Primary module:
+
+```text
+src/aeroragx/generation/sufficiency.py
+```
+
+Current production benchmark config:
+
+```text
+configs/sufficiency_v0_2_1.yaml
+```
+
+The assessor checks:
+
+```text
+minimum evidence count
+informative query-term coverage
+minimum supported terms
+single-evidence coverage
+numeric support
+named-anchor support
+claim-qualifier support
+stricter exact-query coverage
+```
+
+The result includes auditable reasons and is preserved in retrieval metadata.
+
+### Important calibration behavior
+
+Sufficiency v0.2.1 distinguishes:
+
+```text
+power-electronics       ordinary technical compound
+thermal-management      ordinary technical compound
+
+FAA                     named anchor
+AetherWing              named anchor
+Zephyr-X                named anchor
+```
+
+It also distinguishes ordinary semantic use from unsupported authority claims. For example, a phrase like "components require thermal management" is not treated the same as an unsupported regulatory mandate.
+
+---
+
+## Provider layer
+
+### Provider protocol
+
+The generation provider receives:
 
 ```text
 query
@@ -342,7 +358,7 @@ bounded evidence records
 maximum claim count
 ```
 
-and returns a structured response containing:
+and returns:
 
 ```text
 answer
@@ -350,22 +366,86 @@ claims
 insufficient_evidence
 ```
 
-Each provider claim references evidence IDs rather than free-form URLs.
+Provider claims reference evidence IDs, not arbitrary source URLs.
 
-Current provider:
+### Implementations
+
+Deterministic/local provider:
 
 ```text
-DeterministicGenerationProvider
+src/aeroragx/generation/provider.py
 ```
 
-Purpose:
+Structured remote provider:
 
-- local end-to-end pipeline validation
-- deterministic tests
-- no external credentials
-- reproducible generation benchmarks
+```text
+src/aeroragx/generation/structured_provider.py
+src/aeroragx/generation/http_transport.py
+src/aeroragx/generation/model_adapter.py
+src/aeroragx/generation/provider_factory.py
+```
 
-It is not a production neural LLM.
+Prompt/guardrails:
+
+```text
+src/aeroragx/generation/prompting.py
+src/aeroragx/generation/guardrails.py
+```
+
+OpenAI benchmark configuration:
+
+```text
+configs/generation_openai_v0_1.yaml
+configs/provider_v0_1.yaml
+configs/http_transport_openai_v0_1.yaml
+configs/provider_runtime_openai_v0_1.yaml
+```
+
+Current configured model:
+
+```text
+gpt-5.6-luna
+```
+
+---
+
+## Provider hardening
+
+The hardened provider path includes:
+
+```text
+versioned prompt configuration
+evidence delimiters
+prompt-injection assessment
+structured response schema
+bounded retries
+timeouts
+retryable/non-retryable transport errors
+usage telemetry
+request IDs
+latency telemetry
+estimated cost
+secret redaction
+```
+
+Prompt-injection regression tests include patterns for:
+
+- ignoring previous instructions;
+- overriding system prompts;
+- revealing hidden prompts;
+- developer-message injection;
+- tool/shell execution requests;
+- role reassignment.
+
+Structured-provider tests cover:
+
+- normal success;
+- response-schema presence;
+- retryable transport failures;
+- retry limits;
+- non-retryable errors;
+- malformed provider payloads;
+- telemetry accounting.
 
 ---
 
@@ -377,31 +457,22 @@ Primary module:
 src/aeroragx/generation/grounded.py
 ```
 
-Configuration:
-
-```text
-configs/generation_v0_1.yaml
-```
-
 Responsibilities:
 
-1. request reranked evidence;
-2. bound evidence depth;
-3. bound per-chunk characters;
-4. bound total context size;
-5. reject duplicate reranked chunk IDs;
-6. run optional evidence-sufficiency assessment;
-7. refuse early when evidence is insufficient;
-8. call the generation provider when evidence is sufficient;
-9. validate provider evidence references;
-10. resolve claims to authoritative citation records;
-11. build deduplicated source-document summaries;
-12. validate supported/refusal answer states;
-13. attach retrieval/generation metadata.
+1. obtain bounded reranked/facet-aware evidence;
+2. build `GenerationEvidence`;
+3. run evidence sufficiency;
+4. bypass provider when evidence is insufficient;
+5. call the configured provider when sufficient;
+6. validate provider evidence references;
+7. resolve claim references to authoritative citations;
+8. construct deduplicated source-document summaries;
+9. validate supported/refusal answer states;
+10. attach retrieval and provider telemetry.
 
-### Evidence records
+### Generation evidence
 
-Each `GenerationEvidence` preserves:
+Each evidence record preserves:
 
 ```text
 evidence_id
@@ -436,147 +507,83 @@ insufficient_evidence
 retrieval_metadata
 ```
 
-### Citation trust boundary
+---
 
-The provider can say:
+## Citation trust boundary
+
+Provider output may say:
 
 ```text
-claim → evidence ID E1
+CL1 -> E1, E3
 ```
 
-The application resolves `E1` to the authoritative stored evidence record and creates:
+The application resolves those evidence IDs to trusted stored metadata and creates citation records.
+
+The provider does not supply the authoritative:
 
 ```text
-citation ID
-chunk ID
 document ID
 page range
 NASA citation URL
 source URL
 checksum
-reranker rank
 ```
 
-This prevents a provider from becoming the source of truth for document provenance.
-
----
-
-## Evidence-sufficiency layer
-
-Primary module:
-
-```text
-src/aeroragx/generation/sufficiency.py
-```
-
-Configuration:
-
-```text
-configs/sufficiency_v0_1.yaml
-```
-
-The assessor checks:
-
-```text
-evidence count
-informative query-term coverage
-minimum supported terms
-single-chunk evidence concentration
-numeric support
-named-anchor support
-stricter exact-query coverage
-```
-
-Output:
-
-```text
-sufficient
-evidence_count
-query_terms
-supported_terms
-unsupported_terms
-query_term_coverage
-single_evidence_coverage
-required_numeric_terms
-supported_numeric_terms
-required_named_anchors
-supported_named_anchors
-reasons
-```
-
-The result is stored inside:
-
-```text
-GroundedAnswer
-└── retrieval_metadata
-    └── evidence_sufficiency
-```
-
-When `sufficient=false`, the provider is skipped and the system returns an insufficient-evidence answer.
+This prevents the model from becoming the source of truth for provenance.
 
 ---
 
 ## Generation evaluation
 
-Primary module:
+Primary modules:
 
 ```text
 src/aeroragx/generation/evaluation.py
+src/aeroragx/generation/telemetry_evaluation.py
 ```
 
-Query set:
+Benchmark:
 
 ```text
-data/evaluation/generation_queries_v0_1.jsonl
+data/evaluation/generation_queries_v0_3.jsonl
 ```
 
-Reports:
+Final reports:
 
 ```text
-artifacts/evaluation/generation_v0_1.json
-artifacts/evaluation/generation_v0_2.json
+artifacts/evaluation/generation_openai_v0_3_final.json
+artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
+artifacts/evaluation/generation_v0_3_final_comparison.json
 ```
 
-Current metrics:
+### Final v0.3
 
 ```text
-answerability_accuracy
-answerable_completion_rate
-unsupported_refusal_rate
-claim_citation_coverage_rate
-citation_reference_validity_rate
-source_document_coverage_rate
-expected_term_recall
-structural_validity_rate
-```
-
-### v0.1
-
-```text
-Answerability accuracy: 0.8000
-Answerable completion: 1.0000
-Unsupported refusal: 0.0000
-Expected-term recall: 0.9130
-Structural validity: 1.0000
-```
-
-### v0.2 with sufficiency gate
-
-```text
+Queries: 32
 Answerability accuracy: 1.0000
 Answerable completion: 1.0000
 Unsupported refusal: 1.0000
-Expected-term recall: 0.9130
+Claim citation coverage: 1.0000
+Citation-reference validity: 1.0000
+Expected-term recall: 0.9310
 Structural validity: 1.0000
+
+Provider calls: 20
+Provider bypasses: 12
+Provider call-policy accuracy: 1.0000
+Total provider tokens: 58,915
+Estimated total provider cost: $0.103745
+P50 provider latency: 5.6394 s
+P95 provider latency: 7.6947 s
 ```
 
-The v0.2 result demonstrates correct behavior on the current ten-query engineering benchmark. It does not establish broad answerability generalization.
+These values describe the current engineering benchmark only.
 
 ---
 
 ## CLI composition
 
-The CLI assembles the complete pipeline:
+The CLI now composes:
 
 ```text
 BM25Index
@@ -589,209 +596,161 @@ HybridIndex
    v
 RerankerIndex
    |
-   v
+   +----------------------------+
+   |                            |
+   | optional                   |
+   v                            |
+FacetAwareEvidenceIndex         |
+   |                            |
+   +-------------+--------------+
+                 |
+                 v
 EvidenceSufficiencyAssessor
-   |
-   v
+                 |
+                 v
 GroundedAnswerGenerator
+                 |
+                 v
+Configured GenerationProvider
 ```
 
-Important commands:
+Important generation options include:
 
 ```text
-ntrs-search
-ntrs-build-manifest
-ntrs-download-documents
-ntrs-extract-pages
-ntrs-build-chunks
-ntrs-bm25-search
-ntrs-build-dense-index
-ntrs-dense-search
-ntrs-hybrid-search
-ntrs-reranker-search
-ntrs-grounded-answer
-ntrs-build-evaluation-candidates
-ntrs-build-pooled-candidates
-ntrs-build-qrels-from-annotations
-ntrs-evaluate-bm25
-ntrs-evaluate-dense
-ntrs-evaluate-hybrid
-ntrs-evaluate-reranker
-ntrs-evaluate-generation
+--generation-config
+--sufficiency-config
+--facet-retrieval-config
+--provider-config
+--http-transport-config
+--provider-runtime-config
+--candidate-top-k
+--evidence-top-k
 ```
 
 ---
 
-## Trust boundaries
+## Trust domains
 
-AeroRAG-X separates four trust domains.
-
-### 1. External source documents
-
-NASA documents are external inputs.
+### 1. External documents
 
 Controls:
 
-- acquisition receipts
 - checksums
+- acquisition receipts
 - page provenance
 - source URLs
 
-### 2. Retrieval outputs
-
-Retrieval rankings are model outputs and may be wrong.
+### 2. Retrieval/reranking outputs
 
 Controls:
 
-- pooled relevance evaluation
+- pooled evaluation
 - stage-specific metrics
-- preserved rankings/scores
-- reranking benchmarks
+- ranking provenance
+- deterministic tie-breaking
 
-### 3. Retrieved text
+### 3. Retrieved evidence text
 
-Retrieved text is evidence, but future corpora must still be treated as untrusted prompt content.
+Controls:
 
-Planned controls:
-
-- prompt-injection defenses
-- explicit data/instruction separation
-- adversarial benchmark cases
+- explicit data delimiters
+- prompt-injection checks
+- fail-closed policy when configured
 
 ### 4. Generation provider
 
-The provider must not be trusted to invent provenance.
+Controls:
 
-Current controls:
+- structured schema
+- bounded evidence references
+- retries/timeouts
+- malformed-response rejection
+- application-side citation resolution
+- telemetry
 
-- structured provider schema
-- bounded evidence IDs
-- unknown evidence-ID rejection
-- authoritative application-side citation resolution
-- final answer schema validation
+### 5. Serving layer
+
+Not yet implemented. The next milestone must add API validation, request IDs, structured errors, and secret-safe logging.
 
 ---
 
 ## Failure behavior
 
-### No usable evidence
-
-The system returns:
+### Evidence insufficiency
 
 ```text
+provider called = false
 insufficient_evidence = true
 claims = []
 citations = []
 source_documents = []
 ```
 
-### Sufficiency check fails
+### Missing semantic facet
 
-Same grounded refusal state is returned, with auditable sufficiency metadata.
+Facet-aware retrieval falls back to ordinary original-query retrieval.
 
-### Provider references unknown evidence
+### Prompt injection detected under block policy
 
-The response is rejected.
+Provider invocation is blocked.
 
-### Provider marks insufficient evidence
+### Unknown evidence reference
 
-The system produces a validated refusal when configuration permits it.
+Provider response is rejected.
 
-### Provider returns a supported state with no claims
+### Malformed provider response
 
-The response is rejected.
+Provider response is rejected.
 
-### Claim references unknown citation ID
+### Retryable transport error
 
-The final answer is rejected by schema validation.
+The provider retries up to the configured bound and records telemetry.
+
+### Non-retryable transport error
+
+The provider fails immediately.
 
 ---
 
 ## Current non-goals
 
-The current milestone does not attempt to provide:
+The current milestone does not yet provide:
 
-- production hosted LLM integration
-- semantic entailment verification
-- autonomous general-purpose agents
-- large-scale vector database serving
-- table/figure retrieval
-- cloud deployment
-
-Those capabilities are separate future milestones so they can be evaluated independently.
-
----
-
-## Planned target architecture
-
-```text
-NASA NTRS + additional approved aerospace sources
-                         |
-                         v
-              acquisition + validation
-                         |
-                         v
-             multimodal document parsing
-                         |
-                         v
-               text/table/figure units
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-        sparse retrieval      vector database
-              |                     |
-              +----------+----------+
-                         |
-                         v
-                  hybrid fusion
-                         |
-                         v
-                 neural reranking
-                         |
-                         v
-              sufficiency assessment
-                         |
-                         v
-              hardened LLM provider
-                         |
-                         v
-            citation/faithfulness checks
-                         |
-                         v
-             tool-enabled research agent
-                         |
-                         v
-                   FastAPI service
-                         |
-                         v
-             interactive web interface
-                         |
-                         v
-           observability + cloud deploy
-```
+- FastAPI serving;
+- Dockerized deployment;
+- managed secret storage;
+- distributed tracing;
+- vector-database serving;
+- autonomous general-purpose agents;
+- semantic entailment verification;
+- table/figure retrieval;
+- cloud deployment.
 
 ---
 
-## Next architectural milestone
-
-Provider hardening introduces:
+## Next architecture milestone
 
 ```text
-src/aeroragx/generation/prompting.py
-src/aeroragx/generation/guardrails.py
-configs/provider_v0_1.yaml
+AeroRAG-X core
+      |
+      v
+FastAPI application
+      |
+      +--> GET /health
+      +--> GET /ready
+      +--> POST /v1/query
+      |
+      v
+request IDs + structured errors
+      |
+      v
+Docker container
+      |
+      v
+structured telemetry/logging
+      |
+      v
+cloud deployment
 ```
 
-with:
-
-- explicit prompt templates
-- prompt versioning
-- retrieved-data delimiters
-- structured response validation
-- hosted/local provider adapters
-- timeout/retry handling
-- token/latency/cost telemetry
-- prompt-injection regression cases
-
-After that, the next architecture milestone is persistent vector infrastructure plus FastAPI serving.
+The serving layer should reuse the already-tested retrieval/generation core rather than duplicate it.
