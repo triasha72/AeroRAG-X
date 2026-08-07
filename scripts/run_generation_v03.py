@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from aeroragx.cli import _load_grounded_answer_generator
 from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
@@ -14,6 +13,10 @@ from aeroragx.generation.evaluation import (
 from aeroragx.generation.telemetry_evaluation import (
     evaluate_grounded_generation_with_telemetry,
     write_generation_telemetry_evaluation_report,
+)
+from aeroragx.runtime import (
+    RuntimeConfig,
+    load_grounded_runtime,
 )
 
 
@@ -84,28 +87,22 @@ def main() -> None:
 
     queries = load_generation_evaluation_queries(args.queries_input)
 
-    (
-        generator,
-        reranker_settings,
-        generation_settings,
-    ) = _load_grounded_answer_generator(
-        chunks_input=Path("data/processed/ntrs/v0_1/chunks.jsonl"),
-        bm25_config=Path("configs/bm25_v0_1.yaml"),
-        dense_config=Path("configs/dense_v0_1.yaml"),
-        hybrid_config=Path("configs/hybrid_v0_1.yaml"),
-        reranker_config=Path("configs/reranker_v0_1.yaml"),
-        generation_config=args.generation_config,
-        sufficiency_config=args.sufficiency_config,
-        facet_retrieval_config=(args.facet_retrieval_config),
-        provider_config=args.provider_config,
-        http_transport_config=(args.http_transport_config),
-        provider_runtime_config=(args.provider_runtime_config),
-        embeddings_input=Path("artifacts/embeddings/ntrs_v0_1.npy"),
-        metadata_input=Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl"),
-        manifest_input=Path("artifacts/embeddings/ntrs_v0_1_manifest.json"),
-        candidate_top_k=args.candidate_top_k,
-        evidence_top_k=args.evidence_top_k,
+    runtime = load_grounded_runtime(
+        RuntimeConfig(
+            generation_config=(args.generation_config),
+            sufficiency_config=(args.sufficiency_config),
+            facet_retrieval_config=(args.facet_retrieval_config),
+            provider_config=(args.provider_config),
+            http_transport_config=(args.http_transport_config),
+            provider_runtime_config=(args.provider_runtime_config),
+            candidate_top_k=(args.candidate_top_k),
+            evidence_top_k=(args.evidence_top_k),
+        )
     )
+
+    generator = runtime.generator
+    reranker_settings = runtime.reranker_settings
+    generation_settings = runtime.generation_settings
 
     telemetry_report = evaluate_grounded_generation_with_telemetry(
         generator=generator,
