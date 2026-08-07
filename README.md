@@ -4,25 +4,24 @@
 
 A production-oriented retrieval-augmented generation system for aerospace technical knowledge.
 
-AeroRAG-X is being developed as a traceable research assistant for aerospace reports. The project currently focuses on reliable NASA Technical Reports Server ingestion, citation-preserving document processing, lexical and semantic retrieval, pooled relevance assessment, and reproducible retrieval evaluation.
+AeroRAG-X is a traceable research assistant for NASA technical reports. It combines reproducible document acquisition, citation-preserving processing, lexical and semantic retrieval, reciprocal-rank fusion, cross-encoder reranking, deterministic evidence-sufficiency checks, grounded answer generation, and benchmarked evaluation.
 
-Every retrieved result preserves its source document, page range, NASA citation URL, source URL, and document checksum.
+Every answer is built from retrieved evidence whose document ID, page range, NASA citation URL, source URL, and source-document checksum are preserved through the pipeline.
 
 ---
 
 ## Current status
 
-AeroRAG-X currently implements an end-to-end text-retrieval and
-pooled-evaluation pipeline over a curated NASA NTRS corpus:
+AeroRAG-X now implements an end-to-end text RAG pipeline over a curated NASA Technical Reports Server corpus:
 
 ```text
 NASA NTRS metadata
         |
         v
-Corpus manifest
+Versioned corpus manifest
         |
         v
-PDF acquisition and checksum validation
+PDF acquisition + checksum validation
         |
         v
 Page-level text extraction
@@ -38,25 +37,41 @@ BM25 lexical retrieval     Dense semantic retrieval
         +------------+------------+
                      |
                      v
-        Reciprocal Rank Fusion
+           Reciprocal Rank Fusion
                      |
                      v
-           Hybrid top-k candidates
+            Hybrid candidates
                      |
                      v
-       Cross-encoder reranking
+         Cross-encoder reranking
                      |
                      v
-       Generic retrieval evaluation
+        Evidence-sufficiency gate
                      |
-                     v
-          Retrieval benchmark v0.2
+          +----------+----------+
+          |                     |
+          v                     v
+   sufficient evidence    insufficient evidence
+          |                     |
+          v                     v
+ Grounded generation       grounded refusal
+          |
+          v
+ Claim-level citation resolution
+          |
+          v
+ Source-document summaries
+          |
+          v
+ Generation evaluation
 ```
 
-Implemented capabilities include:
+The current text corpus contains **3,233 citation-preserving NASA report chunks**.
+
+### Implemented capabilities
 
 - NASA NTRS metadata search
-- reproducible corpus definitions
+- reproducible corpus configuration
 - document manifests and checksums
 - streamed PDF acquisition
 - page-level PDF extraction
@@ -65,75 +80,88 @@ Implemented capabilities include:
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
 - persistent NumPy embedding indexes
-- shared retrieval-hit and retrieval-index protocols
-- generic BM25, dense, hybrid, and reranker evaluation
+- exact cosine-similarity dense search
 - reciprocal-rank-fusion hybrid retrieval
-- cross-encoder reranking over bounded hybrid candidates
+- cross-encoder reranking
 - preserved BM25, dense, hybrid, and reranker provenance
-- scoring-only reranker latency measurement
-- curated aerospace evaluation queries
+- generic retrieval evaluation
 - deterministic BM25+dense candidate pooling
-- deduplication by `chunk_id`
-- blinded annotation records
-- carried-forward `v0.1` relevance judgments
-- candidate-level binary relevance labels
-- Recall@5 and Recall@10
-- MRR@10 and NDCG@10
+- blinded relevance annotation
+- pooled relevance judgments
+- Recall@5, Recall@10, MRR@10, and NDCG@10
+- provider-agnostic grounded-generation interface
+- deterministic local generation provider
+- bounded generation context
+- structured answer, claim, citation, and source-document schemas
+- authoritative citation resolution from retrieved evidence
+- deterministic evidence-sufficiency assessment
+- numeric-support checks
+- named-anchor support checks
+- query-term coverage checks
+- evidence-concentration checks
+- insufficient-evidence refusal
+- generation evaluation
+- answerability and refusal metrics
+- claim citation coverage
+- citation-reference validity
+- source-document coverage
+- expected-term lexical recall
+- structural answer validation
 - Typer command-line interface
-- Ruff, pytest, mypy, coverage, and GitHub Actions
+- Ruff, pytest, strict mypy, coverage, and GitHub Actions
 
-The retrieval stack now includes lexical retrieval, dense retrieval,
-reciprocal-rank fusion, and cross-encoder reranking. The next major
-milestone is grounded answer generation with claim-level citations and
-insufficient-evidence behavior.
+---
+
+## What is not implemented yet
+
+The current generation provider is a **deterministic local extractive baseline**, not a production hosted LLM.
+
+The project does not yet claim semantic answer faithfulness. Current generation evaluation verifies structural grounding, citation integrity, answer/refusal behavior, and a lightweight expected-term heuristic.
+
+Planned next work includes:
+
+- structured hosted or local LLM provider support
+- prompt construction and versioning
+- prompt-injection defenses
+- malformed-provider-response handling
+- retry, timeout, latency, token, and cost telemetry
+- larger generation benchmarks
+- semantic citation-support evaluation
+- answer-faithfulness evaluation
+- vector-database integration
+- FastAPI serving
+- Docker and cloud deployment
+- multimodal table and figure retrieval
 
 ---
 
 ## Retrieval benchmarks
 
-### Benchmark v0.1
+### Retrieval benchmark v0.1
 
-The original benchmark contains eight aerospace queries and chunk-level
-relevance judgments selected from a BM25-generated candidate pool.
+The original benchmark contains eight aerospace queries and relevance judgments selected from a BM25-generated candidate pool.
 
 | Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
 |---|---:|---:|---:|---:|
 | BM25 | 0.7500 | 0.9167 | 0.6771 | 0.7046 |
 | Dense | 0.2292 | 0.3958 | 0.3376 | 0.2812 |
 
-#### Limitation
+Because the v0.1 judgments were created from BM25 candidates only, the comparison can favor BM25.
 
-The `v0.1` relevance judgments were created from BM25 candidates only.
-This can favor BM25 because relevant chunks retrieved only by dense
-search were absent from the annotation pool.
+### Pooled retrieval benchmark v0.2
 
-### Pooled benchmark v0.2
-
-The `v0.2` benchmark pools results from both retrievers before relevance
-assessment.
+The v0.2 benchmark pools BM25 and dense candidates before relevance assessment.
 
 | Property | Value |
 |---|---:|
 | Evaluation queries | 8 |
 | BM25 depth per query | 20 |
 | Dense depth per query | 20 |
-| Pooled candidates after deduplication | 278 |
+| Candidates after deduplication | 278 |
 | Relevant labels | 101 |
 | Non-relevant labels | 177 |
-| Annotation shuffle seed | 42 |
+| Shuffle seed | 42 |
 | Corpus size | 3,233 chunks |
-
-The protocol:
-
-1. retrieve the top 20 BM25 candidates for every query;
-2. retrieve the top 20 dense candidates for every query;
-3. combine and deduplicate candidates by `chunk_id`;
-4. preserve retriever identity, rank, and score only internally;
-5. carry forward relevant `v0.1` chunks for re-review;
-6. assign deterministic blinded order using SHA-256 and seed `42`;
-7. label each blinded candidate;
-8. generate `qrels_v0_2.jsonl`;
-9. evaluate all retrieval stages against the same judgments.
 
 | Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
 |---|---:|---:|---:|---:|
@@ -143,54 +171,152 @@ The protocol:
 | Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
 | Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
-The fixed top-20 cross-encoder baseline achieves the highest MRR@10 and
-NDCG@10 among the current retrieval stages and improves Recall@10
-relative to Hybrid RRF. BM25 retains the highest overall Recall@5 and
-Recall@10 on this eight-query benchmark.
+The fixed top-20 cross-encoder baseline achieves the highest MRR@10 and NDCG@10 among the current retrieval stages. BM25 retains the highest Recall@5 and Recall@10 on this small benchmark.
 
-Reranking only the Hybrid top 10 changes ordering but cannot recover
-relevant chunks outside that candidate set. Reranking the Hybrid top 20
-can promote relevant chunks from ranks 11–20 into the final top 10.
-
-These are fixed exploratory baselines. The model, candidate depth, and
-batch size were not tuned on the eight-query benchmark.
-
-Benchmark artifacts:
+The reranker uses:
 
 ```text
-artifacts/evaluation/bm25_v0_1.json
-artifacts/evaluation/dense_v0_1.json
-artifacts/evaluation/bm25_v0_2.json
-artifacts/evaluation/dense_v0_2.json
-artifacts/evaluation/hybrid_v0_2.json
-artifacts/evaluation/reranker_top10_v0_2.json
-artifacts/evaluation/reranker_top20_v0_2.json
-artifacts/evaluation/reranker_latency_v0_1.json
+cross-encoder/ms-marco-MiniLM-L6-v2
 ```
 
-Evaluation data:
+Current scoring-only CPU latency baseline:
+
+| Field | Value |
+|---|---:|
+| Queries | 8 |
+| Query–chunk pairs | 160 |
+| Total scoring seconds | 3.170787 |
+| Milliseconds per pair | 19.817420 |
+| Hardware | MacBook Air, CPU baseline |
+
+---
+
+## Grounded-generation benchmarks
+
+Generation evaluation currently contains:
 
 ```text
-data/evaluation/queries_v0_1.jsonl
-data/evaluation/candidates_v0_1.jsonl
-data/evaluation/qrels_v0_1.jsonl
-data/evaluation/candidates_v0_2_internal.jsonl
-data/evaluation/candidates_v0_2_annotation.jsonl
-data/evaluation/qrels_v0_2.jsonl
+8 expected-answerable aerospace questions
+2 deliberately unsupported control questions
+10 total queries
 ```
 
-### Annotation-quality note
+### Generation baseline v0.1
 
-The initial `v0.2` labels were assigned through conservative
-assistant-supported review of stored text previews. An independent
-second-pass audit with fuller source context remains required before
-publication-grade use.
+The initial deterministic generator had complete citation structure but answered both unsupported control questions.
+
+| Metric | v0.1 |
+|---|---:|
+| Queries | 10 |
+| Answerability accuracy | 0.8000 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 0.0000 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.9130 |
+| Structural validity | 1.0000 |
+
+### Sufficiency-gated baseline v0.2
+
+A deterministic evidence-sufficiency gate was added before provider invocation.
+
+| Metric | v0.1 | v0.2 | Delta |
+|---|---:|---:|---:|
+| Answerability accuracy | 0.8000 | **1.0000** | +0.2000 |
+| Answerable completion | 1.0000 | **1.0000** | +0.0000 |
+| Unsupported refusal | 0.0000 | **1.0000** | +1.0000 |
+| Claim citation coverage | 1.0000 | **1.0000** | +0.0000 |
+| Citation-reference validity | 1.0000 | **1.0000** | +0.0000 |
+| Source-document coverage | 1.0000 | **1.0000** | +0.0000 |
+| Expected-term recall | 0.9130 | **0.9130** | +0.0000 |
+| Structural validity | 1.0000 | **1.0000** | +0.0000 |
+
+On the current ten-query benchmark, the sufficiency gate corrected both unsupported-question failures without rejecting any of the eight expected-answerable queries.
+
+This is an exploratory engineering benchmark, not evidence of general-purpose answerability detection. The query set is small and must be expanded before broader claims are made.
+
+Tracked reports:
+
+```text
+artifacts/evaluation/generation_v0_1.json
+artifacts/evaluation/generation_v0_2.json
+```
+
+---
+
+## Evidence-sufficiency gate
+
+The current deterministic gate evaluates retrieved evidence before generation.
+
+It checks:
+
+- minimum evidence count
+- informative query-term coverage
+- minimum supported query terms
+- concentration of query coverage inside at least one evidence chunk
+- exact numeric support for numeric query tokens
+- support for acronyms and mixed-case/hyphenated named anchors
+- stricter coverage for questions requesting an exact value
+
+Configuration:
+
+```text
+configs/sufficiency_v0_1.yaml
+```
+
+Example rejection reasons:
+
+```text
+insufficient_evidence_count
+no_informative_query_terms
+insufficient_supported_terms
+low_query_term_coverage
+low_single_evidence_coverage
+missing_numeric_support
+missing_named_anchor_support
+```
+
+The complete sufficiency decision is preserved in `retrieval_metadata.evidence_sufficiency` so refusals remain auditable.
+
+---
+
+## Grounded answer schema
+
+A grounded answer contains:
+
+```text
+query
+answer
+claims
+citations
+source_documents
+insufficient_evidence
+retrieval_metadata
+```
+
+A supported claim references one or more citation IDs. Those citation IDs are resolved from authoritative retrieved evidence rather than trusted from free-form provider text.
+
+Each citation preserves:
+
+```text
+citation_id
+evidence_id
+chunk_id
+document_id
+page_start
+page_end
+citation_url
+source_url
+document_sha256
+reranker_rank
+```
+
+An insufficient-evidence response contains no claims, citations, or source documents.
 
 ---
 
 ## Dense retrieval baseline
-
-The dense retrieval baseline uses:
 
 | Setting | Value |
 |---|---|
@@ -201,10 +327,138 @@ The dense retrieval baseline uses:
 | Search method | Exact cosine similarity |
 | Stored array format | NumPy `.npy` |
 
-The generated embedding matrix and duplicated chunk metadata are intentionally excluded from Git. The small index manifest is tracked for reproducibility:
+Large generated embedding arrays and duplicated metadata are intentionally excluded from Git. The compact manifest is tracked:
 
 ```text
 artifacts/embeddings/ntrs_v0_1_manifest.json
+```
+
+---
+
+## Installation
+
+AeroRAG-X requires Python 3.12 or newer.
+
+```bash
+git clone https://github.com/triasha72/AeroRAG-X.git
+cd AeroRAG-X
+
+python -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+Conda is also supported:
+
+```bash
+conda create -n aeroragx-py312 python=3.12
+conda activate aeroragx-py312
+python -m pip install -e ".[dev]"
+```
+
+Check the CLI:
+
+```bash
+aeroragx --help
+```
+
+---
+
+## Important CLI workflows
+
+### Search NASA NTRS metadata
+
+```bash
+aeroragx ntrs-search \
+  --query "battery thermal runaway"
+```
+
+### BM25 search
+
+```bash
+aeroragx ntrs-bm25-search \
+  --query "battery thermal runaway" \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml
+```
+
+### Dense search
+
+```bash
+aeroragx ntrs-dense-search \
+  --query "battery thermal runaway" \
+  --dense-config configs/dense_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json
+```
+
+### Hybrid search
+
+```bash
+aeroragx ntrs-hybrid-search \
+  --query "battery thermal runaway" \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json
+```
+
+### Cross-encoder reranking
+
+```bash
+aeroragx ntrs-reranker-search \
+  --query "battery thermal runaway" \
+  --candidate-top-k 20 \
+  --top-k 10
+```
+
+### Generate a grounded answer
+
+```bash
+aeroragx ntrs-grounded-answer \
+  --query "How can battery thermal runaway propagate in electric aircraft?" \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --generation-config configs/generation_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_1.yaml
+```
+
+### Save a grounded answer as JSON
+
+```bash
+aeroragx ntrs-grounded-answer \
+  --query "How can battery thermal runaway propagate in electric aircraft?" \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --generation-config configs/generation_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_1.yaml \
+  --output /tmp/aeroragx_answer.json
+```
+
+### Evaluate grounded generation
+
+```bash
+aeroragx ntrs-evaluate-generation \
+  --queries-input data/evaluation/generation_queries_v0_1.jsonl \
+  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
+  --bm25-config configs/bm25_v0_1.yaml \
+  --dense-config configs/dense_v0_1.yaml \
+  --hybrid-config configs/hybrid_v0_1.yaml \
+  --reranker-config configs/reranker_v0_1.yaml \
+  --generation-config configs/generation_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_1.yaml \
+  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
+  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
+  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --report-output artifacts/evaluation/generation_v0_2.json
 ```
 
 ---
@@ -227,15 +481,19 @@ AeroRAG-X/
 │       ├── hybrid_v0_2.json
 │       ├── reranker_top10_v0_2.json
 │       ├── reranker_top20_v0_2.json
-│       └── reranker_latency_v0_1.json
+│       ├── reranker_latency_v0_1.json
+│       ├── generation_v0_1.json
+│       └── generation_v0_2.json
 ├── configs/
 │   ├── base.yaml
 │   ├── bm25_v0_1.yaml
 │   ├── chunking_v0_1.yaml
 │   ├── corpus_v0_1.yaml
 │   ├── dense_v0_1.yaml
+│   ├── generation_v0_1.yaml
 │   ├── hybrid_v0_1.yaml
-│   └── reranker_v0_1.yaml
+│   ├── reranker_v0_1.yaml
+│   └── sufficiency_v0_1.yaml
 ├── data/
 │   ├── evaluation/
 │   │   ├── README.md
@@ -244,7 +502,8 @@ AeroRAG-X/
 │   │   ├── qrels_v0_1.jsonl
 │   │   ├── candidates_v0_2_internal.jsonl
 │   │   ├── candidates_v0_2_annotation.jsonl
-│   │   └── qrels_v0_2.jsonl
+│   │   ├── qrels_v0_2.jsonl
+│   │   └── generation_queries_v0_1.jsonl
 │   ├── manifests/
 │   └── sample/
 ├── docs/
@@ -254,6 +513,12 @@ AeroRAG-X/
 │       ├── evaluation/
 │       │   ├── pooling.py
 │       │   └── retrieval.py
+│       ├── generation/
+│       │   ├── __init__.py
+│       │   ├── evaluation.py
+│       │   ├── grounded.py
+│       │   ├── provider.py
+│       │   └── sufficiency.py
 │       ├── ingestion/
 │       │   ├── acquisition.py
 │       │   ├── corpus.py
@@ -269,371 +534,147 @@ AeroRAG-X/
 │       ├── cli.py
 │       └── config.py
 ├── tests/
-├── pyproject.toml
-├── README.md
-└── ROADMAP.md
+└── pyproject.toml
 ```
 
 ---
 
-## Local setup
+## Evaluation data
 
-AeroRAG-X requires Python 3.12 or later.
+Retrieval queries:
 
-```bash
-conda create -n aeroragx-py312 python=3.12 -y
-conda activate aeroragx-py312
-
-python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
+```text
+data/evaluation/queries_v0_1.jsonl
 ```
 
-Verify the installation:
+Retrieval judgments:
 
-```bash
-aeroragx info
-aeroragx validate-config
-aeroragx --help
+```text
+data/evaluation/qrels_v0_1.jsonl
+data/evaluation/qrels_v0_2.jsonl
 ```
+
+Generation queries:
+
+```text
+data/evaluation/generation_queries_v0_1.jsonl
+```
+
+Generation reports:
+
+```text
+artifacts/evaluation/generation_v0_1.json
+artifacts/evaluation/generation_v0_2.json
+```
+
+See `data/evaluation/README.md` for protocols, limitations, and reproducibility commands.
 
 ---
 
-## Quality checks
+## Reproducibility and quality checks
 
-Run all project checks before committing:
+Format:
 
 ```bash
 python -m ruff format .
+```
+
+Lint:
+
+```bash
 python -m ruff check .
-python -m pytest --cov=aeroragx --cov-report=term-missing
+```
+
+Tests with coverage:
+
+```bash
+python -m pytest \
+  --cov=aeroragx \
+  --cov-report=term-missing
+```
+
+Strict type checking:
+
+```bash
 python -m mypy src/aeroragx
 ```
 
-The GitHub Actions workflow runs formatting, linting, testing, coverage, and type-checking checks for pull requests and pushes to `main`.
-
----
-
-## Core corpus workflow
-
-### 1. Search NASA NTRS metadata
+Git whitespace validation:
 
 ```bash
-aeroragx ntrs-search \
-  --title "thermal management electric aircraft" \
-  --limit 5
+git diff --check
 ```
 
-### 2. Build the corpus manifest
+CI is defined in:
 
-```bash
-aeroragx ntrs-build-manifest \
-  --corpus-config configs/corpus_v0_1.yaml \
-  --output data/manifests/ntrs_v0_1.jsonl
-```
-
-### 3. Download source documents
-
-```bash
-aeroragx ntrs-download-documents \
-  --manifest-input data/manifests/ntrs_v0_1.jsonl \
-  --output-directory data/raw/ntrs/v0_1 \
-  --receipts-output data/manifests/ntrs_v0_1_downloads.jsonl
-```
-
-### 4. Extract page-level text
-
-```bash
-aeroragx ntrs-extract-pages \
-  --downloads-input data/manifests/ntrs_v0_1_downloads.jsonl \
-  --pages-output data/processed/ntrs/v0_1/pages.jsonl \
-  --receipts-output data/manifests/ntrs_v0_1_extraction.jsonl
-```
-
-### 5. Build citation-preserving chunks
-
-```bash
-aeroragx ntrs-build-chunks \
-  --pages-input data/processed/ntrs/v0_1/pages.jsonl \
-  --chunking-config configs/chunking_v0_1.yaml \
-  --chunks-output data/processed/ntrs/v0_1/chunks.jsonl \
-  --receipts-output data/manifests/ntrs_v0_1_chunking.jsonl
+```text
+.github/workflows/ci.yml
 ```
 
 ---
 
-## Search examples
+## Current limitations
 
-### BM25 lexical search
+### Retrieval benchmark size
 
-```bash
-aeroragx ntrs-bm25-search \
-  --query "aircraft battery cooling system" \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --top-k 5
-```
+The retrieval benchmark contains eight queries. Aggregate metrics are sensitive to individual relevance decisions.
 
-### Build the dense index
+### Retrieval annotation provenance
 
-```bash
-aeroragx ntrs-build-dense-index \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --dense-config configs/dense_v0_1.yaml \
-  --embeddings-output artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-output artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-output artifacts/embeddings/ntrs_v0_1_manifest.json
-```
+The pooled v0.2 relevance labels were created through conservative assistant-supported review of stored text previews. An independent audit with fuller source context and additional assessors is required before publication-grade claims.
 
-### Dense semantic search
+### Generation benchmark size
 
-```bash
-aeroragx ntrs-dense-search \
-  --query "How can thermal runaway spread between aircraft battery cells?" \
-  --top-k 5
-```
+Generation evaluation contains only ten queries. The perfect v0.2 answerability/refusal result should therefore be treated as an engineering checkpoint rather than a generalization claim.
 
-### Hybrid reciprocal-rank-fusion search
+### Generation provider
 
-```bash
-aeroragx ntrs-hybrid-search \
-  --query "How can thermal runaway spread between aircraft battery cells?" \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --top-k 5
-```
+The current provider is deterministic and extractive. A production structured-output LLM provider is not yet integrated.
 
-Hybrid retrieval combines source ranks using Reciprocal Rank Fusion. It
-preserves BM25 and dense scores for provenance but does not add or
-normalize those incomparable raw scores.
+### Semantic faithfulness
 
-### Cross-encoder reranked search
+Current citation verification ensures that claim citation IDs resolve to retrieved evidence and valid provenance. It does not yet prove that every cited passage semantically entails every claim.
 
-```bash
-aeroragx ntrs-reranker-search \
-  --query "How can thermal runaway spread between aircraft battery cells?" \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --reranker-config configs/reranker_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --candidate-top-k 20 \
-  --top-k 10
-```
+### Vector search
 
-The cross-encoder scores query–chunk pairs jointly and preserves the
-original BM25, dense, and Hybrid RRF ranks and scores. Raw finite logits,
-including negative values, are retained for provenance.
+Dense retrieval currently uses exact cosine similarity over a NumPy matrix. A production vector database is planned for larger corpora and deployed serving.
+
+### Multimodality
+
+Table and figure extraction/retrieval remain future milestones.
 
 ---
 
-## Retrieval evaluation workflow
+## Next milestone
 
-### Build the pooled candidate files
+The next engineering milestone is **LLM provider hardening**:
 
-```bash
-aeroragx ntrs-build-pooled-candidates \
-  --queries-input data/evaluation/queries_v0_1.jsonl \
-  --previous-qrels-input data/evaluation/qrels_v0_1.jsonl \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --top-k-per-retriever 20 \
-  --shuffle-seed 42 \
-  --internal-output data/evaluation/candidates_v0_2_internal.jsonl \
-  --annotation-output data/evaluation/candidates_v0_2_annotation.jsonl
+```text
+structured provider configuration
+        |
+        v
+prompt construction + prompt versioning
+        |
+        v
+structured provider response validation
+        |
+        v
+prompt-injection defenses
+        |
+        v
+timeout + retry behavior
+        |
+        v
+latency, token, and cost metadata
+        |
+        v
+expanded generation evaluation
 ```
 
-### Create qrels from completed annotations
-
-```bash
-aeroragx ntrs-build-qrels-from-annotations \
-  --annotations-input data/evaluation/candidates_v0_2_annotation.jsonl \
-  --output data/evaluation/qrels_v0_2.jsonl
-```
-
-### Evaluate BM25 on v0.2
-
-```bash
-aeroragx ntrs-evaluate-bm25 \
-  --queries-input data/evaluation/queries_v0_1.jsonl \
-  --qrels-input data/evaluation/qrels_v0_2.jsonl \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --top-k 10 \
-  --report-output artifacts/evaluation/bm25_v0_2.json
-```
-
-### Evaluate dense retrieval on v0.2
-
-```bash
-aeroragx ntrs-evaluate-dense \
-  --queries-input data/evaluation/queries_v0_1.jsonl \
-  --qrels-input data/evaluation/qrels_v0_2.jsonl \
-  --dense-config configs/dense_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --top-k 10 \
-  --report-output artifacts/evaluation/dense_v0_2.json
-```
-
-### Evaluate Hybrid RRF on v0.2
-
-```bash
-aeroragx ntrs-evaluate-hybrid \
-  --queries-input data/evaluation/queries_v0_1.jsonl \
-  --qrels-input data/evaluation/qrels_v0_2.jsonl \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --top-k 10 \
-  --report-output artifacts/evaluation/hybrid_v0_2.json
-```
-
-### Evaluate top-20 cross-encoder reranking on v0.2
-
-```bash
-aeroragx ntrs-evaluate-reranker \
-  --queries-input data/evaluation/queries_v0_1.jsonl \
-  --qrels-input data/evaluation/qrels_v0_2.jsonl \
-  --chunks-input data/processed/ntrs/v0_1/chunks.jsonl \
-  --bm25-config configs/bm25_v0_1.yaml \
-  --dense-config configs/dense_v0_1.yaml \
-  --hybrid-config configs/hybrid_v0_1.yaml \
-  --reranker-config configs/reranker_v0_1.yaml \
-  --embeddings-input artifacts/embeddings/ntrs_v0_1.npy \
-  --metadata-input artifacts/embeddings/ntrs_v0_1_metadata.jsonl \
-  --manifest-input artifacts/embeddings/ntrs_v0_1_manifest.json \
-  --candidate-top-k 20 \
-  --top-k 10 \
-  --report-output artifacts/evaluation/reranker_top20_v0_2.json \
-  --latency-output artifacts/evaluation/reranker_latency_v0_1.json \
-  --hardware-note "MacBook Air, CPU baseline"
-```
-
-### Reranker latency baseline
-
-| Setting | Value |
-|---|---|
-| Model | `cross-encoder/ms-marco-MiniLM-L6-v2` |
-| Device | `cpu` |
-| Candidate depth | 20 |
-| Batch size | 16 |
-| Evaluation queries | 8 |
-| Query–chunk pairs | 160 |
-| Scoring time | 3.170787 seconds |
-| Mean scoring latency | 19.817420 ms/pair |
-| Hardware note | MacBook Air, CPU baseline |
-
-The timing measures cross-encoder scoring only. It excludes corpus
-loading, BM25 construction, dense-index loading, Hybrid RRF candidate
-generation, and result serialization.
----
-
-## Design principles
-
-### Traceability
-
-Every retrieved chunk preserves:
-
-- NASA document identifier
-- chunk identifier
-- source page or page range
-- NASA citation URL
-- PDF source URL
-- source-document checksum
-
-### Retrieval before generation
-
-Retrieval quality is evaluated independently before an LLM is added. This prevents answer-generation quality from hiding retrieval failures.
-
-### Reproducibility
-
-Corpus definitions, download receipts, extraction receipts, chunking receipts, configurations, candidate pools, relevance judgments, and evaluation reports are versioned separately.
-
-### Blinded evaluation
-
-Retriever identities, ranks, and scores are retained for reproducibility in the internal pool but removed from annotation records to reduce labeling bias.
-
-### Evidence-grounded generation
-
-The future generation system will be required to:
-
-- answer only from retrieved evidence;
-- attach citations to technical claims;
-- identify insufficient evidence;
-- avoid unsupported extrapolation;
-- preserve links to original NASA reports.
-
----
-
-## Planned capabilities
-
-The next development milestones are:
-
-- shared retrieval-index and retrieval-hit interfaces
-- generic retrieval evaluation
-- reciprocal-rank-fusion hybrid retrieval
-- cross-encoder reranking
-- grounded answer generation
-- citation verification
-- table and figure extraction
-- multimodal retrieval
-- FastAPI service
-- interactive demonstration interface
-- Docker packaging and deployment
-- independent audit and expansion of the evaluation dataset
-
-See [`ROADMAP.md`](ROADMAP.md) for the detailed project plan.
-
----
-
-## Development rules
-
-1. Work on a dedicated feature or fix branch.
-2. Add or update tests for every behavior change.
-3. Run Ruff, pytest, coverage, and mypy before committing.
-4. Use pull requests for changes merged into `main`.
-5. Do not commit raw PDFs, model weights, secrets, or generated embedding matrices.
-6. Preserve document, page, checksum, and citation provenance.
-7. Record benchmark limitations rather than presenting incomplete results as definitive.
-8. Evaluate retrieval independently before adding answer generation.
-9. Keep internal retriever metadata out of blinded annotation records.
-10. Audit assistant-supported labels before making publication-grade claims.
-
----
-
-## Data attribution and limitations
-
-Metadata and documents retrieved from the NASA Scientific and Technical Information Program should be attributed to NASA STI.
-
-AeroRAG-X does not claim ownership of NASA source documents. Repository manifests, processing code, retrieval code, annotations, and evaluation artifacts are provided for research and development purposes.
-
-The current corpus is a narrow aerospace research collection and should not be interpreted as a complete representation of NASA technical literature.
-
-The current benchmark contains only eight queries. Aggregate metrics are therefore sensitive to individual queries, candidate-pool depth, annotation decisions, and corpus composition.
-
-Initial `v0.2` annotations were based on candidate text previews and should be independently audited with fuller source context.
-
-Future ASRS support will require separate documentation because ASRS narratives are voluntary and de-identified and should not be treated as independently verified factual reports.
+After provider hardening, the project will move to API serving, persistent vector infrastructure, Docker/cloud deployment, monitoring, and multimodal retrieval.
 
 ---
 
 ## License
 
-The AeroRAG-X source code is released under the MIT License. Source documents and external datasets remain subject to their respective terms and attribution requirements.
+MIT

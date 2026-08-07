@@ -2,11 +2,11 @@
 
 AeroRAG-X is a retrieval-first, evidence-grounded system for aerospace technical knowledge.
 
-The architecture separates corpus acquisition, document processing, retrieval, evaluation, and answer generation so that each layer can be tested independently.
+The design keeps acquisition, processing, retrieval, reranking, sufficiency assessment, generation, citation resolution, and evaluation separable so that each stage can be tested and benchmarked independently.
 
 ---
 
-## Current implemented pipeline
+## Implemented end-to-end pipeline
 
 ```text
 NASA Technical Reports Server
@@ -43,72 +43,72 @@ NASA Technical Reports Server
  Cross-encoder reranking
                |
                v
- Generic retrieval evaluation
+ Evidence-sufficiency assessment
                |
-               v
- Recall@5, Recall@10,
- MRR@10, and NDCG@10
+        +------+------+
+        |             |
+        v             v
+  sufficient      insufficient
+        |             |
+        v             v
+ generation       grounded refusal
+        |
+        v
+ claim/evidence validation
+        |
+        v
+ authoritative citation resolution
+        |
+        v
+ source-document summaries
+        |
+        v
+ generation evaluation
 ```
 
-The implemented pipeline currently operates over 3,233 citation-preserving NASA report chunks.
+The current text pipeline operates over **3,233 citation-preserving NASA report chunks**.
 
 ---
 
-## Planned target pipeline
+## Design principles
 
-```text
-NASA NTRS + future ASRS sources
-                 |
-                 v
-      Acquisition and validation
-                 |
-                 v
- PDF, text, table, and figure extraction
-                 |
-                 v
- Chunking + metadata + document lineage
-                 |
-        +--------+--------+
-        |                 |
-        v                 v
- Dense embeddings    Sparse BM25 index
-        |                 |
-        +--------+--------+
-                 |
-                 v
-       Hybrid rank fusion
-                 |
-                 v
-      Cross-encoder reranking
-                 |
-                 v
-     Grounded answer generation
-                 |
-                 v
- Citation and evidence verification
-                 |
-                 v
-  Text, table, and figure presentation
-                 |
-                 v
- Evaluation, API, UI, and deployment
-```
+### Retrieval first
+
+Generation is downstream of retrieval and reranking. The generator does not directly search the corpus.
+
+### Provenance first
+
+Document ID, page ranges, URLs, chunk IDs, and source-document checksums are preserved from processing through final citations.
+
+### Provider distrust
+
+The provider is allowed to produce structured claims and refer to evidence IDs. It is not trusted to invent authoritative citation metadata.
+
+### Fail closed on invalid citations
+
+Unknown evidence IDs and invalid answer states are rejected.
+
+### Refuse before generation when possible
+
+The evidence-sufficiency gate can stop unsupported questions before a provider call.
+
+### Evaluation before optimization
+
+Each major retrieval/generation stage has a reproducible benchmark before additional complexity is added.
 
 ---
 
-## Implemented components
+## Ingestion layer
 
-### Ingestion
-
-The ingestion layer provides:
+Provides:
 
 - NASA NTRS metadata search
 - record normalization
 - versioned corpus definitions
-- document manifest generation
+- manifest generation
 - public PDF-link resolution
 - streamed downloads
-- temporary `.part` files
+- `.part` temporary files
 - checksum calculation
 - acquisition receipts
 
@@ -120,18 +120,21 @@ src/aeroragx/ingestion/corpus.py
 src/aeroragx/ingestion/acquisition.py
 ```
 
-### Document processing
+---
 
-The processing layer provides:
+## Document-processing layer
 
-- checksum verification before extraction
-- page-level PDF text extraction
-- preservation of empty and nonempty pages
+Provides:
+
+- checksum verification
+- page-level PDF extraction
+- empty-page preservation
 - extraction receipts
 - deterministic overlapping chunks
-- page and document provenance
-- source and citation URLs
-- document checksums
+- page/document provenance
+- citation URLs
+- source URLs
+- source-document checksums
 - chunking receipts
 
 Primary modules:
@@ -141,12 +144,32 @@ src/aeroragx/processing/pdf.py
 src/aeroragx/processing/chunking.py
 ```
 
-### Lexical retrieval
+Every processed chunk preserves:
 
-The BM25 layer provides:
+```text
+chunk_id
+document_id
+chunk_index
+page_start
+page_end
+page_ids
+text
+word_count
+character_count
+token_estimate
+citation_url
+source_url
+document_sha256
+```
+
+---
+
+## BM25 retrieval
+
+Provides:
 
 - tokenization
-- in-memory inverted indexing
+- in-memory inverted index
 - configurable `k1`
 - configurable `b`
 - deterministic ranking
@@ -158,18 +181,19 @@ Primary module:
 src/aeroragx/retrieval/bm25.py
 ```
 
-### Dense retrieval
+---
 
-The dense layer provides:
+## Dense retrieval
 
-- Sentence Transformer document embeddings
-- separate query encoding
-- normalized vectors
-- persisted NumPy embedding matrices
-- aligned JSONL chunk metadata
-- versioned index manifests
+Provides:
+
+- Sentence Transformer embeddings
+- separate query/document encoding
+- normalized embeddings
+- NumPy persistence
+- aligned chunk metadata
+- versioned index manifest
 - exact cosine-similarity search
-- citation-preserving results
 
 Primary module:
 
@@ -177,105 +201,114 @@ Primary module:
 src/aeroragx/retrieval/dense.py
 ```
 
-Current dense index:
+Current index:
 
 ```text
 Model: sentence-transformers/all-MiniLM-L6-v2
 Chunks: 3,233
 Embedding dimension: 384
 Normalization: enabled
+Search: exact cosine similarity
 ```
 
-### Hybrid retrieval
+---
 
-The hybrid layer provides:
+## Hybrid retrieval
 
-- independent BM25 and dense candidate retrieval
-- reciprocal-rank-fusion scoring
-- deterministic cross-retriever deduplication
-- preservation of original source ranks and scores
-- rank-based fusion without combining raw BM25 and cosine scores
-- citation-preserving hybrid results
+Provides:
 
-Primary module and configuration:
+- independent BM25 and dense retrieval
+- Reciprocal Rank Fusion
+- rank-based combination instead of raw-score addition
+- deterministic candidate deduplication
+- BM25/dense provenance preservation
+
+Primary module:
 
 ```text
 src/aeroragx/retrieval/hybrid.py
+```
+
+Configuration:
+
+```text
 configs/hybrid_v0_1.yaml
 ```
 
 Fixed baseline:
 
 ```text
-RRF constant: 60
+RRF k: 60
 BM25 depth: 50
 Dense depth: 50
-Default output depth: 10
+Default output: 10
 ```
 
-### Cross-encoder reranking
+---
 
-The reranking layer provides:
+## Cross-encoder reranking
+
+Provides:
 
 - bounded reranking of Hybrid RRF candidates
-- joint query–chunk cross-encoder scoring
+- joint query/chunk scoring
 - preservation of BM25, dense, and hybrid provenance
-- support for finite positive and negative raw logits
-- deterministic tie-breaking using Hybrid RRF rank and chunk ID
+- deterministic tie-breaking
 - scoring-only latency measurement
-- generic evaluation compatibility
-
-Primary module and configuration:
-
-```text
-src/aeroragx/retrieval/reranker.py
-configs/reranker_v0_1.yaml
-```
-
-Fixed baseline:
-
-```text
-Model: cross-encoder/ms-marco-MiniLM-L6-v2
-Candidate depth: 20
-Returned depth: 10
-Batch size: 16
-Device: CPU
-```
-
-Measured scoring-only latency:
-
-```text
-Queries: 8
-Pairs: 160
-Total seconds: 3.170787
-Milliseconds per pair: 19.817420
-Hardware: MacBook Air, CPU baseline
-```
-
-### Retrieval evaluation
-
-The evaluation layer provides:
-
-- versioned natural-language queries
-- chunk-level relevance judgments
-- Recall@5
-- Recall@10
-- MRR@10
-- NDCG@10
-- aggregate reports
-- per-query reports
-- shared retrieval-hit and retrieval-index protocols
-- generic retrieval evaluation
-- BM25 evaluation
-- dense evaluation
-- Hybrid RRF evaluation
-- cross-encoder reranker evaluation
-- top-10 and top-20 candidate-depth comparison
+- generic retrieval-evaluation compatibility
 
 Primary module:
 
 ```text
+src/aeroragx/retrieval/reranker.py
+```
+
+Configuration:
+
+```text
+configs/reranker_v0_1.yaml
+```
+
+Current model:
+
+```text
+cross-encoder/ms-marco-MiniLM-L6-v2
+```
+
+Default baseline:
+
+```text
+candidate_top_k: 20
+default_top_k: 10
+batch_size: 16
+device: cpu
+```
+
+---
+
+## Retrieval evaluation
+
+Provides:
+
+- natural-language query records
+- relevance judgments
+- Recall@5
+- Recall@10
+- MRR@10
+- NDCG@10
+- per-query metrics
+- aggregate metrics
+- shared retrieval protocols
+- BM25 evaluation
+- dense evaluation
+- Hybrid RRF evaluation
+- reranker evaluation
+
+Primary modules:
+
+```text
 src/aeroragx/evaluation/retrieval.py
+src/aeroragx/evaluation/pooling.py
 ```
 
 Tracked reports:
@@ -293,134 +326,472 @@ artifacts/evaluation/reranker_latency_v0_1.json
 
 ---
 
-## Provenance model
+## Generation provider layer
 
-Each processed chunk preserves:
+Primary module:
 
 ```text
+src/aeroragx/generation/provider.py
+```
+
+The provider interface receives:
+
+```text
+query
+bounded evidence records
+maximum claim count
+```
+
+and returns a structured response containing:
+
+```text
+answer
+claims
+insufficient_evidence
+```
+
+Each provider claim references evidence IDs rather than free-form URLs.
+
+Current provider:
+
+```text
+DeterministicGenerationProvider
+```
+
+Purpose:
+
+- local end-to-end pipeline validation
+- deterministic tests
+- no external credentials
+- reproducible generation benchmarks
+
+It is not a production neural LLM.
+
+---
+
+## Grounded-generation layer
+
+Primary module:
+
+```text
+src/aeroragx/generation/grounded.py
+```
+
+Configuration:
+
+```text
+configs/generation_v0_1.yaml
+```
+
+Responsibilities:
+
+1. request reranked evidence;
+2. bound evidence depth;
+3. bound per-chunk characters;
+4. bound total context size;
+5. reject duplicate reranked chunk IDs;
+6. run optional evidence-sufficiency assessment;
+7. refuse early when evidence is insufficient;
+8. call the generation provider when evidence is sufficient;
+9. validate provider evidence references;
+10. resolve claims to authoritative citation records;
+11. build deduplicated source-document summaries;
+12. validate supported/refusal answer states;
+13. attach retrieval/generation metadata.
+
+### Evidence records
+
+Each `GenerationEvidence` preserves:
+
+```text
+evidence_id
 chunk_id
 document_id
-chunk_index
 page_start
 page_end
-page_ids
+text
 citation_url
 source_url
 document_sha256
-text
-word_count
-character_count
-token_estimate
+reranker_rank
+reranker_score
+hybrid_rank
+hybrid_score
+retrieved_by
+bm25_rank
+bm25_score
+dense_rank
+dense_score
 ```
 
-This provenance allows a retrieved result to be traced back to:
+### Final answer
 
-1. its chunk;
-2. its source page or page range;
-3. its NASA document;
-4. its source PDF;
-5. the checksum of the processed source file.
+```text
+query
+answer
+claims
+citations
+source_documents
+insufficient_evidence
+retrieval_metadata
+```
+
+### Citation trust boundary
+
+The provider can say:
+
+```text
+claim → evidence ID E1
+```
+
+The application resolves `E1` to the authoritative stored evidence record and creates:
+
+```text
+citation ID
+chunk ID
+document ID
+page range
+NASA citation URL
+source URL
+checksum
+reranker rank
+```
+
+This prevents a provider from becoming the source of truth for document provenance.
 
 ---
 
-## Retrieval-evaluation separation
+## Evidence-sufficiency layer
 
-Retrieval is evaluated before answer generation is added.
+Primary module:
 
-This design prevents a fluent language model response from hiding weak retrieval. The current system measures whether relevant source chunks are found and how highly they are ranked.
+```text
+src/aeroragx/generation/sufficiency.py
+```
 
-Answer-generation evaluation will be introduced separately and will include:
+Configuration:
 
-- claim faithfulness;
-- citation coverage;
-- citation correctness;
-- answer relevance;
-- insufficient-evidence behavior.
+```text
+configs/sufficiency_v0_1.yaml
+```
+
+The assessor checks:
+
+```text
+evidence count
+informative query-term coverage
+minimum supported terms
+single-chunk evidence concentration
+numeric support
+named-anchor support
+stricter exact-query coverage
+```
+
+Output:
+
+```text
+sufficient
+evidence_count
+query_terms
+supported_terms
+unsupported_terms
+query_term_coverage
+single_evidence_coverage
+required_numeric_terms
+supported_numeric_terms
+required_named_anchors
+supported_named_anchors
+reasons
+```
+
+The result is stored inside:
+
+```text
+GroundedAnswer
+└── retrieval_metadata
+    └── evidence_sufficiency
+```
+
+When `sufficient=false`, the provider is skipped and the system returns an insufficient-evidence answer.
 
 ---
 
-## Current benchmark state
+## Generation evaluation
 
-The pooled `v0.2` benchmark contains eight queries, 278 reviewed
-candidates, and 101 relevant chunk judgments. BM25, dense retrieval,
-and Hybrid RRF are evaluated against the same qrels.
+Primary module:
 
-| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
-|---|---:|---:|---:|---:|
-| BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
-| Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
-| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
-| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
-| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
+```text
+src/aeroragx/generation/evaluation.py
+```
 
-The top-20 reranker produces the highest MRR@10 and NDCG@10 among
-the implemented retrieval stages and improves Recall@10 over Hybrid RRF.
-BM25 retains the highest overall Recall@5 and Recall@10. The initial
-labels were produced from candidate previews and require an independent
-second-pass audit before publication-grade use.
+Query set:
 
-## Design principles
+```text
+data/evaluation/generation_queries_v0_1.jsonl
+```
 
-### Traceability
+Reports:
 
-Every technical result should preserve a path back to the original source material.
+```text
+artifacts/evaluation/generation_v0_1.json
+artifacts/evaluation/generation_v0_2.json
+```
 
-### Retrieval before generation
+Current metrics:
 
-Retrieval quality is measured independently before adding an LLM.
+```text
+answerability_accuracy
+answerable_completion_rate
+unsupported_refusal_rate
+claim_citation_coverage_rate
+citation_reference_validity_rate
+source_document_coverage_rate
+expected_term_recall
+structural_validity_rate
+```
 
-### Reproducibility
+### v0.1
 
-Corpus manifests, checksums, extraction receipts, chunking receipts, configurations, relevance judgments, and benchmark reports are versioned independently.
+```text
+Answerability accuracy: 0.8000
+Answerable completion: 1.0000
+Unsupported refusal: 0.0000
+Expected-term recall: 0.9130
+Structural validity: 1.0000
+```
 
-### Separation of concerns
+### v0.2 with sufficiency gate
 
-Acquisition, processing, retrieval, evaluation, generation, and presentation remain separate modules.
+```text
+Answerability accuracy: 1.0000
+Answerable completion: 1.0000
+Unsupported refusal: 1.0000
+Expected-term recall: 0.9130
+Structural validity: 1.0000
+```
 
-### Evidence-grounded generation
+The v0.2 result demonstrates correct behavior on the current ten-query engineering benchmark. It does not establish broad answerability generalization.
 
-Future answers must:
+---
 
-- use retrieved source evidence;
-- cite supporting chunks and pages;
-- identify insufficient evidence;
-- avoid unsupported technical claims.
+## CLI composition
+
+The CLI assembles the complete pipeline:
+
+```text
+BM25Index
+   +
+DenseIndex
+   |
+   v
+HybridIndex
+   |
+   v
+RerankerIndex
+   |
+   v
+EvidenceSufficiencyAssessor
+   |
+   v
+GroundedAnswerGenerator
+```
+
+Important commands:
+
+```text
+ntrs-search
+ntrs-build-manifest
+ntrs-download-documents
+ntrs-extract-pages
+ntrs-build-chunks
+ntrs-bm25-search
+ntrs-build-dense-index
+ntrs-dense-search
+ntrs-hybrid-search
+ntrs-reranker-search
+ntrs-grounded-answer
+ntrs-build-evaluation-candidates
+ntrs-build-pooled-candidates
+ntrs-build-qrels-from-annotations
+ntrs-evaluate-bm25
+ntrs-evaluate-dense
+ntrs-evaluate-hybrid
+ntrs-evaluate-reranker
+ntrs-evaluate-generation
+```
+
+---
+
+## Trust boundaries
+
+AeroRAG-X separates four trust domains.
+
+### 1. External source documents
+
+NASA documents are external inputs.
+
+Controls:
+
+- acquisition receipts
+- checksums
+- page provenance
+- source URLs
+
+### 2. Retrieval outputs
+
+Retrieval rankings are model outputs and may be wrong.
+
+Controls:
+
+- pooled relevance evaluation
+- stage-specific metrics
+- preserved rankings/scores
+- reranking benchmarks
+
+### 3. Retrieved text
+
+Retrieved text is evidence, but future corpora must still be treated as untrusted prompt content.
+
+Planned controls:
+
+- prompt-injection defenses
+- explicit data/instruction separation
+- adversarial benchmark cases
+
+### 4. Generation provider
+
+The provider must not be trusted to invent provenance.
+
+Current controls:
+
+- structured provider schema
+- bounded evidence IDs
+- unknown evidence-ID rejection
+- authoritative application-side citation resolution
+- final answer schema validation
+
+---
+
+## Failure behavior
+
+### No usable evidence
+
+The system returns:
+
+```text
+insufficient_evidence = true
+claims = []
+citations = []
+source_documents = []
+```
+
+### Sufficiency check fails
+
+Same grounded refusal state is returned, with auditable sufficiency metadata.
+
+### Provider references unknown evidence
+
+The response is rejected.
+
+### Provider marks insufficient evidence
+
+The system produces a validated refusal when configuration permits it.
+
+### Provider returns a supported state with no claims
+
+The response is rejected.
+
+### Claim references unknown citation ID
+
+The final answer is rejected by schema validation.
+
+---
+
+## Current non-goals
+
+The current milestone does not attempt to provide:
+
+- production hosted LLM integration
+- semantic entailment verification
+- autonomous general-purpose agents
+- large-scale vector database serving
+- table/figure retrieval
+- cloud deployment
+
+Those capabilities are separate future milestones so they can be evaluated independently.
+
+---
+
+## Planned target architecture
+
+```text
+NASA NTRS + additional approved aerospace sources
+                         |
+                         v
+              acquisition + validation
+                         |
+                         v
+             multimodal document parsing
+                         |
+                         v
+               text/table/figure units
+                         |
+              +----------+----------+
+              |                     |
+              v                     v
+        sparse retrieval      vector database
+              |                     |
+              +----------+----------+
+                         |
+                         v
+                  hybrid fusion
+                         |
+                         v
+                 neural reranking
+                         |
+                         v
+              sufficiency assessment
+                         |
+                         v
+              hardened LLM provider
+                         |
+                         v
+            citation/faithfulness checks
+                         |
+                         v
+             tool-enabled research agent
+                         |
+                         v
+                   FastAPI service
+                         |
+                         v
+             interactive web interface
+                         |
+                         v
+           observability + cloud deploy
+```
 
 ---
 
 ## Next architectural milestone
 
-The next component is grounded answer generation over the reranked,
-citation-preserving evidence set:
+Provider hardening introduces:
 
 ```text
-BM25 retrieval -------+
-                      |
-Dense retrieval ------+--> Reciprocal Rank Fusion
-                                      |
-                                      v
-                             Hybrid candidates
-                                      |
-                                      v
-                         Cross-encoder reranking
-                                      |
-                                      v
-                             Reranked evidence
-                                      |
-                                      v
-                         Grounded LLM generation
-                                      |
-                                      v
-                     Claims + citations + refusal
+src/aeroragx/generation/prompting.py
+src/aeroragx/generation/guardrails.py
+configs/provider_v0_1.yaml
 ```
 
-The generation layer must preserve:
+with:
 
-- chunk, document, page, checksum, and URL provenance;
-- final reranker rank and score;
-- original Hybrid RRF, BM25, and dense ranks and scores;
-- explicit claim-to-evidence relationships;
-- an insufficient-evidence state;
-- deterministic tests through a fake provider.
+- explicit prompt templates
+- prompt versioning
+- retrieved-data delimiters
+- structured response validation
+- hosted/local provider adapters
+- timeout/retry handling
+- token/latency/cost telemetry
+- prompt-injection regression cases
 
-Grounded generation will be evaluated separately from retrieval.
+After that, the next architecture milestone is persistent vector infrastructure plus FastAPI serving.
