@@ -2,15 +2,27 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    status,
+)
 
 from aeroragx.api.schemas import (
     HealthResponse,
+    QueryRequest,
     ReadinessResponse,
+)
+from aeroragx.api.service import QueryService
+from aeroragx.generation.grounded import (
+    GroundedAnswer,
 )
 
 
-def create_app() -> FastAPI:
+def create_app(
+    *,
+    query_service: QueryService | None = None,
+) -> FastAPI:
     """Create the AeroRAG-X HTTP application."""
 
     app = FastAPI(
@@ -37,16 +49,32 @@ def create_app() -> FastAPI:
         tags=["system"],
     )
     def ready() -> ReadinessResponse:
-        """Return API readiness.
+        """Return runtime readiness."""
 
-        Retrieval/generation runtime readiness
-        will be added in the next checkpoint.
-        """
+        is_ready = query_service is not None
 
         return ReadinessResponse(
-            status="ready",
-            ready=True,
+            status=("ready" if is_ready else "not_ready"),
+            ready=is_ready,
         )
+
+    @app.post(
+        "/v1/query",
+        response_model=GroundedAnswer,
+        tags=["generation"],
+    )
+    def grounded_query(
+        request: QueryRequest,
+    ) -> GroundedAnswer:
+        """Answer one query using grounded evidence."""
+
+        if query_service is None:
+            raise HTTPException(
+                status_code=(status.HTTP_503_SERVICE_UNAVAILABLE),
+                detail=("AeroRAG-X runtime is not ready."),
+            )
+
+        return query_service.query(request.query)
 
     return app
 
