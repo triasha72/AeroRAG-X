@@ -9,7 +9,7 @@ from collections.abc import (
 )
 from contextlib import asynccontextmanager
 from time import perf_counter
-from typing import cast
+from typing import TypedDict, cast
 from uuid import uuid4
 
 from fastapi import (
@@ -71,6 +71,123 @@ def _runtime_mode_label(
     "Return the supported API runtime mode for observability."
 
     return "openai" if config.provider_config is not None else "local"
+
+
+class _GroundedQueryLogFields(TypedDict):
+    """Typed structured fields emitted for one grounded query."""
+
+    insufficient_evidence: bool
+    claim_count: int
+    citation_count: int
+    source_document_count: int
+    retriever: str | None
+    requested_evidence_top_k: int | None
+    returned_evidence_count: int | None
+    used_evidence_count: int | None
+    reranker_model: str | None
+    generation_provider: str | None
+    generation_model: str | None
+    evidence_sufficient: bool | None
+    provider_called: bool | None
+    provider_bypassed: bool | None
+    provider_succeeded: bool | None
+    provider_attempts: int | None
+    provider_latency_ms: float | None
+    provider_request_id: str | None
+    input_tokens: int | None
+    output_tokens: int | None
+    total_tokens: int | None
+    estimated_cost_usd: float | None
+    prompt_injection_safe: bool | None
+    prompt_injection_findings: int | None
+    provider_error_type: str | None
+
+
+def _grounded_query_log_fields(
+    answer: GroundedAnswer,
+) -> _GroundedQueryLogFields:
+    """Return safe operational fields for one grounded answer."""
+
+    metadata = answer.retrieval_metadata
+
+    fields: _GroundedQueryLogFields = {
+        "insufficient_evidence": answer.insufficient_evidence,
+        "claim_count": len(answer.claims),
+        "citation_count": len(answer.citations),
+        "source_document_count": len(answer.source_documents),
+        "retriever": None,
+        "requested_evidence_top_k": None,
+        "returned_evidence_count": None,
+        "used_evidence_count": None,
+        "reranker_model": None,
+        "generation_provider": None,
+        "generation_model": None,
+        "evidence_sufficient": None,
+        "provider_called": None,
+        "provider_bypassed": None,
+        "provider_succeeded": None,
+        "provider_attempts": None,
+        "provider_latency_ms": None,
+        "provider_request_id": None,
+        "input_tokens": None,
+        "output_tokens": None,
+        "total_tokens": None,
+        "estimated_cost_usd": None,
+        "prompt_injection_safe": None,
+        "prompt_injection_findings": None,
+        "provider_error_type": None,
+    }
+
+    if metadata is None:
+        return fields
+
+    sufficiency = metadata.evidence_sufficiency
+    provider = metadata.provider_telemetry
+
+    fields.update(
+        {
+            "retriever": metadata.retriever,
+            "requested_evidence_top_k": metadata.requested_evidence_top_k,
+            "returned_evidence_count": metadata.returned_evidence_count,
+            "used_evidence_count": metadata.used_evidence_count,
+            "reranker_model": metadata.reranker_model,
+            "generation_provider": metadata.generation_provider,
+            "generation_model": metadata.generation_model,
+            "evidence_sufficient": (sufficiency.sufficient if sufficiency is not None else None),
+        }
+    )
+
+    provider_called = provider is not None or not answer.insufficient_evidence
+    provider_bypassed = answer.insufficient_evidence and provider is None
+
+    fields["provider_called"] = provider_called
+    fields["provider_bypassed"] = provider_bypassed
+
+    if provider is None:
+        return fields
+
+    usage = provider.usage
+
+    fields.update(
+        {
+            "provider_succeeded": provider.succeeded,
+            "provider_attempts": provider.attempts,
+            "provider_latency_ms": round(
+                provider.latency_seconds * 1000.0,
+                3,
+            ),
+            "provider_request_id": provider.request_id,
+            "input_tokens": usage.input_tokens if usage is not None else None,
+            "output_tokens": usage.output_tokens if usage is not None else None,
+            "total_tokens": usage.total_tokens if usage is not None else None,
+            "estimated_cost_usd": provider.estimated_cost_usd,
+            "prompt_injection_safe": provider.prompt_injection_safe,
+            "prompt_injection_findings": provider.prompt_injection_findings,
+            "provider_error_type": provider.error_type,
+        }
+    )
+
+    return fields
 
 
 def create_app(
@@ -355,6 +472,7 @@ def create_app(
     )
     def grounded_query(
         request: QueryRequest,
+        http_request: Request,
     ) -> GroundedAnswer:
         """Answer one query using grounded evidence."""
 
@@ -363,7 +481,16 @@ def create_app(
         if service is None:
             raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
 
-        return service.query(request.query)
+        answer = service.query(request.query)
+
+        log_event(
+            logger,
+            "grounded_query_completed",
+            request_id=current_request_id(http_request),
+            **_grounded_query_log_fields(answer),
+        )
+
+        return answer
 
     return app
 
