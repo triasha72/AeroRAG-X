@@ -5,9 +5,11 @@ from aeroragx.observability.logging import (
     configure_json_logger,
     log_event,
 )
+from aeroragx.observability.metrics import ServiceMetrics
 
 __all__ = [
     "JsonLogFormatter",
+    "ServiceMetrics",
     "configure_json_logger",
     "log_event",
 ]
