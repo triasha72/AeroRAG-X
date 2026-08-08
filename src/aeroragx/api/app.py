@@ -103,6 +103,14 @@ class _GroundedQueryLogFields(TypedDict):
     provider_error_type: str | None
     rag_total_ms: float | None
     retrieval_ms: float | None
+    bm25_ms: float | None
+    dense_ms: float | None
+    hybrid_fusion_ms: float | None
+    reranker_scoring_ms: float | None
+    retrieval_search_count: int | None
+    facet_search_count: int | None
+    facet_overhead_ms: float | None
+    facet_used: bool | None
     evidence_build_ms: float | None
     sufficiency_ms: float | None
     provider_stage_ms: float | None
@@ -144,6 +152,14 @@ def _grounded_query_log_fields(
         "provider_error_type": None,
         "rag_total_ms": None,
         "retrieval_ms": None,
+        "bm25_ms": None,
+        "dense_ms": None,
+        "hybrid_fusion_ms": None,
+        "reranker_scoring_ms": None,
+        "retrieval_search_count": None,
+        "facet_search_count": None,
+        "facet_overhead_ms": None,
+        "facet_used": None,
         "evidence_build_ms": None,
         "sufficiency_ms": None,
         "provider_stage_ms": None,
@@ -157,6 +173,14 @@ def _grounded_query_log_fields(
             {
                 "rag_total_ms": timings.total_ms,
                 "retrieval_ms": timings.retrieval_ms,
+                "bm25_ms": timings.bm25_ms,
+                "dense_ms": timings.dense_ms,
+                "hybrid_fusion_ms": timings.hybrid_fusion_ms,
+                "reranker_scoring_ms": timings.reranker_scoring_ms,
+                "retrieval_search_count": (timings.retrieval_search_count),
+                "facet_search_count": timings.facet_search_count,
+                "facet_overhead_ms": timings.facet_overhead_ms,
+                "facet_used": timings.facet_used,
                 "evidence_build_ms": timings.evidence_build_ms,
                 "sufficiency_ms": timings.sufficiency_ms,
                 "provider_stage_ms": timings.provider_stage_ms,

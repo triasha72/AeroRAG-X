@@ -781,6 +781,14 @@ def test_grounded_query_log_includes_internal_stage_timings() -> None:
             answer.attach_stage_timings(
                 RAGStageTimings(
                     retrieval_ms=10.5,
+                    bm25_ms=1.1,
+                    dense_ms=3.2,
+                    hybrid_fusion_ms=0.6,
+                    reranker_scoring_ms=4.5,
+                    retrieval_search_count=3,
+                    facet_search_count=2,
+                    facet_overhead_ms=1.1,
+                    facet_used=True,
                     evidence_build_ms=0.8,
                     sufficiency_ms=0.4,
                     provider_stage_ms=125.0,
@@ -811,6 +819,14 @@ def test_grounded_query_log_includes_internal_stage_timings() -> None:
     )
 
     assert query_event["retrieval_ms"] == 10.5
+    assert query_event["bm25_ms"] == 1.1
+    assert query_event["dense_ms"] == 3.2
+    assert query_event["hybrid_fusion_ms"] == 0.6
+    assert query_event["reranker_scoring_ms"] == 4.5
+    assert query_event["retrieval_search_count"] == 3
+    assert query_event["facet_search_count"] == 2
+    assert query_event["facet_overhead_ms"] == 1.1
+    assert query_event["facet_used"] is True
     assert query_event["evidence_build_ms"] == 0.8
     assert query_event["sufficiency_ms"] == 0.4
     assert query_event["provider_stage_ms"] == 125.0

@@ -9,6 +9,9 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from aeroragx.generation.facet_retrieval import (
+    FacetRetrievalTimings,
+)
 from aeroragx.generation.grounded import (
     INSUFFICIENT_EVIDENCE_ANSWER,
     GenerationConfig,
@@ -109,6 +112,24 @@ class FakeRerankedIndex:
         self.queries.append(query)
         self.top_ks.append(top_k)
         return self._hits[:top_k]
+
+
+class TimedFakeRerankedIndex(FakeRerankedIndex):
+    """Return fixed hits plus production-shaped facet timing telemetry."""
+
+    def __init__(
+        self,
+        hits: Sequence[RerankedSearchHit],
+        timings: FacetRetrievalTimings,
+    ) -> None:
+        super().__init__(hits)
+        self._timings = timings
+
+    @property
+    def last_timings(self) -> FacetRetrievalTimings:
+        """Return deterministic retrieval timing for generation tests."""
+
+        return self._timings.model_copy(deep=True)
 
 
 def make_config(**updates: object) -> GenerationConfig:
@@ -734,3 +755,50 @@ def test_insufficient_answer_records_bypassed_stage_timings() -> None:
     assert timings.sufficiency_ms is None
     assert timings.provider_stage_ms is None
     assert timings.citation_resolution_ms is None
+
+
+def test_generate_propagates_detailed_retrieval_timings() -> None:
+    hits = [make_hit(1), make_hit(2)]
+    index = TimedFakeRerankedIndex(
+        hits,
+        FacetRetrievalTimings(
+            search_count=3,
+            facet_search_count=2,
+            used_facets=True,
+            base_search_ms=41.0,
+            bm25_ms=5.0,
+            dense_ms=12.0,
+            hybrid_fusion_ms=1.5,
+            reranker_scoring_ms=20.0,
+            facet_overhead_ms=2.5,
+            total_ms=43.5,
+        ),
+    )
+    provider = StaticGenerationProvider(
+        make_supported_response(),
+    )
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate(
+        "What thermal-management challenges are shared?",
+    )
+    timings = answer.stage_timings
+
+    assert timings is not None
+    assert timings.bm25_ms == 5.0
+    assert timings.dense_ms == 12.0
+    assert timings.hybrid_fusion_ms == 1.5
+    assert timings.reranker_scoring_ms == 20.0
+    assert timings.retrieval_search_count == 3
+    assert timings.facet_search_count == 2
+    assert timings.facet_overhead_ms == 2.5
+    assert timings.facet_used is True
+
+    payload = answer.model_dump(mode="json")
+
+    assert "stage_timings" not in payload
+    assert "_stage_timings" not in payload

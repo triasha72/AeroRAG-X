@@ -7,11 +7,14 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
-from typing import Protocol, Self
+from typing import Protocol, Self, runtime_checkable
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
 
+from aeroragx.generation.facet_retrieval import (
+    FacetRetrievalTimings,
+)
 from aeroragx.generation.provider import (
     GenerationProvider,
     ProviderEvidence,
@@ -26,7 +29,10 @@ from aeroragx.generation.sufficiency import (
     EvidenceSufficiencyResult,
 )
 from aeroragx.retrieval.hybrid import RetrieverName
-from aeroragx.retrieval.reranker import RerankedSearchHit
+from aeroragx.retrieval.reranker import (
+    RerankedSearchHit,
+    RerankerSearchTimings,
+)
 
 INSUFFICIENT_EVIDENCE_ANSWER = (
     "The retrieved evidence is insufficient to answer this question reliably."
@@ -219,6 +225,14 @@ class RAGStageTimings(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     retrieval_ms: float = Field(ge=0.0)
+    bm25_ms: float | None = Field(default=None, ge=0.0)
+    dense_ms: float | None = Field(default=None, ge=0.0)
+    hybrid_fusion_ms: float | None = Field(default=None, ge=0.0)
+    reranker_scoring_ms: float | None = Field(default=None, ge=0.0)
+    retrieval_search_count: int | None = Field(default=None, ge=1)
+    facet_search_count: int | None = Field(default=None, ge=0)
+    facet_overhead_ms: float | None = Field(default=None, ge=0.0)
+    facet_used: bool | None = None
     evidence_build_ms: float = Field(ge=0.0)
     sufficiency_ms: float | None = Field(default=None, ge=0.0)
     provider_stage_ms: float | None = Field(default=None, ge=0.0)
@@ -302,6 +316,83 @@ class RerankedEvidenceIndex(Protocol):
         """Return reranked evidence candidates."""
 
         ...
+
+
+@runtime_checkable
+class _FacetTimingIndex(Protocol):
+    """Optional facet timing interface used by production retrieval."""
+
+    @property
+    def last_timings(self) -> FacetRetrievalTimings | None:
+        """Return the latest aggregated facet retrieval timing."""
+
+        ...
+
+
+@runtime_checkable
+class _RerankerTimingIndex(Protocol):
+    """Optional reranker timing interface used without facet retrieval."""
+
+    @property
+    def last_search_timings(self) -> RerankerSearchTimings | None:
+        """Return the latest reranker timing snapshot."""
+
+        ...
+
+
+class _DetailedRetrievalTimings(BaseModel):
+    """Normalized retrieval detail attached to one RAG request."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    bm25_ms: float | None = Field(default=None, ge=0.0)
+    dense_ms: float | None = Field(default=None, ge=0.0)
+    hybrid_fusion_ms: float | None = Field(default=None, ge=0.0)
+    reranker_scoring_ms: float | None = Field(default=None, ge=0.0)
+    retrieval_search_count: int | None = Field(default=None, ge=1)
+    facet_search_count: int | None = Field(default=None, ge=0)
+    facet_overhead_ms: float | None = Field(default=None, ge=0.0)
+    facet_used: bool | None = None
+
+
+def _detailed_retrieval_timings(
+    index: RerankedEvidenceIndex,
+) -> _DetailedRetrievalTimings:
+    """Normalize optional retrieval-component timings after one search."""
+
+    if isinstance(index, _FacetTimingIndex):
+        facet_timings = index.last_timings
+
+        if facet_timings is not None:
+            return _DetailedRetrievalTimings(
+                bm25_ms=facet_timings.bm25_ms,
+                dense_ms=facet_timings.dense_ms,
+                hybrid_fusion_ms=facet_timings.hybrid_fusion_ms,
+                reranker_scoring_ms=(facet_timings.reranker_scoring_ms),
+                retrieval_search_count=facet_timings.search_count,
+                facet_search_count=facet_timings.facet_search_count,
+                facet_overhead_ms=facet_timings.facet_overhead_ms,
+                facet_used=facet_timings.used_facets,
+            )
+
+    if isinstance(index, _RerankerTimingIndex):
+        reranker_timings = index.last_search_timings
+
+        if reranker_timings is not None:
+            hybrid_timings = reranker_timings.hybrid
+
+            return _DetailedRetrievalTimings(
+                bm25_ms=(hybrid_timings.bm25_ms if hybrid_timings is not None else None),
+                dense_ms=(hybrid_timings.dense_ms if hybrid_timings is not None else None),
+                hybrid_fusion_ms=(hybrid_timings.fusion_ms if hybrid_timings is not None else None),
+                reranker_scoring_ms=(reranker_timings.reranker_scoring_ms),
+                retrieval_search_count=1,
+                facet_search_count=0,
+                facet_overhead_ms=0.0,
+                facet_used=False,
+            )
+
+    return _DetailedRetrievalTimings()
 
 
 def load_generation_config(path: Path) -> GenerationConfig:
@@ -571,6 +662,9 @@ class GroundedAnswerGenerator:
             (perf_counter() - retrieval_started_at) * 1000.0,
             3,
         )
+        detailed_retrieval = _detailed_retrieval_timings(
+            self._index,
+        )
 
         evidence_started_at = perf_counter()
         evidence = build_generation_evidence(hits, self._config)
@@ -583,6 +677,14 @@ class GroundedAnswerGenerator:
             answer.attach_stage_timings(
                 RAGStageTimings(
                     retrieval_ms=retrieval_ms,
+                    bm25_ms=detailed_retrieval.bm25_ms,
+                    dense_ms=detailed_retrieval.dense_ms,
+                    hybrid_fusion_ms=(detailed_retrieval.hybrid_fusion_ms),
+                    reranker_scoring_ms=(detailed_retrieval.reranker_scoring_ms),
+                    retrieval_search_count=(detailed_retrieval.retrieval_search_count),
+                    facet_search_count=(detailed_retrieval.facet_search_count),
+                    facet_overhead_ms=(detailed_retrieval.facet_overhead_ms),
+                    facet_used=detailed_retrieval.facet_used,
                     evidence_build_ms=evidence_build_ms,
                     sufficiency_ms=sufficiency_ms,
                     provider_stage_ms=provider_stage_ms,
