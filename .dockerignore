@@ -1,0 +1,47 @@
+# Git
+.git
+.github
+
+# macOS / editors
+.DS_Store
+.vscode
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments and secrets
+.venv/
+venv/
+.env
+.env.*
+
+# Coverage
+.coverage
+htmlcov/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Tests are not required in the serving image
+tests/
+
+# Downloaded/generated corpus data is mounted at runtime
+data/raw/
+data/processed/
+data/results/
+
+# Generated dense indexes are mounted at runtime
+artifacts/embeddings/
+
+# Evaluation outputs are not required for serving
+artifacts/evaluation/
+
+# Temporary files
+*.backup
+*.bak
