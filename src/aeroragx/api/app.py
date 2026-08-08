@@ -65,6 +65,14 @@ _DEFAULT_EVENT_LOGGER = configure_json_logger(
 )
 
 
+def _runtime_mode_label(
+    config: RuntimeConfig,
+) -> str:
+    "Return the supported API runtime mode for observability."
+
+    return "openai" if config.provider_config is not None else "local"
+
+
 def create_app(
     *,
     query_service: QueryService | None = None,
@@ -86,7 +94,56 @@ def create_app(
         """Load the heavy runtime once per process."""
 
         if query_service is None and runtime_config is not None:
-            application.state.query_service = service_loader(runtime_config)
+            runtime_mode = _runtime_mode_label(runtime_config)
+            started_at = perf_counter()
+
+            log_event(
+                logger,
+                "runtime_load_started",
+                runtime_mode=runtime_mode,
+                candidate_top_k=runtime_config.candidate_top_k,
+                evidence_top_k=runtime_config.evidence_top_k,
+            )
+
+            try:
+                loaded_service = service_loader(runtime_config)
+
+            except Exception as exc:
+                duration_ms = round(
+                    (perf_counter() - started_at) * 1000.0,
+                    3,
+                )
+
+                log_event(
+                    logger,
+                    "runtime_load_failed",
+                    level=logging.ERROR,
+                    runtime_mode=runtime_mode,
+                    candidate_top_k=runtime_config.candidate_top_k,
+                    evidence_top_k=runtime_config.evidence_top_k,
+                    duration_ms=duration_ms,
+                    succeeded=False,
+                    error_type=type(exc).__name__,
+                )
+
+                raise
+
+            application.state.query_service = loaded_service
+
+            duration_ms = round(
+                (perf_counter() - started_at) * 1000.0,
+                3,
+            )
+
+            log_event(
+                logger,
+                "runtime_load_completed",
+                runtime_mode=runtime_mode,
+                candidate_top_k=runtime_config.candidate_top_k,
+                evidence_top_k=runtime_config.evidence_top_k,
+                duration_ms=duration_ms,
+                succeeded=True,
+            )
 
         try:
             yield

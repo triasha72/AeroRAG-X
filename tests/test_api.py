@@ -6,6 +6,7 @@ import json
 import logging
 from io import StringIO
 
+import pytest
 from fastapi.testclient import TestClient
 
 from aeroragx.api import create_app
@@ -247,6 +248,165 @@ def test_runtime_loader_sets_ready_during_lifespan() -> None:
         assert response.status_code == 200
 
     assert loaded_configs == [runtime_config]
+
+
+def test_runtime_loader_emits_structured_startup_events() -> None:
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime",
+    )
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        assert config.candidate_top_k == 20
+        assert config.evidence_top_k == 5
+
+        return service
+
+    runtime_config = RuntimeConfig(
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+        event_logger=logger,
+    )
+
+    with TestClient(application) as client:
+        readiness = client.get("/ready")
+
+        assert readiness.status_code == 200
+        assert readiness.json()["ready"] is True
+
+    events = read_log_events(stream)
+
+    runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
+
+    assert [event["event"] for event in runtime_events] == [
+        "runtime_load_started",
+        "runtime_load_completed",
+    ]
+
+    started = runtime_events[0]
+    completed = runtime_events[1]
+
+    assert started["runtime_mode"] == "local"
+    assert started["candidate_top_k"] == 20
+    assert started["evidence_top_k"] == 5
+
+    assert completed["runtime_mode"] == "local"
+    assert completed["candidate_top_k"] == 20
+    assert completed["evidence_top_k"] == 5
+    assert completed["succeeded"] is True
+    assert isinstance(completed["duration_ms"], float)
+    assert completed["duration_ms"] >= 0.0
+
+
+def test_runtime_loader_failure_emits_safe_failure_event() -> None:
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime.failure",
+    )
+
+    def failing_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        del config
+
+        raise RuntimeError("sensitive runtime failure detail")
+
+    runtime_config = RuntimeConfig(
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=failing_loader,
+        event_logger=logger,
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match="sensitive runtime failure detail",
+    ):
+        with TestClient(application):
+            pass
+
+    events = read_log_events(stream)
+
+    assert [event["event"] for event in events] == [
+        "runtime_load_started",
+        "runtime_load_failed",
+    ]
+
+    failed = events[-1]
+
+    assert failed["level"] == "ERROR"
+    assert failed["runtime_mode"] == "local"
+    assert failed["candidate_top_k"] == 20
+    assert failed["evidence_top_k"] == 5
+    assert failed["succeeded"] is False
+    assert failed["error_type"] == "RuntimeError"
+    assert isinstance(failed["duration_ms"], float)
+    assert failed["duration_ms"] >= 0.0
+
+    assert "sensitive runtime failure detail" not in stream.getvalue()
+
+
+def test_openai_runtime_is_identified_without_logging_secrets() -> None:
+    from pathlib import Path
+
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime.openai",
+    )
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        del config
+
+        return service
+
+    runtime_config = RuntimeConfig(
+        provider_config=Path("configs/provider_v0_1.yaml"),
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+        event_logger=logger,
+    )
+
+    with TestClient(application):
+        pass
+
+    events = read_log_events(stream)
+
+    runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
+
+    assert runtime_events[0]["runtime_mode"] == "openai"
+    assert runtime_events[1]["runtime_mode"] == "openai"
+
+    rendered = stream.getvalue()
+
+    assert "OPENAI_API_KEY" not in rendered
+    assert "Authorization" not in rendered
+    assert "Bearer " not in rendered
 
 
 def test_success_response_has_request_id() -> None:
