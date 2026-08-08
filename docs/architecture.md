@@ -688,6 +688,28 @@ provider failure mapping
 
 runtime readiness endpoint
 
+6. Container layer
+
+Controls:
+
+Python 3.12 slim runtime
+
+CPU-only PyTorch serving environment
+
+non-root process execution
+
+read-only generated-artifact mounts
+
+environment-driven runtime configuration
+
+container health check
+
+FastAPI readiness endpoint
+
+reproducible local smoke validation
+
+Docker build validation in CI
+
 Failure behavior
 
 Evidence insufficiency
@@ -743,8 +765,6 @@ Current non-goals
 
 The current milestone does not yet provide:
 
-Dockerized deployment;
-
 structured JSON service logging;
 
 distributed tracing;
@@ -769,21 +789,39 @@ AeroRAG-X core
 FastAPI serving                IMPLEMENTED
       |
       v
-Docker container               NEXT
+Docker container               IMPLEMENTED
       |
       v
-container health/readiness
+non-root execution             IMPLEMENTED
       |
       v
-structured JSON logging
+container health/readiness     IMPLEMENTED
+      |
+      v
+NASA-backed container query    IMPLEMENTED
+      |
+      v
+structured JSON logging        NEXT
       |
       v
 request/provider correlation
       |
       v
+retrieval/reranker timing
+      |
+      v
 latency + error metrics
+      |
+      v
+OpenTelemetry
       |
       v
 cloud deployment
 
-Dockerization should reuse the already-tested FastAPI application and shared runtime without changing retrieval or grounding behavior.
+Dockerization reuses the same tested FastAPI application and shared
+AeroRAG-X runtime without changing retrieval, sufficiency, generation,
+or citation behavior.
+
+The next architecture phase adds observability around this serving path
+while preserving the application request ID and provider request ID as
+separate correlation identifiers.

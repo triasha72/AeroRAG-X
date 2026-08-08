@@ -758,11 +758,15 @@ API key removed after live validation
 
 The serving architecture and HTTP execution path are implemented. Remaining unchecked API-test items are extended regression coverage rather than blockers for this milestone.
 
-Phase 12 — Docker and local service deployment — NEXT
+Phase 12 — Docker and local service deployment — IMPLEMENTED
 
 Dockerfile
 
 .dockerignore
+
+Python 3.12 slim serving image
+
+CPU-only PyTorch runtime
 
 reproducible container build
 
@@ -772,19 +776,46 @@ environment-variable documentation
 
 container health check
 
+extended model-loading startup allowance
+
+generated corpus mounted read-only
+
+generated dense index mounted read-only
+
 deterministic local container boot
 
-/health + /ready container smoke test
+GET /health container validation
 
-real NASA query through container
+GET /ready container validation
 
-image-size review
+Docker health validation
 
-dependency caching
+real NASA-backed query through container
 
-Docker Compose only if additional services require it
+grounded claims through container
 
-Phase 13 — Observability and reliability
+authoritative citations through container
+
+X-Request-ID preservation through container
+
+reproducible scripts/docker_smoke.sh integration test
+
+Docker image architecture validation
+
+CPU dependency validation
+
+Docker image-size review
+
+Docker build validation in GitHub Actions
+
+BuildKit GitHub Actions cache
+
+Docker Compose intentionally deferred until additional services require it
+
+The Docker service deliberately keeps generated corpus and dense-index
+artifacts outside the image and mounts them read-only at runtime.
+
+Phase 13 — Observability and reliability — NEXT
 
 structured JSON logging
 

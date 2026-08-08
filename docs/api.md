@@ -336,23 +336,77 @@ Terminal 2 -> curl
 
 If Uvicorn was stopped with Ctrl+C, curl should fail because nothing is listening on port 8000.
 
+Containerized execution
+
+The FastAPI service is available through the AeroRAG-X Docker image.
+
+Build:
+
+docker build \
+  -t aeroragx:local \
+  .
+
+Run:
+
+docker run \
+  -d \
+  --name aeroragx-local \
+  -p 8000:8000 \
+  -e AERORAGX_RUNTIME_MODE=local \
+  -e AERORAGX_CANDIDATE_TOP_K=20 \
+  -e AERORAGX_EVIDENCE_TOP_K=5 \
+  -v "$PWD/data/processed:/app/data/processed:ro" \
+  -v "$PWD/artifacts/embeddings:/app/artifacts/embeddings:ro" \
+  aeroragx:local
+
+The HTTP contract is unchanged between native and containerized
+execution.
+
+The container continues to expose:
+
+GET /health
+GET /ready
+POST /v1/query
+
+Containerized execution preserves structured request validation,
+structured error responses, X-Request-ID, retrieval metadata, evidence
+sufficiency, provider bypass behavior, grounded claims, authoritative
+citations, source-document metadata, and provider telemetry.
+
+The default local container uses deterministic generation and CPU-only
+PyTorch.
+
+Generated corpus and dense-index files are mounted read-only rather than
+baked into the image.
+
+See docs/docker.md for complete Docker documentation.
+
 Next service milestone
 
-The next step is Dockerized local deployment:
+The next service milestone is observability and reliability:
 
-FastAPI service
+FastAPI
     |
     v
-Docker image
+Dockerized service
     |
     v
-non-root runtime
+structured JSON logging
     |
     v
-container health/readiness
+AeroRAG-X request-ID correlation
     |
     v
-NASA-backed query smoke test
+provider request-ID correlation
     |
     v
-structured logging and observability
+retrieval/reranker timing
+    |
+    v
+provider latency
+    |
+    v
+error metrics
+    |
+    v
+OpenTelemetry
