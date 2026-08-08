@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import json
+import logging
+from io import StringIO
+
 from fastapi.testclient import TestClient
 
 from aeroragx.api import create_app
@@ -9,6 +13,7 @@ from aeroragx.generation.grounded import (
     GroundedAnswer,
     GroundedClaim,
 )
+from aeroragx.observability import configure_json_logger
 
 
 class FakeQueryService:
@@ -38,6 +43,29 @@ class FakeQueryService:
             insufficient_evidence=False,
             retrieval_metadata=None,
         )
+
+
+def capturing_event_logger(
+    name: str,
+) -> tuple[logging.Logger, StringIO]:
+    """Return one isolated structured logger and capture stream."""
+
+    stream = StringIO()
+
+    logger = configure_json_logger(
+        name=name,
+        stream=stream,
+    )
+
+    return logger, stream
+
+
+def read_log_events(
+    stream: StringIO,
+) -> list[dict[str, object]]:
+    """Parse line-delimited JSON events from one capture stream."""
+
+    return [json.loads(line) for line in stream.getvalue().splitlines() if line.strip()]
 
 
 def test_health_endpoint() -> None:
@@ -323,3 +351,80 @@ def test_unexpected_failure_is_structured() -> None:
     assert data["error"]["code"] == ("internal_error")
 
     assert data["error"]["request_id"] == response.headers["x-request-id"]
+
+
+def test_success_request_emits_structured_http_log() -> None:
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.success",
+    )
+
+    client = TestClient(
+        create_app(
+            query_service=service,
+            event_logger=logger,
+        )
+    )
+
+    raw_query = "Why is aircraft thermal management important?"
+
+    response = client.post(
+        "/v1/query",
+        json={"query": raw_query},
+    )
+
+    assert response.status_code == 200
+
+    events = read_log_events(stream)
+
+    assert len(events) == 1
+
+    event = events[0]
+
+    assert event["event"] == "http_request_completed"
+    assert event["request_id"] == response.headers["x-request-id"]
+    assert event["method"] == "POST"
+    assert event["path"] == "/v1/query"
+    assert event["status_code"] == 200
+    assert event["succeeded"] is True
+    assert isinstance(event["duration_ms"], float)
+    assert event["duration_ms"] >= 0.0
+
+    assert "query" not in event
+    assert raw_query not in stream.getvalue()
+
+
+def test_validation_error_emits_structured_http_log() -> None:
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.validation",
+    )
+
+    client = TestClient(
+        create_app(
+            query_service=service,
+            event_logger=logger,
+        )
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "   "},
+    )
+
+    assert response.status_code == 422
+
+    events = read_log_events(stream)
+
+    assert len(events) == 1
+
+    event = events[0]
+
+    assert event["event"] == "http_request_completed"
+    assert event["request_id"] == response.headers["x-request-id"]
+    assert event["method"] == "POST"
+    assert event["path"] == "/v1/query"
+    assert event["status_code"] == 422
+    assert event["succeeded"] is False
+    assert isinstance(event["duration_ms"], float)
+    assert event["duration_ms"] >= 0.0

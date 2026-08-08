@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import (
     AsyncIterator,
     Callable,
 )
 from contextlib import asynccontextmanager
+from time import perf_counter
 from typing import cast
 from uuid import uuid4
 
@@ -47,6 +49,10 @@ from aeroragx.generation.grounded import (
 from aeroragx.generation.structured_provider import (
     StructuredProviderError,
 )
+from aeroragx.observability import (
+    configure_json_logger,
+    log_event,
+)
 from aeroragx.runtime import RuntimeConfig
 
 type ServiceLoader = Callable[
@@ -54,17 +60,24 @@ type ServiceLoader = Callable[
     QueryService,
 ]
 
+_DEFAULT_EVENT_LOGGER = configure_json_logger(
+    name="aeroragx.api",
+)
+
 
 def create_app(
     *,
     query_service: QueryService | None = None,
     runtime_config: RuntimeConfig | None = None,
     service_loader: ServiceLoader = load_query_service,
+    event_logger: logging.Logger | None = None,
 ) -> FastAPI:
     """Create the AeroRAG-X HTTP application."""
 
     if query_service is not None and runtime_config is not None:
         raise ValueError("Provide query_service or runtime_config, not both.")
+
+    logger = _DEFAULT_EVENT_LOGGER if event_logger is None else event_logger
 
     @asynccontextmanager
     async def lifespan(
@@ -140,15 +153,52 @@ def create_app(
         request: Request,
         call_next: RequestResponseEndpoint,
     ) -> Response:
-        """Attach one request ID to every HTTP request."""
+        """Attach one request ID and emit one structured request event."""
 
         request_id = str(uuid4())
+        started_at = perf_counter()
 
         request.state.request_id = request_id
 
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+
+        except Exception:
+            duration_ms = round(
+                (perf_counter() - started_at) * 1000.0,
+                3,
+            )
+
+            log_event(
+                logger,
+                "http_request_failed",
+                request_id=request_id,
+                method=request.method,
+                path=request.url.path,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                duration_ms=duration_ms,
+                succeeded=False,
+            )
+
+            raise
+
+        duration_ms = round(
+            (perf_counter() - started_at) * 1000.0,
+            3,
+        )
 
         response.headers["X-Request-ID"] = request_id
+
+        log_event(
+            logger,
+            "http_request_completed",
+            request_id=request_id,
+            method=request.method,
+            path=request.url.path,
+            status_code=response.status_code,
+            duration_ms=duration_ms,
+            succeeded=response.status_code < 400,
+        )
 
         return response
 
