@@ -762,3 +762,57 @@ def test_validation_error_emits_structured_http_log() -> None:
     assert event["succeeded"] is False
     assert isinstance(event["duration_ms"], float)
     assert event["duration_ms"] >= 0.0
+
+
+def test_grounded_query_log_includes_internal_stage_timings() -> None:
+    from aeroragx.generation.grounded import RAGStageTimings
+
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.query.timings",
+    )
+
+    class TimedQueryService:
+        def query(
+            self,
+            query: str,
+        ) -> GroundedAnswer:
+            answer = service.query(query)
+            answer.attach_stage_timings(
+                RAGStageTimings(
+                    retrieval_ms=10.5,
+                    evidence_build_ms=0.8,
+                    sufficiency_ms=0.4,
+                    provider_stage_ms=125.0,
+                    citation_resolution_ms=1.2,
+                    total_ms=138.9,
+                )
+            )
+            return answer
+
+    client = TestClient(
+        create_app(
+            query_service=TimedQueryService(),
+            event_logger=logger,
+        )
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "test query"},
+    )
+
+    assert response.status_code == 200
+    assert "stage_timings" not in response.json()
+    assert "_stage_timings" not in response.json()
+
+    query_event = next(
+        event for event in read_log_events(stream) if event["event"] == "grounded_query_completed"
+    )
+
+    assert query_event["retrieval_ms"] == 10.5
+    assert query_event["evidence_build_ms"] == 0.8
+    assert query_event["sufficiency_ms"] == 0.4
+    assert query_event["provider_stage_ms"] == 125.0
+    assert query_event["citation_resolution_ms"] == 1.2
+    assert query_event["rag_total_ms"] == 138.9

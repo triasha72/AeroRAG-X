@@ -686,3 +686,51 @@ def test_write_grounded_answer(tmp_path: Path) -> None:
     assert payload["claims"][0]["claim_id"] == "CL1"
     assert payload["citations"][0]["citation_id"] == "C1"
     assert payload["citations"][0]["citation_url"].startswith("https://ntrs.nasa.gov/citations/")
+
+
+def test_generate_attaches_internal_stage_timings() -> None:
+    hits = [make_hit(1), make_hit(2)]
+    provider = StaticGenerationProvider(make_supported_response())
+    generator = GroundedAnswerGenerator(
+        index=FakeRerankedIndex(hits),
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate("How does thermal runaway propagate?")
+    timings = answer.stage_timings
+
+    assert timings is not None
+    assert timings.retrieval_ms >= 0.0
+    assert timings.evidence_build_ms >= 0.0
+    assert timings.sufficiency_ms is None
+    assert timings.provider_stage_ms is not None
+    assert timings.provider_stage_ms >= 0.0
+    assert timings.citation_resolution_ms is not None
+    assert timings.citation_resolution_ms >= 0.0
+    assert timings.total_ms >= timings.retrieval_ms
+
+    payload = answer.model_dump(mode="json")
+    assert "stage_timings" not in payload
+    assert "_stage_timings" not in payload
+
+
+def test_insufficient_answer_records_bypassed_stage_timings() -> None:
+    provider = StaticGenerationProvider(make_supported_response())
+    generator = GroundedAnswerGenerator(
+        index=FakeRerankedIndex([]),
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate("Unsupported technical question")
+    timings = answer.stage_timings
+
+    assert answer.insufficient_evidence is True
+    assert provider.call_count == 0
+    assert timings is not None
+    assert timings.retrieval_ms >= 0.0
+    assert timings.evidence_build_ms >= 0.0
+    assert timings.sufficiency_ms is None
+    assert timings.provider_stage_ms is None
+    assert timings.citation_resolution_ms is None

@@ -6,10 +6,11 @@ import math
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+from time import perf_counter
 from typing import Protocol, Self
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
 
 from aeroragx.generation.provider import (
     GenerationProvider,
@@ -212,6 +213,19 @@ class RetrievalMetadata(BaseModel):
     provider_telemetry: ProviderTelemetry | None = None
 
 
+class RAGStageTimings(BaseModel):
+    """Internal wall-clock timings for one grounded-generation request."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    retrieval_ms: float = Field(ge=0.0)
+    evidence_build_ms: float = Field(ge=0.0)
+    sufficiency_ms: float | None = Field(default=None, ge=0.0)
+    provider_stage_ms: float | None = Field(default=None, ge=0.0)
+    citation_resolution_ms: float | None = Field(default=None, ge=0.0)
+    total_ms: float = Field(ge=0.0)
+
+
 class GroundedAnswer(BaseModel):
     """Final grounded answer with claim-level citations."""
 
@@ -227,6 +241,25 @@ class GroundedAnswer(BaseModel):
     source_documents: list[SourceDocument] = Field(default_factory=list)
     insufficient_evidence: bool
     retrieval_metadata: RetrievalMetadata | None = None
+
+    _stage_timings: RAGStageTimings | None = PrivateAttr(default=None)
+
+    @property
+    def stage_timings(self) -> RAGStageTimings | None:
+        """Return a defensive copy of internal stage timings."""
+
+        if self._stage_timings is None:
+            return None
+
+        return self._stage_timings.model_copy(deep=True)
+
+    def attach_stage_timings(
+        self,
+        timings: RAGStageTimings,
+    ) -> None:
+        """Attach internal timings without changing the public response schema."""
+
+        self._stage_timings = timings.model_copy(deep=True)
 
     @model_validator(mode="after")
     def validate_answer_state(self) -> Self:
@@ -515,20 +548,52 @@ class GroundedAnswerGenerator:
         *,
         reranker_model: str | None = None,
     ) -> GroundedAnswer:
-        """Retrieve evidence, call the provider, and verify every citation."""
+        """Retrieve, assess, generate, resolve citations, and record timings."""
 
+        total_started_at = perf_counter()
         normalized_query = query.strip()
 
         if not normalized_query:
             raise ValueError("query must not be blank.")
 
+        sufficiency_ms: float | None = None
+        provider_stage_ms: float | None = None
+        citation_resolution_ms: float | None = None
+
+        retrieval_started_at = perf_counter()
         hits = list(
             self._index.search(
                 query=normalized_query,
                 top_k=self._config.evidence_top_k,
             )
         )
+        retrieval_ms = round(
+            (perf_counter() - retrieval_started_at) * 1000.0,
+            3,
+        )
+
+        evidence_started_at = perf_counter()
         evidence = build_generation_evidence(hits, self._config)
+        evidence_build_ms = round(
+            (perf_counter() - evidence_started_at) * 1000.0,
+            3,
+        )
+
+        def finalize(answer: GroundedAnswer) -> GroundedAnswer:
+            answer.attach_stage_timings(
+                RAGStageTimings(
+                    retrieval_ms=retrieval_ms,
+                    evidence_build_ms=evidence_build_ms,
+                    sufficiency_ms=sufficiency_ms,
+                    provider_stage_ms=provider_stage_ms,
+                    citation_resolution_ms=citation_resolution_ms,
+                    total_ms=round(
+                        (perf_counter() - total_started_at) * 1000.0,
+                        3,
+                    ),
+                )
+            )
+            return answer
 
         if len(evidence) < self._config.minimum_evidence_count:
             if not self._config.allow_insufficient_evidence:
@@ -537,22 +602,29 @@ class GroundedAnswerGenerator:
                     "insufficient-evidence responses are disabled."
                 )
 
-            return _insufficient_answer(
-                query=normalized_query,
-                answer=INSUFFICIENT_EVIDENCE_ANSWER,
-                config=self._config,
-                returned_evidence_count=len(hits),
-                used_evidence_count=len(evidence),
-                reranker_model=reranker_model,
-                evidence_sufficiency=None,
+            return finalize(
+                _insufficient_answer(
+                    query=normalized_query,
+                    answer=INSUFFICIENT_EVIDENCE_ANSWER,
+                    config=self._config,
+                    returned_evidence_count=len(hits),
+                    used_evidence_count=len(evidence),
+                    reranker_model=reranker_model,
+                    evidence_sufficiency=None,
+                )
             )
 
         evidence_sufficiency = None
 
         if self._sufficiency_assessor is not None:
+            sufficiency_started_at = perf_counter()
             evidence_sufficiency = self._sufficiency_assessor.assess(
                 query=normalized_query,
                 evidence=evidence,
+            )
+            sufficiency_ms = round(
+                (perf_counter() - sufficiency_started_at) * 1000.0,
+                3,
             )
 
             if not evidence_sufficiency.sufficient:
@@ -562,14 +634,16 @@ class GroundedAnswerGenerator:
                         "insufficient-evidence responses are disabled."
                     )
 
-                return _insufficient_answer(
-                    query=normalized_query,
-                    answer=INSUFFICIENT_EVIDENCE_ANSWER,
-                    config=self._config,
-                    returned_evidence_count=len(hits),
-                    used_evidence_count=len(evidence),
-                    reranker_model=reranker_model,
-                    evidence_sufficiency=evidence_sufficiency,
+                return finalize(
+                    _insufficient_answer(
+                        query=normalized_query,
+                        answer=INSUFFICIENT_EVIDENCE_ANSWER,
+                        config=self._config,
+                        returned_evidence_count=len(hits),
+                        used_evidence_count=len(evidence),
+                        reranker_model=reranker_model,
+                        evidence_sufficiency=evidence_sufficiency,
+                    )
                 )
 
         provider_evidence = [
@@ -579,10 +653,16 @@ class GroundedAnswerGenerator:
             )
             for item in evidence
         ]
+
+        provider_started_at = perf_counter()
         response = self._provider.generate(
             query=normalized_query,
             evidence=provider_evidence,
             max_claims=self._config.max_claims,
+        )
+        provider_stage_ms = round(
+            (perf_counter() - provider_started_at) * 1000.0,
+            3,
         )
 
         provider_telemetry = (
@@ -594,7 +674,8 @@ class GroundedAnswerGenerator:
             else None
         )
 
-        return self._resolve_response(
+        resolution_started_at = perf_counter()
+        answer = self._resolve_response(
             query=normalized_query,
             response=response,
             evidence=evidence,
@@ -603,6 +684,12 @@ class GroundedAnswerGenerator:
             evidence_sufficiency=evidence_sufficiency,
             provider_telemetry=provider_telemetry,
         )
+        citation_resolution_ms = round(
+            (perf_counter() - resolution_started_at) * 1000.0,
+            3,
+        )
+
+        return finalize(answer)
 
     def _resolve_response(
         self,

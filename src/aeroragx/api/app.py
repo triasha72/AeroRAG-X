@@ -101,6 +101,12 @@ class _GroundedQueryLogFields(TypedDict):
     prompt_injection_safe: bool | None
     prompt_injection_findings: int | None
     provider_error_type: str | None
+    rag_total_ms: float | None
+    retrieval_ms: float | None
+    evidence_build_ms: float | None
+    sufficiency_ms: float | None
+    provider_stage_ms: float | None
+    citation_resolution_ms: float | None
 
 
 def _grounded_query_log_fields(
@@ -136,7 +142,27 @@ def _grounded_query_log_fields(
         "prompt_injection_safe": None,
         "prompt_injection_findings": None,
         "provider_error_type": None,
+        "rag_total_ms": None,
+        "retrieval_ms": None,
+        "evidence_build_ms": None,
+        "sufficiency_ms": None,
+        "provider_stage_ms": None,
+        "citation_resolution_ms": None,
     }
+
+    timings = answer.stage_timings
+
+    if timings is not None:
+        fields.update(
+            {
+                "rag_total_ms": timings.total_ms,
+                "retrieval_ms": timings.retrieval_ms,
+                "evidence_build_ms": timings.evidence_build_ms,
+                "sufficiency_ms": timings.sufficiency_ms,
+                "provider_stage_ms": timings.provider_stage_ms,
+                "citation_resolution_ms": timings.citation_resolution_ms,
+            }
+        )
 
     if metadata is None:
         return fields
