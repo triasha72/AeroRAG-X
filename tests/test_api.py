@@ -2,13 +2,24 @@
 
 from __future__ import annotations
 
+import json
+import logging
+from io import StringIO
+
+import pytest
 from fastapi.testclient import TestClient
 
 from aeroragx.api import create_app
 from aeroragx.generation.grounded import (
     GroundedAnswer,
     GroundedClaim,
+    RetrievalMetadata,
 )
+from aeroragx.generation.structured_provider import (
+    ProviderTelemetry,
+    ProviderUsage,
+)
+from aeroragx.observability import configure_json_logger
 
 
 class FakeQueryService:
@@ -38,6 +49,29 @@ class FakeQueryService:
             insufficient_evidence=False,
             retrieval_metadata=None,
         )
+
+
+def capturing_event_logger(
+    name: str,
+) -> tuple[logging.Logger, StringIO]:
+    """Return one isolated structured logger and capture stream."""
+
+    stream = StringIO()
+
+    logger = configure_json_logger(
+        name=name,
+        stream=stream,
+    )
+
+    return logger, stream
+
+
+def read_log_events(
+    stream: StringIO,
+) -> list[dict[str, object]]:
+    """Parse line-delimited JSON events from one capture stream."""
+
+    return [json.loads(line) for line in stream.getvalue().splitlines() if line.strip()]
 
 
 def test_health_endpoint() -> None:
@@ -221,6 +255,165 @@ def test_runtime_loader_sets_ready_during_lifespan() -> None:
     assert loaded_configs == [runtime_config]
 
 
+def test_runtime_loader_emits_structured_startup_events() -> None:
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime",
+    )
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        assert config.candidate_top_k == 20
+        assert config.evidence_top_k == 5
+
+        return service
+
+    runtime_config = RuntimeConfig(
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+        event_logger=logger,
+    )
+
+    with TestClient(application) as client:
+        readiness = client.get("/ready")
+
+        assert readiness.status_code == 200
+        assert readiness.json()["ready"] is True
+
+    events = read_log_events(stream)
+
+    runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
+
+    assert [event["event"] for event in runtime_events] == [
+        "runtime_load_started",
+        "runtime_load_completed",
+    ]
+
+    started = runtime_events[0]
+    completed = runtime_events[1]
+
+    assert started["runtime_mode"] == "local"
+    assert started["candidate_top_k"] == 20
+    assert started["evidence_top_k"] == 5
+
+    assert completed["runtime_mode"] == "local"
+    assert completed["candidate_top_k"] == 20
+    assert completed["evidence_top_k"] == 5
+    assert completed["succeeded"] is True
+    assert isinstance(completed["duration_ms"], float)
+    assert completed["duration_ms"] >= 0.0
+
+
+def test_runtime_loader_failure_emits_safe_failure_event() -> None:
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime.failure",
+    )
+
+    def failing_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        del config
+
+        raise RuntimeError("sensitive runtime failure detail")
+
+    runtime_config = RuntimeConfig(
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=failing_loader,
+        event_logger=logger,
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match="sensitive runtime failure detail",
+    ):
+        with TestClient(application):
+            pass
+
+    events = read_log_events(stream)
+
+    assert [event["event"] for event in events] == [
+        "runtime_load_started",
+        "runtime_load_failed",
+    ]
+
+    failed = events[-1]
+
+    assert failed["level"] == "ERROR"
+    assert failed["runtime_mode"] == "local"
+    assert failed["candidate_top_k"] == 20
+    assert failed["evidence_top_k"] == 5
+    assert failed["succeeded"] is False
+    assert failed["error_type"] == "RuntimeError"
+    assert isinstance(failed["duration_ms"], float)
+    assert failed["duration_ms"] >= 0.0
+
+    assert "sensitive runtime failure detail" not in stream.getvalue()
+
+
+def test_openai_runtime_is_identified_without_logging_secrets() -> None:
+    from pathlib import Path
+
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime.openai",
+    )
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        del config
+
+        return service
+
+    runtime_config = RuntimeConfig(
+        provider_config=Path("configs/provider_v0_1.yaml"),
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+        event_logger=logger,
+    )
+
+    with TestClient(application):
+        pass
+
+    events = read_log_events(stream)
+
+    runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
+
+    assert runtime_events[0]["runtime_mode"] == "openai"
+    assert runtime_events[1]["runtime_mode"] == "openai"
+
+    rendered = stream.getvalue()
+
+    assert "OPENAI_API_KEY" not in rendered
+    assert "Authorization" not in rendered
+    assert "Bearer " not in rendered
+
+
 def test_success_response_has_request_id() -> None:
     from uuid import UUID
 
@@ -323,3 +516,249 @@ def test_unexpected_failure_is_structured() -> None:
     assert data["error"]["code"] == ("internal_error")
 
     assert data["error"]["request_id"] == response.headers["x-request-id"]
+
+
+def test_success_request_emits_structured_http_log() -> None:
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.success",
+    )
+
+    client = TestClient(
+        create_app(
+            query_service=service,
+            event_logger=logger,
+        )
+    )
+
+    raw_query = "Why is aircraft thermal management important?"
+
+    response = client.post(
+        "/v1/query",
+        json={"query": raw_query},
+    )
+
+    assert response.status_code == 200
+
+    events = read_log_events(stream)
+
+    http_events = [event for event in events if event["event"] == "http_request_completed"]
+
+    assert len(http_events) == 1
+
+    event = http_events[0]
+
+    assert event["event"] == "http_request_completed"
+    assert event["request_id"] == response.headers["x-request-id"]
+    assert event["method"] == "POST"
+    assert event["path"] == "/v1/query"
+    assert event["status_code"] == 200
+    assert event["succeeded"] is True
+    assert isinstance(event["duration_ms"], float)
+    assert event["duration_ms"] >= 0.0
+
+    assert "query" not in event
+    assert raw_query not in stream.getvalue()
+
+
+def test_grounded_query_emits_structured_operational_telemetry() -> None:
+    logger, stream = capturing_event_logger("aeroragx.test.api.query.telemetry")
+
+    provider_telemetry = ProviderTelemetry(
+        model_name="gpt-test",
+        prompt_version="test-v1",
+        attempts=2,
+        latency_seconds=0.125,
+        succeeded=True,
+        request_id="provider-request-123",
+        usage=ProviderUsage(input_tokens=120, output_tokens=30),
+        estimated_cost_usd=0.00125,
+        prompt_injection_safe=True,
+        prompt_injection_findings=0,
+        error_type=None,
+    )
+
+    metadata = RetrievalMetadata(
+        retriever="cross_encoder_reranker",
+        requested_evidence_top_k=5,
+        returned_evidence_count=5,
+        used_evidence_count=3,
+        reranker_model="test-reranker",
+        generation_provider="openai-responses",
+        generation_model="gpt-test",
+        evidence_sufficiency=None,
+        provider_telemetry=provider_telemetry,
+    )
+
+    class TelemetryQueryService:
+        def query(self, query: str) -> GroundedAnswer:
+            return GroundedAnswer(
+                query=query,
+                answer="A grounded telemetry test answer.",
+                claims=[
+                    GroundedClaim(
+                        claim_id="CL1",
+                        text="A grounded telemetry test claim.",
+                        citation_ids=[],
+                    )
+                ],
+                citations=[],
+                source_documents=[],
+                insufficient_evidence=False,
+                retrieval_metadata=metadata,
+            )
+
+    client = TestClient(
+        create_app(
+            query_service=TelemetryQueryService(),
+            event_logger=logger,
+        )
+    )
+
+    raw_query = "Explain the thermal-management result."
+    response = client.post(
+        "/v1/query",
+        json={"query": raw_query},
+    )
+
+    assert response.status_code == 200
+
+    query_event = next(
+        event for event in read_log_events(stream) if event["event"] == "grounded_query_completed"
+    )
+
+    assert query_event["request_id"] == response.headers["x-request-id"]
+    assert query_event["insufficient_evidence"] is False
+    assert query_event["claim_count"] == 1
+    assert query_event["retriever"] == "cross_encoder_reranker"
+    assert query_event["returned_evidence_count"] == 5
+    assert query_event["used_evidence_count"] == 3
+    assert query_event["generation_provider"] == "openai-responses"
+    assert query_event["generation_model"] == "gpt-test"
+    assert query_event["provider_called"] is True
+    assert query_event["provider_bypassed"] is False
+    assert query_event["provider_succeeded"] is True
+    assert query_event["provider_attempts"] == 2
+    assert query_event["provider_latency_ms"] == 125.0
+    assert query_event["provider_request_id"] == "provider-request-123"
+    assert query_event["input_tokens"] == 120
+    assert query_event["output_tokens"] == 30
+    assert query_event["total_tokens"] == 150
+    assert query_event["estimated_cost_usd"] == 0.00125
+    assert query_event["prompt_injection_safe"] is True
+    assert query_event["prompt_injection_findings"] == 0
+    assert "query" not in query_event
+    assert raw_query not in stream.getvalue()
+
+
+def test_insufficient_answer_records_provider_bypass() -> None:
+    logger, stream = capturing_event_logger("aeroragx.test.api.query.bypass")
+
+    metadata = RetrievalMetadata(
+        retriever="cross_encoder_reranker",
+        requested_evidence_top_k=5,
+        returned_evidence_count=0,
+        used_evidence_count=0,
+        reranker_model="test-reranker",
+        generation_provider="fake",
+        generation_model="deterministic-grounded-v0",
+        evidence_sufficiency=None,
+        provider_telemetry=None,
+    )
+
+    class InsufficientQueryService:
+        def query(self, query: str) -> GroundedAnswer:
+            return GroundedAnswer(
+                query=query,
+                answer="The retrieved evidence is insufficient to answer this question reliably.",
+                claims=[],
+                citations=[],
+                source_documents=[],
+                insufficient_evidence=True,
+                retrieval_metadata=metadata,
+            )
+
+    client = TestClient(
+        create_app(
+            query_service=InsufficientQueryService(),
+            event_logger=logger,
+        )
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "Unsupported aerospace claim"},
+    )
+
+    assert response.status_code == 200
+
+    query_event = next(
+        event for event in read_log_events(stream) if event["event"] == "grounded_query_completed"
+    )
+
+    assert query_event["insufficient_evidence"] is True
+    assert query_event["provider_called"] is False
+    assert query_event["provider_bypassed"] is True
+    assert query_event["provider_attempts"] is None
+    assert query_event["provider_latency_ms"] is None
+    assert query_event["provider_request_id"] is None
+    assert query_event["estimated_cost_usd"] is None
+
+
+def test_query_without_retrieval_metadata_logs_safe_nulls() -> None:
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger("aeroragx.test.api.query.no-metadata")
+
+    client = TestClient(create_app(query_service=service, event_logger=logger))
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "test query"},
+    )
+
+    assert response.status_code == 200
+
+    query_event = next(
+        event for event in read_log_events(stream) if event["event"] == "grounded_query_completed"
+    )
+
+    assert query_event["retriever"] is None
+    assert query_event["generation_provider"] is None
+    assert query_event["provider_called"] is None
+    assert query_event["provider_bypassed"] is None
+
+
+def test_validation_error_emits_structured_http_log() -> None:
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.validation",
+    )
+
+    client = TestClient(
+        create_app(
+            query_service=service,
+            event_logger=logger,
+        )
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "   "},
+    )
+
+    assert response.status_code == 422
+
+    events = read_log_events(stream)
+
+    assert len(events) == 1
+
+    event = events[0]
+
+    assert event["event"] == "http_request_completed"
+    assert event["request_id"] == response.headers["x-request-id"]
+    assert event["method"] == "POST"
+    assert event["path"] == "/v1/query"
+    assert event["status_code"] == 422
+    assert event["succeeded"] is False
+    assert isinstance(event["duration_ms"], float)
+    assert event["duration_ms"] >= 0.0
