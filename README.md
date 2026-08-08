@@ -863,6 +863,51 @@ aeroragx ntrs-grounded-answer \
   --sufficiency-config configs/sufficiency_v0_2_1.yaml \
   --facet-retrieval-config configs/facet_retrieval_v0_1.yaml
 
+Dockerized local service
+
+AeroRAG-X can run the FastAPI serving layer inside a non-root Docker
+container.
+
+The local image uses CPU-only PyTorch and does not require CUDA.
+
+Build:
+
+docker build \
+  -t aeroragx:local \
+  .
+
+Generated NASA corpus and dense embedding artifacts are intentionally
+not baked into the image. They are mounted read-only when the service
+starts:
+
+docker run \
+  -d \
+  --name aeroragx-local \
+  -p 8000:8000 \
+  -e AERORAGX_RUNTIME_MODE=local \
+  -e AERORAGX_CANDIDATE_TOP_K=20 \
+  -e AERORAGX_EVIDENCE_TOP_K=5 \
+  -v "$PWD/data/processed:/app/data/processed:ro" \
+  -v "$PWD/artifacts/embeddings:/app/artifacts/embeddings:ro" \
+  aeroragx:local
+
+The container exposes the same HTTP contract as native execution:
+
+GET  /health
+GET  /ready
+POST /v1/query
+
+Run the reproducible integration smoke test:
+
+./scripts/docker_smoke.sh
+
+The smoke test validates required runtime artifacts, container startup,
+health and readiness, non-root execution, mounted NASA artifacts, a real
+NASA-backed grounded query, returned claims and citations, deterministic
+local generation, and X-Request-ID.
+
+See docs/docker.md for the complete Docker workflow.
+
 Validation
 
 Run the local quality gate:
@@ -886,9 +931,11 @@ AeroRAG-X/
 ├── docs/
 │   ├── api.md
 │   ├── architecture.md
+│   ├── docker.md
 │   ├── evaluation.md
 │   └── generation.md
 ├── scripts/
+│   └── docker_smoke.sh
 ├── src/
 │   └── aeroragx/
 │       ├── api/
@@ -908,6 +955,8 @@ Documentation
 docs/architecture.md — architecture, trust boundaries, runtime composition, and failure behavior
 
 docs/api.md — FastAPI endpoints, environment configuration, request IDs, errors, and smoke tests
+
+docs/docker.md — Docker build, CPU runtime, read-only artifact mounts, health checks, and container smoke testing
 
 docs/generation.md — grounded generation and provider behavior
 
@@ -933,7 +982,11 @@ redacts provider secrets from transport errors;
 
 refuses unsupported questions before provider invocation when possible;
 
-keeps API keys in environment variables rather than tracked configuration.
+keeps API keys in environment variables rather than tracked configuration;
+
+runs the Docker service as a non-root user;
+
+mounts generated serving artifacts read-only.
 
 Current non-goals include:
 
@@ -951,6 +1004,6 @@ persistent vector-database serving.
 
 Next milestone
 
-The next engineering milestone is Dockerized local service deployment, followed by structured service observability and cloud deployment.
+The next engineering milestone is structured service observability and reliability, followed by cloud deployment.
 
 See ROADMAP.md for the planned sequence.
