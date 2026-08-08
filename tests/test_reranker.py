@@ -599,3 +599,23 @@ def test_reranked_hit_rejects_non_finite_score() -> None:
             dense_rank=hybrid_hit.dense_rank,
             dense_score=hybrid_hit.dense_score,
         )
+
+
+def test_reranker_records_detailed_search_timings() -> None:
+    index, _, _ = make_reranker_index()
+
+    hits = index.search(
+        "battery thermal runaway",
+        top_k=2,
+    )
+
+    timings = index.last_search_timings
+
+    assert len(hits) == 2
+    assert timings is not None
+    assert timings.candidate_retrieval_ms >= 0.0
+    assert timings.reranker_scoring_ms >= 0.0
+    assert timings.ranking_ms >= 0.0
+    assert timings.total_ms >= 0.0
+    assert timings.pair_count == 3
+    assert timings.hybrid is None

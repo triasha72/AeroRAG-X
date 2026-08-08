@@ -388,3 +388,21 @@ def test_fake_hits_satisfy_retrieval_protocol() -> None:
     )
 
     assert hit.rank == 1
+
+
+def test_hybrid_records_component_timings() -> None:
+    index = make_hybrid_index()
+
+    hits = index.search(
+        "battery thermal runaway",
+        top_k=2,
+    )
+
+    timings = index.last_timings
+
+    assert len(hits) == 2
+    assert timings is not None
+    assert timings.bm25_ms >= 0.0
+    assert timings.dense_ms >= 0.0
+    assert timings.fusion_ms >= 0.0
+    assert timings.total_ms >= 0.0

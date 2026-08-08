@@ -126,3 +126,65 @@ def test_missing_semantic_facet_falls_back_to_original() -> None:
     actual = wrapped.search(query=QUERY, top_k=2)
     assert [hit.chunk.chunk_id for hit in actual] == ["original-1", "original-2"]
     assert wrapped.last_used_facets is False
+
+
+def test_shared_query_records_facet_search_timing() -> None:
+    plan = plan_shared_facets(QUERY)
+    assert plan is not None
+
+    left = plan.facets[0].search_query
+    right = plan.facets[1].search_query
+
+    base = FakeIndex(
+        {
+            QUERY: [
+                _hit(
+                    "general",
+                    "Electrified aircraft thermal management.",
+                    1,
+                )
+            ],
+            left: [
+                _hit(
+                    "battery-1",
+                    "Battery electric aircraft thermal management.",
+                    1,
+                )
+            ],
+            right: [
+                _hit(
+                    "fuel-1",
+                    "Fuel cell aircraft heat rejection.",
+                    1,
+                )
+            ],
+        }
+    )
+
+    wrapped = FacetAwareEvidenceIndex(
+        base,
+        FacetRetrievalConfig(
+            facet_search_top_k=5,
+            per_facet_quota=1,
+        ),
+    )
+
+    wrapped.search(
+        query=QUERY,
+        top_k=3,
+    )
+
+    timings = wrapped.last_timings
+
+    assert timings is not None
+    assert timings.search_count == 3
+    assert timings.facet_search_count == 2
+    assert timings.used_facets is True
+    assert timings.base_search_ms >= 0.0
+    assert timings.facet_overhead_ms >= 0.0
+    assert timings.total_ms >= 0.0
+
+    assert timings.bm25_ms is None
+    assert timings.dense_ms is None
+    assert timings.hybrid_fusion_ms is None
+    assert timings.reranker_scoring_ms is None

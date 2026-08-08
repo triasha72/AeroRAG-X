@@ -15,7 +15,12 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from aeroragx.processing.chunking import ChunkRecord
-from aeroragx.retrieval.hybrid import HybridSearchHit, RetrieverName
+from aeroragx.retrieval.hybrid import (
+    HybridIndex,
+    HybridSearchHit,
+    HybridSearchTimings,
+    RetrieverName,
+)
 
 
 class RerankerConfig(BaseModel):
@@ -211,6 +216,19 @@ class _ScoredHybridCandidate:
     cross_encoder_score: float
 
 
+class RerankerSearchTimings(BaseModel):
+    """Internal timing snapshot for one reranked search."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    candidate_retrieval_ms: float = Field(ge=0.0)
+    reranker_scoring_ms: float = Field(ge=0.0)
+    ranking_ms: float = Field(ge=0.0)
+    total_ms: float = Field(ge=0.0)
+    pair_count: int = Field(ge=0)
+    hybrid: HybridSearchTimings | None = None
+
+
 class RerankerIndex:
     """Rerank a bounded Hybrid RRF candidate set with a cross-encoder."""
 
@@ -228,6 +246,7 @@ class RerankerIndex:
         self._scoring_seconds = 0.0
         self._last_pair_count = 0
         self._last_scoring_seconds = 0.0
+        self._last_search_timings: RerankerSearchTimings | None = None
 
     @property
     def config(self) -> RerankerConfig:
@@ -247,6 +266,15 @@ class RerankerIndex:
 
         return self._last_scoring_seconds
 
+    @property
+    def last_search_timings(self) -> RerankerSearchTimings | None:
+        """Return a defensive copy of the latest reranked-search timings."""
+
+        if self._last_search_timings is None:
+            return None
+
+        return self._last_search_timings.model_copy(deep=True)
+
     def reset_timing(self) -> None:
         """Reset accumulated cross-encoder scoring measurements."""
 
@@ -255,13 +283,14 @@ class RerankerIndex:
         self._scoring_seconds = 0.0
         self._last_pair_count = 0
         self._last_scoring_seconds = 0.0
+        self._last_search_timings = None
 
     def search(
         self,
         query: str,
         top_k: int = 10,
     ) -> list[RerankedSearchHit]:
-        """Return cross-encoder-ranked Hybrid RRF candidates."""
+        """Return cross-encoder-ranked Hybrid RRF candidates with timing."""
 
         if top_k < 1:
             raise ValueError("top_k must be at least 1.")
@@ -269,11 +298,23 @@ class RerankerIndex:
         if top_k > self._config.candidate_top_k:
             raise ValueError("top_k must not exceed candidate_top_k.")
 
+        self._last_search_timings = None
+        total_started_at = perf_counter()
+
+        candidate_started_at = perf_counter()
         hybrid_hits = list(
             self._hybrid_index.search(
                 query=query,
                 top_k=self._config.candidate_top_k,
             )
+        )
+        candidate_retrieval_ms = round(
+            (perf_counter() - candidate_started_at) * 1000.0,
+            3,
+        )
+
+        hybrid_timings = (
+            self._hybrid_index.last_timings if isinstance(self._hybrid_index, HybridIndex) else None
         )
 
         chunk_ids = [hit.chunk.chunk_id for hit in hybrid_hits]
@@ -283,14 +324,18 @@ class RerankerIndex:
 
         documents = [hit.chunk.text for hit in hybrid_hits]
 
-        start_time = perf_counter()
+        scoring_started_at = perf_counter()
         raw_scores = self._scorer.score(
             query,
             documents,
             batch_size=self._config.batch_size,
             show_progress_bar=(self._config.show_progress_bar),
         )
-        elapsed_seconds = perf_counter() - start_time
+        elapsed_seconds = perf_counter() - scoring_started_at
+        reranker_scoring_ms = round(
+            elapsed_seconds * 1000.0,
+            3,
+        )
 
         scores = [float(score) for score in raw_scores]
 
@@ -309,6 +354,8 @@ class RerankerIndex:
         self._scoring_seconds += elapsed_seconds
         self._last_pair_count = pair_count
         self._last_scoring_seconds = elapsed_seconds
+
+        ranking_started_at = perf_counter()
 
         scored_candidates = [
             _ScoredHybridCandidate(
@@ -331,7 +378,7 @@ class RerankerIndex:
             ),
         )
 
-        return [
+        results = [
             RerankedSearchHit(
                 rank=rank,
                 score=candidate.cross_encoder_score,
@@ -349,6 +396,26 @@ class RerankerIndex:
                 start=1,
             )
         ]
+
+        ranking_ms = round(
+            (perf_counter() - ranking_started_at) * 1000.0,
+            3,
+        )
+        total_ms = round(
+            (perf_counter() - total_started_at) * 1000.0,
+            3,
+        )
+
+        self._last_search_timings = RerankerSearchTimings(
+            candidate_retrieval_ms=candidate_retrieval_ms,
+            reranker_scoring_ms=reranker_scoring_ms,
+            ranking_ms=ranking_ms,
+            total_ms=total_ms,
+            pair_count=pair_count,
+            hybrid=hybrid_timings,
+        )
+
+        return results
 
     def build_latency_report(
         self,

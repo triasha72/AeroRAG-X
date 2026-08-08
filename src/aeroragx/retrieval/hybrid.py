@@ -5,6 +5,7 @@ import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from time import perf_counter
 from typing import Literal, Self
 
 import yaml
@@ -29,6 +30,17 @@ class HybridConfig(BaseModel):
     bm25_top_k: int = Field(default=50, ge=1, le=100)
     dense_top_k: int = Field(default=50, ge=1, le=100)
     default_top_k: int = Field(default=10, ge=1, le=100)
+
+
+class HybridSearchTimings(BaseModel):
+    """Internal timing snapshot for one Hybrid RRF search."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    bm25_ms: float = Field(ge=0.0)
+    dense_ms: float = Field(ge=0.0)
+    fusion_ms: float = Field(ge=0.0)
+    total_ms: float = Field(ge=0.0)
 
 
 class HybridSearchHit(BaseModel):
@@ -203,6 +215,7 @@ class HybridIndex:
         self._bm25_index = bm25_index
         self._dense_index = dense_index
         self._config = config or HybridConfig()
+        self._last_timings: HybridSearchTimings | None = None
 
     @property
     def config(self) -> HybridConfig:
@@ -210,24 +223,49 @@ class HybridIndex:
 
         return self._config
 
+    @property
+    def last_timings(self) -> HybridSearchTimings | None:
+        """Return a defensive copy of the latest Hybrid RRF timing snapshot."""
+
+        if self._last_timings is None:
+            return None
+
+        return self._last_timings.model_copy(deep=True)
+
     def search(
         self,
         query: str,
         top_k: int = 10,
     ) -> list[HybridSearchHit]:
-        """Return deterministically ranked RRF results."""
+        """Return deterministically ranked RRF results and record stage timing."""
 
         if top_k < 1:
             raise ValueError("top_k must be at least 1.")
 
+        self._last_timings = None
+        total_started_at = perf_counter()
+
+        bm25_started_at = perf_counter()
         bm25_hits = self._bm25_index.search(
             query=query,
             top_k=self._config.bm25_top_k,
         )
+        bm25_ms = round(
+            (perf_counter() - bm25_started_at) * 1000.0,
+            3,
+        )
+
+        dense_started_at = perf_counter()
         dense_hits = self._dense_index.search(
             query=query,
             top_k=self._config.dense_top_k,
         )
+        dense_ms = round(
+            (perf_counter() - dense_started_at) * 1000.0,
+            3,
+        )
+
+        fusion_started_at = perf_counter()
 
         candidates: dict[str, _HybridAccumulator] = {}
 
@@ -253,7 +291,7 @@ class HybridIndex:
             ),
         )
 
-        return [
+        results = [
             HybridSearchHit(
                 rank=rank,
                 score=round(candidate.rrf_score, 12),
@@ -269,6 +307,24 @@ class HybridIndex:
                 start=1,
             )
         ]
+
+        fusion_ms = round(
+            (perf_counter() - fusion_started_at) * 1000.0,
+            3,
+        )
+        total_ms = round(
+            (perf_counter() - total_started_at) * 1000.0,
+            3,
+        )
+
+        self._last_timings = HybridSearchTimings(
+            bm25_ms=bm25_ms,
+            dense_ms=dense_ms,
+            fusion_ms=fusion_ms,
+            total_ms=total_ms,
+        )
+
+        return results
 
 
 def write_hybrid_search_results(
