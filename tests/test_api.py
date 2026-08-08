@@ -832,3 +832,216 @@ def test_grounded_query_log_includes_internal_stage_timings() -> None:
     assert query_event["provider_stage_ms"] == 125.0
     assert query_event["citation_resolution_ms"] == 1.2
     assert query_event["rag_total_ms"] == 138.9
+
+
+def test_metrics_endpoint_exposes_http_and_query_metrics() -> None:
+    service = FakeQueryService()
+    client = TestClient(create_app(query_service=service))
+
+    assert client.get("/health").status_code == 200
+    assert (
+        client.post(
+            "/v1/query",
+            json={"query": "metrics smoke test"},
+        ).status_code
+        == 200
+    )
+
+    response = client.get("/metrics")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/plain")
+
+    rendered = response.text
+
+    assert (
+        "aeroragx_http_requests_total{"
+        'method="GET",route="/health",status_class="2xx"} 1.0' in rendered
+    )
+    assert (
+        "aeroragx_http_requests_total{"
+        'method="POST",route="/v1/query",status_class="2xx"} 1.0' in rendered
+    )
+    assert "aeroragx_query_requests_total 1.0" in rendered
+    assert "aeroragx_query_success_total 1.0" in rendered
+    assert "aeroragx_query_errors_total 0.0" in rendered
+    assert "metrics smoke test" not in rendered
+    assert "request_id=" not in rendered
+
+
+def test_metrics_record_rag_stage_histograms() -> None:
+    from aeroragx.generation.grounded import RAGStageTimings
+
+    service = FakeQueryService()
+
+    class TimedMetricsQueryService:
+        def query(self, query: str) -> GroundedAnswer:
+            answer = service.query(query)
+            answer.attach_stage_timings(
+                RAGStageTimings(
+                    retrieval_ms=400.0,
+                    reranker_scoring_ms=200.0,
+                    evidence_build_ms=20.0,
+                    total_ms=1250.0,
+                )
+            )
+            return answer
+
+    client = TestClient(create_app(query_service=TimedMetricsQueryService()))
+
+    assert (
+        client.post(
+            "/v1/query",
+            json={"query": "timed metrics query"},
+        ).status_code
+        == 200
+    )
+
+    rendered = client.get("/metrics").text
+
+    assert "aeroragx_rag_duration_seconds_count 1.0" in rendered
+    assert "aeroragx_rag_duration_seconds_sum 1.25" in rendered
+    assert "aeroragx_retrieval_duration_seconds_count 1.0" in rendered
+    assert "aeroragx_retrieval_duration_seconds_sum 0.4" in rendered
+    assert "aeroragx_reranker_duration_seconds_count 1.0" in rendered
+    assert "aeroragx_reranker_duration_seconds_sum 0.2" in rendered
+
+
+def test_metrics_record_provider_call_and_bypass() -> None:
+    telemetry = ProviderTelemetry(
+        model_name="gpt-test",
+        prompt_version="test-v1",
+        attempts=1,
+        latency_seconds=0.75,
+        succeeded=True,
+        request_id="provider-metrics-request",
+        usage=ProviderUsage(input_tokens=10, output_tokens=5),
+        estimated_cost_usd=0.0001,
+        prompt_injection_safe=True,
+        prompt_injection_findings=0,
+        error_type=None,
+    )
+    provider_metadata = RetrievalMetadata(
+        retriever="cross_encoder_reranker",
+        requested_evidence_top_k=5,
+        returned_evidence_count=5,
+        used_evidence_count=3,
+        reranker_model="test-reranker",
+        generation_provider="openai-responses",
+        generation_model="gpt-test",
+        evidence_sufficiency=None,
+        provider_telemetry=telemetry,
+    )
+
+    class ProviderMetricsService:
+        def query(self, query: str) -> GroundedAnswer:
+            return GroundedAnswer(
+                query=query,
+                answer="provider metrics answer",
+                claims=[
+                    GroundedClaim(
+                        claim_id="CL1",
+                        text="provider metrics claim",
+                        citation_ids=[],
+                    )
+                ],
+                citations=[],
+                source_documents=[],
+                insufficient_evidence=False,
+                retrieval_metadata=provider_metadata,
+            )
+
+    provider_client = TestClient(create_app(query_service=ProviderMetricsService()))
+    assert (
+        provider_client.post(
+            "/v1/query",
+            json={"query": "provider metrics"},
+        ).status_code
+        == 200
+    )
+    provider_rendered = provider_client.get("/metrics").text
+
+    assert 'aeroragx_provider_calls_total{provider="openai-responses"} 1.0' in provider_rendered
+    assert (
+        "aeroragx_provider_duration_seconds_count{"
+        'provider="openai-responses"} 1.0' in provider_rendered
+    )
+
+    bypass_metadata = RetrievalMetadata(
+        retriever="cross_encoder_reranker",
+        requested_evidence_top_k=5,
+        returned_evidence_count=0,
+        used_evidence_count=0,
+        reranker_model="test-reranker",
+        generation_provider="fake",
+        generation_model="deterministic-grounded-v0",
+        evidence_sufficiency=None,
+        provider_telemetry=None,
+    )
+
+    class BypassMetricsService:
+        def query(self, query: str) -> GroundedAnswer:
+            return GroundedAnswer(
+                query=query,
+                answer=("The retrieved evidence is insufficient to answer this question reliably."),
+                claims=[],
+                citations=[],
+                source_documents=[],
+                insufficient_evidence=True,
+                retrieval_metadata=bypass_metadata,
+            )
+
+    bypass_client = TestClient(create_app(query_service=BypassMetricsService()))
+    assert (
+        bypass_client.post(
+            "/v1/query",
+            json={"query": "unsupported metrics query"},
+        ).status_code
+        == 200
+    )
+    bypass_rendered = bypass_client.get("/metrics").text
+
+    assert "aeroragx_insufficient_evidence_total 1.0" in bypass_rendered
+    assert "aeroragx_provider_bypasses_total 1.0" in bypass_rendered
+
+
+def test_metrics_record_query_and_provider_failures() -> None:
+    from aeroragx.generation.structured_provider import ProviderTransportError
+
+    class ProviderFailureMetricsService:
+        def query(self, query: str) -> GroundedAnswer:
+            del query
+            raise ProviderTransportError(
+                "simulated provider metrics failure",
+                retryable=False,
+            )
+
+    client = TestClient(create_app(query_service=ProviderFailureMetricsService()))
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "provider failure metrics"},
+    )
+    rendered = client.get("/metrics").text
+
+    assert response.status_code == 502
+    assert "aeroragx_query_requests_total 1.0" in rendered
+    assert "aeroragx_query_errors_total 1.0" in rendered
+    assert 'aeroragx_provider_calls_total{provider="unknown"} 1.0' in rendered
+    assert 'aeroragx_provider_errors_total{provider="unknown"} 1.0' in rendered
+    assert (
+        "aeroragx_http_requests_total{"
+        'method="POST",route="/v1/query",status_class="5xx"} 1.0' in rendered
+    )
+
+
+def test_unmatched_metric_route_does_not_use_raw_path() -> None:
+    client = TestClient(create_app())
+
+    raw_path = "/unmatched/high-cardinality-value"
+    assert client.get(raw_path).status_code == 404
+
+    rendered = client.get("/metrics").text
+
+    assert 'route="__unmatched__"' in rendered
+    assert raw_path not in rendered

@@ -21,6 +21,7 @@ from fastapi.exceptions import (
     RequestValidationError,
 )
 from fastapi.responses import JSONResponse
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from starlette.middleware.base import (
     RequestResponseEndpoint,
 )
@@ -50,6 +51,7 @@ from aeroragx.generation.structured_provider import (
     StructuredProviderError,
 )
 from aeroragx.observability import (
+    ServiceMetrics,
     configure_json_logger,
     log_event,
 )
@@ -246,6 +248,7 @@ def create_app(
     runtime_config: RuntimeConfig | None = None,
     service_loader: ServiceLoader = load_query_service,
     event_logger: logging.Logger | None = None,
+    service_metrics: ServiceMetrics | None = None,
 ) -> FastAPI:
     """Create the AeroRAG-X HTTP application."""
 
@@ -253,6 +256,7 @@ def create_app(
         raise ValueError("Provide query_service or runtime_config, not both.")
 
     logger = _DEFAULT_EVENT_LOGGER if event_logger is None else event_logger
+    metrics = ServiceMetrics() if service_metrics is None else service_metrics
 
     @asynccontextmanager
     async def lifespan(
@@ -326,6 +330,7 @@ def create_app(
     )
 
     app.state.query_service = query_service
+    app.state.service_metrics = metrics
 
     def current_query_service() -> QueryService | None:
         """Return the currently loaded service."""
@@ -343,6 +348,79 @@ def create_app(
         return cast(
             str,
             request.state.request_id,
+        )
+
+    def metric_route(
+        request: Request,
+    ) -> str:
+        """Return one bounded route label for Prometheus metrics."""
+
+        route = request.scope.get("route")
+        route_path = getattr(route, "path", None)
+
+        if isinstance(route_path, str):
+            return route_path
+
+        return "__unmatched__"
+
+    def milliseconds_to_seconds(
+        value: float | None,
+    ) -> float | None:
+        """Convert optional millisecond telemetry to seconds."""
+
+        if value is None:
+            return None
+
+        return value / 1000.0
+
+    def record_grounded_answer_metrics(
+        answer: GroundedAnswer,
+    ) -> None:
+        """Record aggregate metrics for one successful grounded query."""
+
+        timings = answer.stage_timings
+
+        metrics.record_query_completed(
+            insufficient_evidence=answer.insufficient_evidence,
+            rag_duration_seconds=(
+                milliseconds_to_seconds(timings.total_ms) if timings is not None else None
+            ),
+            retrieval_duration_seconds=(
+                milliseconds_to_seconds(timings.retrieval_ms) if timings is not None else None
+            ),
+            reranker_duration_seconds=(
+                milliseconds_to_seconds(timings.reranker_scoring_ms)
+                if timings is not None
+                else None
+            ),
+        )
+
+        metadata = answer.retrieval_metadata
+
+        if metadata is None:
+            return
+
+        provider_telemetry = metadata.provider_telemetry
+        provider_name = metadata.generation_provider or "unknown"
+
+        if provider_telemetry is not None:
+            metrics.record_provider_call(
+                provider=provider_name,
+                duration_seconds=provider_telemetry.latency_seconds,
+                succeeded=provider_telemetry.succeeded,
+            )
+            return
+
+        if answer.insufficient_evidence:
+            metrics.record_provider_bypass()
+            return
+
+        metrics.record_provider_call(
+            provider=provider_name,
+            duration_seconds=(
+                milliseconds_to_seconds(timings.provider_stage_ms) if timings is not None else None
+            ),
+            succeeded=True,
         )
 
     def error_response(
@@ -388,9 +466,17 @@ def create_app(
             response = await call_next(request)
 
         except Exception:
+            elapsed_seconds = perf_counter() - started_at
             duration_ms = round(
-                (perf_counter() - started_at) * 1000.0,
+                elapsed_seconds * 1000.0,
                 3,
+            )
+
+            metrics.record_http_request(
+                method=request.method,
+                route=metric_route(request),
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                duration_seconds=elapsed_seconds,
             )
 
             log_event(
@@ -406,12 +492,20 @@ def create_app(
 
             raise
 
+        elapsed_seconds = perf_counter() - started_at
         duration_ms = round(
-            (perf_counter() - started_at) * 1000.0,
+            elapsed_seconds * 1000.0,
             3,
         )
 
         response.headers["X-Request-ID"] = request_id
+
+        metrics.record_http_request(
+            method=request.method,
+            route=metric_route(request),
+            status_code=response.status_code,
+            duration_seconds=elapsed_seconds,
+        )
 
         log_event(
             logger,
@@ -465,6 +559,12 @@ def create_app(
 
         del error
 
+        metrics.record_provider_call(
+            provider="unknown",
+            duration_seconds=None,
+            succeeded=False,
+        )
+
         return error_response(
             request=request,
             status_code=(status.HTTP_502_BAD_GATEWAY),
@@ -515,6 +615,21 @@ def create_app(
             ready=is_ready,
         )
 
+    @app.get(
+        "/metrics",
+        include_in_schema=False,
+        tags=["system"],
+    )
+    def prometheus_metrics() -> Response:
+        """Expose Prometheus-compatible service metrics."""
+
+        return Response(
+            content=generate_latest(metrics.registry),
+            headers={
+                "Content-Type": CONTENT_TYPE_LATEST,
+            },
+        )
+
     @app.post(
         "/v1/query",
         response_model=GroundedAnswer,
@@ -526,12 +641,21 @@ def create_app(
     ) -> GroundedAnswer:
         """Answer one query using grounded evidence."""
 
-        service = current_query_service()
+        metrics.record_query_started()
 
-        if service is None:
-            raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
+        try:
+            service = current_query_service()
 
-        answer = service.query(request.query)
+            if service is None:
+                raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
+
+            answer = service.query(request.query)
+
+        except Exception:
+            metrics.record_query_error()
+            raise
+
+        record_grounded_answer_metrics(answer)
 
         log_event(
             logger,
