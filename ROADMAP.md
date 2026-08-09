@@ -575,11 +575,11 @@ Do this only when service requirements justify it.
 
 ## Phase 18 — Portfolio-quality release
 
-- [ ] Merge the cloud-deployment pull request through green CI
+- [x] Merge the cloud-deployment pull request through green CI
 - [ ] Protect `main`
-- [ ] Add a service architecture diagram
-- [ ] Add one reproducible demo workflow
-- [ ] Publish benchmark summary
-- [ ] Publish container and Cloud Run usage
+- [x] Add a service architecture diagram
+- [x] Add one reproducible demo workflow
+- [x] Publish benchmark summary
+- [x] Publish container and Cloud Run usage
 - [ ] Create versioned release or tag
-- [ ] Add concise portfolio and resume project description
+- [x] Add concise portfolio and resume project description
