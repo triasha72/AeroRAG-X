@@ -1,292 +1,165 @@
-AeroRAG-X
-
-
+# AeroRAG-X
 
 A production-oriented, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.
 
-AeroRAG-X is built around a curated NASA Technical Reports Server (NTRS) corpus. It combines reproducible document acquisition, citation-preserving processing, lexical and semantic retrieval, Reciprocal Rank Fusion, cross-encoder reranking, deterministic facet-aware evidence selection, evidence-sufficiency gating, hardened structured generation, authoritative claim-level citation resolution, provider telemetry, and a FastAPI serving layer.
+AeroRAG-X is built around a curated NASA Technical Reports Server (NTRS) corpus. It combines reproducible document acquisition, citation-preserving processing, lexical and semantic retrieval, Reciprocal Rank Fusion, cross-encoder reranking, deterministic facet-aware evidence selection, evidence-sufficiency gating, hardened structured generation, authoritative claim-level citation resolution, provider telemetry, FastAPI serving, containerization, observability, and private cloud deployment.
 
 Every generated claim is tied back to retrieved evidence whose document ID, page range, NASA citation URL, source URL, and source-document checksum are preserved through the pipeline.
 
-Current status
+## System architecture
+
+```mermaid
+flowchart TD
+    A["NASA NTRS metadata and PDFs"] --> B["Versioned corpus and citation-preserving chunks"]
+    B --> C["BM25 + dense retrieval + hybrid fusion"]
+    C --> D["Cross-encoder reranking and evidence-sufficiency gate"]
+    D --> E["Structured generation and citation resolution"]
+    E --> F["Shared RAG runtime"]
+    F --> G["Typer CLI"]
+    F --> H["FastAPI service"]
+    H --> I["Docker, observability, and private Cloud Run"]
+```
+
+## Current status
 
 AeroRAG-X implements an end-to-end text RAG system with both CLI and HTTP interfaces.
 
-NASA NTRS metadata
-        |
-        v
-Versioned corpus manifest
-        |
-        v
-PDF acquisition + checksum validation
-        |
-        v
-Page-level text extraction
-        |
-        v
-Citation-preserving overlapping chunks
-        |
-        +-------------------------+
-        |                         |
-        v                         v
-BM25 lexical retrieval     Dense semantic retrieval
-        |                         |
-        +------------+------------+
-                     |
-                     v
-           Reciprocal Rank Fusion
-                     |
-                     v
-            Hybrid candidates
-                     |
-                     v
-         Cross-encoder reranking
-                     |
-                     v
-      Optional facet-aware retrieval
-                     |
-                     v
-        Evidence-sufficiency gate
-                     |
-          +----------+----------+
-          |                     |
-          v                     v
-   sufficient evidence    insufficient evidence
-          |                     |
-          v                     v
- Structured provider       grounded refusal
-          |
-          v
- Prompt/response guardrails
-          |
-          v
- Claim-level citation resolution
-          |
-          v
- Source-document summaries
-          |
-          v
- Retrieval + provider telemetry
-          |
-          v
-      Shared RAG runtime
-          |
-          +------------------+
-          |                  |
-          v                  v
-        Typer              FastAPI
-         CLI          /health /ready /v1/query
+- Curated NASA NTRS corpus with **3,233 citation-preserving chunks**
+- BM25, dense retrieval, Reciprocal Rank Fusion, and cross-encoder reranking
+- Deterministic local generation and OpenAI Responses API provider support
+- Evidence-sufficiency gating and grounded refusals for unsupported questions
+- Claim-level citations resolved from authoritative application-side metadata
+- FastAPI API with health, readiness, query, request-ID, and structured-error support
+- Non-root Docker service with read-only runtime artifacts
+- Structured logs, Prometheus metrics, OpenTelemetry traces, and load validation
+- Private Google Cloud Run Gen2 deployment with read-only Cloud Storage artifact mounts
 
-The current text corpus contains 3,233 citation-preserving NASA report chunks.
+## Implemented capabilities
 
-Implemented capabilities
+### Corpus acquisition and provenance
 
-NASA NTRS metadata search
+- NASA NTRS metadata search
+- Reproducible corpus configuration
+- Versioned document manifests
+- PDF-link resolution
+- Streamed PDF acquisition
+- Checksum validation and acquisition receipts
+- Page-level PDF extraction
+- Citation-preserving overlapping chunks
+- Document, page, source URL, citation URL, and checksum provenance
+- Persistent corpus and embedding manifests
 
-reproducible corpus configuration
+### Retrieval and ranking
 
-versioned document manifests
+- BM25 lexical retrieval
+- Sentence Transformer dense retrieval
+- Persistent NumPy embedding indexes
+- Exact cosine-similarity dense search
+- Reciprocal Rank Fusion hybrid retrieval
+- Cross-encoder reranking
+- Preserved BM25, dense, hybrid, and reranker provenance
+- Pooled retrieval evaluation
+- Deterministic facet-aware retrieval for supported synthesis patterns
 
-streamed PDF acquisition
+### Grounded generation and safety
 
-checksum validation and acquisition receipts
+- Provider-agnostic generation interface
+- Deterministic local generation provider
+- OpenAI Responses API structured provider adapter
+- Versioned provider and prompt configuration
+- Prompt-injection heuristics
+- Evidence delimiters and structured-response validation
+- Timeout and bounded retry behavior
+- Token, latency, retry, request-ID, and estimated-cost telemetry
+- Evidence-sufficiency gating before provider invocation
+- Numeric-support, named-anchor, and claim-qualifier checks
+- Grounded refusal when available evidence is insufficient
+- Authoritative application-side citation resolution
+- Claim, citation, source-document, and answer schemas
 
-page-level PDF extraction
+### Evaluation
 
-citation-preserving overlapping chunks
+- Retrieval benchmark v0.1
+- Pooled retrieval benchmark v0.2
+- Generation v0.3 benchmark with 32 labeled queries
+- Deterministic-provider and OpenAI-provider evaluation
+- Answerability, refusal, citation, structural-validity, latency, token, and cost metrics
+- Frozen evaluation artifacts for reproducibility
 
-BM25 lexical retrieval
+### Serving and reliability
 
-Sentence Transformer dense retrieval
+- Shared reusable RAG runtime
+- FastAPI application factory
+- Lifespan-managed one-time runtime loading
+- Environment-driven local and OpenAI runtime modes
+- `GET /health`
+- `GET /ready`
+- `POST /v1/query`
+- `/docs`, `/redoc`, and `/openapi.json`
+- Structured API errors
+- Per-request `X-Request-ID`
+- Ruff, pytest, strict mypy, coverage, and GitHub Actions
+- Dockerized local serving
+- Structured JSON logging
+- Prometheus metrics at `GET /metrics`
+- OpenTelemetry tracing and OTLP/HTTP export
+- P50/P95/P99 deterministic load validation
 
-persistent NumPy embedding indexes
+## Generation v0.3 benchmark
 
-exact cosine-similarity dense search
+The final generation benchmark contains:
 
-Reciprocal Rank Fusion hybrid retrieval
+| Category | Queries |
+|---|---:|
+| Expected-answerable queries | 20 |
+| Unsupported queries | 12 |
+| Total | 32 |
 
-cross-encoder reranking
+The final configuration uses:
 
-preserved BM25, dense, hybrid, and reranker provenance
-
-pooled retrieval evaluation
-
-deterministic facet-aware evidence retrieval for supported synthesis patterns
-
-deterministic evidence-sufficiency assessment
-
-morphology-aware query normalization
-
-numeric-support checks
-
-named-anchor checks
-
-claim-qualifier checks
-
-insufficient-evidence refusal before provider invocation
-
-provider-agnostic generation interface
-
-deterministic local generation provider
-
-OpenAI Responses API structured provider adapter
-
-versioned provider configuration
-
-prompt versioning and evidence delimiters
-
-prompt-injection heuristics
-
-structured provider-response validation
-
-retry and timeout handling
-
-token, latency, retry, request-ID, and estimated-cost telemetry
-
-authoritative application-side citation resolution
-
-claim, citation, source-document, and answer schemas
-
-generation v0.3 benchmark with 32 labeled queries
-
-reusable shared runtime construction
-
-FastAPI application factory
-
-lifespan-managed one-time RAG runtime loading
-
-environment-driven local/OpenAI API modes
-
-GET /health
-
-GET /ready
-
-POST /v1/query
-
-structured API errors
-
-per-request X-Request-ID
-
-Typer command-line interface
-
-Ruff, pytest, strict mypy, coverage, and GitHub Actions
-
-Generation v0.3 final benchmark
-
-The final benchmark contains:
-
-20 expected-answerable queries
-12 unsupported queries
-32 total queries
-
-The final benchmark configuration uses:
-
+```text
 Sufficiency v0.2.1
-+
-Facet Retrieval v0.1
-+
-OpenAI Responses API provider
++ Facet Retrieval v0.1
++ OpenAI Responses API provider
+```
 
-Final generation results
+### Final generation results
 
-Metric
+| Metric | Baseline | Final |
+|---|---:|---:|
+| Answerability accuracy | 0.9375 | 1.0000 |
+| Answerable completion | 0.9000 | 1.0000 |
+| Unsupported refusal | 1.0000 | 1.0000 |
+| Claim citation coverage | 1.0000 | 1.0000 |
+| Citation-reference validity | 1.0000 | 1.0000 |
+| Expected-term recall | 0.9138 | 0.9310 |
+| Structural validity | 1.0000 | 1.0000 |
 
-Baseline
+### Provider-routing results
 
-Final
+| Metric | Baseline | Final |
+|---|---:|---:|
+| Provider calls | 22 | 20 |
+| Provider bypasses | 10 | 12 |
+| Provider call-policy accuracy | 0.8750 | 1.0000 |
+| Total tokens | 63,638 | 58,915 |
+| Estimated benchmark cost | $0.105733 | $0.103745 |
 
-Answerability accuracy
+Final measured provider latency:
 
-0.9375
-
-1.0000
-
-Answerable completion
-
-0.9000
-
-1.0000
-
-Unsupported refusal
-
-1.0000
-
-1.0000
-
-Claim citation coverage
-
-1.0000
-
-1.0000
-
-Citation-reference validity
-
-1.0000
-
-1.0000
-
-Expected-term recall
-
-0.9138
-
-0.9310
-
-Structural validity
-
-1.0000
-
-1.0000
-
-Provider-routing results
-
-Metric
-
-Baseline
-
-Final
-
-Provider calls
-
-22
-
-20
-
-Provider bypasses
-
-10
-
-12
-
-Provider call-policy accuracy
-
-0.8750
-
-1.0000
-
-Total tokens
-
-63,638
-
-58,915
-
-Estimated benchmark cost
-
-$0.105733
-
-$0.103745
-
-Final measured latency:
-
-P50 provider latency: 5.6394 s
-P95 provider latency: 7.6947 s
-Provider retry rate: 0.0
+| Metric | Value |
+|---|---:|
+| P50 provider latency | 5.6394 s |
+| P95 provider latency | 7.6947 s |
+| Provider retry rate | 0.0 |
 
 The final benchmark produced zero answerability failures.
 
 These results describe the current engineering benchmark only. They are not evidence of universal RAG correctness, general-purpose answer faithfulness, or performance outside the current corpus and evaluation set.
 
-Tracked reports include:
+Tracked evaluation artifacts include:
 
+```text
 artifacts/evaluation/generation_deterministic_v0_3.json
 artifacts/evaluation/generation_deterministic_v0_3_telemetry.json
 artifacts/evaluation/generation_openai_v0_3.json
@@ -294,238 +167,94 @@ artifacts/evaluation/generation_openai_v0_3_telemetry.json
 artifacts/evaluation/generation_openai_v0_3_final.json
 artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
 artifacts/evaluation/generation_v0_3_final_comparison.json
+```
 
-Retrieval benchmarks
+## Retrieval benchmarks
 
-Retrieval benchmark v0.1
+### Retrieval benchmark v0.1
 
-Retriever
-
-Recall@5
-
-Recall@10
-
-MRR@10
-
-NDCG@10
-
-BM25
-
-0.7500
-
-0.9167
-
-0.6771
-
-0.7046
-
-Dense
-
-0.2292
-
-0.3958
-
-0.3376
-
-0.2812
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.7500 | 0.9167 | 0.6771 | 0.7046 |
+| Dense | 0.2292 | 0.3958 | 0.3376 | 0.2812 |
 
 The v0.1 judgments were created from a BM25-generated candidate pool, so this comparison can favor BM25.
 
-Pooled retrieval benchmark v0.2
+### Pooled retrieval benchmark v0.2
 
-Property
+| Property | Value |
+|---|---:|
+| Evaluation queries | 8 |
+| BM25 depth per query | 20 |
+| Dense depth per query | 20 |
+| Candidates after deduplication | 278 |
+| Relevant labels | 101 |
+| Non-relevant labels | 177 |
+| Shuffle seed | 42 |
+| Corpus size | 3,233 chunks |
 
-Value
-
-Evaluation queries
-
-8
-
-BM25 depth per query
-
-20
-
-Dense depth per query
-
-20
-
-Candidates after deduplication
-
-278
-
-Relevant labels
-
-101
-
-Non-relevant labels
-
-177
-
-Shuffle seed
-
-42
-
-Corpus size
-
-3,233 chunks
-
-Retriever
-
-Recall@5
-
-Recall@10
-
-MRR@10
-
-NDCG@10
-
-BM25
-
-0.2662
-
-0.4016
-
-0.7292
-
-0.5321
-
-Dense
-
-0.1330
-
-0.2778
-
-0.5521
-
-0.3976
-
-Hybrid RRF
-
-0.2043
-
-0.3024
-
-0.7639
-
-0.4777
-
-Reranker top-10
-
-0.2087
-
-0.3024
-
-0.7188
-
-0.4614
-
-Reranker top-20
-
-0.2068
-
-0.3375
-
-0.8375
-
-0.5080
+| Retriever | Recall@5 | Recall@10 | MRR@10 | NDCG@10 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.2662 | 0.4016 | 0.7292 | 0.5321 |
+| Dense | 0.1330 | 0.2778 | 0.5521 | 0.3976 |
+| Hybrid RRF | 0.2043 | 0.3024 | 0.7639 | 0.4777 |
+| Reranker top-10 | 0.2087 | 0.3024 | 0.7188 | 0.4614 |
+| Reranker top-20 | 0.2068 | 0.3375 | 0.8375 | 0.5080 |
 
 Current reranker:
 
+```text
 cross-encoder/ms-marco-MiniLM-L6-v2
+```
 
-Current scoring-only CPU latency baseline:
+Current scoring-only CPU baseline:
 
-Field
+| Field | Value |
+|---|---:|
+| Queries | 8 |
+| Query-chunk pairs | 160 |
+| Total scoring time | 3.170787 s |
+| Milliseconds per pair | 19.817420 ms |
+| Hardware | MacBook Air CPU baseline |
 
-Value
-
-Queries
-
-8
-
-Query-chunk pairs
-
-160
-
-Total scoring seconds
-
-3.170787
-
-Milliseconds per pair
-
-19.817420
-
-Hardware
-
-MacBook Air, CPU baseline
-
-FastAPI service
+## FastAPI service
 
 AeroRAG-X exposes the same grounded-generation runtime through a FastAPI service.
 
 The heavy retrieval and generation runtime is constructed once during application startup and reused across requests.
 
-Endpoints
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Process health check |
+| `GET` | `/ready` | RAG runtime readiness |
+| `POST` | `/v1/query` | Generate one evidence-grounded answer |
+| `GET` | `/metrics` | Prometheus metrics |
+| `GET` | `/docs` | Interactive Swagger/OpenAPI documentation |
+| `GET` | `/redoc` | ReDoc documentation |
+| `GET` | `/openapi.json` | OpenAPI schema |
 
-Method
+### Runtime environment
 
-Endpoint
-
-Purpose
-
-GET
-
-/health
-
-Process health check
-
-GET
-
-/ready
-
-RAG runtime readiness
-
-POST
-
-/v1/query
-
-Generate one evidence-grounded answer
-
-GET
-
-/docs
-
-Interactive Swagger/OpenAPI documentation
-
-GET
-
-/redoc
-
-ReDoc documentation
-
-GET
-
-/openapi.json
-
-OpenAPI schema
-
-Runtime environment
-
+```text
 AERORAGX_RUNTIME_MODE
 AERORAGX_CANDIDATE_TOP_K
 AERORAGX_EVIDENCE_TOP_K
+```
 
 Supported runtime modes:
 
+```text
 local
 openai
+```
 
-Local deterministic mode
+### Local deterministic mode
 
 Local mode runs the full retrieval, reranking, facet-selection, sufficiency, citation-resolution, and HTTP path without an external LLM call.
 
-Terminal 1:
+In Terminal 1:
 
+```bash
 unset OPENAI_API_KEY
 
 export AERORAGX_RUNTIME_MODE=local
@@ -536,67 +265,72 @@ python -m uvicorn \
   aeroragx.api:app \
   --host 127.0.0.1 \
   --port 8000
+```
 
-Keep the server running. In Terminal 2:
+In Terminal 2:
 
+```bash
 curl -sS http://127.0.0.1:8000/health
 echo
 
 curl -sS http://127.0.0.1:8000/ready
 echo
+```
 
 Example grounded query:
 
+```bash
 curl -sS \
   -X POST \
   http://127.0.0.1:8000/v1/query \
   -H "Content-Type: application/json" \
   -d '{
-    "query":
-    "Why is cryogenic hydrogen storage challenging for aircraft?"
+    "query": "Why is cryogenic hydrogen storage challenging for aircraft?"
   }'
+```
 
-OpenAI-backed mode
+### OpenAI-backed mode
 
 The same service can use the configured OpenAI Responses API provider without changing application code.
 
+```bash
 export AERORAGX_RUNTIME_MODE=openai
 export AERORAGX_CANDIDATE_TOP_K=20
 export AERORAGX_EVIDENCE_TOP_K=5
+export OPENAI_API_KEY="your-key"
+```
 
-Set OPENAI_API_KEY securely in the environment. Do not commit it.
+Do not commit API keys. After a local live test:
 
-On macOS, one temporary approach is to copy the key to the clipboard and run:
-
-export OPENAI_API_KEY="$(pbpaste | tr -d '\r\n')"
-printf '' | pbcopy
-
-After the live test:
-
+```bash
 unset OPENAI_API_KEY
 export AERORAGX_RUNTIME_MODE=local
+```
 
 OpenAI execution uses:
 
+```text
 configs/generation_openai_v0_1.yaml
 configs/provider_v0_1.yaml
 configs/http_transport_openai_v0_1.yaml
 configs/provider_runtime_openai_v0_1.yaml
 configs/sufficiency_v0_2_1.yaml
 configs/facet_retrieval_v0_1.yaml
+```
 
-Request IDs
+## Request IDs and structured errors
 
 Every HTTP request receives an AeroRAG-X request identifier.
 
 Responses include:
 
+```text
 X-Request-ID: <uuid>
+```
 
-Structured errors include the same request ID in the JSON body.
+Structured errors include the same request ID:
 
-Example:
-
+```json
 {
   "error": {
     "code": "invalid_request",
@@ -604,198 +338,44 @@ Example:
     "request_id": "<same UUID as X-Request-ID>"
   }
 }
+```
 
-Current error categories:
-
-HTTP status
-
-Error code
-
-Meaning
-
-422
-
-invalid_request
-
-Request-schema validation failure
-
-502
-
-provider_failure
-
-Structured generation-provider failure
-
-503
-
-runtime_unavailable
-
-RAG runtime is unavailable
-
-500
-
-internal_error
-
-Unexpected internal failure
+| HTTP status | Error code | Meaning |
+|---:|---|---|
+| 422 | `invalid_request` | Request-schema validation failure |
+| 502 | `provider_failure` | Structured generation-provider failure |
+| 503 | `runtime_unavailable` | RAG runtime is unavailable |
+| 500 | `internal_error` | Unexpected internal failure |
 
 Provider and internal exception details are not exposed directly to clients.
 
-Provider telemetry
+## Provider telemetry and trust boundary
 
-When a structured external provider is invoked, retrieval_metadata.provider_telemetry can include:
+When a structured external provider is invoked, `retrieval_metadata.provider_telemetry` can include:
 
-provider request ID
-model name
-attempt count
-latency
-input tokens
-output tokens
-estimated cost
-prompt-injection assessment
-success/failure state
+- provider request ID
+- model name
+- attempt count
+- latency
+- input tokens
+- output tokens
+- estimated cost
+- prompt-injection assessment
+- success or failure state
 
-If the evidence-sufficiency gate rejects a request before provider invocation, provider telemetry remains null.
-
-Controlled HTTP validation
-
-The serving path has been validated through both deterministic and OpenAI-backed execution.
-
-A controlled answerable OpenAI request returned:
-
-HTTP status: 200
-AeroRAG-X X-Request-ID: present
-Provider: openai-responses
-Model: gpt-5.6-luna
-Grounded claims: 3
-Authoritative citations: 5
-Source documents: 4
-Provider attempts: 1
-Provider latency: 5.1753 s
-Input tokens: 2355
-Output tokens: 340
-Estimated provider cost: $0.004395
-Prompt-injection assessment: safe
-
-A controlled unsupported fictional query returned:
-
-insufficient_evidence: true
-claims: 0
-citations: 0
-provider_telemetry: null
-
-That verifies provider bypass when the sufficiency layer rejects unsupported evidence.
-
-Evidence-sufficiency gate
-
-Primary implementation:
-
-src/aeroragx/generation/sufficiency.py
-
-Current benchmark configuration:
-
-configs/sufficiency_v0_2_1.yaml
-
-The gate checks:
-
-minimum evidence count
-
-informative query-term coverage
-
-minimum supported terms
-
-single-evidence coverage
-
-numeric support
-
-named-anchor support
-
-claim-qualifier support
-
-stricter coverage for exact-value questions
-
-The full decision is preserved in retrieval metadata for auditable provider bypasses and refusals.
-
-Facet-aware retrieval
-
-Primary implementation:
-
-src/aeroragx/generation/facet_retrieval.py
-
-Configuration:
-
-configs/facet_retrieval_v0_1.yaml
-
-For recognized multi-facet synthesis patterns, the wrapper:
-
-derives deterministic facet searches;
-
-retrieves evidence for each facet;
-
-verifies semantic facet identity;
-
-deduplicates by chunk_id;
-
-balances evidence across supported facets;
-
-adds original-query evidence;
-
-falls back to ordinary retrieval if semantic facet support is unavailable.
-
-The current implementation is intentionally narrow rather than a general-purpose query-planning agent.
-
-Hardened provider layer
-
-Current OpenAI generation configuration:
-
-configs/generation_openai_v0_1.yaml
-
-Current configured model:
-
-gpt-5.6-luna
-
-Provider-hardening configuration:
-
-configs/provider_v0_1.yaml
-configs/http_transport_openai_v0_1.yaml
-configs/provider_runtime_openai_v0_1.yaml
-
-Controls include:
-
-versioned prompt configuration
-
-explicit evidence delimiters
-
-prompt-injection heuristics
-
-response-schema enforcement
-
-bounded retries
-
-timeout handling
-
-retryable versus non-retryable transport errors
-
-secret redaction
-
-provider request IDs
-
-latency measurement
-
-input/output token accounting
-
-estimated cost accounting
+If the evidence-sufficiency gate rejects a request before provider invocation, provider telemetry remains `null`.
 
 Retrieved evidence is treated as untrusted input. The provider is not trusted to create authoritative citation metadata.
 
-Citation trust boundary
-
 The provider may return:
 
+```text
 claim -> evidence ID
+```
 
-AeroRAG-X resolves each evidence ID to authoritative retrieved metadata.
+AeroRAG-X resolves each evidence ID to authoritative retrieved metadata. Final citations preserve:
 
-The final citation preserves:
-
+```text
 citation_id
 evidence_id
 chunk_id
@@ -806,13 +386,68 @@ citation_url
 source_url
 document_sha256
 reranker_rank
+```
 
 Unknown evidence references are rejected.
 
-Installation
+## Evidence-sufficiency gate
+
+Primary implementation:
+
+```text
+src/aeroragx/generation/sufficiency.py
+```
+
+Current configuration:
+
+```text
+configs/sufficiency_v0_2_1.yaml
+```
+
+The gate checks:
+
+- minimum evidence count
+- informative query-term coverage
+- minimum supported terms
+- single-evidence coverage
+- numeric support
+- named-anchor support
+- claim-qualifier support
+- stricter coverage for exact-value questions
+
+The full decision is preserved in retrieval metadata for auditable provider bypasses and refusals.
+
+## Facet-aware retrieval
+
+Primary implementation:
+
+```text
+src/aeroragx/generation/facet_retrieval.py
+```
+
+Configuration:
+
+```text
+configs/facet_retrieval_v0_1.yaml
+```
+
+For recognized multi-facet synthesis patterns, the wrapper:
+
+- derives deterministic facet searches;
+- retrieves evidence for each facet;
+- verifies semantic facet identity;
+- deduplicates by `chunk_id`;
+- balances evidence across supported facets;
+- adds original-query evidence;
+- falls back to ordinary retrieval if semantic facet support is unavailable.
+
+The current implementation is intentionally narrow rather than a general-purpose query-planning agent.
+
+## Installation
 
 AeroRAG-X requires Python 3.12 or newer.
 
+```bash
 git clone https://github.com/triasha72/AeroRAG-X.git
 cd AeroRAG-X
 
@@ -821,37 +456,47 @@ source .venv/bin/activate
 
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
+```
 
 Conda is also supported:
 
+```bash
 conda create -n aeroragx-py312 python=3.12
 conda activate aeroragx-py312
 python -m pip install -e ".[dev]"
+```
 
 Check the CLI:
 
+```bash
 aeroragx --help
+```
 
-Important CLI workflows
+## Important CLI workflows
 
-Cross-encoder reranking
+### Cross-encoder reranking
 
+```bash
 aeroragx ntrs-reranker-search \
   --query "battery thermal runaway" \
   --candidate-top-k 20 \
   --top-k 10
+```
 
-Deterministic grounded answer
+### Deterministic grounded answer
 
+```bash
 aeroragx ntrs-grounded-answer \
   --query "How can battery thermal runaway propagate in electric aircraft?" \
   --candidate-top-k 20 \
   --evidence-top-k 5 \
   --generation-config configs/generation_v0_1.yaml \
   --sufficiency-config configs/sufficiency_v0_2_1.yaml
+```
 
-OpenAI grounded answer with facet-aware retrieval
+### OpenAI grounded answer with facet-aware retrieval
 
+```bash
 aeroragx ntrs-grounded-answer \
   --query "What thermal-management challenges are shared by battery-electric and fuel-cell aircraft?" \
   --candidate-top-k 20 \
@@ -862,24 +507,25 @@ aeroragx ntrs-grounded-answer \
   --provider-runtime-config configs/provider_runtime_openai_v0_1.yaml \
   --sufficiency-config configs/sufficiency_v0_2_1.yaml \
   --facet-retrieval-config configs/facet_retrieval_v0_1.yaml
+```
 
-Dockerized local service
+## Dockerized local service
 
-AeroRAG-X can run the FastAPI serving layer inside a non-root Docker
-container.
+AeroRAG-X can run the FastAPI serving layer inside a non-root Docker container.
 
 The local image uses CPU-only PyTorch and does not require CUDA.
 
-Build:
+Build the image:
 
+```bash
 docker build \
   -t aeroragx:local \
   .
+```
 
-Generated NASA corpus and dense embedding artifacts are intentionally
-not baked into the image. They are mounted read-only when the service
-starts:
+Generated NASA corpus and dense embedding artifacts are intentionally not baked into the image. They are mounted read-only when the service starts:
 
+```bash
 docker run \
   -d \
   --name aeroragx-local \
@@ -890,38 +536,97 @@ docker run \
   -v "$PWD/data/processed:/app/data/processed:ro" \
   -v "$PWD/artifacts/embeddings:/app/artifacts/embeddings:ro" \
   aeroragx:local
-
-The container exposes the same HTTP contract as native execution:
-
-GET  /health
-GET  /ready
-POST /v1/query
+```
 
 Run the reproducible integration smoke test:
 
+```bash
 ./scripts/docker_smoke.sh
+```
 
-The smoke test validates required runtime artifacts, container startup,
-health and readiness, non-root execution, mounted NASA artifacts, a real
-NASA-backed grounded query, returned claims and citations, deterministic
-local generation, and X-Request-ID.
+The smoke test validates required runtime artifacts, container startup, health and readiness, non-root execution, mounted NASA artifacts, a grounded query, returned claims and citations, deterministic local generation, and `X-Request-ID`.
 
-See docs/docker.md for the complete Docker workflow.
+See [docs/docker.md](docs/docker.md) for the complete Docker workflow.
 
-Validation
+## Production observability and reliability
+
+Phase 13 adds production-oriented observability around the FastAPI and Docker serving path:
+
+- structured JSON logs;
+- request, provider, trace, and span correlation;
+- runtime, HTTP, RAG, retrieval, reranker, facet, and provider timings;
+- Prometheus metrics at `GET /metrics`;
+- deterministic P50/P95/P99 load validation;
+- OpenTelemetry FastAPI and application spans;
+- OTLP/HTTP trace export;
+- local OpenTelemetry Collector validation;
+- privacy controls that exclude raw query and evidence text from observability payloads.
+
+Local deterministic load validation completed with zero failures through concurrency 4.
+
+| Metric | Value |
+|---|---:|
+| Requests | 20 |
+| Concurrency | 4 |
+| P50 latency | 993.928 ms |
+| P95 latency | 1117.138 ms |
+| P99 latency | 1126.538 ms |
+| Throughput | 3.966 requests/s |
+
+See [docs/observability.md](docs/observability.md) for logging, metrics, tracing, load testing, privacy, and failure-mode details.
+
+## Private Cloud Run deployment
+
+AeroRAG-X is deployed as a private Google Cloud Run Gen2 service.
+
+The deployment uses:
+
+- an immutable Artifact Registry image digest;
+- port `8000`;
+- two CPU cores and 2 GiB memory;
+- concurrency of one;
+- zero minimum instances and one maximum instance;
+- a 300-second request timeout;
+- a dedicated runtime service account;
+- two read-only Cloud Storage volume mounts;
+- authenticated invocation only.
+
+The mounted runtime artifact layout is:
+
+| Container path | Contents |
+|---|---|
+| `/app/data/processed` | NASA corpus chunks |
+| `/app/artifacts/embeddings` | embedding matrix, metadata, and manifest |
+
+The Cloud Run runtime service account has bucket-scoped `roles/storage.objectViewer` access only. The service is private: unauthenticated access is disabled.
+
+Authenticated live validation passed for:
+
+```text
+GET  /health
+GET  /ready
+POST /v1/query
+```
+
+See [docs/cloud-run.md](docs/cloud-run.md) for deployment, validation, rollback, and security details.
+
+## Validation
 
 Run the local quality gate:
 
+```bash
 python -m ruff format --check .
 python -m ruff check .
 python -m pytest -q
 python -m mypy src/aeroragx
 git diff --check
+```
 
 CI runs the same core quality checks on pull requests.
 
-Repository structure
+## Repository structure
 
+```text
 AeroRAG-X/
 ├── .github/
 │   └── workflows/
@@ -931,9 +636,11 @@ AeroRAG-X/
 ├── docs/
 │   ├── api.md
 │   ├── architecture.md
+│   ├── cloud-run.md
 │   ├── docker.md
 │   ├── evaluation.md
-│   └── generation.md
+│   ├── generation.md
+│   └── observability.md
 ├── scripts/
 │   └── docker_smoke.sh
 ├── src/
@@ -949,81 +656,56 @@ AeroRAG-X/
 ├── README.md
 ├── ROADMAP.md
 └── pyproject.toml
+```
 
-Documentation
+## Documentation
 
-docs/architecture.md — architecture, trust boundaries, runtime composition, and failure behavior
+- [docs/architecture.md](docs/architecture.md) — architecture, trust boundaries, runtime composition, and failure behavior
+- [docs/api.md](docs/api.md) — FastAPI endpoints, environment configuration, request IDs, errors, and smoke tests
+- [docs/docker.md](docs/docker.md) — Docker build, CPU runtime, read-only artifact mounts, health checks, and container smoke testing
+- [docs/observability.md](docs/observability.md) — logging, metrics, tracing, load testing, privacy, and failure modes
+- [docs/cloud-run.md](docs/cloud-run.md) — private Cloud Run deployment, Cloud Storage mounts, validation, rollback, and operational limits
+- [docs/generation.md](docs/generation.md) — grounded generation and provider behavior
+- [docs/evaluation.md](docs/evaluation.md) — retrieval and generation evaluation
+- [ROADMAP.md](ROADMAP.md) — completed milestones and planned phases
 
-docs/api.md — FastAPI endpoints, environment configuration, request IDs, errors, and smoke tests
-
-docs/docker.md — Docker build, CPU runtime, read-only artifact mounts, health checks, and container smoke testing
-
-docs/generation.md — grounded generation and provider behavior
-
-docs/evaluation.md — retrieval and generation evaluation
-
-ROADMAP.md — completed milestones and next phases
-
-Security and limitations
+## Security and limitations
 
 AeroRAG-X currently:
 
-treats retrieved text as untrusted provider input;
-
-uses deterministic prompt-injection heuristics;
-
-validates structured provider output;
-
-rejects unknown evidence IDs;
-
-resolves citation metadata application-side;
-
-redacts provider secrets from transport errors;
-
-refuses unsupported questions before provider invocation when possible;
-
-keeps API keys in environment variables rather than tracked configuration;
-
-runs the Docker service as a non-root user;
-
-mounts generated serving artifacts read-only.
+- treats retrieved text as untrusted provider input;
+- uses deterministic prompt-injection heuristics;
+- validates structured provider output;
+- rejects unknown evidence IDs;
+- resolves citation metadata application-side;
+- redacts provider secrets from transport errors;
+- refuses unsupported questions before provider invocation when possible;
+- keeps API keys in environment variables rather than tracked configuration;
+- runs the Docker service as a non-root user;
+- mounts generated serving artifacts read-only;
+- uses a least-privilege Cloud Run runtime service account;
+- keeps the deployed Cloud Run API private.
 
 Current non-goals include:
 
-autonomous general-purpose agents;
+- autonomous general-purpose agents;
+- semantic entailment verification;
+- table and figure retrieval;
+- managed secret storage for cloud-hosted external-provider credentials;
+- public unauthenticated API access;
+- public API rate limiting and abuse controls;
+- persistent vector-database serving.
 
-semantic entailment verification;
+## Next milestone
 
-table/figure retrieval;
+The private cloud deployment milestone is complete.
 
-managed secret storage;
+The next engineering work is deployment reproducibility and evaluation maturity:
 
-cloud deployment;
+- commit Cloud Run deployment documentation and validation workflow;
+- add deployment automation or infrastructure-as-code;
+- add regression thresholds for retrieval, generation, latency, and citation quality;
+- expand retrieval and generation evaluation coverage;
+- add persistent vector infrastructure only when service requirements justify it.
 
-persistent vector-database serving.
-
-Next milestone
-
-The next engineering milestone is structured service observability and reliability, followed by cloud deployment.
-
-See ROADMAP.md for the planned sequence.
-
-## Production observability and reliability
-
-Phase 13 adds production-oriented observability around the FastAPI and Docker serving path:
-
-- structured JSON logs;
-- request, provider, trace, and span correlation;
-- runtime, HTTP, RAG, retrieval, reranker, facet, and provider timings;
-- Prometheus metrics at `GET /metrics`;
-- deterministic P50/P95/P99 load validation;
-- OpenTelemetry FastAPI and application spans;
-- OTLP/HTTP trace export;
-- local OpenTelemetry Collector validation;
-- privacy controls that exclude raw query/evidence text from observability payloads.
-
-Local deterministic load validation completed with zero failures through concurrency 4. The 20-request concurrency-4 run measured P50 993.928 ms, P95 1117.138 ms, P99 1126.538 ms, and 3.966 requests/s.
-
-See `docs/observability.md` for the complete logging, metrics, tracing, load-test, privacy, and failure-mode runbook.
-
-The next project milestone is cloud deployment.
+See [ROADMAP.md](ROADMAP.md) for the planned sequence.
