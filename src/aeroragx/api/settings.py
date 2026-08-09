@@ -8,7 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
-from aeroragx.runtime import RuntimeConfig
+from aeroragx.runtime import (
+    DenseBackendName,
+    RuntimeConfig,
+)
 
 type RuntimeMode = Literal[
     "local",
@@ -21,6 +24,9 @@ class ApiRuntimeSettings:
     """Validated API runtime settings."""
 
     mode: RuntimeMode = "local"
+
+    dense_backend: DenseBackendName = "numpy"
+
     candidate_top_k: int = 20
     evidence_top_k: int = 5
 
@@ -31,6 +37,7 @@ class ApiRuntimeSettings:
 
         if self.mode == "local":
             return RuntimeConfig(
+                dense_backend=(self.dense_backend),
                 generation_config=Path("configs/generation_v0_1.yaml"),
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
@@ -39,6 +46,7 @@ class ApiRuntimeSettings:
             )
 
         return RuntimeConfig(
+            dense_backend=(self.dense_backend),
             generation_config=Path("configs/generation_openai_v0_1.yaml"),
             sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
             facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
@@ -96,6 +104,26 @@ def load_api_runtime_settings(
     else:
         raise ValueError("AERORAGX_RUNTIME_MODE must be 'local' or 'openai'.")
 
+    raw_dense_backend = (
+        env.get(
+            "AERORAGX_DENSE_BACKEND",
+            "numpy",
+        )
+        .strip()
+        .lower()
+    )
+
+    dense_backend: DenseBackendName
+
+    if raw_dense_backend == "numpy":
+        dense_backend = "numpy"
+
+    elif raw_dense_backend == "pgvector":
+        dense_backend = "pgvector"
+
+    else:
+        raise ValueError("AERORAGX_DENSE_BACKEND must be 'numpy' or 'pgvector'.")
+
     candidate_top_k = _positive_integer(
         value=env.get(
             "AERORAGX_CANDIDATE_TOP_K",
@@ -117,6 +145,7 @@ def load_api_runtime_settings(
 
     return ApiRuntimeSettings(
         mode=mode,
+        dense_backend=dense_backend,
         candidate_top_k=(candidate_top_k),
         evidence_top_k=(evidence_top_k),
     )
