@@ -34,6 +34,19 @@ AeroRAG-X implements an end-to-end text RAG system with both CLI and HTTP interf
 - Structured logs, Prometheus metrics, OpenTelemetry traces, and load validation
 - Private Google Cloud Run Gen2 deployment with read-only Cloud Storage artifact mounts
 
+
+## Portfolio-ready summary
+
+AeroRAG-X is an end-to-end, evidence-grounded RAG system for aerospace technical knowledge. It demonstrates the full applied-ML systems lifecycle: reproducible NASA data acquisition, provenance-preserving processing, hybrid retrieval, reranking, evidence sufficiency, structured generation, citation validation, evaluation, FastAPI serving, observability, Docker, and private Cloud Run deployment.
+
+The project includes deterministic regression checks and a protected held-out generation evaluation split, so measured results are separated from future system tuning.
+
+## Reproducible local demo
+
+Run the complete deterministic local API demonstration:
+
+```bash
+./scripts/demo_local.sh
 ## Implemented capabilities
 
 ### Corpus acquisition and provenance
@@ -738,14 +751,14 @@ Current non-goals include:
 
 ## Next milestone
 
-The private cloud deployment milestone is complete.
+## Release status
 
-The next engineering work is deployment reproducibility and evaluation maturity:
+The core retrieval, generation, serving, observability, private Cloud Run deployment, deterministic regression, and held-out evaluation milestones are complete.
 
-- commit Cloud Run deployment documentation and validation workflow;
-- add deployment automation or infrastructure-as-code;
-- add regression thresholds for retrieval, generation, latency, and citation quality;
-- expand retrieval and generation evaluation coverage;
-- add persistent vector infrastructure only when service requirements justify it.
+This portfolio-release branch adds a reproducible local demo and a concise project summary. The remaining release steps are:
+
+- merge the portfolio-release pull request through green CI;
+- create a versioned GitHub release or tag;
+- protect `main` after the remaining milestones are complete.
 
 See [ROADMAP.md](ROADMAP.md) for the planned sequence.
