@@ -57,7 +57,7 @@ from aeroragx.observability import (
     ServiceMetrics,
     TracingRuntime,
     configure_json_logger,
-    create_tracing_runtime,
+    create_configured_tracing_runtime,
     current_trace_ids,
     log_event,
     use_tracer,
@@ -266,7 +266,9 @@ def create_app(
     logger = _DEFAULT_EVENT_LOGGER if event_logger is None else event_logger
     metrics = ServiceMetrics() if service_metrics is None else service_metrics
     owns_tracing_runtime = tracing_runtime is None
-    trace_runtime = create_tracing_runtime() if tracing_runtime is None else tracing_runtime
+    trace_runtime = (
+        create_configured_tracing_runtime() if tracing_runtime is None else tracing_runtime
+    )
 
     @asynccontextmanager
     async def lifespan(

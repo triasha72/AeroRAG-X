@@ -9,9 +9,11 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
 )
 
 from aeroragx.observability.tracing import (
+    create_configured_tracing_runtime,
     create_tracing_runtime,
     current_trace_ids,
     current_tracer,
+    load_tracing_settings,
     trace_span,
     use_tracer,
 )
@@ -156,3 +158,88 @@ def test_trace_span_rejects_blank_name() -> None:
     ):
         with trace_span("   "):
             pass
+
+
+def test_load_tracing_settings_defaults_to_disabled() -> None:
+    settings = load_tracing_settings({})
+
+    assert settings.enabled is False
+    assert settings.endpoint == "http://127.0.0.1:4318/v1/traces"
+    assert settings.service_name == "aeroragx"
+    assert settings.service_version == "0.1.0"
+    assert settings.environment == "local"
+    assert settings.sample_ratio == 1.0
+
+
+def test_load_tracing_settings_reads_otlp_environment() -> None:
+    settings = load_tracing_settings(
+        {
+            "AERORAGX_OTEL_ENABLED": "true",
+            "AERORAGX_OTEL_ENDPOINT": ("http://collector:4318/v1/traces"),
+            "AERORAGX_OTEL_SERVICE_NAME": "aeroragx-api",
+            "AERORAGX_OTEL_SERVICE_VERSION": "0.1.0-test",
+            "AERORAGX_OTEL_ENVIRONMENT": "test",
+            "AERORAGX_OTEL_SAMPLE_RATIO": "0.25",
+        }
+    )
+
+    assert settings.enabled is True
+    assert settings.endpoint == "http://collector:4318/v1/traces"
+    assert settings.service_name == "aeroragx-api"
+    assert settings.service_version == "0.1.0-test"
+    assert settings.environment == "test"
+    assert settings.sample_ratio == 0.25
+
+
+@pytest.mark.parametrize(
+    "raw_value",
+    ["maybe", "enabled", "2"],
+)
+def test_load_tracing_settings_rejects_invalid_enabled_value(
+    raw_value: str,
+) -> None:
+    with pytest.raises(
+        ValueError,
+        match="AERORAGX_OTEL_ENABLED",
+    ):
+        load_tracing_settings(
+            {
+                "AERORAGX_OTEL_ENABLED": raw_value,
+            }
+        )
+
+
+@pytest.mark.parametrize(
+    "raw_value",
+    ["invalid", "-0.1", "1.1"],
+)
+def test_load_tracing_settings_rejects_invalid_sample_ratio(
+    raw_value: str,
+) -> None:
+    with pytest.raises(
+        ValueError,
+        match="AERORAGX_OTEL_SAMPLE_RATIO",
+    ):
+        load_tracing_settings(
+            {
+                "AERORAGX_OTEL_SAMPLE_RATIO": raw_value,
+            }
+        )
+
+
+def test_configured_tracing_runtime_is_no_exporter_when_disabled() -> None:
+    runtime = create_configured_tracing_runtime(
+        {
+            "AERORAGX_OTEL_ENABLED": "false",
+            "AERORAGX_OTEL_ENVIRONMENT": "test",
+        }
+    )
+
+    with runtime.tracer.start_as_current_span(
+        "aeroragx.test.disabled_export",
+    ):
+        pass
+
+    assert runtime.force_flush()
+
+    runtime.shutdown()

@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+import os
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 
 from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+    OTLPSpanExporter,
+)
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
@@ -28,6 +32,18 @@ _CURRENT_TRACER: ContextVar[Tracer | None] = ContextVar(
     "aeroragx_current_tracer",
     default=None,
 )
+
+
+@dataclass(frozen=True, slots=True)
+class TracingSettings:
+    """Validated environment-driven tracing settings."""
+
+    enabled: bool = False
+    endpoint: str = "http://127.0.0.1:4318/v1/traces"
+    service_name: str = _DEFAULT_SERVICE_NAME
+    service_version: str = _DEFAULT_SERVICE_VERSION
+    environment: str = "local"
+    sample_ratio: float = 1.0
 
 
 @dataclass(slots=True)
@@ -51,6 +67,121 @@ class TracingRuntime:
         """Shut down tracing processors and exporters."""
 
         self.provider.shutdown()
+
+
+def _parse_enabled(
+    raw_value: str,
+) -> bool:
+    """Parse a strict boolean tracing environment variable."""
+
+    normalized = raw_value.strip().lower()
+
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+
+    raise ValueError("AERORAGX_OTEL_ENABLED must be one of: true, false, 1, 0, yes, no, on, off.")
+
+
+def _parse_sample_ratio(
+    raw_value: str,
+) -> float:
+    """Parse and validate the tracing sample ratio."""
+
+    try:
+        sample_ratio = float(raw_value)
+
+    except ValueError as exc:
+        raise ValueError("AERORAGX_OTEL_SAMPLE_RATIO must be a number.") from exc
+
+    if not 0.0 <= sample_ratio <= 1.0:
+        raise ValueError("AERORAGX_OTEL_SAMPLE_RATIO must be between 0 and 1.")
+
+    return sample_ratio
+
+
+def load_tracing_settings(
+    environ: Mapping[str, str] | None = None,
+) -> TracingSettings:
+    """Load OpenTelemetry tracing settings from environment variables."""
+
+    env = os.environ if environ is None else environ
+
+    enabled = _parse_enabled(
+        env.get(
+            "AERORAGX_OTEL_ENABLED",
+            "false",
+        )
+    )
+    endpoint = env.get(
+        "AERORAGX_OTEL_ENDPOINT",
+        "http://127.0.0.1:4318/v1/traces",
+    ).strip()
+    service_name = env.get(
+        "AERORAGX_OTEL_SERVICE_NAME",
+        _DEFAULT_SERVICE_NAME,
+    ).strip()
+    service_version = env.get(
+        "AERORAGX_OTEL_SERVICE_VERSION",
+        _DEFAULT_SERVICE_VERSION,
+    ).strip()
+    environment = env.get(
+        "AERORAGX_OTEL_ENVIRONMENT",
+        "local",
+    ).strip()
+    sample_ratio = _parse_sample_ratio(
+        env.get(
+            "AERORAGX_OTEL_SAMPLE_RATIO",
+            "1.0",
+        )
+    )
+
+    if enabled and not endpoint:
+        raise ValueError("AERORAGX_OTEL_ENDPOINT must not be blank when tracing is enabled.")
+
+    if not service_name:
+        raise ValueError("AERORAGX_OTEL_SERVICE_NAME must not be blank.")
+
+    if not service_version:
+        raise ValueError("AERORAGX_OTEL_SERVICE_VERSION must not be blank.")
+
+    if not environment:
+        raise ValueError("AERORAGX_OTEL_ENVIRONMENT must not be blank.")
+
+    return TracingSettings(
+        enabled=enabled,
+        endpoint=endpoint,
+        service_name=service_name,
+        service_version=service_version,
+        environment=environment,
+        sample_ratio=sample_ratio,
+    )
+
+
+def create_configured_tracing_runtime(
+    environ: Mapping[str, str] | None = None,
+) -> TracingRuntime:
+    """Create the default tracing runtime from environment settings."""
+
+    settings = load_tracing_settings(environ)
+
+    exporter: SpanExporter | None = None
+
+    if settings.enabled:
+        exporter = OTLPSpanExporter(
+            endpoint=settings.endpoint,
+        )
+
+    return create_tracing_runtime(
+        exporter=exporter,
+        service_name=settings.service_name,
+        service_version=settings.service_version,
+        environment=settings.environment,
+        sample_ratio=settings.sample_ratio,
+        batch_export=True,
+    )
 
 
 def create_tracing_runtime(
