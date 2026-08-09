@@ -118,7 +118,7 @@ The next technical priority is evaluation maturity and deployment reproducibilit
 
 Future repository hardening:
 
-- [ ] Protect `main`
+- [x] Protect `main`
 - [ ] Require passing CI before merge
 - [ ] Prevent force pushes to `main`
 - [ ] Enforce coverage threshold
@@ -576,10 +576,10 @@ Do this only when service requirements justify it.
 ## Phase 18 — Portfolio-quality release
 
 - [x] Merge the cloud-deployment pull request through green CI
-- [ ] Protect `main`
+- [x] Protect `main`
 - [x] Add a service architecture diagram
 - [x] Add one reproducible demo workflow
 - [x] Publish benchmark summary
 - [x] Publish container and Cloud Run usage
-- [ ] Create versioned release or tag
+- [x] Create versioned release or tag
 - [x] Add concise portfolio and resume project description
