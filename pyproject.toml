@@ -26,9 +26,16 @@ dependencies = [
   "sentence-transformers>=5.6,<6.0",
   "typer>=0.12,<1.0",
   "uvicorn>=0.30,<1.0",
+  "psycopg[binary]>=3.2,<4.0",
+"pgvector>=0.4,<1.0",
 ]
 
 [project.optional-dependencies]
+vector = [
+  "pgvector>=0.5,<0.6",
+  "psycopg[binary]>=3.3,<4.0",
+]
+
 dev = [
   "click>=8.1,<9.0",
   "mypy>=1.11,<2.0",
@@ -45,6 +52,8 @@ aeroragx = "aeroragx.cli:app"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+aeroragx = ["py.typed"]
 
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib -q"
