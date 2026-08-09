@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 
 from opentelemetry import trace
@@ -20,6 +23,11 @@ from opentelemetry.trace import Tracer
 
 _DEFAULT_SERVICE_NAME = "aeroragx"
 _DEFAULT_SERVICE_VERSION = "0.1.0"
+
+_CURRENT_TRACER: ContextVar[Tracer | None] = ContextVar(
+    "aeroragx_current_tracer",
+    default=None,
+)
 
 
 @dataclass(slots=True)
@@ -113,3 +121,23 @@ def current_trace_ids() -> tuple[str | None, str | None]:
         f"{context.trace_id:032x}",
         f"{context.span_id:016x}",
     )
+
+
+def current_tracer() -> Tracer | None:
+    """Return the request-local AeroRAG-X tracer when one is active."""
+
+    return _CURRENT_TRACER.get()
+
+
+@contextmanager
+def use_tracer(
+    tracer: Tracer,
+) -> Iterator[None]:
+    """Bind one tracer to the current execution context."""
+
+    token = _CURRENT_TRACER.set(tracer)
+
+    try:
+        yield
+    finally:
+        _CURRENT_TRACER.reset(token)

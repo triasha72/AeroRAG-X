@@ -11,6 +11,8 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
 from aeroragx.observability.tracing import (
     create_tracing_runtime,
     current_trace_ids,
+    current_tracer,
+    use_tracer,
 )
 
 
@@ -122,3 +124,18 @@ def test_tracing_runtime_rejects_invalid_sample_ratio(
         create_tracing_runtime(
             sample_ratio=sample_ratio,
         )
+
+
+def test_use_tracer_binds_and_restores_request_local_tracer() -> None:
+    runtime = create_tracing_runtime(
+        environment="test",
+    )
+
+    assert current_tracer() is None
+
+    with use_tracer(runtime.tracer):
+        assert current_tracer() is runtime.tracer
+
+    assert current_tracer() is None
+
+    runtime.shutdown()

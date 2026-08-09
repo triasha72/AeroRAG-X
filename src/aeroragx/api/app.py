@@ -21,6 +21,9 @@ from fastapi.exceptions import (
     RequestValidationError,
 )
 from fastapi.responses import JSONResponse
+from opentelemetry import trace
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.trace import Status, StatusCode
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from starlette.middleware.base import (
     RequestResponseEndpoint,
@@ -52,8 +55,12 @@ from aeroragx.generation.structured_provider import (
 )
 from aeroragx.observability import (
     ServiceMetrics,
+    TracingRuntime,
     configure_json_logger,
+    create_tracing_runtime,
+    current_trace_ids,
     log_event,
+    use_tracer,
 )
 from aeroragx.runtime import RuntimeConfig
 
@@ -249,6 +256,7 @@ def create_app(
     service_loader: ServiceLoader = load_query_service,
     event_logger: logging.Logger | None = None,
     service_metrics: ServiceMetrics | None = None,
+    tracing_runtime: TracingRuntime | None = None,
 ) -> FastAPI:
     """Create the AeroRAG-X HTTP application."""
 
@@ -257,6 +265,8 @@ def create_app(
 
     logger = _DEFAULT_EVENT_LOGGER if event_logger is None else event_logger
     metrics = ServiceMetrics() if service_metrics is None else service_metrics
+    owns_tracing_runtime = tracing_runtime is None
+    trace_runtime = create_tracing_runtime() if tracing_runtime is None else tracing_runtime
 
     @asynccontextmanager
     async def lifespan(
@@ -322,6 +332,9 @@ def create_app(
         finally:
             application.state.query_service = None
 
+            if owns_tracing_runtime:
+                trace_runtime.shutdown()
+
     app = FastAPI(
         title="AeroRAG-X",
         version="0.1.0",
@@ -331,6 +344,7 @@ def create_app(
 
     app.state.query_service = query_service
     app.state.service_metrics = metrics
+    app.state.tracing_runtime = trace_runtime
 
     def current_query_service() -> QueryService | None:
         """Return the currently loaded service."""
@@ -462,63 +476,78 @@ def create_app(
 
         request.state.request_id = request_id
 
-        try:
-            response = await call_next(request)
+        server_span = trace.get_current_span()
 
-        except Exception:
+        if server_span.is_recording():
+            server_span.set_attribute(
+                "aeroragx.request_id",
+                request_id,
+            )
+
+        with use_tracer(trace_runtime.tracer):
+            try:
+                response = await call_next(request)
+
+            except Exception:
+                elapsed_seconds = perf_counter() - started_at
+                duration_ms = round(
+                    elapsed_seconds * 1000.0,
+                    3,
+                )
+                trace_id, span_id = current_trace_ids()
+
+                metrics.record_http_request(
+                    method=request.method,
+                    route=metric_route(request),
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    duration_seconds=elapsed_seconds,
+                )
+
+                log_event(
+                    logger,
+                    "http_request_failed",
+                    request_id=request_id,
+                    trace_id=trace_id,
+                    span_id=span_id,
+                    method=request.method,
+                    path=request.url.path,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    duration_ms=duration_ms,
+                    succeeded=False,
+                )
+
+                raise
+
             elapsed_seconds = perf_counter() - started_at
             duration_ms = round(
                 elapsed_seconds * 1000.0,
                 3,
             )
 
+            response.headers["X-Request-ID"] = request_id
+            trace_id, span_id = current_trace_ids()
+
             metrics.record_http_request(
                 method=request.method,
                 route=metric_route(request),
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status_code=response.status_code,
                 duration_seconds=elapsed_seconds,
             )
 
             log_event(
                 logger,
-                "http_request_failed",
+                "http_request_completed",
                 request_id=request_id,
+                trace_id=trace_id,
+                span_id=span_id,
                 method=request.method,
                 path=request.url.path,
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status_code=response.status_code,
                 duration_ms=duration_ms,
-                succeeded=False,
+                succeeded=response.status_code < 400,
             )
 
-            raise
-
-        elapsed_seconds = perf_counter() - started_at
-        duration_ms = round(
-            elapsed_seconds * 1000.0,
-            3,
-        )
-
-        response.headers["X-Request-ID"] = request_id
-
-        metrics.record_http_request(
-            method=request.method,
-            route=metric_route(request),
-            status_code=response.status_code,
-            duration_seconds=elapsed_seconds,
-        )
-
-        log_event(
-            logger,
-            "http_request_completed",
-            request_id=request_id,
-            method=request.method,
-            path=request.url.path,
-            status_code=response.status_code,
-            duration_ms=duration_ms,
-            succeeded=response.status_code < 400,
-        )
-
-        return response
+            return response
 
     @app.exception_handler(RequestValidationError)
     async def validation_error_handler(
@@ -642,29 +671,72 @@ def create_app(
         """Answer one query using grounded evidence."""
 
         metrics.record_query_started()
+        request_id = current_request_id(http_request)
 
-        try:
-            service = current_query_service()
+        with trace_runtime.tracer.start_as_current_span(
+            "aeroragx.query",
+        ) as query_span:
+            query_span.set_attribute(
+                "aeroragx.request_id",
+                request_id,
+            )
 
-            if service is None:
-                raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
+            try:
+                service = current_query_service()
 
-            answer = service.query(request.query)
+                if service is None:
+                    raise RuntimeUnavailableError("AeroRAG-X runtime is not ready.")
 
-        except Exception:
-            metrics.record_query_error()
-            raise
+                answer = service.query(request.query)
 
-        record_grounded_answer_metrics(answer)
+            except Exception:
+                metrics.record_query_error()
+                query_span.set_status(
+                    Status(StatusCode.ERROR),
+                )
+                raise
 
-        log_event(
-            logger,
-            "grounded_query_completed",
-            request_id=current_request_id(http_request),
-            **_grounded_query_log_fields(answer),
-        )
+            record_grounded_answer_metrics(answer)
 
-        return answer
+            query_span.set_attribute(
+                "aeroragx.insufficient_evidence",
+                answer.insufficient_evidence,
+            )
+            query_span.set_attribute(
+                "aeroragx.claim_count",
+                len(answer.claims),
+            )
+            query_span.set_attribute(
+                "aeroragx.citation_count",
+                len(answer.citations),
+            )
+
+            metadata = answer.retrieval_metadata
+
+            if metadata is not None and metadata.generation_provider is not None:
+                query_span.set_attribute(
+                    "aeroragx.generation_provider",
+                    metadata.generation_provider,
+                )
+
+            trace_id, span_id = current_trace_ids()
+
+            log_event(
+                logger,
+                "grounded_query_completed",
+                request_id=request_id,
+                trace_id=trace_id,
+                span_id=span_id,
+                **_grounded_query_log_fields(answer),
+            )
+
+            return answer
+
+    FastAPIInstrumentor.instrument_app(
+        app,
+        tracer_provider=trace_runtime.provider,
+        excluded_urls="health,ready,metrics",
+    )
 
     return app
 

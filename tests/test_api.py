@@ -8,6 +8,10 @@ from io import StringIO
 
 import pytest
 from fastapi.testclient import TestClient
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
+from opentelemetry.trace import SpanKind
 
 from aeroragx.api import create_app
 from aeroragx.generation.grounded import (
@@ -19,7 +23,10 @@ from aeroragx.generation.structured_provider import (
     ProviderTelemetry,
     ProviderUsage,
 )
-from aeroragx.observability import configure_json_logger
+from aeroragx.observability import (
+    configure_json_logger,
+    create_tracing_runtime,
+)
 
 
 class FakeQueryService:
@@ -1045,3 +1052,100 @@ def test_unmatched_metric_route_does_not_use_raw_path() -> None:
 
     assert 'route="__unmatched__"' in rendered
     assert raw_path not in rendered
+
+
+def test_query_trace_correlates_request_and_logs() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+    service = FakeQueryService()
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.tracing",
+    )
+
+    raw_query = "Sensitive tracing query text"
+
+    application = create_app(
+        query_service=service,
+        event_logger=logger,
+        tracing_runtime=tracing_runtime,
+    )
+
+    with TestClient(application) as client:
+        response = client.post(
+            "/v1/query",
+            json={"query": raw_query},
+        )
+
+    assert response.status_code == 200
+
+    tracing_runtime.force_flush()
+    spans = exporter.get_finished_spans()
+
+    query_span = next(span for span in spans if span.name == "aeroragx.query")
+    server_span = next(span for span in spans if span.kind == SpanKind.SERVER)
+
+    assert query_span.context is not None
+    assert server_span.context is not None
+    assert query_span.parent is not None
+
+    assert query_span.context.trace_id == server_span.context.trace_id
+    assert query_span.parent.span_id == server_span.context.span_id
+
+    request_id = response.headers["x-request-id"]
+
+    assert query_span.attributes["aeroragx.request_id"] == request_id
+    assert query_span.attributes["aeroragx.insufficient_evidence"] is False
+    assert query_span.attributes["aeroragx.claim_count"] == 1
+
+    events = read_log_events(stream)
+
+    query_event = next(event for event in events if event["event"] == "grounded_query_completed")
+    http_event = next(event for event in events if event["event"] == "http_request_completed")
+
+    expected_trace_id = f"{query_span.context.trace_id:032x}"
+    expected_query_span_id = f"{query_span.context.span_id:016x}"
+    expected_server_span_id = f"{server_span.context.span_id:016x}"
+
+    assert query_event["request_id"] == request_id
+    assert query_event["trace_id"] == expected_trace_id
+    assert query_event["span_id"] == expected_query_span_id
+
+    assert http_event["request_id"] == request_id
+    assert http_event["trace_id"] == expected_trace_id
+    assert http_event["span_id"] == expected_server_span_id
+
+    serialized_attributes = repr(
+        dict(query_span.attributes),
+    )
+
+    assert raw_query not in serialized_attributes
+    assert raw_query not in stream.getvalue()
+
+    tracing_runtime.shutdown()
+
+
+def test_health_and_metrics_are_excluded_from_http_tracing() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+
+    application = create_app(
+        tracing_runtime=tracing_runtime,
+    )
+
+    with TestClient(application) as client:
+        assert client.get("/health").status_code == 200
+        assert client.get("/metrics").status_code == 200
+
+    tracing_runtime.force_flush()
+
+    assert exporter.get_finished_spans() == ()
+
+    tracing_runtime.shutdown()
