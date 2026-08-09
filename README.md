@@ -34,12 +34,11 @@ AeroRAG-X implements an end-to-end text RAG system with both CLI and HTTP interf
 - Structured logs, Prometheus metrics, OpenTelemetry traces, and load validation
 - Private Google Cloud Run Gen2 deployment with read-only Cloud Storage artifact mounts
 
+## Project overview
 
-## Portfolio-ready summary
+AeroRAG-X is an evidence-grounded retrieval-augmented generation system for aerospace technical knowledge. It explores how reproducible NASA technical-report ingestion, provenance-preserving retrieval, evaluation, and evidence-sufficiency checks can reduce unsupported answers in a high-consequence engineering domain.
 
-AeroRAG-X is an end-to-end, evidence-grounded RAG system for aerospace technical knowledge. It demonstrates the full applied-ML systems lifecycle: reproducible NASA data acquisition, provenance-preserving processing, hybrid retrieval, reranking, evidence sufficiency, structured generation, citation validation, evaluation, FastAPI serving, observability, Docker, and private Cloud Run deployment.
-
-The project includes deterministic regression checks and a protected held-out generation evaluation split, so measured results are separated from future system tuning.
+The project includes deterministic regression checks and a protected held-out generation-evaluation split, so measured results remain separate from future system tuning.
 
 ## Reproducible local demo
 
@@ -47,6 +46,8 @@ Run the complete deterministic local API demonstration:
 
 ```bash
 ./scripts/demo_local.sh
+```
+
 ## Implemented capabilities
 
 ### Corpus acquisition and provenance
@@ -182,6 +183,7 @@ artifacts/evaluation/generation_openai_v0_3_final.json
 artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
 artifacts/evaluation/generation_v0_3_final_comparison.json
 ```
+
 ## Held-out deterministic evaluation v0.4
 
 AeroRAG-X also tracks a separate held-out deterministic generation evaluation. Its 12 queries are kept separate from the 32-query development benchmark and were not used to select generation, retrieval, or sufficiency settings.
@@ -222,6 +224,7 @@ data/evaluation/generation_queries_v0_4_heldout.jsonl
 tests/test_generation_heldout_split.py
 artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json
 ```
+
 ## Retrieval benchmarks
 
 ### Retrieval benchmark v0.1
@@ -690,11 +693,13 @@ AeroRAG-X/
 │   ├── api.md
 │   ├── architecture.md
 │   ├── cloud-run.md
+│   ├── demo.md
 │   ├── docker.md
 │   ├── evaluation.md
 │   ├── generation.md
 │   └── observability.md
 ├── scripts/
+│   ├── demo_local.sh
 │   └── docker_smoke.sh
 ├── src/
 │   └── aeroragx/
@@ -718,6 +723,7 @@ AeroRAG-X/
 - [docs/docker.md](docs/docker.md) — Docker build, CPU runtime, read-only artifact mounts, health checks, and container smoke testing
 - [docs/observability.md](docs/observability.md) — logging, metrics, tracing, load testing, privacy, and failure modes
 - [docs/cloud-run.md](docs/cloud-run.md) — private Cloud Run deployment, Cloud Storage mounts, validation, rollback, and operational limits
+- [docs/demo.md](docs/demo.md) — reproducible deterministic local API demonstration
 - [docs/generation.md](docs/generation.md) — grounded generation and provider behavior
 - [docs/evaluation.md](docs/evaluation.md) — retrieval and generation evaluation
 - [ROADMAP.md](ROADMAP.md) — completed milestones and planned phases
@@ -749,16 +755,10 @@ Current non-goals include:
 - public API rate limiting and abuse controls;
 - persistent vector-database serving.
 
-## Next milestone
-
 ## Release status
 
-The core retrieval, generation, serving, observability, private Cloud Run deployment, deterministic regression, and held-out evaluation milestones are complete.
+Version 0.1.0 freezes a validated text-RAG baseline with reproducible local execution, deterministic regression checks, a protected held-out generation-evaluation split, containerized serving, observability, and private Cloud Run validation.
 
-This portfolio-release branch adds a reproducible local demo and a concise project summary. The remaining release steps are:
-
-- merge the portfolio-release pull request through green CI;
-- create a versioned GitHub release or tag;
-- protect `main` after the remaining milestones are complete.
+Future work will prioritize measuring known failure modes—especially retrieval coverage, citation support, and answer faithfulness—before adding new infrastructure or model features.
 
 See [ROADMAP.md](ROADMAP.md) for the planned sequence.
