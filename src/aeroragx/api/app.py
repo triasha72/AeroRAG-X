@@ -284,6 +284,7 @@ def create_app(
                 logger,
                 "runtime_load_started",
                 runtime_mode=runtime_mode,
+                dense_backend=runtime_config.dense_backend,
                 candidate_top_k=runtime_config.candidate_top_k,
                 evidence_top_k=runtime_config.evidence_top_k,
             )
@@ -302,6 +303,7 @@ def create_app(
                     "runtime_load_failed",
                     level=logging.ERROR,
                     runtime_mode=runtime_mode,
+                    dense_backend=runtime_config.dense_backend,
                     candidate_top_k=runtime_config.candidate_top_k,
                     evidence_top_k=runtime_config.evidence_top_k,
                     duration_ms=duration_ms,
@@ -322,6 +324,7 @@ def create_app(
                 logger,
                 "runtime_load_completed",
                 runtime_mode=runtime_mode,
+                dense_backend=runtime_config.dense_backend,
                 candidate_top_k=runtime_config.candidate_top_k,
                 evidence_top_k=runtime_config.evidence_top_k,
                 duration_ms=duration_ms,

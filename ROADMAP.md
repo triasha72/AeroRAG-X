@@ -21,6 +21,11 @@ Reliable corpus
 -> observability
 -> private cloud deployment
 -> persistent vector infrastructure
+-> private cloud deployment
+-> persistent vector infrastructure
+-> local neural generation
+-> parameter-efficient domain adaptation
+-> agentic research workflow
 -> multimodal retrieval
 -> evaluation maturity
 -> release and reproducibility
@@ -95,7 +100,18 @@ Final provider telemetry:
 
 Version 0.1.0 freezes a validated evidence-grounded text-RAG baseline.
 
-The next technical priority is evaluation maturity and failure analysis: expand the benchmark, assess retrieval coverage and citation support, and study when the system should refuse to answer. Persistent vector infrastructure should be added only when service scale or retrieval requirements justify it.
+Post-v0.1 development has added an optional PostgreSQL + pgvector dense-retrieval backend with exact retrieval-equivalence validation and runtime backend selection.
+
+The next technical priority is model-side capability:
+
+1. add a local Hugging Face Transformers generation provider;
+2. establish a protected baseline for local neural generation;
+3. add PEFT / LoRA domain adaptation;
+4. compare base, RAG, LoRA, and LoRA + RAG configurations;
+5. add a bounded tool-using research agent;
+6. evaluate agent task completion, tool selection, grounding, latency, and failure behavior.
+
+Evaluation remains the governing principle: new model or agent capabilities should be benchmarked against existing baselines rather than adopted solely because they are more complex.
 
 ---
 
@@ -524,20 +540,52 @@ Deferred:
 - [ ] Public-demo policy
 - [ ] Public API rate limiting and abuse controls
 
-## Phase 15 — Persistent vector infrastructure
+## Phase 15 — Persistent vector infrastructure — IMPLEMENTED
 
-Do this only when service requirements justify it.
+The first persistent-vector milestone adds PostgreSQL + pgvector as an optional dense backend while retaining exact NumPy search as the lightweight default.
 
-- [ ] PostgreSQL plus pgvector development configuration
-- [ ] Vector-schema migration
-- [ ] Embeddings and provenance persistence
-- [ ] Metadata filtering
-- [ ] Document upsert and delete
-- [ ] Index-version metadata
-- [ ] pgvector retrieval implementation
-- [ ] Compare pgvector with exact NumPy baseline
-- [ ] Retrieval-latency benchmark
-- [ ] Backup and restore instructions
+### Completed
+
+- [x] PostgreSQL + pgvector local development configuration
+- [x] Versioned vector-store configuration
+- [x] Persistent embedding storage
+- [x] Citation-preserving chunk provenance
+- [x] Transactional chunk/vector upserts
+- [x] Embedding-model metadata
+- [x] Embedding-dimension validation
+- [x] Index-version metadata
+- [x] Exact cosine retrieval through pgvector
+- [x] NumPy-vs-pgvector backend comparison
+- [x] Retrieval-equivalence validation
+- [x] Retrieval-latency benchmark
+- [x] PostgreSQL integration tests
+- [x] PostgreSQL + pgvector service in GitHub Actions
+- [x] Runtime-selectable NumPy / pgvector dense backends
+- [x] API environment configuration through `AERORAGX_DENSE_BACKEND`
+- [x] NumPy retained as the lightweight default
+
+### Measured validation
+
+- 3,233 corpus chunks
+- 384-dimensional `sentence-transformers/all-MiniLM-L6-v2` embeddings
+- 8 / 8 exact top-10 retrieval matches
+- exact-match rate = 1.0
+- mean overlap@10 = 1.0
+- maximum score delta = 2.8e-07
+- identical Recall@10
+- identical MRR@10
+- identical NDCG@10
+- identical Hybrid RRF top-five runtime results for the validated query
+
+The current benchmark showed that NumPy remains lower-latency for the present 3,233-chunk static corpus. pgvector is therefore retained as an optional backend for persistence, transactional updates, database-backed metadata, and future mutable-corpus requirements rather than replacing NumPy by default.
+
+### Deferred scale work
+
+- [ ] Metadata-filtered retrieval API
+- [ ] Document deletion workflow
+- [ ] Backup and restore runbook
+- [ ] Exact pgvector versus HNSW benchmark at materially larger corpus sizes
+- [ ] Managed PostgreSQL deployment
 
 ## Phase 16 — Multimodal report processing
 

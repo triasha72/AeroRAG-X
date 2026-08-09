@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
+from aeroragx.evaluation.retrieval import RetrievalIndex
 from aeroragx.generation.facet_retrieval import (
     FacetAwareEvidenceIndex,
     load_facet_retrieval_config,
@@ -47,6 +49,11 @@ from aeroragx.retrieval.reranker import (
     with_candidate_top_k,
 )
 
+type DenseBackendName = Literal[
+    "numpy",
+    "pgvector",
+]
+
 
 class RuntimeConfigurationError(ValueError):
     """Raised when runtime configurations are incompatible."""
@@ -57,13 +64,23 @@ class RuntimeConfig:
     """Paths and settings required to construct AeroRAG-X."""
 
     chunks_input: Path = Path("data/processed/ntrs/v0_1/chunks.jsonl")
+
     bm25_config: Path = Path("configs/bm25_v0_1.yaml")
+
     dense_config: Path = Path("configs/dense_v0_1.yaml")
+
     hybrid_config: Path = Path("configs/hybrid_v0_1.yaml")
+
     reranker_config: Path = Path("configs/reranker_v0_1.yaml")
 
+    dense_backend: DenseBackendName = "numpy"
+
+    vector_store_config: Path = Path("configs/vector_store_v0_1.yaml")
+
     generation_config: Path = Path("configs/generation_v0_1.yaml")
+
     sufficiency_config: Path = Path("configs/sufficiency_v0_2_1.yaml")
+
     facet_retrieval_config: Path | None = Path("configs/facet_retrieval_v0_1.yaml")
 
     provider_config: Path | None = None
@@ -71,7 +88,9 @@ class RuntimeConfig:
     provider_runtime_config: Path | None = None
 
     embeddings_input: Path = Path("artifacts/embeddings/ntrs_v0_1.npy")
+
     metadata_input: Path = Path("artifacts/embeddings/ntrs_v0_1_metadata.jsonl")
+
     manifest_input: Path = Path("artifacts/embeddings/ntrs_v0_1_manifest.json")
 
     candidate_top_k: int | None = None
@@ -137,12 +156,62 @@ def load_hybrid_index(
 
     encoder = load_dense_encoder(dense_settings)
 
-    dense_index = DenseIndex(
-        embeddings=embeddings,
-        chunks=dense_chunks,
-        config=dense_settings,
-        encoder=encoder,
-    )
+    dense_index: RetrievalIndex
+
+    if config.dense_backend == "numpy":
+        dense_index = DenseIndex(
+            embeddings=embeddings,
+            chunks=dense_chunks,
+            config=dense_settings,
+            encoder=encoder,
+        )
+
+    elif config.dense_backend == "pgvector":
+        try:
+            import psycopg
+
+            from aeroragx.retrieval.pgvector_store import (
+                PgVectorIndex,
+                load_pgvector_config,
+                resolve_database_url,
+            )
+
+        except ImportError as exc:
+            raise RuntimeConfigurationError(
+                "The pgvector dense backend requires "
+                "the vector dependencies. Install them with "
+                '`pip install -e ".[vector]"`.'
+            ) from exc
+
+        try:
+            vector_settings = load_pgvector_config(config.vector_store_config)
+
+            database_url = resolve_database_url(vector_settings)
+
+            pgvector_index = PgVectorIndex(
+                database_url=database_url,
+                config=vector_settings,
+                dense_config=dense_settings,
+                encoder=encoder,
+                manifest=manifest,
+            )
+
+            database_chunk_count = pgvector_index.document_count
+
+        except (ValueError, psycopg.Error) as exc:
+            raise RuntimeConfigurationError(
+                f"Could not initialize the pgvector dense backend: {exc}"
+            ) from exc
+
+        if database_chunk_count != manifest.chunk_count:
+            raise RuntimeConfigurationError(
+                "The pgvector database chunk count does not match the dense index manifest."
+            )
+
+        dense_index = pgvector_index
+
+    else:
+        raise RuntimeConfigurationError(f"Unsupported dense backend: {config.dense_backend!r}.")
 
     return (
         HybridIndex(
