@@ -85,6 +85,7 @@ AeroRAG-X implements an end-to-end text RAG system with both CLI and HTTP interf
 - Deterministic-provider and OpenAI-provider evaluation
 - Answerability, refusal, citation, structural-validity, latency, token, and cost metrics
 - Frozen evaluation artifacts for reproducibility
+- Versioned deterministic baseline and a CI-enforced generation regression policy
 
 ### Serving and reliability
 

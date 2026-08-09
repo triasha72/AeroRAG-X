@@ -394,6 +394,7 @@ Future hardening:
 - [x] Latency, token, and cost telemetry
 - [x] Final 32-query run with zero answerability failures
 - [x] Final comparison artifact
+- [x] Frozen deterministic-generation regression policy in CI
 
 Future work:
 
@@ -555,17 +556,21 @@ Do this only when service requirements justify it.
 
 ## Phase 17 — Evaluation maturity
 
+- [x] Frozen deterministic 32-query generation baseline
+- [x] Versioned generation-regression policy
+- [x] Generation quality thresholds enforced in CI
 - [ ] Larger retrieval benchmark
 - [ ] Larger generation benchmark
+- [ ] Development and held-out evaluation splits
 - [ ] Conflicting-evidence cases
 - [ ] Partial-evidence cases
 - [ ] Adversarial prompt-injection benchmark
+- [ ] Retrieval and end-to-end latency regression thresholds
 - [ ] Semantic citation support
 - [ ] Semantic answer faithfulness
 - [ ] Semantic answer relevance
 - [ ] Independent human review
 - [ ] Multiple benchmark assessors
-- [ ] Regression thresholds in CI
 
 ## Phase 18 — Portfolio-quality release
 

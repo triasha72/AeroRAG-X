@@ -252,6 +252,17 @@ artifacts/evaluation/generation_v0_3_final_comparison.json
 ```
 
 ---
+## Deterministic regression policy
+
+AeroRAG-X includes a versioned, deterministic local baseline that is checked in
+continuous integration without invoking a paid generation provider.
+
+Tracked baseline artifacts:
+
+```text
+artifacts/evaluation/generation_deterministic_v0_3_phase17_baseline.json
+configs/evaluation_regression_v0_1.yaml
+---
 
 ## Interpretation
 

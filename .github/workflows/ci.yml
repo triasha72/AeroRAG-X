@@ -33,7 +33,10 @@ jobs:
 
       - name: Type check
         run: mypy src/aeroragx
-
+      - name: Frozen generation regression policy
+        run: |
+          python scripts/check_evaluation_regression.py \
+            --policy configs/evaluation_regression_v0_1.yaml
   docker-build:
     runs-on: ubuntu-latest
     needs: quality
