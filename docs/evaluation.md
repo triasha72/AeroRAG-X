@@ -254,14 +254,209 @@ artifacts/evaluation/generation_v0_3_final_comparison.json
 ---
 ## Deterministic regression policy
 
-AeroRAG-X includes a versioned, deterministic local baseline that is checked in
-continuous integration without invoking a paid generation provider.
+AeroRAG-X includes a versioned deterministic local development baseline that is checked in continuous integration without invoking a paid generation provider.
 
-Tracked baseline artifacts:
+Tracked development-baseline artifacts:
 
 ```text
 artifacts/evaluation/generation_deterministic_v0_3_phase17_baseline.json
 configs/evaluation_regression_v0_1.yaml
+```
+
+The development regression check is:
+
+```bash
+python scripts/check_evaluation_regression.py \
+  --policy configs/evaluation_regression_v0_1.yaml
+```
+
+This policy applies to the v0.3 development baseline only. The held-out v0.4 result below is deliberately not used to select thresholds or tune the system.
+
+---
+
+## Held-out generation evaluation v0.4
+
+The v0.4 dataset is a separate held-out deterministic evaluation set:
+
+```text
+data/evaluation/generation_queries_v0_4_heldout.jsonl
+```
+
+Composition:
+
+```text
+6 answerable queries
+6 unsupported queries
+12 total queries
+```
+
+A split test verifies that held-out query IDs and normalized query text do not overlap with the v0.3 development dataset.
+
+### Frozen held-out result
+
+Configuration:
+
+```text
+generation_v0_1.yaml
+sufficiency_v0_2_1.yaml
+facet_retrieval_v0_1.yaml
+candidate_top_k = 20
+evidence_top_k = 5
+generation provider = fake
+generation model = deterministic-grounded-v0
+reranker = cross-encoder/ms-marco-MiniLM-L6-v2
+```
+
+| Metric | Result |
+|---|---:|
+| Answerability accuracy | 0.9167 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 0.8333 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.7778 |
+| Structural validity | 1.0000 |
+
+The report contains 11 correct answerability decisions out of 12, 5 correct refusals out of 6 unsupported questions, and 14 matched expected terms out of 18.
+
+Tracked held-out artifacts:
+
+```text
+data/evaluation/generation_queries_v0_4_heldout.jsonl
+tests/test_generation_heldout_split.py
+artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json
+```
+
+### Reproduction
+
+```bash
+aeroragx ntrs-evaluate-generation \
+  --queries-input data/evaluation/generation_queries_v0_4_heldout.jsonl \
+  --generation-config configs/generation_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_2_1.yaml \
+  --facet-retrieval-config configs/facet_retrieval_v0_1.yaml \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --report-output /tmp/aeroragx_generation_v0_4_heldout_baseline.json
+```
+
+### Interpretation
+
+The held-out report confirms perfect citation coverage, citation validity, source coverage, and structural validity for this run. It also exposes an answerability/refusal miss and incomplete expected-term coverage.
+
+These observations are recorded without changing the system based on this held-out set. Any future improvements must be developed and selected using separate development data, then evaluated against a new held-out set.
+
+---
+
+## Deterministic regression policy
+
+AeroRAG-X includes a versioned deterministic local development baseline that is checked in continuous integration without invoking a paid generation provider.
+
+Tracked development-baseline artifacts:
+
+```text
+artifacts/evaluation/generation_deterministic_v0_3_phase17_baseline.json
+configs/evaluation_regression_v0_1.yaml
+```
+
+The development regression check is:
+
+```bash
+python scripts/check_evaluation_regression.py \
+  --policy configs/evaluation_regression_v0_1.yaml
+```
+
+This policy applies to the v0.3 development baseline only. The held-out v0.4 result below is deliberately not used to select thresholds or tune the system.
+
+---
+
+## Held-out generation evaluation v0.4
+
+The v0.4 dataset is a separate held-out deterministic evaluation set:
+
+```text
+data/evaluation/generation_queries_v0_4_heldout.jsonl
+```
+
+Composition:
+
+```text
+6 answerable queries
+6 unsupported queries
+12 total queries
+```
+
+A split test verifies that held-out query IDs and normalized query text do not overlap with the v0.3 development dataset.
+
+### Frozen held-out result
+
+Configuration:
+
+```text
+generation_v0_1.yaml
+sufficiency_v0_2_1.yaml
+facet_retrieval_v0_1.yaml
+candidate_top_k = 20
+evidence_top_k = 5
+generation provider = fake
+generation model = deterministic-grounded-v0
+reranker = cross-encoder/ms-marco-MiniLM-L6-v2
+```
+
+| Metric | Result |
+|---|---:|
+| Answerability accuracy | 0.9167 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 0.8333 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.7778 |
+| Structural validity | 1.0000 |
+
+The report contains 11 correct answerability decisions out of 12, 5 correct refusals out of 6 unsupported questions, and 14 matched expected terms out of 18.
+
+Tracked held-out artifacts:
+
+```text
+data/evaluation/generation_queries_v0_4_heldout.jsonl
+tests/test_generation_heldout_split.py
+artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json
+```
+
+### Reproduction
+
+```bash
+aeroragx ntrs-evaluate-generation \
+  --queries-input data/evaluation/generation_queries_v0_4_heldout.jsonl \
+  --generation-config configs/generation_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_2_1.yaml \
+  --facet-retrieval-config configs/facet_retrieval_v0_1.yaml \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --report-output /tmp/aeroragx_generation_v0_4_heldout_baseline.json
+```
+
+### Interpretation
+
+The held-out report confirms perfect citation coverage, citation validity, source coverage, and structural validity for this run. It also exposes an answerability/refusal miss and incomplete expected-term coverage.
+
+These observations are recorded without changing the system based on this held-out set. Any future improvements must be developed and selected using separate development data, then evaluated against a new held-out set.
+
+---
+
+## Next evaluation work
+
+- expand the development generation benchmark;
+- create a fresh held-out set after future development changes;
+- add conflicting-evidence cases;
+- add partial-evidence cases;
+- add broader adversarial prompt-injection cases;
+- add semantic claim/citation support scoring;
+- add semantic answer-faithfulness and answer-relevance evaluation;
+- add independent human review and multiple assessors;
+- add retrieval and end-to-end latency regression thresholds.
 ---
 
 ## Interpretation

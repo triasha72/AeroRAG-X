@@ -559,9 +559,10 @@ Do this only when service requirements justify it.
 - [x] Frozen deterministic 32-query generation baseline
 - [x] Versioned generation-regression policy
 - [x] Generation quality thresholds enforced in CI
+- [x] Development and held-out generation-evaluation splits
+- [x] Frozen deterministic v0.4 held-out baseline with 12 queries
 - [ ] Larger retrieval benchmark
 - [ ] Larger generation benchmark
-- [ ] Development and held-out evaluation splits
 - [ ] Conflicting-evidence cases
 - [ ] Partial-evidence cases
 - [ ] Adversarial prompt-injection benchmark
