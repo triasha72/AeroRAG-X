@@ -1,0 +1,11 @@
+version: "0.1"
+
+backend: "pgvector"
+
+database_url_env: "AERORAGX_VECTOR_DATABASE_URL"
+
+table_name: "aerorag_chunks"
+
+metric: "cosine"
+
+default_top_k: 10

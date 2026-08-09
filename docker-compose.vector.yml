@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.2-pg17-bookworm
+    container_name: aeroragx-postgres
+
+    environment:
+      POSTGRES_DB: aeroragx
+      POSTGRES_USER: aeroragx
+      POSTGRES_PASSWORD: aeroragx
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - aeroragx_pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U aeroragx -d aeroragx"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+    restart: unless-stopped
+
+volumes:
+  aeroragx_pgdata:

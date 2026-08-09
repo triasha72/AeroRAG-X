@@ -29,6 +29,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+vector = [
+  "pgvector>=0.5,<0.6",
+  "psycopg[binary]>=3.3,<4.0",
+]
+
 dev = [
   "click>=8.1,<9.0",
   "mypy>=1.11,<2.0",
@@ -45,6 +50,8 @@ aeroragx = "aeroragx.cli:app"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+aeroragx = ["py.typed"]
 
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib -q"
