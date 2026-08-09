@@ -381,6 +381,7 @@ def test_openai_runtime_is_identified_without_logging_secrets() -> None:
     from aeroragx.runtime import RuntimeConfig
 
     service = FakeQueryService()
+
     logger, stream = capturing_event_logger(
         "aeroragx.test.api.runtime.openai",
     )
@@ -394,6 +395,8 @@ def test_openai_runtime_is_identified_without_logging_secrets() -> None:
 
     runtime_config = RuntimeConfig(
         provider_config=Path("configs/provider_v0_1.yaml"),
+        http_transport_config=Path("configs/http_transport_openai_v0_1.yaml"),
+        provider_runtime_config=Path("configs/provider_runtime_openai_v0_1.yaml"),
         candidate_top_k=20,
         evidence_top_k=5,
     )
@@ -412,13 +415,72 @@ def test_openai_runtime_is_identified_without_logging_secrets() -> None:
     runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
 
     assert runtime_events[0]["runtime_mode"] == "openai"
+
     assert runtime_events[1]["runtime_mode"] == "openai"
 
     rendered = stream.getvalue()
 
     assert "OPENAI_API_KEY" not in rendered
+
     assert "Authorization" not in rendered
+
     assert "Bearer " not in rendered
+
+
+def test_transformers_runtime_is_identified() -> None:
+    from pathlib import Path
+
+    from aeroragx.api.service import QueryService
+    from aeroragx.runtime import RuntimeConfig
+
+    service = FakeQueryService()
+
+    logger, stream = capturing_event_logger(
+        "aeroragx.test.api.runtime.transformers",
+    )
+
+    def fake_loader(
+        config: RuntimeConfig,
+    ) -> QueryService:
+        del config
+
+        return service
+
+    runtime_config = RuntimeConfig(
+        generation_config=Path("configs/generation_transformers_v0_1.yaml"),
+        provider_config=Path("configs/provider_v0_1.yaml"),
+        provider_runtime_config=Path("configs/transformers_runtime_v0_1.yaml"),
+        candidate_top_k=20,
+        evidence_top_k=5,
+    )
+
+    application = create_app(
+        runtime_config=runtime_config,
+        service_loader=fake_loader,
+        event_logger=logger,
+    )
+
+    with TestClient(application):
+        pass
+
+    events = read_log_events(stream)
+
+    runtime_events = [event for event in events if str(event["event"]).startswith("runtime_load_")]
+
+    assert [event["event"] for event in runtime_events] == [
+        "runtime_load_started",
+        "runtime_load_completed",
+    ]
+
+    assert runtime_events[0]["runtime_mode"] == "transformers"
+
+    assert runtime_events[1]["runtime_mode"] == "transformers"
+
+    assert runtime_events[0]["dense_backend"] == "numpy"
+
+    assert runtime_events[1]["dense_backend"] == "numpy"
+
+    assert runtime_events[1]["succeeded"] is True
 
 
 def test_success_response_has_request_id() -> None:

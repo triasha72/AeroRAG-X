@@ -19,7 +19,7 @@ def test_default_runtime_is_local() -> None:
 
     assert config.dense_backend == "numpy"
 
-    assert str(config.generation_config) == ("configs/generation_v0_1.yaml")
+    assert str(config.generation_config) == "configs/generation_v0_1.yaml"
 
     assert config.provider_config is None
     assert config.http_transport_config is None
@@ -29,7 +29,7 @@ def test_default_runtime_is_local() -> None:
 def test_openai_runtime_selects_remote_configs() -> None:
     settings = load_api_runtime_settings(
         {
-            "AERORAGX_RUNTIME_MODE": ("openai"),
+            "AERORAGX_RUNTIME_MODE": "openai",
         }
     )
 
@@ -39,11 +39,62 @@ def test_openai_runtime_selects_remote_configs() -> None:
 
     assert str(config.generation_config) == ("configs/generation_openai_v0_1.yaml")
 
-    assert str(config.provider_config) == ("configs/provider_v0_1.yaml")
+    assert str(config.provider_config) == "configs/provider_v0_1.yaml"
 
     assert str(config.http_transport_config) == ("configs/http_transport_openai_v0_1.yaml")
 
     assert str(config.provider_runtime_config) == ("configs/provider_runtime_openai_v0_1.yaml")
+
+
+def test_transformers_runtime_selects_local_llm_configs() -> None:
+    settings = load_api_runtime_settings(
+        {
+            "AERORAGX_RUNTIME_MODE": ("transformers"),
+        }
+    )
+
+    config = settings.to_runtime_config()
+
+    assert settings.mode == "transformers"
+
+    assert str(config.generation_config) == ("configs/generation_transformers_v0_1.yaml")
+
+    assert str(config.provider_config) == "configs/provider_v0_1.yaml"
+
+    assert config.http_transport_config is None
+
+    assert str(config.provider_runtime_config) == ("configs/transformers_runtime_v0_1.yaml")
+
+
+def test_transformers_runtime_preserves_numpy_default() -> None:
+    settings = load_api_runtime_settings(
+        {
+            "AERORAGX_RUNTIME_MODE": ("transformers"),
+        }
+    )
+
+    config = settings.to_runtime_config()
+
+    assert settings.dense_backend == "numpy"
+
+    assert config.dense_backend == "numpy"
+
+
+def test_transformers_runtime_can_use_pgvector() -> None:
+    settings = load_api_runtime_settings(
+        {
+            "AERORAGX_RUNTIME_MODE": ("transformers"),
+            "AERORAGX_DENSE_BACKEND": ("pgvector"),
+        }
+    )
+
+    config = settings.to_runtime_config()
+
+    assert settings.mode == "transformers"
+
+    assert settings.dense_backend == "pgvector"
+
+    assert config.dense_backend == "pgvector"
 
 
 def test_pgvector_backend_can_be_selected() -> None:
@@ -63,7 +114,7 @@ def test_pgvector_backend_can_be_selected() -> None:
 def test_unknown_dense_backend_is_rejected() -> None:
     with pytest.raises(
         ValueError,
-        match=("AERORAGX_DENSE_BACKEND"),
+        match="AERORAGX_DENSE_BACKEND",
     ):
         load_api_runtime_settings(
             {
@@ -88,7 +139,7 @@ def test_runtime_depths_can_be_overridden() -> None:
 def test_unknown_runtime_mode_is_rejected() -> None:
     with pytest.raises(
         ValueError,
-        match=("AERORAGX_RUNTIME_MODE"),
+        match="AERORAGX_RUNTIME_MODE",
     ):
         load_api_runtime_settings(
             {
@@ -100,7 +151,7 @@ def test_unknown_runtime_mode_is_rejected() -> None:
 def test_evidence_depth_cannot_exceed_candidates() -> None:
     with pytest.raises(
         ValueError,
-        match=("AERORAGX_EVIDENCE_TOP_K"),
+        match="AERORAGX_EVIDENCE_TOP_K",
     ):
         load_api_runtime_settings(
             {

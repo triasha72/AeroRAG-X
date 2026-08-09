@@ -16,6 +16,7 @@ from aeroragx.runtime import (
 type RuntimeMode = Literal[
     "local",
     "openai",
+    "transformers",
 ]
 
 
@@ -37,24 +38,36 @@ class ApiRuntimeSettings:
 
         if self.mode == "local":
             return RuntimeConfig(
-                dense_backend=(self.dense_backend),
+                dense_backend=self.dense_backend,
                 generation_config=Path("configs/generation_v0_1.yaml"),
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
-                candidate_top_k=(self.candidate_top_k),
-                evidence_top_k=(self.evidence_top_k),
+                candidate_top_k=self.candidate_top_k,
+                evidence_top_k=self.evidence_top_k,
+            )
+
+        if self.mode == "transformers":
+            return RuntimeConfig(
+                dense_backend=self.dense_backend,
+                generation_config=Path("configs/generation_transformers_v0_1.yaml"),
+                sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
+                facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
+                provider_config=Path("configs/provider_v0_1.yaml"),
+                provider_runtime_config=Path("configs/transformers_runtime_v0_1.yaml"),
+                candidate_top_k=self.candidate_top_k,
+                evidence_top_k=self.evidence_top_k,
             )
 
         return RuntimeConfig(
-            dense_backend=(self.dense_backend),
+            dense_backend=self.dense_backend,
             generation_config=Path("configs/generation_openai_v0_1.yaml"),
             sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
             facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
             provider_config=Path("configs/provider_v0_1.yaml"),
             http_transport_config=Path("configs/http_transport_openai_v0_1.yaml"),
             provider_runtime_config=Path("configs/provider_runtime_openai_v0_1.yaml"),
-            candidate_top_k=(self.candidate_top_k),
-            evidence_top_k=(self.evidence_top_k),
+            candidate_top_k=self.candidate_top_k,
+            evidence_top_k=self.evidence_top_k,
         )
 
 
@@ -101,8 +114,11 @@ def load_api_runtime_settings(
     elif raw_mode == "openai":
         mode = "openai"
 
+    elif raw_mode == "transformers":
+        mode = "transformers"
+
     else:
-        raise ValueError("AERORAGX_RUNTIME_MODE must be 'local' or 'openai'.")
+        raise ValueError("AERORAGX_RUNTIME_MODE must be 'local', 'openai', or 'transformers'.")
 
     raw_dense_backend = (
         env.get(
@@ -129,7 +145,7 @@ def load_api_runtime_settings(
             "AERORAGX_CANDIDATE_TOP_K",
             "20",
         ),
-        name=("AERORAGX_CANDIDATE_TOP_K"),
+        name="AERORAGX_CANDIDATE_TOP_K",
     )
 
     evidence_top_k = _positive_integer(
@@ -137,7 +153,7 @@ def load_api_runtime_settings(
             "AERORAGX_EVIDENCE_TOP_K",
             "5",
         ),
-        name=("AERORAGX_EVIDENCE_TOP_K"),
+        name="AERORAGX_EVIDENCE_TOP_K",
     )
 
     if evidence_top_k > candidate_top_k:
@@ -146,6 +162,6 @@ def load_api_runtime_settings(
     return ApiRuntimeSettings(
         mode=mode,
         dense_backend=dense_backend,
-        candidate_top_k=(candidate_top_k),
-        evidence_top_k=(evidence_top_k),
+        candidate_top_k=candidate_top_k,
+        evidence_top_k=evidence_top_k,
     )

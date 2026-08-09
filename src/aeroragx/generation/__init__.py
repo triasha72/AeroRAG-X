@@ -75,6 +75,13 @@ from aeroragx.generation.sufficiency import (
     SufficiencyConfig,
     load_sufficiency_config,
 )
+from aeroragx.generation.transformers_transport import (
+    TransformersRuntimeConfig,
+    TransformersStructuredModelTransport,
+    load_transformers_runtime_config,
+    resolve_transformers_device,
+    resolve_transformers_dtype,
+)
 
 __all__ = [
     "AnswerCitation",
@@ -116,6 +123,8 @@ __all__ = [
     "StructuredModelTransport",
     "StructuredProviderError",
     "SufficiencyConfig",
+    "TransformersRuntimeConfig",
+    "TransformersStructuredModelTransport",
     "assess_prompt_injection",
     "build_generation_evidence",
     "build_grounded_prompt",
@@ -129,6 +138,9 @@ __all__ = [
     "load_provider_hardening_config",
     "load_provider_runtime_config",
     "load_sufficiency_config",
+    "load_transformers_runtime_config",
+    "resolve_transformers_device",
+    "resolve_transformers_dtype",
     "with_evidence_top_k",
     "write_generation_evaluation_report",
     "write_grounded_answer",
