@@ -24,61 +24,73 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=("Run grounded-generation evaluation once while capturing provider telemetry.")
     )
+
     parser.add_argument(
         "--queries-input",
         type=Path,
         default=Path("data/evaluation/generation_queries_v0_3.jsonl"),
     )
+
     parser.add_argument(
         "--generation-config",
         type=Path,
         default=Path("configs/generation_v0_1.yaml"),
     )
+
     parser.add_argument(
         "--sufficiency-config",
         type=Path,
         default=Path("configs/sufficiency_v0_1.yaml"),
     )
+
     parser.add_argument(
         "--facet-retrieval-config",
         type=Path,
         default=None,
     )
+
     parser.add_argument(
         "--provider-config",
         type=Path,
         default=None,
     )
+
     parser.add_argument(
         "--http-transport-config",
         type=Path,
         default=None,
     )
+
     parser.add_argument(
         "--provider-runtime-config",
         type=Path,
         default=None,
     )
+
     parser.add_argument(
         "--candidate-top-k",
         type=int,
         default=20,
     )
+
     parser.add_argument(
         "--evidence-top-k",
         type=int,
         default=5,
     )
+
     parser.add_argument(
         "--report-output",
         type=Path,
         required=True,
     )
+
     parser.add_argument(
         "--telemetry-output",
         type=Path,
         required=True,
     )
+
     return parser.parse_args()
 
 
@@ -101,7 +113,9 @@ def main() -> None:
     )
 
     generator = runtime.generator
+
     reranker_settings = runtime.reranker_settings
+
     generation_settings = runtime.generation_settings
 
     telemetry_report = evaluate_grounded_generation_with_telemetry(
@@ -116,83 +130,130 @@ def main() -> None:
         args.report_output,
         telemetry_report.generation_report,
     )
+
     write_generation_telemetry_evaluation_report(
         args.telemetry_output,
         telemetry_report,
     )
 
     generation = telemetry_report.generation_report
+
     provider = telemetry_report.provider_summary
 
     print()
+
     print("Generation v0.3 benchmark")
+
     print("-------------------------")
-    print("Queries:", generation.query_count)
+
     print(
-        "Answerability accuracy:",
-        f"{generation.answerability_accuracy:.4f}",
-    )
-    print(
-        "Answerable completion:",
-        f"{generation.answerable_completion_rate:.4f}",
-    )
-    print(
-        "Unsupported refusal:",
-        f"{generation.unsupported_refusal_rate:.4f}",
-    )
-    print(
-        "Citation coverage:",
-        f"{generation.claim_citation_coverage_rate:.4f}",
-    )
-    print(
-        "Citation validity:",
-        f"{generation.citation_reference_validity_rate:.4f}",
-    )
-    print(
-        "Structural validity:",
-        f"{generation.structural_validity_rate:.4f}",
+        "Queries:",
+        generation.query_count,
     )
 
-    if provider.remote_provider:
+    print(
+        "Answerability accuracy:",
+        (f"{generation.answerability_accuracy:.4f}"),
+    )
+
+    print(
+        "Answerable completion:",
+        (f"{generation.answerable_completion_rate:.4f}"),
+    )
+
+    print(
+        "Unsupported refusal:",
+        (f"{generation.unsupported_refusal_rate:.4f}"),
+    )
+
+    print(
+        "Citation coverage:",
+        (f"{generation.claim_citation_coverage_rate:.4f}"),
+    )
+
+    print(
+        "Citation validity:",
+        (f"{generation.citation_reference_validity_rate:.4f}"),
+    )
+
+    print(
+        "Structural validity:",
+        (f"{generation.structural_validity_rate:.4f}"),
+    )
+
+    if provider.telemetry_expected:
         print()
+
         print("Provider telemetry")
+
         print("------------------")
+
+        print(
+            "Provider kind:",
+            provider.provider_kind,
+        )
+
         print(
             "Provider calls:",
             provider.provider_call_count,
         )
+
         print(
             "Provider bypasses:",
             provider.provider_bypass_count,
         )
+
         print(
             "Call-policy accuracy:",
-            provider.provider_call_policy_accuracy,
+            (provider.provider_call_policy_accuracy),
         )
+
         print(
             "Retry rate:",
             provider.provider_retry_rate,
         )
+
         print(
             "P50 latency (s):",
             provider.p50_latency_seconds,
         )
+
         print(
             "P95 latency (s):",
             provider.p95_latency_seconds,
         )
+
+        print(
+            "Input tokens:",
+            (provider.provider_total_input_tokens),
+        )
+
+        print(
+            "Output tokens:",
+            (provider.provider_total_output_tokens),
+        )
+
         print(
             "Total tokens:",
             provider.provider_total_tokens,
         )
+
         print(
             "Estimated cost (USD):",
-            provider.provider_total_estimated_cost_usd,
+            (provider.provider_total_estimated_cost_usd),
         )
 
     print()
-    print("Generation report:", args.report_output)
-    print("Telemetry report:", args.telemetry_output)
+
+    print(
+        "Generation report:",
+        args.report_output,
+    )
+
+    print(
+        "Telemetry report:",
+        args.telemetry_output,
+    )
 
 
 if __name__ == "__main__":
