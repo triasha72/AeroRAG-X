@@ -23,7 +23,7 @@ Reliable corpus
 -> persistent vector infrastructure
 -> multimodal retrieval
 -> evaluation maturity
--> portfolio-quality release
+-> release and reproducibility
 ```
 
 ## Current project status
@@ -93,11 +93,9 @@ Final provider telemetry:
 
 ## Current priority
 
-Phase 14, private cloud deployment, is implemented and validated.
+Version 0.1.0 freezes a validated evidence-grounded text-RAG baseline.
 
-The immediate repository task is to capture the deployment configuration, validation workflow, and operational limits in source control through the `feat/cloud-deployment` pull request.
-
-The next technical priority is evaluation maturity and deployment reproducibility. Persistent vector infrastructure should be added only when service scale or retrieval requirements justify it.
+The next technical priority is evaluation maturity and failure analysis: expand the benchmark, assess retrieval coverage and citation support, and study when the system should refuse to answer. Persistent vector infrastructure should be added only when service scale or retrieval requirements justify it.
 
 ---
 
@@ -119,8 +117,8 @@ The next technical priority is evaluation maturity and deployment reproducibilit
 Future repository hardening:
 
 - [x] Protect `main`
-- [ ] Require passing CI before merge
-- [ ] Prevent force pushes to `main`
+- [x] Require passing CI before merge
+- [x] Prevent force pushes to `main`
 - [ ] Enforce coverage threshold
 - [ ] Add pre-commit hooks
 
@@ -573,7 +571,7 @@ Do this only when service requirements justify it.
 - [ ] Independent human review
 - [ ] Multiple benchmark assessors
 
-## Phase 18 — Portfolio-quality release
+## Phase 18 — v0.1.0 release and reproducibility
 
 - [x] Merge the cloud-deployment pull request through green CI
 - [x] Protect `main`
@@ -582,4 +580,4 @@ Do this only when service requirements justify it.
 - [x] Publish benchmark summary
 - [x] Publish container and Cloud Run usage
 - [x] Create versioned release or tag
-- [x] Add concise portfolio and resume project description
+- [x] Document project scope, limitations, and reproducible usage
