@@ -6,10 +6,18 @@ from aeroragx.observability.logging import (
     log_event,
 )
 from aeroragx.observability.metrics import ServiceMetrics
+from aeroragx.observability.tracing import (
+    TracingRuntime,
+    create_tracing_runtime,
+    current_trace_ids,
+)
 
 __all__ = [
     "JsonLogFormatter",
     "ServiceMetrics",
+    "TracingRuntime",
     "configure_json_logger",
+    "create_tracing_runtime",
+    "current_trace_ids",
     "log_event",
 ]
