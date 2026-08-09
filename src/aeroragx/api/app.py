@@ -77,9 +77,15 @@ _DEFAULT_EVENT_LOGGER = configure_json_logger(
 def _runtime_mode_label(
     config: RuntimeConfig,
 ) -> str:
-    "Return the supported API runtime mode for observability."
+    """Return the supported API runtime mode for observability."""
 
-    return "openai" if config.provider_config is not None else "local"
+    if config.provider_config is None:
+        return "local"
+
+    if config.http_transport_config is not None:
+        return "openai"
+
+    return "transformers"
 
 
 class _GroundedQueryLogFields(TypedDict):

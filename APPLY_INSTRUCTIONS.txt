@@ -1,0 +1,26 @@
+AeroRAG-X README/ROADMAP update bundle
+
+Contents:
+  README.md
+  ROADMAP.md
+
+From the AeroRAG-X repository root, extract with:
+
+  unzip -o /path/to/AeroRAGX_docs_update.zip -d .
+
+Then verify:
+
+  git diff -- README.md ROADMAP.md
+  git status
+
+Run the final gate before staging:
+
+  unset AERORAGX_VECTOR_DATABASE_URL
+  ruff format .
+  ruff check .
+  mypy src/aeroragx
+  mypy scripts/load_pgvector.py
+  mypy scripts/benchmark_vector_backends.py
+  mypy scripts/smoke_transformers.py
+  pytest
+  git diff --check

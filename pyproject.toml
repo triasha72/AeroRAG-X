@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [{ name = "Triasha Sarkar" }]
+
 dependencies = [
   "fastapi>=0.115,<1.0",
   "httpx>=0.27,<1.0",
@@ -29,9 +30,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+
 vector = [
   "pgvector>=0.5,<0.6",
   "psycopg[binary]>=3.3,<4.0",
+]
+
+llm = [
+  "accelerate>=1.14,<2.0",
+  "torch>=2.4,<3.0",
+  "transformers>=5.14,<6.0",
 ]
 
 dev = [
@@ -77,5 +85,9 @@ packages = ["aeroragx"]
 module = [
   "sentence_transformers",
   "sentence_transformers.*",
+  "transformers",
+  "transformers.*",
+  "accelerate",
+  "accelerate.*",
 ]
 ignore_missing_imports = true
