@@ -11,6 +11,7 @@ from aeroragx.observability.tracing import (
     create_tracing_runtime,
     current_trace_ids,
     current_tracer,
+    trace_span,
     use_tracer,
 )
 
@@ -23,5 +24,6 @@ __all__ = [
     "current_trace_ids",
     "current_tracer",
     "log_event",
+    "trace_span",
     "use_tracer",
 ]

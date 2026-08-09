@@ -28,6 +28,7 @@ from aeroragx.generation.sufficiency import (
     EvidenceSufficiencyAssessor,
     EvidenceSufficiencyResult,
 )
+from aeroragx.observability.tracing import trace_span
 from aeroragx.retrieval.hybrid import RetrieverName
 from aeroragx.retrieval.reranker import (
     RerankedSearchHit,
@@ -651,27 +652,72 @@ class GroundedAnswerGenerator:
         provider_stage_ms: float | None = None
         citation_resolution_ms: float | None = None
 
-        retrieval_started_at = perf_counter()
-        hits = list(
-            self._index.search(
-                query=normalized_query,
-                top_k=self._config.evidence_top_k,
-            )
-        )
-        retrieval_ms = round(
-            (perf_counter() - retrieval_started_at) * 1000.0,
-            3,
-        )
-        detailed_retrieval = _detailed_retrieval_timings(
-            self._index,
-        )
+        with trace_span(
+            "aeroragx.retrieval",
+        ) as retrieval_span:
+            if retrieval_span is not None:
+                retrieval_span.set_attribute(
+                    "aeroragx.top_k",
+                    self._config.evidence_top_k,
+                )
 
-        evidence_started_at = perf_counter()
-        evidence = build_generation_evidence(hits, self._config)
-        evidence_build_ms = round(
-            (perf_counter() - evidence_started_at) * 1000.0,
-            3,
-        )
+            retrieval_started_at = perf_counter()
+            hits = list(
+                self._index.search(
+                    query=normalized_query,
+                    top_k=self._config.evidence_top_k,
+                )
+            )
+            retrieval_ms = round(
+                (perf_counter() - retrieval_started_at) * 1000.0,
+                3,
+            )
+            detailed_retrieval = _detailed_retrieval_timings(
+                self._index,
+            )
+
+            if retrieval_span is not None:
+                retrieval_span.set_attribute(
+                    "aeroragx.result_count",
+                    len(hits),
+                )
+
+                if detailed_retrieval.retrieval_search_count is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.retrieval_search_count",
+                        detailed_retrieval.retrieval_search_count,
+                    )
+
+                if detailed_retrieval.facet_search_count is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.facet_search_count",
+                        detailed_retrieval.facet_search_count,
+                    )
+
+                if detailed_retrieval.facet_used is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.facet_used",
+                        detailed_retrieval.facet_used,
+                    )
+
+        with trace_span(
+            "aeroragx.evidence_build",
+        ) as evidence_span:
+            evidence_started_at = perf_counter()
+            evidence = build_generation_evidence(
+                hits,
+                self._config,
+            )
+            evidence_build_ms = round(
+                (perf_counter() - evidence_started_at) * 1000.0,
+                3,
+            )
+
+            if evidence_span is not None:
+                evidence_span.set_attribute(
+                    "aeroragx.evidence_count",
+                    len(evidence),
+                )
 
         def finalize(answer: GroundedAnswer) -> GroundedAnswer:
             answer.attach_stage_timings(
@@ -719,15 +765,28 @@ class GroundedAnswerGenerator:
         evidence_sufficiency = None
 
         if self._sufficiency_assessor is not None:
-            sufficiency_started_at = perf_counter()
-            evidence_sufficiency = self._sufficiency_assessor.assess(
-                query=normalized_query,
-                evidence=evidence,
-            )
-            sufficiency_ms = round(
-                (perf_counter() - sufficiency_started_at) * 1000.0,
-                3,
-            )
+            with trace_span(
+                "aeroragx.sufficiency",
+            ) as sufficiency_span:
+                sufficiency_started_at = perf_counter()
+                evidence_sufficiency = self._sufficiency_assessor.assess(
+                    query=normalized_query,
+                    evidence=evidence,
+                )
+                sufficiency_ms = round(
+                    (perf_counter() - sufficiency_started_at) * 1000.0,
+                    3,
+                )
+
+                if sufficiency_span is not None:
+                    sufficiency_span.set_attribute(
+                        "aeroragx.evidence_count",
+                        len(evidence),
+                    )
+                    sufficiency_span.set_attribute(
+                        "aeroragx.sufficient",
+                        evidence_sufficiency.sufficient,
+                    )
 
             if not evidence_sufficiency.sufficient:
                 if not self._config.allow_insufficient_evidence:
@@ -756,40 +815,103 @@ class GroundedAnswerGenerator:
             for item in evidence
         ]
 
-        provider_started_at = perf_counter()
-        response = self._provider.generate(
-            query=normalized_query,
-            evidence=provider_evidence,
-            max_claims=self._config.max_claims,
-        )
-        provider_stage_ms = round(
-            (perf_counter() - provider_started_at) * 1000.0,
-            3,
-        )
+        with trace_span(
+            "aeroragx.provider",
+        ) as provider_span:
+            if provider_span is not None:
+                provider_span.set_attribute(
+                    "aeroragx.provider",
+                    self._config.provider,
+                )
+                provider_span.set_attribute(
+                    "aeroragx.model",
+                    self._config.model_name,
+                )
+                provider_span.set_attribute(
+                    "aeroragx.evidence_count",
+                    len(provider_evidence),
+                )
 
-        provider_telemetry = (
-            self._provider.last_telemetry
-            if isinstance(
-                self._provider,
-                StructuredGenerationProvider,
+            provider_started_at = perf_counter()
+            response = self._provider.generate(
+                query=normalized_query,
+                evidence=provider_evidence,
+                max_claims=self._config.max_claims,
             )
-            else None
-        )
+            provider_stage_ms = round(
+                (perf_counter() - provider_started_at) * 1000.0,
+                3,
+            )
 
-        resolution_started_at = perf_counter()
-        answer = self._resolve_response(
-            query=normalized_query,
-            response=response,
-            evidence=evidence,
-            returned_evidence_count=len(hits),
-            reranker_model=reranker_model,
-            evidence_sufficiency=evidence_sufficiency,
-            provider_telemetry=provider_telemetry,
-        )
-        citation_resolution_ms = round(
-            (perf_counter() - resolution_started_at) * 1000.0,
-            3,
-        )
+            provider_telemetry = (
+                self._provider.last_telemetry
+                if isinstance(
+                    self._provider,
+                    StructuredGenerationProvider,
+                )
+                else None
+            )
+
+            if provider_span is not None:
+                provider_span.set_attribute(
+                    "aeroragx.response_insufficient_evidence",
+                    response.insufficient_evidence,
+                )
+
+                if provider_telemetry is not None:
+                    provider_span.set_attribute(
+                        "aeroragx.provider_succeeded",
+                        provider_telemetry.succeeded,
+                    )
+                    provider_span.set_attribute(
+                        "aeroragx.provider_attempts",
+                        provider_telemetry.attempts,
+                    )
+
+                    if provider_telemetry.usage is not None:
+                        total_tokens = provider_telemetry.usage.total_tokens
+
+                        if total_tokens is not None:
+                            provider_span.set_attribute(
+                                "aeroragx.total_tokens",
+                                total_tokens,
+                            )
+
+        with trace_span(
+            "aeroragx.citation_resolution",
+        ) as citation_span:
+            resolution_started_at = perf_counter()
+            answer = self._resolve_response(
+                query=normalized_query,
+                response=response,
+                evidence=evidence,
+                returned_evidence_count=len(hits),
+                reranker_model=reranker_model,
+                evidence_sufficiency=evidence_sufficiency,
+                provider_telemetry=provider_telemetry,
+            )
+            citation_resolution_ms = round(
+                (perf_counter() - resolution_started_at) * 1000.0,
+                3,
+            )
+
+            if citation_span is not None:
+                citation_span.set_attribute(
+                    "aeroragx.claim_count",
+                    len(answer.claims),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.citation_count",
+                    len(answer.citations),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.source_document_count",
+                    len(answer.source_documents),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.insufficient_evidence",
+                    answer.insufficient_evidence,
+                )
 
         return finalize(answer)
 

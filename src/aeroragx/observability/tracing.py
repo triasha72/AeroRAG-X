@@ -19,7 +19,7 @@ from opentelemetry.sdk.trace.sampling import (
     ParentBased,
     TraceIdRatioBased,
 )
-from opentelemetry.trace import Tracer
+from opentelemetry.trace import Span, Tracer
 
 _DEFAULT_SERVICE_NAME = "aeroragx"
 _DEFAULT_SERVICE_VERSION = "0.1.0"
@@ -141,3 +141,26 @@ def use_tracer(
         yield
     finally:
         _CURRENT_TRACER.reset(token)
+
+
+@contextmanager
+def trace_span(
+    name: str,
+) -> Iterator[Span | None]:
+    """Create one request-local span, or no-op when tracing is inactive."""
+
+    normalized_name = name.strip()
+
+    if not normalized_name:
+        raise ValueError("span name must not be blank.")
+
+    tracer = current_tracer()
+
+    if tracer is None:
+        yield None
+        return
+
+    with tracer.start_as_current_span(
+        normalized_name,
+    ) as span:
+        yield span

@@ -12,6 +12,7 @@ from aeroragx.observability.tracing import (
     create_tracing_runtime,
     current_trace_ids,
     current_tracer,
+    trace_span,
     use_tracer,
 )
 
@@ -139,3 +140,19 @@ def test_use_tracer_binds_and_restores_request_local_tracer() -> None:
     assert current_tracer() is None
 
     runtime.shutdown()
+
+
+def test_trace_span_is_noop_without_bound_tracer() -> None:
+    with trace_span(
+        "aeroragx.test.noop",
+    ) as span:
+        assert span is None
+
+
+def test_trace_span_rejects_blank_name() -> None:
+    with pytest.raises(
+        ValueError,
+        match="span name must not be blank",
+    ):
+        with trace_span("   "):
+            pass

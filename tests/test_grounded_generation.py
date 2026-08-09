@@ -7,6 +7,9 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import pytest
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
 from pydantic import ValidationError
 
 from aeroragx.generation.facet_retrieval import (
@@ -24,6 +27,10 @@ from aeroragx.generation.provider import (
     ProviderClaim,
     ProviderResponse,
     StaticGenerationProvider,
+)
+from aeroragx.observability import (
+    create_tracing_runtime,
+    use_tracer,
 )
 from aeroragx.processing.chunking import ChunkRecord
 from aeroragx.retrieval.reranker import RerankedSearchHit
@@ -802,3 +809,89 @@ def test_generate_propagates_detailed_retrieval_timings() -> None:
 
     assert "stage_timings" not in payload
     assert "_stage_timings" not in payload
+
+
+def test_generation_pipeline_emits_stage_spans_without_raw_query() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+
+    raw_query = "Sensitive aerospace tracing query"
+    index = FakeRerankedIndex(
+        [
+            make_hit(1),
+            make_hit(2),
+        ]
+    )
+    provider = StaticGenerationProvider(
+        make_supported_response(),
+    )
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=provider,
+        config=make_config(),
+    )
+
+    with use_tracer(tracing_runtime.tracer):
+        with tracing_runtime.tracer.start_as_current_span(
+            "aeroragx.test.parent",
+        ) as parent_span:
+            answer = generator.generate(
+                raw_query,
+            )
+
+    assert answer.insufficient_evidence is False
+
+    tracing_runtime.force_flush()
+    spans = exporter.get_finished_spans()
+
+    span_by_name = {span.name: span for span in spans}
+
+    expected_names = {
+        "aeroragx.retrieval",
+        "aeroragx.evidence_build",
+        "aeroragx.provider",
+        "aeroragx.citation_resolution",
+    }
+
+    assert expected_names.issubset(
+        span_by_name,
+    )
+
+    parent_context = parent_span.get_span_context()
+
+    for name in expected_names:
+        span = span_by_name[name]
+
+        assert span.context is not None
+        assert span.parent is not None
+        assert span.context.trace_id == parent_context.trace_id
+        assert span.parent.span_id == parent_context.span_id
+
+    retrieval_span = span_by_name["aeroragx.retrieval"]
+
+    assert retrieval_span.attributes["aeroragx.top_k"] == 5
+    assert retrieval_span.attributes["aeroragx.result_count"] == 2
+
+    evidence_span = span_by_name["aeroragx.evidence_build"]
+
+    assert evidence_span.attributes["aeroragx.evidence_count"] == 2
+
+    provider_span = span_by_name["aeroragx.provider"]
+
+    assert provider_span.attributes["aeroragx.provider"] == "fake"
+    assert provider_span.attributes["aeroragx.model"] == "deterministic-grounded-v0"
+
+    citation_span = span_by_name["aeroragx.citation_resolution"]
+
+    assert citation_span.attributes["aeroragx.claim_count"] == 2
+    assert citation_span.attributes["aeroragx.citation_count"] == 2
+
+    serialized = repr([dict(span.attributes) for span in spans])
+
+    assert raw_query not in serialized
+
+    tracing_runtime.shutdown()
