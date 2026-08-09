@@ -1,0 +1,12 @@
+{"query_id":"heldout_ans_001","query":"Why is heat rejection difficult at low aircraft airspeed?","expected_answerable":true,"expected_terms":["heat","rejection","airspeed"]}
+{"query_id":"heldout_ans_002","query":"Why must aircraft fuel-cell thermal systems balance weight, drag, and pumping power?","expected_answerable":true,"expected_terms":["fuel","cell","weight"]}
+{"query_id":"heldout_ans_003","query":"How can high-temperature PEM fuel cells improve aircraft heat rejection?","expected_answerable":true,"expected_terms":["high","temperature","fuel"]}
+{"query_id":"heldout_ans_004","query":"Why may battery support be useful for a fuel-cell aircraft during takeoff or climb?","expected_answerable":true,"expected_terms":["battery","fuel","cell"]}
+{"query_id":"heldout_ans_005","query":"How can thermal-management design affect the mass of an electric aircraft?","expected_answerable":true,"expected_terms":["thermal","mass","aircraft"]}
+{"query_id":"heldout_ans_006","query":"Why are thermal-management requirements linked to aircraft component heat loads?","expected_answerable":true,"expected_terms":["thermal","heat","components"]}
+{"query_id":"heldout_exact_001","query":"What exact coolant flow rate does the FAA require for every electric-aircraft battery pack?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"heldout_policy_001","query":"Which federal regulation sets a single mandatory thermal-management design for all fuel-cell aircraft?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"heldout_fiction_001","query":"What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"heldout_fiction_002","query":"Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"heldout_scope_001","query":"What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"heldout_scope_002","query":"What weather forecast causes every battery-electric aircraft to be grounded?","expected_answerable":false,"expected_terms":[]}

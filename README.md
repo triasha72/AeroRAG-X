@@ -169,7 +169,46 @@ artifacts/evaluation/generation_openai_v0_3_final.json
 artifacts/evaluation/generation_openai_v0_3_final_telemetry.json
 artifacts/evaluation/generation_v0_3_final_comparison.json
 ```
+## Held-out deterministic evaluation v0.4
 
+AeroRAG-X also tracks a separate held-out deterministic generation evaluation. Its 12 queries are kept separate from the 32-query development benchmark and were not used to select generation, retrieval, or sufficiency settings.
+
+| Category | Queries |
+|---|---:|
+| Expected-answerable queries | 6 |
+| Unsupported queries | 6 |
+| Total | 12 |
+
+The frozen deterministic held-out run used the same retrieval and sufficiency configuration as the development baseline:
+
+```text
+generation_v0_1.yaml
+sufficiency_v0_2_1.yaml
+facet_retrieval_v0_1.yaml
+candidate_top_k = 20
+evidence_top_k = 5
+```
+
+| Metric | Held-out result |
+|---|---:|
+| Answerability accuracy | 0.9167 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 0.8333 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.7778 |
+| Structural validity | 1.0000 |
+
+The held-out result is recorded as evidence, not used as a tuning target or a CI regression threshold.
+
+Tracked held-out artifacts:
+
+```text
+data/evaluation/generation_queries_v0_4_heldout.jsonl
+tests/test_generation_heldout_split.py
+artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json
+```
 ## Retrieval benchmarks
 
 ### Retrieval benchmark v0.1
