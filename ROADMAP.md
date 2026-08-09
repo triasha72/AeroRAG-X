@@ -168,13 +168,31 @@ Retry rate: 0.0
 
 Current priority
 
-The immediate priority is:
+Phase 13 — observability and reliability — is complete on the feature branch.
 
-FastAPI PR + CI
--> main branch protection
+Implemented:
+
+FastAPI serving
 -> Dockerized local service
--> structured logging / observability
--> deployment
+-> structured JSON logging
+-> request/provider correlation
+-> detailed RAG and retrieval timing
+-> Prometheus metrics
+-> deterministic P50/P95/P99 load validation
+-> OpenTelemetry tracing
+-> OTLP/HTTP export
+-> local OpenTelemetry Collector validation
+
+The next priority is:
+
+Phase 14 — cloud deployment
+-> container registry
+-> managed service deployment
+-> managed secrets
+-> health/readiness validation
+-> production logs/metrics/traces
+-> rollback procedure
+-> cost and abuse controls
 
 Phase 1 — Repository foundation
 

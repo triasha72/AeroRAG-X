@@ -765,10 +765,6 @@ Current non-goals
 
 The current milestone does not yet provide:
 
-structured JSON service logging;
-
-distributed tracing;
-
 managed secret storage;
 
 vector-database serving;
@@ -781,6 +777,46 @@ table/figure retrieval;
 
 cloud deployment.
 
+Observability architecture
+
+The serving path now includes an observability plane:
+
+```text
+FastAPI request
+      |
+      +--> structured JSON logs
+      |
+      +--> Prometheus metrics
+      |
+      +--> OpenTelemetry SERVER span
+               |
+               v
+         aeroragx.query
+               |
+               +--> retrieval
+               |     |
+               |     +--> reranker
+               |            |
+               |            +--> hybrid_retrieval
+               |                    |
+               |                    +--> bm25
+               |                    +--> dense
+               |                    +--> hybrid_fusion
+               |
+               +--> evidence_build
+               +--> sufficiency
+               +--> provider
+               +--> citation_resolution
+```
+
+The observability layer preserves the existing application trust boundary.
+
+It does not log or trace raw query text, raw retrieved evidence, answer text, API keys, authorization headers, or provider credentials.
+
+Prometheus labels avoid high-cardinality identifiers such as request IDs, document IDs, and chunk IDs.
+
+Trace export is disabled by default and can be enabled through environment configuration. OTLP/HTTP export has been validated against a local OpenTelemetry Collector.
+
 Next architecture milestone
 
 AeroRAG-X core
@@ -792,36 +828,21 @@ FastAPI serving                IMPLEMENTED
 Docker container               IMPLEMENTED
       |
       v
-non-root execution             IMPLEMENTED
+structured JSON logging        IMPLEMENTED
       |
       v
-container health/readiness     IMPLEMENTED
+Prometheus metrics             IMPLEMENTED
       |
       v
-NASA-backed container query    IMPLEMENTED
+P50/P95/P99 load validation    IMPLEMENTED
       |
       v
-structured JSON logging        NEXT
+OpenTelemetry tracing          IMPLEMENTED
       |
       v
-request/provider correlation
+OTLP export                    IMPLEMENTED
       |
       v
-retrieval/reranker timing
-      |
-      v
-latency + error metrics
-      |
-      v
-OpenTelemetry
-      |
-      v
-cloud deployment
+cloud deployment               NEXT
 
-Dockerization reuses the same tested FastAPI application and shared
-AeroRAG-X runtime without changing retrieval, sufficiency, generation,
-or citation behavior.
-
-The next architecture phase adds observability around this serving path
-while preserving the application request ID and provider request ID as
-separate correlation identifiers.
+The cloud phase should reuse the same Docker image, shared AeroRAG-X runtime, health/readiness contract, observability schema, and grounded-generation trust boundary.
