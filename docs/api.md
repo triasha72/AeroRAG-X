@@ -381,32 +381,35 @@ baked into the image.
 
 See docs/docker.md for complete Docker documentation.
 
+Observability and reliability
+
+The FastAPI service now includes:
+
+- structured JSON request and query logs;
+- `X-Request-ID` correlation;
+- trace/span correlation;
+- `GET /metrics` Prometheus exposition;
+- RAG, retrieval, reranker, facet, provider, and HTTP latency metrics;
+- OpenTelemetry FastAPI and application tracing;
+- configurable OTLP/HTTP export.
+
+`GET /metrics` is intentionally excluded from the OpenAPI schema.
+
+Tracing is disabled by default. It can be enabled with:
+
+```text
+AERORAGX_OTEL_ENABLED
+AERORAGX_OTEL_ENDPOINT
+AERORAGX_OTEL_SERVICE_NAME
+AERORAGX_OTEL_SERVICE_VERSION
+AERORAGX_OTEL_ENVIRONMENT
+AERORAGX_OTEL_SAMPLE_RATIO
+```
+
+Operational endpoints `/health`, `/ready`, and `/metrics` are excluded from FastAPI tracing.
+
+See `docs/observability.md` for the complete observability contract and runbook.
+
 Next service milestone
 
-The next service milestone is observability and reliability:
-
-FastAPI
-    |
-    v
-Dockerized service
-    |
-    v
-structured JSON logging
-    |
-    v
-AeroRAG-X request-ID correlation
-    |
-    v
-provider request-ID correlation
-    |
-    v
-retrieval/reranker timing
-    |
-    v
-provider latency
-    |
-    v
-error metrics
-    |
-    v
-OpenTelemetry
+The next service milestone is cloud deployment while preserving the existing API, grounding, citation, metrics, logging, and tracing contracts.

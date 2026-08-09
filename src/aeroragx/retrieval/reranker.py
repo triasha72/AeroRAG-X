@@ -14,8 +14,14 @@ import numpy as np
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from aeroragx.observability.tracing import trace_span
 from aeroragx.processing.chunking import ChunkRecord
-from aeroragx.retrieval.hybrid import HybridSearchHit, RetrieverName
+from aeroragx.retrieval.hybrid import (
+    HybridIndex,
+    HybridSearchHit,
+    HybridSearchTimings,
+    RetrieverName,
+)
 
 
 class RerankerConfig(BaseModel):
@@ -211,6 +217,19 @@ class _ScoredHybridCandidate:
     cross_encoder_score: float
 
 
+class RerankerSearchTimings(BaseModel):
+    """Internal timing snapshot for one reranked search."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    candidate_retrieval_ms: float = Field(ge=0.0)
+    reranker_scoring_ms: float = Field(ge=0.0)
+    ranking_ms: float = Field(ge=0.0)
+    total_ms: float = Field(ge=0.0)
+    pair_count: int = Field(ge=0)
+    hybrid: HybridSearchTimings | None = None
+
+
 class RerankerIndex:
     """Rerank a bounded Hybrid RRF candidate set with a cross-encoder."""
 
@@ -228,6 +247,7 @@ class RerankerIndex:
         self._scoring_seconds = 0.0
         self._last_pair_count = 0
         self._last_scoring_seconds = 0.0
+        self._last_search_timings: RerankerSearchTimings | None = None
 
     @property
     def config(self) -> RerankerConfig:
@@ -247,6 +267,15 @@ class RerankerIndex:
 
         return self._last_scoring_seconds
 
+    @property
+    def last_search_timings(self) -> RerankerSearchTimings | None:
+        """Return a defensive copy of the latest reranked-search timings."""
+
+        if self._last_search_timings is None:
+            return None
+
+        return self._last_search_timings.model_copy(deep=True)
+
     def reset_timing(self) -> None:
         """Reset accumulated cross-encoder scoring measurements."""
 
@@ -255,13 +284,14 @@ class RerankerIndex:
         self._scoring_seconds = 0.0
         self._last_pair_count = 0
         self._last_scoring_seconds = 0.0
+        self._last_search_timings = None
 
     def search(
         self,
         query: str,
         top_k: int = 10,
     ) -> list[RerankedSearchHit]:
-        """Return cross-encoder-ranked Hybrid RRF candidates."""
+        """Return cross-encoder-ranked Hybrid RRF candidates with timing."""
 
         if top_k < 1:
             raise ValueError("top_k must be at least 1.")
@@ -269,86 +299,160 @@ class RerankerIndex:
         if top_k > self._config.candidate_top_k:
             raise ValueError("top_k must not exceed candidate_top_k.")
 
-        hybrid_hits = list(
-            self._hybrid_index.search(
-                query=query,
-                top_k=self._config.candidate_top_k,
+        with trace_span(
+            "aeroragx.reranker",
+        ) as reranker_span:
+            if reranker_span is not None:
+                reranker_span.set_attribute(
+                    "aeroragx.model",
+                    self._config.model_name,
+                )
+                reranker_span.set_attribute(
+                    "aeroragx.requested_top_k",
+                    top_k,
+                )
+                reranker_span.set_attribute(
+                    "aeroragx.candidate_top_k",
+                    self._config.candidate_top_k,
+                )
+                reranker_span.set_attribute(
+                    "aeroragx.batch_size",
+                    self._config.batch_size,
+                )
+
+            self._last_search_timings = None
+            total_started_at = perf_counter()
+
+            candidate_started_at = perf_counter()
+            hybrid_hits = list(
+                self._hybrid_index.search(
+                    query=query,
+                    top_k=self._config.candidate_top_k,
+                )
             )
-        )
-
-        chunk_ids = [hit.chunk.chunk_id for hit in hybrid_hits]
-
-        if len(chunk_ids) != len(set(chunk_ids)):
-            raise ValueError("Hybrid retrieval returned duplicate chunk IDs.")
-
-        documents = [hit.chunk.text for hit in hybrid_hits]
-
-        start_time = perf_counter()
-        raw_scores = self._scorer.score(
-            query,
-            documents,
-            batch_size=self._config.batch_size,
-            show_progress_bar=(self._config.show_progress_bar),
-        )
-        elapsed_seconds = perf_counter() - start_time
-
-        scores = [float(score) for score in raw_scores]
-
-        if len(scores) != len(hybrid_hits):
-            raise ValueError(
-                "Reranker scorer returned a different number of scores than candidates."
+            candidate_retrieval_ms = round(
+                (perf_counter() - candidate_started_at) * 1000.0,
+                3,
             )
 
-        for score in scores:
-            if not math.isfinite(score):
-                raise ValueError("Reranker scorer returned a non-finite score.")
-
-        pair_count = len(hybrid_hits)
-        self._query_count += 1
-        self._pair_count += pair_count
-        self._scoring_seconds += elapsed_seconds
-        self._last_pair_count = pair_count
-        self._last_scoring_seconds = elapsed_seconds
-
-        scored_candidates = [
-            _ScoredHybridCandidate(
-                hybrid_hit=hybrid_hit,
-                cross_encoder_score=score,
+            hybrid_timings = (
+                self._hybrid_index.last_timings
+                if isinstance(
+                    self._hybrid_index,
+                    HybridIndex,
+                )
+                else None
             )
-            for hybrid_hit, score in zip(
-                hybrid_hits,
-                scores,
-                strict=True,
-            )
-        ]
 
-        ranked_candidates = sorted(
-            scored_candidates,
-            key=lambda candidate: (
-                -candidate.cross_encoder_score,
-                candidate.hybrid_hit.rank,
-                candidate.hybrid_hit.chunk.chunk_id,
-            ),
-        )
+            chunk_ids = [hit.chunk.chunk_id for hit in hybrid_hits]
 
-        return [
-            RerankedSearchHit(
-                rank=rank,
-                score=candidate.cross_encoder_score,
-                chunk=candidate.hybrid_hit.chunk,
-                hybrid_rank=candidate.hybrid_hit.rank,
-                hybrid_score=candidate.hybrid_hit.score,
-                retrieved_by=candidate.hybrid_hit.retrieved_by,
-                bm25_rank=candidate.hybrid_hit.bm25_rank,
-                bm25_score=candidate.hybrid_hit.bm25_score,
-                dense_rank=candidate.hybrid_hit.dense_rank,
-                dense_score=candidate.hybrid_hit.dense_score,
+            if len(chunk_ids) != len(set(chunk_ids)):
+                raise ValueError("Hybrid retrieval returned duplicate chunk IDs.")
+
+            documents = [hit.chunk.text for hit in hybrid_hits]
+
+            scoring_started_at = perf_counter()
+            raw_scores = self._scorer.score(
+                query,
+                documents,
+                batch_size=self._config.batch_size,
+                show_progress_bar=(self._config.show_progress_bar),
             )
-            for rank, candidate in enumerate(
-                ranked_candidates[:top_k],
-                start=1,
+            elapsed_seconds = perf_counter() - scoring_started_at
+            reranker_scoring_ms = round(
+                elapsed_seconds * 1000.0,
+                3,
             )
-        ]
+
+            scores = [float(score) for score in raw_scores]
+
+            if len(scores) != len(hybrid_hits):
+                raise ValueError(
+                    "Reranker scorer returned a different number of scores than candidates."
+                )
+
+            for score in scores:
+                if not math.isfinite(score):
+                    raise ValueError("Reranker scorer returned a non-finite score.")
+
+            pair_count = len(hybrid_hits)
+            self._query_count += 1
+            self._pair_count += pair_count
+            self._scoring_seconds += elapsed_seconds
+            self._last_pair_count = pair_count
+            self._last_scoring_seconds = elapsed_seconds
+
+            ranking_started_at = perf_counter()
+
+            scored_candidates = [
+                _ScoredHybridCandidate(
+                    hybrid_hit=hybrid_hit,
+                    cross_encoder_score=score,
+                )
+                for hybrid_hit, score in zip(
+                    hybrid_hits,
+                    scores,
+                    strict=True,
+                )
+            ]
+
+            ranked_candidates = sorted(
+                scored_candidates,
+                key=lambda candidate: (
+                    -candidate.cross_encoder_score,
+                    candidate.hybrid_hit.rank,
+                    candidate.hybrid_hit.chunk.chunk_id,
+                ),
+            )
+
+            results = [
+                RerankedSearchHit(
+                    rank=rank,
+                    score=candidate.cross_encoder_score,
+                    chunk=candidate.hybrid_hit.chunk,
+                    hybrid_rank=candidate.hybrid_hit.rank,
+                    hybrid_score=candidate.hybrid_hit.score,
+                    retrieved_by=candidate.hybrid_hit.retrieved_by,
+                    bm25_rank=candidate.hybrid_hit.bm25_rank,
+                    bm25_score=candidate.hybrid_hit.bm25_score,
+                    dense_rank=candidate.hybrid_hit.dense_rank,
+                    dense_score=candidate.hybrid_hit.dense_score,
+                )
+                for rank, candidate in enumerate(
+                    ranked_candidates[:top_k],
+                    start=1,
+                )
+            ]
+
+            ranking_ms = round(
+                (perf_counter() - ranking_started_at) * 1000.0,
+                3,
+            )
+            total_ms = round(
+                (perf_counter() - total_started_at) * 1000.0,
+                3,
+            )
+
+            if reranker_span is not None:
+                reranker_span.set_attribute(
+                    "aeroragx.pair_count",
+                    pair_count,
+                )
+                reranker_span.set_attribute(
+                    "aeroragx.result_count",
+                    len(results),
+                )
+
+            self._last_search_timings = RerankerSearchTimings(
+                candidate_retrieval_ms=candidate_retrieval_ms,
+                reranker_scoring_ms=reranker_scoring_ms,
+                ranking_ms=ranking_ms,
+                total_ms=total_ms,
+                pair_count=pair_count,
+                hybrid=hybrid_timings,
+            )
+
+            return results
 
     def build_latency_report(
         self,

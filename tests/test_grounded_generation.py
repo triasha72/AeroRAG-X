@@ -7,8 +7,14 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import pytest
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
 from pydantic import ValidationError
 
+from aeroragx.generation.facet_retrieval import (
+    FacetRetrievalTimings,
+)
 from aeroragx.generation.grounded import (
     INSUFFICIENT_EVIDENCE_ANSWER,
     GenerationConfig,
@@ -21,6 +27,10 @@ from aeroragx.generation.provider import (
     ProviderClaim,
     ProviderResponse,
     StaticGenerationProvider,
+)
+from aeroragx.observability import (
+    create_tracing_runtime,
+    use_tracer,
 )
 from aeroragx.processing.chunking import ChunkRecord
 from aeroragx.retrieval.reranker import RerankedSearchHit
@@ -109,6 +119,24 @@ class FakeRerankedIndex:
         self.queries.append(query)
         self.top_ks.append(top_k)
         return self._hits[:top_k]
+
+
+class TimedFakeRerankedIndex(FakeRerankedIndex):
+    """Return fixed hits plus production-shaped facet timing telemetry."""
+
+    def __init__(
+        self,
+        hits: Sequence[RerankedSearchHit],
+        timings: FacetRetrievalTimings,
+    ) -> None:
+        super().__init__(hits)
+        self._timings = timings
+
+    @property
+    def last_timings(self) -> FacetRetrievalTimings:
+        """Return deterministic retrieval timing for generation tests."""
+
+        return self._timings.model_copy(deep=True)
 
 
 def make_config(**updates: object) -> GenerationConfig:
@@ -686,3 +714,184 @@ def test_write_grounded_answer(tmp_path: Path) -> None:
     assert payload["claims"][0]["claim_id"] == "CL1"
     assert payload["citations"][0]["citation_id"] == "C1"
     assert payload["citations"][0]["citation_url"].startswith("https://ntrs.nasa.gov/citations/")
+
+
+def test_generate_attaches_internal_stage_timings() -> None:
+    hits = [make_hit(1), make_hit(2)]
+    provider = StaticGenerationProvider(make_supported_response())
+    generator = GroundedAnswerGenerator(
+        index=FakeRerankedIndex(hits),
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate("How does thermal runaway propagate?")
+    timings = answer.stage_timings
+
+    assert timings is not None
+    assert timings.retrieval_ms >= 0.0
+    assert timings.evidence_build_ms >= 0.0
+    assert timings.sufficiency_ms is None
+    assert timings.provider_stage_ms is not None
+    assert timings.provider_stage_ms >= 0.0
+    assert timings.citation_resolution_ms is not None
+    assert timings.citation_resolution_ms >= 0.0
+    assert timings.total_ms >= timings.retrieval_ms
+
+    payload = answer.model_dump(mode="json")
+    assert "stage_timings" not in payload
+    assert "_stage_timings" not in payload
+
+
+def test_insufficient_answer_records_bypassed_stage_timings() -> None:
+    provider = StaticGenerationProvider(make_supported_response())
+    generator = GroundedAnswerGenerator(
+        index=FakeRerankedIndex([]),
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate("Unsupported technical question")
+    timings = answer.stage_timings
+
+    assert answer.insufficient_evidence is True
+    assert provider.call_count == 0
+    assert timings is not None
+    assert timings.retrieval_ms >= 0.0
+    assert timings.evidence_build_ms >= 0.0
+    assert timings.sufficiency_ms is None
+    assert timings.provider_stage_ms is None
+    assert timings.citation_resolution_ms is None
+
+
+def test_generate_propagates_detailed_retrieval_timings() -> None:
+    hits = [make_hit(1), make_hit(2)]
+    index = TimedFakeRerankedIndex(
+        hits,
+        FacetRetrievalTimings(
+            search_count=3,
+            facet_search_count=2,
+            used_facets=True,
+            base_search_ms=41.0,
+            bm25_ms=5.0,
+            dense_ms=12.0,
+            hybrid_fusion_ms=1.5,
+            reranker_scoring_ms=20.0,
+            facet_overhead_ms=2.5,
+            total_ms=43.5,
+        ),
+    )
+    provider = StaticGenerationProvider(
+        make_supported_response(),
+    )
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=provider,
+        config=make_config(),
+    )
+
+    answer = generator.generate(
+        "What thermal-management challenges are shared?",
+    )
+    timings = answer.stage_timings
+
+    assert timings is not None
+    assert timings.bm25_ms == 5.0
+    assert timings.dense_ms == 12.0
+    assert timings.hybrid_fusion_ms == 1.5
+    assert timings.reranker_scoring_ms == 20.0
+    assert timings.retrieval_search_count == 3
+    assert timings.facet_search_count == 2
+    assert timings.facet_overhead_ms == 2.5
+    assert timings.facet_used is True
+
+    payload = answer.model_dump(mode="json")
+
+    assert "stage_timings" not in payload
+    assert "_stage_timings" not in payload
+
+
+def test_generation_pipeline_emits_stage_spans_without_raw_query() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+
+    raw_query = "Sensitive aerospace tracing query"
+    index = FakeRerankedIndex(
+        [
+            make_hit(1),
+            make_hit(2),
+        ]
+    )
+    provider = StaticGenerationProvider(
+        make_supported_response(),
+    )
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=provider,
+        config=make_config(),
+    )
+
+    with use_tracer(tracing_runtime.tracer):
+        with tracing_runtime.tracer.start_as_current_span(
+            "aeroragx.test.parent",
+        ) as parent_span:
+            answer = generator.generate(
+                raw_query,
+            )
+
+    assert answer.insufficient_evidence is False
+
+    tracing_runtime.force_flush()
+    spans = exporter.get_finished_spans()
+
+    span_by_name = {span.name: span for span in spans}
+
+    expected_names = {
+        "aeroragx.retrieval",
+        "aeroragx.evidence_build",
+        "aeroragx.provider",
+        "aeroragx.citation_resolution",
+    }
+
+    assert expected_names.issubset(
+        span_by_name,
+    )
+
+    parent_context = parent_span.get_span_context()
+
+    for name in expected_names:
+        span = span_by_name[name]
+
+        assert span.context is not None
+        assert span.parent is not None
+        assert span.context.trace_id == parent_context.trace_id
+        assert span.parent.span_id == parent_context.span_id
+
+    retrieval_span = span_by_name["aeroragx.retrieval"]
+
+    assert retrieval_span.attributes["aeroragx.top_k"] == 5
+    assert retrieval_span.attributes["aeroragx.result_count"] == 2
+
+    evidence_span = span_by_name["aeroragx.evidence_build"]
+
+    assert evidence_span.attributes["aeroragx.evidence_count"] == 2
+
+    provider_span = span_by_name["aeroragx.provider"]
+
+    assert provider_span.attributes["aeroragx.provider"] == "fake"
+    assert provider_span.attributes["aeroragx.model"] == "deterministic-grounded-v0"
+
+    citation_span = span_by_name["aeroragx.citation_resolution"]
+
+    assert citation_span.attributes["aeroragx.claim_count"] == 2
+    assert citation_span.attributes["aeroragx.citation_count"] == 2
+
+    serialized = repr([dict(span.attributes) for span in spans])
+
+    assert raw_query not in serialized
+
+    tracing_runtime.shutdown()

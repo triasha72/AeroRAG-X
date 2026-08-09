@@ -5,6 +5,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
 from pydantic import ValidationError
 
 from aeroragx.evaluation.retrieval import (
@@ -12,6 +15,10 @@ from aeroragx.evaluation.retrieval import (
     RelevanceJudgment,
     RetrievalHit,
     evaluate_retriever,
+)
+from aeroragx.observability import (
+    create_tracing_runtime,
+    use_tracer,
 )
 from aeroragx.processing.chunking import ChunkRecord
 from aeroragx.retrieval.hybrid import (
@@ -388,3 +395,89 @@ def test_fake_hits_satisfy_retrieval_protocol() -> None:
     )
 
     assert hit.rank == 1
+
+
+def test_hybrid_records_component_timings() -> None:
+    index = make_hybrid_index()
+
+    hits = index.search(
+        "battery thermal runaway",
+        top_k=2,
+    )
+
+    timings = index.last_timings
+
+    assert len(hits) == 2
+    assert timings is not None
+    assert timings.bm25_ms >= 0.0
+    assert timings.dense_ms >= 0.0
+    assert timings.fusion_ms >= 0.0
+    assert timings.total_ms >= 0.0
+
+
+def test_hybrid_search_emits_nested_retrieval_spans_without_raw_query() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+    index = make_hybrid_index()
+    raw_query = "Sensitive hybrid tracing query"
+
+    with use_tracer(tracing_runtime.tracer):
+        with tracing_runtime.tracer.start_as_current_span(
+            "aeroragx.test.parent",
+        ) as parent_span:
+            hits = index.search(
+                raw_query,
+                top_k=2,
+            )
+
+    assert len(hits) == 2
+
+    tracing_runtime.force_flush()
+    spans = exporter.get_finished_spans()
+    span_by_name = {span.name: span for span in spans}
+
+    expected_names = {
+        "aeroragx.hybrid_retrieval",
+        "aeroragx.bm25",
+        "aeroragx.dense",
+        "aeroragx.hybrid_fusion",
+    }
+
+    assert expected_names.issubset(span_by_name)
+
+    hybrid_span = span_by_name["aeroragx.hybrid_retrieval"]
+    parent_context = parent_span.get_span_context()
+
+    assert hybrid_span.context is not None
+    assert hybrid_span.parent is not None
+    assert hybrid_span.context.trace_id == parent_context.trace_id
+    assert hybrid_span.parent.span_id == parent_context.span_id
+
+    hybrid_context = hybrid_span.context
+
+    for child_name in (
+        "aeroragx.bm25",
+        "aeroragx.dense",
+        "aeroragx.hybrid_fusion",
+    ):
+        child = span_by_name[child_name]
+
+        assert child.context is not None
+        assert child.parent is not None
+        assert child.context.trace_id == hybrid_context.trace_id
+        assert child.parent.span_id == hybrid_context.span_id
+
+    assert hybrid_span.attributes["aeroragx.requested_top_k"] == 2
+    assert span_by_name["aeroragx.bm25"].attributes["aeroragx.result_count"] == 2
+    assert span_by_name["aeroragx.dense"].attributes["aeroragx.result_count"] == 2
+    assert span_by_name["aeroragx.hybrid_fusion"].attributes["aeroragx.result_count"] == 2
+
+    serialized = repr([dict(span.attributes) for span in spans])
+
+    assert raw_query not in serialized
+
+    tracing_runtime.shutdown()

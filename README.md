@@ -1007,3 +1007,23 @@ Next milestone
 The next engineering milestone is structured service observability and reliability, followed by cloud deployment.
 
 See ROADMAP.md for the planned sequence.
+
+## Production observability and reliability
+
+Phase 13 adds production-oriented observability around the FastAPI and Docker serving path:
+
+- structured JSON logs;
+- request, provider, trace, and span correlation;
+- runtime, HTTP, RAG, retrieval, reranker, facet, and provider timings;
+- Prometheus metrics at `GET /metrics`;
+- deterministic P50/P95/P99 load validation;
+- OpenTelemetry FastAPI and application spans;
+- OTLP/HTTP trace export;
+- local OpenTelemetry Collector validation;
+- privacy controls that exclude raw query/evidence text from observability payloads.
+
+Local deterministic load validation completed with zero failures through concurrency 4. The 20-request concurrency-4 run measured P50 993.928 ms, P95 1117.138 ms, P99 1126.538 ms, and 3.966 requests/s.
+
+See `docs/observability.md` for the complete logging, metrics, tracing, load-test, privacy, and failure-mode runbook.
+
+The next project milestone is cloud deployment.
