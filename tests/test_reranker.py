@@ -9,12 +9,19 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+    InMemorySpanExporter,
+)
 from pydantic import ValidationError
 
 from aeroragx.evaluation.retrieval import (
     EvaluationQuery,
     RelevanceJudgment,
     evaluate_retriever,
+)
+from aeroragx.observability import (
+    create_tracing_runtime,
+    use_tracer,
 )
 from aeroragx.processing.chunking import ChunkRecord
 from aeroragx.retrieval.hybrid import HybridSearchHit
@@ -619,3 +626,51 @@ def test_reranker_records_detailed_search_timings() -> None:
     assert timings.total_ms >= 0.0
     assert timings.pair_count == 3
     assert timings.hybrid is None
+
+
+def test_reranker_search_emits_span_without_raw_query() -> None:
+    exporter = InMemorySpanExporter()
+    tracing_runtime = create_tracing_runtime(
+        exporter=exporter,
+        environment="test",
+        batch_export=False,
+    )
+    index, _, _ = make_reranker_index()
+    raw_query = "Sensitive reranker tracing query"
+
+    with use_tracer(tracing_runtime.tracer):
+        with tracing_runtime.tracer.start_as_current_span(
+            "aeroragx.test.parent",
+        ) as parent_span:
+            hits = index.search(
+                raw_query,
+                top_k=2,
+            )
+
+    assert len(hits) == 2
+
+    tracing_runtime.force_flush()
+    spans = exporter.get_finished_spans()
+
+    reranker_span = next(span for span in spans if span.name == "aeroragx.reranker")
+
+    assert reranker_span.context is not None
+    assert reranker_span.parent is not None
+
+    parent_context = parent_span.get_span_context()
+
+    assert reranker_span.context.trace_id == parent_context.trace_id
+    assert reranker_span.parent.span_id == parent_context.span_id
+
+    assert reranker_span.attributes["aeroragx.model"] == "cross-encoder/ms-marco-MiniLM-L6-v2"
+    assert reranker_span.attributes["aeroragx.requested_top_k"] == 2
+    assert reranker_span.attributes["aeroragx.candidate_top_k"] == 20
+    assert reranker_span.attributes["aeroragx.batch_size"] == 16
+    assert reranker_span.attributes["aeroragx.pair_count"] == 3
+    assert reranker_span.attributes["aeroragx.result_count"] == 2
+
+    serialized = repr(dict(reranker_span.attributes))
+
+    assert raw_query not in serialized
+
+    tracing_runtime.shutdown()

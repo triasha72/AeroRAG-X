@@ -12,6 +12,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from aeroragx.evaluation.retrieval import RetrievalHit, RetrievalIndex
+from aeroragx.observability.tracing import trace_span
 from aeroragx.processing.chunking import ChunkRecord
 
 RetrieverName = Literal["bm25", "dense"]
@@ -242,89 +243,156 @@ class HybridIndex:
         if top_k < 1:
             raise ValueError("top_k must be at least 1.")
 
-        self._last_timings = None
-        total_started_at = perf_counter()
+        with trace_span(
+            "aeroragx.hybrid_retrieval",
+        ) as hybrid_span:
+            if hybrid_span is not None:
+                hybrid_span.set_attribute(
+                    "aeroragx.requested_top_k",
+                    top_k,
+                )
+                hybrid_span.set_attribute(
+                    "aeroragx.bm25_top_k",
+                    self._config.bm25_top_k,
+                )
+                hybrid_span.set_attribute(
+                    "aeroragx.dense_top_k",
+                    self._config.dense_top_k,
+                )
 
-        bm25_started_at = perf_counter()
-        bm25_hits = self._bm25_index.search(
-            query=query,
-            top_k=self._config.bm25_top_k,
-        )
-        bm25_ms = round(
-            (perf_counter() - bm25_started_at) * 1000.0,
-            3,
-        )
+            self._last_timings = None
+            total_started_at = perf_counter()
 
-        dense_started_at = perf_counter()
-        dense_hits = self._dense_index.search(
-            query=query,
-            top_k=self._config.dense_top_k,
-        )
-        dense_ms = round(
-            (perf_counter() - dense_started_at) * 1000.0,
-            3,
-        )
+            with trace_span(
+                "aeroragx.bm25",
+            ) as bm25_span:
+                if bm25_span is not None:
+                    bm25_span.set_attribute(
+                        "aeroragx.top_k",
+                        self._config.bm25_top_k,
+                    )
 
-        fusion_started_at = perf_counter()
+                bm25_started_at = perf_counter()
+                bm25_hits = self._bm25_index.search(
+                    query=query,
+                    top_k=self._config.bm25_top_k,
+                )
+                bm25_ms = round(
+                    (perf_counter() - bm25_started_at) * 1000.0,
+                    3,
+                )
 
-        candidates: dict[str, _HybridAccumulator] = {}
+                if bm25_span is not None:
+                    bm25_span.set_attribute(
+                        "aeroragx.result_count",
+                        len(bm25_hits),
+                    )
 
-        _consume_source_hits(
-            candidates,
-            bm25_hits,
-            source_name="bm25",
-            rrf_k=self._config.rrf_k,
-        )
-        _consume_source_hits(
-            candidates,
-            dense_hits,
-            source_name="dense",
-            rrf_k=self._config.rrf_k,
-        )
+            with trace_span(
+                "aeroragx.dense",
+            ) as dense_span:
+                if dense_span is not None:
+                    dense_span.set_attribute(
+                        "aeroragx.top_k",
+                        self._config.dense_top_k,
+                    )
 
-        ranked_candidates = sorted(
-            candidates.values(),
-            key=lambda candidate: (
-                -candidate.rrf_score,
-                _best_source_rank(candidate),
-                candidate.chunk.chunk_id,
-            ),
-        )
+                dense_started_at = perf_counter()
+                dense_hits = self._dense_index.search(
+                    query=query,
+                    top_k=self._config.dense_top_k,
+                )
+                dense_ms = round(
+                    (perf_counter() - dense_started_at) * 1000.0,
+                    3,
+                )
 
-        results = [
-            HybridSearchHit(
-                rank=rank,
-                score=round(candidate.rrf_score, 12),
-                chunk=candidate.chunk,
-                retrieved_by=_retriever_names(candidate),
-                bm25_rank=candidate.bm25_rank,
-                bm25_score=candidate.bm25_score,
-                dense_rank=candidate.dense_rank,
-                dense_score=candidate.dense_score,
+                if dense_span is not None:
+                    dense_span.set_attribute(
+                        "aeroragx.result_count",
+                        len(dense_hits),
+                    )
+
+            with trace_span(
+                "aeroragx.hybrid_fusion",
+            ) as fusion_span:
+                fusion_started_at = perf_counter()
+
+                candidates: dict[str, _HybridAccumulator] = {}
+
+                _consume_source_hits(
+                    candidates,
+                    bm25_hits,
+                    source_name="bm25",
+                    rrf_k=self._config.rrf_k,
+                )
+                _consume_source_hits(
+                    candidates,
+                    dense_hits,
+                    source_name="dense",
+                    rrf_k=self._config.rrf_k,
+                )
+
+                ranked_candidates = sorted(
+                    candidates.values(),
+                    key=lambda candidate: (
+                        -candidate.rrf_score,
+                        _best_source_rank(candidate),
+                        candidate.chunk.chunk_id,
+                    ),
+                )
+
+                results = [
+                    HybridSearchHit(
+                        rank=rank,
+                        score=round(candidate.rrf_score, 12),
+                        chunk=candidate.chunk,
+                        retrieved_by=_retriever_names(candidate),
+                        bm25_rank=candidate.bm25_rank,
+                        bm25_score=candidate.bm25_score,
+                        dense_rank=candidate.dense_rank,
+                        dense_score=candidate.dense_score,
+                    )
+                    for rank, candidate in enumerate(
+                        ranked_candidates[:top_k],
+                        start=1,
+                    )
+                ]
+
+                fusion_ms = round(
+                    (perf_counter() - fusion_started_at) * 1000.0,
+                    3,
+                )
+
+                if fusion_span is not None:
+                    fusion_span.set_attribute(
+                        "aeroragx.candidate_count",
+                        len(candidates),
+                    )
+                    fusion_span.set_attribute(
+                        "aeroragx.result_count",
+                        len(results),
+                    )
+
+            total_ms = round(
+                (perf_counter() - total_started_at) * 1000.0,
+                3,
             )
-            for rank, candidate in enumerate(
-                ranked_candidates[:top_k],
-                start=1,
+
+            if hybrid_span is not None:
+                hybrid_span.set_attribute(
+                    "aeroragx.result_count",
+                    len(results),
+                )
+
+            self._last_timings = HybridSearchTimings(
+                bm25_ms=bm25_ms,
+                dense_ms=dense_ms,
+                fusion_ms=fusion_ms,
+                total_ms=total_ms,
             )
-        ]
 
-        fusion_ms = round(
-            (perf_counter() - fusion_started_at) * 1000.0,
-            3,
-        )
-        total_ms = round(
-            (perf_counter() - total_started_at) * 1000.0,
-            3,
-        )
-
-        self._last_timings = HybridSearchTimings(
-            bm25_ms=bm25_ms,
-            dense_ms=dense_ms,
-            fusion_ms=fusion_ms,
-            total_ms=total_ms,
-        )
-
-        return results
+            return results
 
 
 def write_hybrid_search_results(
