@@ -560,15 +560,16 @@ def receipt_from_build_result(
             estimated_cost += telemetry.estimated_cost_usd
 
     answer_attempts = 0
+
     answer_request_ids: list[str] = []
 
-    if result.answer_telemetry is not None:
-        answer_attempts = result.answer_telemetry.attempts
+    for answer_telemetry_item in result.answer_telemetry:
+        answer_attempts += answer_telemetry_item.attempts
 
-        if result.answer_telemetry.request_id is not None:
-            answer_request_ids.append(result.answer_telemetry.request_id)
+        if answer_telemetry_item.request_id is not None:
+            answer_request_ids.append(answer_telemetry_item.request_id)
 
-        usage = result.answer_telemetry.usage
+        usage = answer_telemetry_item.usage
 
         if usage is None or usage.input_tokens is None or usage.output_tokens is None:
             telemetry_complete = False
@@ -578,11 +579,11 @@ def receipt_from_build_result(
 
             output_tokens += usage.output_tokens
 
-        if result.answer_telemetry.estimated_cost_usd is None:
+        if answer_telemetry_item.estimated_cost_usd is None:
             telemetry_complete = False
 
         else:
-            estimated_cost += result.answer_telemetry.estimated_cost_usd
+            estimated_cost += answer_telemetry_item.estimated_cost_usd
 
     return PlanGenerationReceipt(
         plan_id=result.plan_id,

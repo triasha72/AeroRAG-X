@@ -101,7 +101,9 @@ class ExampleBuildResult(BaseModel):
         default_factory=list,
     )
 
-    answer_telemetry: ProviderTelemetry | None = None
+    answer_telemetry: list[ProviderTelemetry] = Field(
+        default_factory=list,
+    )
 
     example: TrainingExample
 
@@ -252,59 +254,132 @@ class TrainingExampleBuilder:
     ) -> ExampleBuildResult:
         """Build ordinary or synthesis training supervision."""
 
-        (
-            question,
-            question_telemetry,
-        ) = self._draft_supported_question(
-            plan=plan,
-            evidence=(resolved.provider_evidence),
-        )
-
         if plan.example_type == "ordinary":
             max_claims = self._teacher_config.ordinary.max_claims
+
+            maximum_response_attempts = 1
 
         elif plan.example_type == "synthesis":
             max_claims = self._teacher_config.synthesis.max_claims
 
+            maximum_response_attempts = self._teacher_config.question_generation.max_draft_attempts
+
         else:
             raise AssertionError("Supported builder received a non-supported example type.")
 
-        response = self._answer_provider.generate(
-            query=question,
-            evidence=(resolved.provider_evidence),
-            max_claims=(max_claims),
-        )
+        question_telemetry: list[TeacherCallTelemetry] = []
 
-        if response.insufficient_evidence:
-            raise ExampleBuildError(
-                f"{plan.plan_id}: supported "
-                "teacher answer unexpectedly "
-                "reported insufficient evidence."
+        answer_telemetry: list[ProviderTelemetry] = []
+
+        repair_context: str | None = None
+
+        last_response_error: str | None = None
+
+        for _ in range(maximum_response_attempts):
+            (
+                question,
+                current_question_telemetry,
+            ) = self._draft_supported_question(
+                plan=plan,
+                evidence=(resolved.provider_evidence),
+                repair_context=(repair_context),
             )
 
-        if plan.example_type == "synthesis":
-            self._validate_synthesis_response(
+            question_telemetry.extend(current_question_telemetry)
+
+            response = self._answer_provider.generate(
+                query=question,
+                evidence=(resolved.provider_evidence),
+                max_claims=max_claims,
+            )
+
+            current_answer_telemetry = self._answer_telemetry()
+
+            if current_answer_telemetry is not None:
+                answer_telemetry.append(current_answer_telemetry)
+
+            if response.insufficient_evidence:
+                error_message = (
+                    f"{plan.plan_id}: supported "
+                    "teacher answer unexpectedly "
+                    "reported insufficient evidence."
+                )
+
+                if plan.example_type == "ordinary":
+                    raise ExampleBuildError(error_message)
+
+                last_response_error = error_message
+
+                repair_context = (
+                    "The previous synthesis question "
+                    "produced an insufficient-evidence "
+                    "answer. Draft a substantially "
+                    "different question whose complete "
+                    "answer requires material facts from "
+                    "at least two separate technical "
+                    "passages. Previous question: " + repr(question)
+                )
+
+                continue
+
+            if plan.example_type == "synthesis":
+                try:
+                    self._validate_synthesis_response(
+                        plan=plan,
+                        response=response,
+                    )
+
+                except ExampleBuildError as error:
+                    last_response_error = str(error)
+
+                    repair_context = (
+                        "The previous synthesis question "
+                        "did not produce a genuinely "
+                        "multi-evidence answer. "
+                        "The response failed because: "
+                        + last_response_error
+                        + " Draft a substantially "
+                        "different question whose complete "
+                        "answer must combine at least one "
+                        "material fact or relationship from "
+                        "two or more separate technical "
+                        "passages. Do not ask a question "
+                        "whose complete answer can be "
+                        "supported by only one passage. "
+                        "Previous question: " + repr(question)
+                    )
+
+                    continue
+
+            example = self._make_training_example(
                 plan=plan,
+                question=question,
+                max_claims=max_claims,
+                evidence=(resolved.training_evidence),
                 response=response,
             )
 
-        example = self._make_training_example(
-            plan=plan,
-            question=question,
-            max_claims=max_claims,
-            evidence=(resolved.training_evidence),
-            response=response,
+            return ExampleBuildResult(
+                plan_id=plan.plan_id,
+                example_type=(plan.example_type),
+                question_attempts=len(question_telemetry),
+                question_telemetry=(question_telemetry),
+                verification_telemetry=[],
+                answer_telemetry=(answer_telemetry),
+                example=example,
+            )
+
+        message = (
+            f"{plan.plan_id}: synthesis "
+            "response repair exhausted "
+            f"{maximum_response_attempts} "
+            "attempts."
         )
 
-        return ExampleBuildResult(
-            plan_id=(plan.plan_id),
-            example_type=(plan.example_type),
-            question_attempts=len(question_telemetry),
-            question_telemetry=(question_telemetry),
-            verification_telemetry=[],
-            answer_telemetry=(self._answer_telemetry()),
-            example=example,
-        )
+        if last_response_error is not None:
+            message += " Last response validation error: " + last_response_error
+
+        raise ExampleBuildError(message)
 
     def _build_refusal_example(
         self,
@@ -343,7 +418,7 @@ class TrainingExampleBuilder:
             question_attempts=len(question_telemetry),
             question_telemetry=(question_telemetry),
             verification_telemetry=(verification_telemetry),
-            answer_telemetry=None,
+            answer_telemetry=[],
             example=example,
         )
 
@@ -352,6 +427,7 @@ class TrainingExampleBuilder:
         *,
         plan: PlannedExample,
         evidence: Sequence[ProviderEvidence],
+        repair_context: str | None = None,
     ) -> tuple[
         str,
         list[TeacherCallTelemetry],
@@ -371,6 +447,18 @@ class TrainingExampleBuilder:
 
             else:
                 raise AssertionError("Supported question drafting received an invalid plan type.")
+
+            if repair_context is not None:
+                prompt = prompt.model_copy(
+                    update={
+                        "user_prompt": (
+                            prompt.user_prompt
+                            + "\n\n"
+                            + "SYNTHESIS REPAIR REQUIREMENT:\n"
+                            + repair_context
+                        )
+                    }
+                )
 
             if last_validation_error is not None:
                 prompt = prompt.model_copy(

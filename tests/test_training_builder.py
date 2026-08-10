@@ -8,6 +8,7 @@ import pytest
 
 from aeroragx.generation.provider import (
     ProviderClaim,
+    ProviderEvidence,
     ProviderResponse,
     StaticGenerationProvider,
 )
@@ -407,6 +408,7 @@ def test_synthesis_requires_at_least_two_claims() -> None:
             )
         ],
         answer_response=response,
+        max_draft_attempts=1,
     )
 
     plan = make_plan(
@@ -448,6 +450,7 @@ def test_synthesis_requires_multiple_evidence_ids() -> None:
             )
         ],
         answer_response=response,
+        max_draft_attempts=1,
     )
 
     plan = make_plan(
@@ -605,3 +608,140 @@ def test_synthesis_redrafts_after_invalid_question() -> None:
     assert len(transport.requests) == 2
 
     assert "previous draft was rejected" in (transport.requests[1].user_prompt.casefold())
+
+
+class QueueGenerationProviderForRepair:
+    """Return deterministic generation responses in order."""
+
+    def __init__(
+        self,
+        responses: Sequence[ProviderResponse],
+    ) -> None:
+        self._responses = list(responses)
+
+        self.received_queries: list[str] = []
+
+    @property
+    def call_count(
+        self,
+    ) -> int:
+        """Return generation-call count."""
+
+        return len(self.received_queries)
+
+    def generate(
+        self,
+        *,
+        query: str,
+        evidence: Sequence[ProviderEvidence],
+        max_claims: int,
+    ) -> ProviderResponse:
+        """Return the next queued response."""
+
+        del evidence
+        del max_claims
+
+        self.received_queries.append(query)
+
+        if not self._responses:
+            raise AssertionError("Queue generation provider has no queued response.")
+
+        return self._responses.pop(0).model_copy(deep=True)
+
+
+def test_synthesis_repairs_single_evidence_answer() -> None:
+    first_response = ProviderResponse(
+        answer=("The first answer contains two claims but relies on only one evidence item."),
+        claims=[
+            ProviderClaim(
+                text=("Thermal transport affects the architecture."),
+                evidence_ids=["E1"],
+            ),
+            ProviderClaim(
+                text=("Thermal constraints also affect integration."),
+                evidence_ids=["E1"],
+            ),
+        ],
+        insufficient_evidence=False,
+    )
+
+    repaired_response = ProviderResponse(
+        answer=("Thermal transport and component sizing jointly shape system integration."),
+        claims=[
+            ProviderClaim(
+                text=("Thermal transport affects integration."),
+                evidence_ids=["E1"],
+            ),
+            ProviderClaim(
+                text=("Component sizing also affects integration."),
+                evidence_ids=["E2"],
+            ),
+        ],
+        insufficient_evidence=False,
+    )
+
+    transport = QueueTransport(
+        [
+            make_question_result("How does thermal transport affect the architecture?"),
+            make_question_result(
+                "How do thermal transport and component sizing jointly shape system integration?"
+            ),
+        ]
+    )
+
+    question_client = StructuredTeacherClient(
+        model_name="teacher-test",
+        transport=transport,
+        timeout_seconds=30.0,
+        max_retries=0,
+        retry_backoff_seconds=0.0,
+    )
+
+    provider = QueueGenerationProviderForRepair(
+        [
+            first_response,
+            repaired_response,
+        ]
+    )
+
+    builder = TrainingExampleBuilder(
+        chunks=make_chunks(),
+        selected_document_ids={1001},
+        protected_document_ids=set(),
+        teacher_config=(make_teacher_config(max_draft_attempts=3)),
+        question_client=(question_client),
+        answer_provider=provider,
+    )
+
+    plan = make_plan(
+        plan_id="plan_0069",
+        example_type="synthesis",
+        chunk_ids=[
+            "1001:chunk:00000",
+            "1001:chunk:00001",
+            "1001:chunk:00002",
+        ],
+    )
+
+    result = builder.build(plan)
+
+    assert provider.call_count == 2
+
+    assert result.question_attempts == 2
+
+    assert result.example.query == (
+        "How do thermal transport and component sizing jointly shape system integration?"
+    )
+
+    cited_evidence_ids = {
+        evidence_id
+        for claim in result.example.response.claims
+        for evidence_id in claim.evidence_ids
+    }
+
+    assert cited_evidence_ids == {
+        "E1",
+        "E2",
+    }
+
+    assert "synthesis repair requirement" in (transport.requests[1].user_prompt.casefold())
