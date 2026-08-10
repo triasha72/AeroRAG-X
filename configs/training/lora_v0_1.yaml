@@ -31,14 +31,37 @@ formatting:
   preserve_structured_response: true
 
 training:
-  status: "not_enabled_yet"
+  status: "ready_for_training"
   seed: 20260810
   max_sequence_tokens: 4096
+
+  epochs: 3
+  learning_rate: 0.0002
+  weight_decay: 0.01
+
+  per_device_batch_size: 1
+  gradient_accumulation_steps: 8
+  gradient_checkpointing: true
+  gradient_clip_norm: 1.0
+
+  dtype: "float16"
+  device: "mps"
 
 lora:
   rank: 16
   alpha: 32
   dropout: 0.05
+  bias: "none"
+
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+
+outputs:
+  best_adapter: "artifacts/training/adapters/aeroragx_lora_v0_1_best"
+  report: "artifacts/evaluation/aeroragx_lora_training_v0_1.json"
 
 objectives:
   improve:
@@ -59,5 +82,5 @@ notes:
   - "Do not use documents listed in the protected document manifest for training."
   - "Construct training examples only from documents in the frozen source-selection manifest."
   - "Construct teacher-generation inputs only from bundles in the frozen example-plan manifest."
-  - "LoRA target modules will be selected after the PEFT/model-module audit."
-  - "This configuration is not yet an executable training configuration."
+  - "LoRA target modules were validated against the installed Qwen3-0.6B architecture."
+  - "The assistant-only MPS path passed tokenizer, shortest-sequence, longest-sequence, tiny-overfit, save, and reload gates."
