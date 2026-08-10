@@ -1,0 +1,83 @@
+{
+  "adapter_path": "artifacts/training/adapters/aeroragx_lora_tiny_overfit_v0_1",
+  "base_model": "Qwen/Qwen3-0.6B",
+  "device": "mps",
+  "dtype": "float16",
+  "examples": [
+    {
+      "example_id": "train_plan_0002",
+      "sequence_tokens": 976,
+      "supervised_tokens": 127
+    },
+    {
+      "example_id": "train_plan_0076",
+      "sequence_tokens": 1012,
+      "supervised_tokens": 167
+    },
+    {
+      "example_id": "train_plan_0107",
+      "sequence_tokens": 1088,
+      "supervised_tokens": 226
+    },
+    {
+      "example_id": "train_plan_0041",
+      "sequence_tokens": 1114,
+      "supervised_tokens": 184
+    }
+  ],
+  "final_mean_loss": 0.003407186348340474,
+  "gradient_checkpointing": true,
+  "initial_mean_loss": 1.3722532391548157,
+  "learning_rate": 0.0002,
+  "lora": {
+    "alpha": 32,
+    "dropout": 0.05,
+    "rank": 16,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ]
+  },
+  "loss_reduction_fraction": 0.997517086313865,
+  "reload_difference": 0.0,
+  "reload_mean_loss": 0.003407186348340474,
+  "seed": 20260810,
+  "step_losses": [
+    1.4802751541137695,
+    1.0454646348953247,
+    1.1698921918869019,
+    1.0790035724639893,
+    0.5923075079917908,
+    0.5691860914230347,
+    0.8366504907608032,
+    0.757571280002594,
+    0.3516080677509308,
+    0.3295065462589264,
+    0.5958971977233887,
+    0.5027817487716675,
+    0.16059859097003937,
+    0.1487327665090561,
+    0.3903358578681946,
+    0.2764419615268707,
+    0.03757387399673462,
+    0.03644264116883278,
+    0.1964319795370102,
+    0.12706221640110016,
+    0.005312755238264799,
+    0.010083965957164764,
+    0.07477148622274399,
+    0.06778091937303543,
+    0.0013853879645466805,
+    0.0034265390131622553,
+    0.05880630016326904,
+    0.013600792735815048,
+    0.0013724924065172672,
+    0.0013316184049472213,
+    0.027354968711733818,
+    0.005426660645753145
+  ],
+  "steps": 32,
+  "version": "0.1"
+}

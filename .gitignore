@@ -42,3 +42,6 @@ data/processed/
 
 # Local LoRA teacher-generation checkpoints
 data/training/work/
+
+# Local LoRA adapter checkpoints
+artifacts/training/adapters/
