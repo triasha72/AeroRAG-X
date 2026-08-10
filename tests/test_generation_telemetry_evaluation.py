@@ -16,6 +16,7 @@ from aeroragx.generation.grounded import (
 )
 from aeroragx.generation.structured_provider import (
     ProviderTelemetry,
+    ProviderTransportError,
     ProviderUsage,
 )
 from aeroragx.generation.telemetry_evaluation import (
@@ -24,13 +25,18 @@ from aeroragx.generation.telemetry_evaluation import (
 
 
 class FakeGenerator:
-    """Return preconfigured answers."""
+    """Return configured answers or errors."""
 
     def __init__(
         self,
-        answers: dict[str, GroundedAnswer],
+        answers: dict[
+            str,
+            GroundedAnswer | Exception,
+        ],
     ) -> None:
         self._answers = answers
+
+        self.received_queries: list[str] = []
 
     def generate(
         self,
@@ -40,7 +46,17 @@ class FakeGenerator:
     ) -> GroundedAnswer:
         del reranker_model
 
-        return self._answers[query]
+        self.received_queries.append(query)
+
+        configured = self._answers[query]
+
+        if isinstance(
+            configured,
+            Exception,
+        ):
+            raise configured
+
+        return configured
 
 
 def supported_answer(
@@ -71,7 +87,7 @@ def supported_answer(
         model_name=generation_model,
         prompt_version="prompt-v1",
         attempts=attempts,
-        latency_seconds=latency_seconds,
+        latency_seconds=(latency_seconds),
         succeeded=True,
         request_id="req-test",
         usage=ProviderUsage(
@@ -86,7 +102,7 @@ def supported_answer(
 
     return GroundedAnswer(
         query=query,
-        answer="Battery thermal evidence.",
+        answer=("Battery thermal evidence."),
         claims=[
             GroundedClaim(
                 claim_id="CL1",
@@ -106,7 +122,7 @@ def supported_answer(
         ],
         insufficient_evidence=False,
         retrieval_metadata=RetrievalMetadata(
-            retriever="hybrid+reranker",
+            retriever=("hybrid+reranker"),
             requested_evidence_top_k=5,
             returned_evidence_count=5,
             used_evidence_count=1,
@@ -133,7 +149,7 @@ def refusal_answer(
         source_documents=[],
         insufficient_evidence=True,
         retrieval_metadata=RetrievalMetadata(
-            retriever="hybrid+reranker",
+            retriever=("hybrid+reranker"),
             requested_evidence_top_k=5,
             returned_evidence_count=5,
             used_evidence_count=5,
@@ -195,6 +211,10 @@ def test_remote_provider_telemetry_is_aggregated() -> None:
 
     assert summary.provider_bypass_count == 1
 
+    assert summary.provider_call_unknown_count == 0
+
+    assert summary.provider_call_policy_evaluated_count == 2
+
     assert summary.provider_call_policy_correct_count == 2
 
     assert summary.provider_bypass_rate == 0.5
@@ -233,6 +253,8 @@ def test_remote_provider_telemetry_is_aggregated() -> None:
     assert first.total_tokens == 120
 
     assert first.prompt_injection_safe is True
+
+    assert first.generation_failed is False
 
     assert second.provider_called is False
 
@@ -344,6 +366,8 @@ def test_deterministic_provider_has_no_provider_policy_metrics() -> None:
 
     assert summary.provider_bypass_count == 0
 
+    assert summary.provider_call_unknown_count == 0
+
     assert summary.provider_bypass_rate is None
 
     assert summary.provider_call_policy_accuracy is None
@@ -412,6 +436,10 @@ def test_transformers_provider_telemetry_is_aggregated() -> None:
 
     assert summary.provider_bypass_count == 1
 
+    assert summary.provider_call_unknown_count == 0
+
+    assert summary.provider_call_policy_evaluated_count == 2
+
     assert summary.provider_call_policy_correct_count == 2
 
     assert summary.provider_bypass_rate == 0.5
@@ -469,3 +497,140 @@ def test_transformers_provider_telemetry_is_aggregated() -> None:
     assert unsupported.total_tokens is None
 
     assert unsupported.estimated_cost_usd is None
+
+
+def test_transformers_failure_is_recorded_and_evaluation_continues() -> None:
+    model_name = "Qwen/Qwen3-0.6B"
+
+    queries = [
+        GenerationEvaluationQuery(
+            query_id="q1",
+            query="broken",
+            expected_answerable=True,
+            expected_terms=["battery"],
+        ),
+        GenerationEvaluationQuery(
+            query_id="q2",
+            query="unsupported",
+            expected_answerable=False,
+        ),
+        GenerationEvaluationQuery(
+            query_id="q3",
+            query="working",
+            expected_answerable=True,
+            expected_terms=["battery"],
+        ),
+    ]
+
+    generator = FakeGenerator(
+        {
+            "broken": ProviderTransportError(
+                "invalid local-model JSON",
+                retryable=False,
+            ),
+            "unsupported": refusal_answer(
+                "unsupported",
+                generation_provider=("transformers"),
+                generation_model=(model_name),
+            ),
+            "working": supported_answer(
+                query="working",
+                latency_seconds=2.0,
+                attempts=1,
+                input_tokens=100,
+                output_tokens=25,
+                estimated_cost_usd=0.0,
+                generation_provider=("transformers"),
+                generation_model=(model_name),
+            ),
+        }
+    )
+
+    report = evaluate_grounded_generation_with_telemetry(
+        generator=generator,
+        queries=queries,
+        generation_provider=("transformers"),
+        generation_model=model_name,
+        reranker_model=("test-reranker"),
+    )
+
+    generation = report.generation_report
+
+    assert generation.query_count == 3
+
+    assert generation.completed_query_count == 2
+
+    assert generation.generation_failure_count == 1
+
+    assert generation.generation_failure_rate == pytest.approx(1 / 3)
+
+    assert generator.received_queries == [
+        "broken",
+        "unsupported",
+        "working",
+    ]
+
+    failed = report.query_telemetry[0]
+
+    assert failed.generation_failed is True
+
+    assert failed.failure_type == "provider_transport"
+
+    assert failed.provider_called is None
+
+    assert failed.provider_call_policy_correct is None
+
+    summary = report.provider_summary
+
+    assert summary.provider_kind == "local_model"
+
+    assert summary.provider_call_count == 1
+
+    assert summary.provider_bypass_count == 1
+
+    assert summary.provider_call_unknown_count == 1
+
+    assert summary.provider_call_policy_evaluated_count == 2
+
+    assert summary.provider_call_policy_correct_count == 2
+
+    assert summary.provider_call_policy_accuracy == 1.0
+
+    assert summary.provider_bypass_rate == 0.5
+
+    assert summary.provider_total_input_tokens == 100
+
+    assert summary.provider_total_output_tokens == 25
+
+    assert summary.provider_total_tokens == 125
+
+    assert summary.provider_total_estimated_cost_usd == 0.0
+
+
+def test_telemetry_evaluation_can_remain_strict() -> None:
+    query = GenerationEvaluationQuery(
+        query_id="q1",
+        query="broken",
+        expected_answerable=True,
+    )
+
+    with pytest.raises(
+        ProviderTransportError,
+        match="strict failure",
+    ):
+        evaluate_grounded_generation_with_telemetry(
+            generator=FakeGenerator(
+                {
+                    "broken": (
+                        ProviderTransportError(
+                            "strict failure",
+                            retryable=False,
+                        )
+                    )
+                }
+            ),
+            queries=[query],
+            generation_provider=("transformers"),
+            generation_model=("Qwen/Qwen3-0.6B"),
+            continue_on_error=False,
+        )

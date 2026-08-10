@@ -124,6 +124,7 @@ def main() -> None:
         generation_provider=(generation_settings.provider),
         generation_model=(generation_settings.model_name),
         reranker_model=(reranker_settings.model_name),
+        continue_on_error=True,
     )
 
     write_generation_evaluation_report(
@@ -152,6 +153,23 @@ def main() -> None:
     )
 
     print(
+        "Completed queries:",
+        generation.completed_query_count,
+    )
+
+    print(
+        "Generation failures:",
+        generation.generation_failure_count,
+    )
+
+    print(
+        "Generation failure rate:",
+        (f"{generation.generation_failure_rate:.4f}"),
+    )
+
+    print()
+
+    print(
         "Answerability accuracy:",
         (f"{generation.answerability_accuracy:.4f}"),
     )
@@ -174,6 +192,16 @@ def main() -> None:
     print(
         "Citation validity:",
         (f"{generation.citation_reference_validity_rate:.4f}"),
+    )
+
+    print(
+        "Source-document coverage:",
+        (f"{generation.source_document_coverage_rate:.4f}"),
+    )
+
+    print(
+        "Expected-term recall:",
+        (f"{generation.expected_term_recall:.4f}"),
     )
 
     print(
@@ -201,6 +229,16 @@ def main() -> None:
         print(
             "Provider bypasses:",
             provider.provider_bypass_count,
+        )
+
+        print(
+            "Provider call state unknown:",
+            provider.provider_call_unknown_count,
+        )
+
+        print(
+            "Call-policy evaluated:",
+            (provider.provider_call_policy_evaluated_count),
         )
 
         print(
@@ -244,6 +282,23 @@ def main() -> None:
         )
 
     print()
+
+    if generation.generation_failure_count > 0:
+        print("Generation failures by query")
+
+        print("----------------------------")
+
+        for result in generation.query_results:
+            if not result.generation_failed:
+                continue
+
+            print(
+                result.query_id,
+                "->",
+                result.failure_type,
+            )
+
+        print()
 
     print(
         "Generation report:",
