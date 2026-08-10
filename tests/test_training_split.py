@@ -161,3 +161,24 @@ def test_duplicate_example_ids_are_rejected() -> None:
         split_training_examples(
             [example, example],
         )
+
+
+def test_split_tracks_requested_fraction_for_independent_documents() -> None:
+    examples = [
+        make_example(
+            example_id=f"example_{index:02d}",
+            document_ids=[2000 + index],
+        )
+        for index in range(10)
+    ]
+
+    split = split_training_examples(
+        examples,
+        dev_fraction=0.30,
+        seed=42,
+    )
+
+    assert len(split.dev) == 3
+    assert len(split.train) == 7
+
+    assert not (split.train_document_ids & split.dev_document_ids)

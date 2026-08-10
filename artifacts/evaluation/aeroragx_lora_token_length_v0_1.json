@@ -7,14 +7,23 @@
   "example_count": 120,
   "max_sequence_tokens": 4096,
   "model_name": "Qwen/Qwen3-0.6B",
-  "over_limit_examples": [],
+  "over_limit_examples": [
+    {
+      "example_id": "train_plan_0103",
+      "token_count": 4521
+    },
+    {
+      "example_id": "train_plan_0105",
+      "token_count": 5122
+    }
+  ],
   "statistics": {
-    "max": 2,
-    "mean": 2,
-    "min": 2,
-    "over_limit_count": 0,
-    "p50": 2,
-    "p95": 2
+    "max": 5122,
+    "mean": 1665.0083333333334,
+    "min": 976,
+    "over_limit_count": 2,
+    "p50": 1507,
+    "p95": 2364
   },
   "version": "0.1"
 }

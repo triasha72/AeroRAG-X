@@ -121,9 +121,17 @@ def split_training_examples(
     train: list[TrainingExample] = []
     dev: list[TrainingExample] = []
 
+    ranked_components: list[
+        tuple[
+            float,
+            str,
+            list[TrainingExample],
+        ]
+    ] = []
+
     for component in components.values():
         component_documents = sorted(
-            {document_id for example in component for document_id in (example.source_document_ids)}
+            {document_id for example in component for document_id in example.source_document_ids}
         )
 
         component_key = ",".join(str(document_id) for document_id in component_documents)
@@ -133,9 +141,68 @@ def split_training_examples(
             component_key=component_key,
         )
 
-        destination = dev if score < dev_fraction else train
+        ranked_components.append(
+            (
+                score,
+                component_key,
+                component,
+            )
+        )
 
-        destination.extend(component)
+    ranked_components.sort(
+        key=lambda item: (
+            item[0],
+            item[1],
+        )
+    )
+
+    if dev_fraction == 0.0:
+        for _, _, component in ranked_components:
+            train.extend(component)
+
+    elif dev_fraction == 1.0:
+        for _, _, component in ranked_components:
+            dev.extend(component)
+
+    elif len(ranked_components) == 1:
+        train.extend(ranked_components[0][2])
+
+    else:
+        target_dev_examples = round(len(copied_examples) * dev_fraction)
+
+        target_dev_examples = max(
+            1,
+            min(
+                len(copied_examples) - 1,
+                target_dev_examples,
+            ),
+        )
+
+        cumulative = 0
+        best_prefix = 1
+        best_distance = float("inf")
+
+        for prefix in range(
+            1,
+            len(ranked_components),
+        ):
+            cumulative += len(ranked_components[prefix - 1][2])
+
+            distance = abs(cumulative - target_dev_examples)
+
+            if distance < best_distance:
+                best_distance = distance
+                best_prefix = prefix
+
+        for index, (
+            _,
+            _,
+            component,
+        ) in enumerate(ranked_components):
+            if index < best_prefix:
+                dev.extend(component)
+            else:
+                train.extend(component)
 
     train.sort(key=lambda example: example.example_id)
 
