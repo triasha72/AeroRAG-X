@@ -510,30 +510,31 @@ def build_synthesis_question_prompt(
 
     return TeacherPrompt(
         system_prompt=(
-            "You create one natural technical "
-            "engineering question for supervised "
-            "training data. The question must require "
-            "synthesis across multiple supplied "
-            "technical excerpts. Do not answer the "
-            "question. Do not mention evidence IDs, "
-            "chunks, documents, prompts, or the "
-            "training-data process."
+            "You create exactly one natural technical engineering "
+            "question for supervised training data. The question "
+            "must require synthesis across multiple supplied technical "
+            "passages. Do not answer the question. The final question "
+            "must sound like something an engineer would naturally ask."
         ),
         user_prompt=(
-            "Create one coherent engineering question "
-            "whose complete answer requires material "
-            "information from at least two of these "
-            "excerpts.\n\n"
-            "Requirements:\n"
-            "- The question must be answerable from "
-            "the supplied excerpts.\n"
-            "- It should invite several materially "
-            "distinct technical facts or relationships.\n"
-            "- It must remain one coherent question.\n"
-            "- Do not mention E1, E2, E3, evidence, "
-            "chunks, or document identifiers.\n"
-            "- Do not include the answer.\n"
-            "- Return only the structured question field.\n\n" + _render_evidence(evidence)
+            "Create exactly one coherent engineering question whose "
+            "complete answer requires material information from at "
+            "least two of the technical passages below.\n\n"
+            "STRICT OUTPUT REQUIREMENTS:\n"
+            "- Return one question only in the structured question field.\n"
+            "- The question must be one sentence.\n"
+            "- The question must end with a question mark.\n"
+            "- Keep the question under 240 characters.\n"
+            "- The question must be answerable from the technical content.\n"
+            "- It should require several materially distinct technical "
+            "facts or relationships.\n"
+            "- Do not mention E1, E2, E3, or any evidence identifier.\n"
+            "- Do not use the words evidence, excerpt, excerpts, supplied, "
+            "provided, document, documents, chunk, chunks, prompt, "
+            "training, or dataset in the question.\n"
+            "- Do not include document numbers or source identifiers.\n"
+            "- Do not include the answer.\n\n"
+            "Technical passages:\n\n" + _render_evidence(evidence)
         ),
     )
 

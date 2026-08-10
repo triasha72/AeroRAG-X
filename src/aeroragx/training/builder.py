@@ -360,6 +360,8 @@ class TrainingExampleBuilder:
 
         telemetry: list[TeacherCallTelemetry] = []
 
+        last_validation_error: str | None = None
+
         for _ in range(self._teacher_config.question_generation.max_draft_attempts):
             if plan.example_type == "ordinary":
                 prompt = build_ordinary_question_prompt(evidence)
@@ -369,6 +371,22 @@ class TrainingExampleBuilder:
 
             else:
                 raise AssertionError("Supported question drafting received an invalid plan type.")
+
+            if last_validation_error is not None:
+                prompt = prompt.model_copy(
+                    update={
+                        "user_prompt": (
+                            prompt.user_prompt
+                            + "\n\n"
+                            + "A previous draft was rejected "
+                            + "by deterministic validation because: "
+                            + last_validation_error
+                            + "\n"
+                            + "Return a corrected question that "
+                            + "does not repeat that problem."
+                        )
+                    }
+                )
 
             (
                 draft,
@@ -387,7 +405,9 @@ class TrainingExampleBuilder:
                     config=(self._teacher_config.question_generation),
                 )
 
-            except TeacherQuestionValidationError:
+            except TeacherQuestionValidationError as error:
+                last_validation_error = str(error)
+
                 continue
 
             return (
@@ -395,12 +415,17 @@ class TrainingExampleBuilder:
                 telemetry,
             )
 
-        raise ExampleBuildError(
+        message = (
             f"{plan.plan_id}: teacher "
             "did not produce a valid "
             "supported question within "
             "the configured draft limit."
         )
+
+        if last_validation_error is not None:
+            message += " Last validation error: " + last_validation_error
+
+        raise ExampleBuildError(message)
 
     def _draft_refusal_question(
         self,

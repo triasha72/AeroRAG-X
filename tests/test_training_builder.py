@@ -544,3 +544,64 @@ def test_refusal_fails_when_every_draft_is_supported() -> None:
         match=("verified unsupported"),
     ):
         builder.build(plan)
+
+
+def test_synthesis_redrafts_after_invalid_question() -> None:
+    response = ProviderResponse(
+        answer=(
+            "Thermal transport, component sizing, "
+            "and integration considerations interact "
+            "across the architecture."
+        ),
+        claims=[
+            ProviderClaim(
+                text=("Thermal transport affects the architecture."),
+                evidence_ids=["E1"],
+            ),
+            ProviderClaim(
+                text=("Component sizing and integration also affect the architecture."),
+                evidence_ids=[
+                    "E2",
+                    "E3",
+                ],
+            ),
+        ],
+        insufficient_evidence=False,
+    )
+
+    builder, _, transport = make_builder(
+        teacher_outcomes=[
+            make_question_result(
+                "Based on the supplied excerpts, how do the engineering factors interact?"
+            ),
+            make_question_result(
+                "How do thermal transport, component sizing, "
+                "and integration constraints interact "
+                "within the architecture?"
+            ),
+        ],
+        answer_response=response,
+    )
+
+    plan = make_plan(
+        example_type="synthesis",
+        chunk_ids=[
+            "1001:chunk:00000",
+            "1001:chunk:00001",
+            "1001:chunk:00002",
+        ],
+    )
+
+    result = builder.build(plan)
+
+    assert result.question_attempts == 2
+
+    assert result.example.query == (
+        "How do thermal transport, component sizing, "
+        "and integration constraints interact "
+        "within the architecture?"
+    )
+
+    assert len(transport.requests) == 2
+
+    assert "previous draft was rejected" in (transport.requests[1].user_prompt.casefold())
