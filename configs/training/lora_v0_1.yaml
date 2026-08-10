@@ -11,6 +11,9 @@ dataset:
   source_selection_manifest: "data/training/manifests/source_documents_v0_1.json"
   example_plan_manifest: "data/training/manifests/example_plan_v0_1.json"
   training_input: "data/training/aeroragx_lora_v0_1.jsonl"
+  train_input: "data/training/splits/aeroragx_lora_v0_1_train_eligible.jsonl"
+  dev_input: "data/training/splits/aeroragx_lora_v0_1_dev.jsonl"
+  eligibility_report: "artifacts/evaluation/aeroragx_lora_training_eligibility_v0_1.json"
   manifest_output: "data/training/manifests/aeroragx_lora_v0_1.json"
 
   dev_fraction: 0.10

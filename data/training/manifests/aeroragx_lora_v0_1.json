@@ -12,15 +12,17 @@
   },
   "dev": {
     "documents": [
+      20180005333,
+      20210017939,
       20220018208
     ],
-    "examples": 4,
+    "examples": 12,
     "path": "data/training/splits/aeroragx_lora_v0_1_dev.jsonl",
-    "sha256": "5d6bf8be68e78db347e0cc1a28e1423752c46228949eaefce16c7a2194f936b8",
+    "sha256": "9f20bce48b8b34df1956098f70b618fbd7fe0feb2dac048eb7a96fca31fbf2d3",
     "types": {
-      "ordinary": 2,
-      "refusal": 1,
-      "synthesis": 1
+      "ordinary": 7,
+      "refusal": 2,
+      "synthesis": 3
     }
   },
   "generation": {
@@ -48,6 +50,10 @@
       "path": "data/training/manifests/example_plan_v0_1.json",
       "sha256": "e63533ec72da11802db9c8f468ea159e5aa2a3841711c6fd8ca84cef7f8237e3"
     },
+    "lora_config": {
+      "path": "configs/training/lora_v0_1.yaml",
+      "sha256": "619c81461d345e0d99c38fff7d21323a1767b314a8518165051ef677a2308730"
+    },
     "protected_documents": {
       "path": "data/evaluation/generation_v0_3_protected_documents.json",
       "sha256": "1bfa11206c0e87bd9b76c8a54a63363caf20f3f7a64fb10e6af5f2c9f41a4164"
@@ -62,13 +68,19 @@
     },
     "token_length_report": {
       "path": "artifacts/evaluation/aeroragx_lora_token_length_v0_1.json",
-      "sha256": "e42f7b7aa87c27b0fd47349f9b1b09b9f495550562183e0608c9abd2c2629c8c"
+      "sha256": "1ea7ab1dbe1eaa010f7b5b01558d91d5191b05fad647eee2f0945143417afe59"
+    },
+    "training_eligibility_report": {
+      "path": "artifacts/evaluation/aeroragx_lora_training_eligibility_v0_1.json",
+      "sha256": "fad693e42cde96dfc94a327cefcdd985bf4de238a1ceab0e99fe3acbbf99cef3"
     }
   },
   "split": {
     "dev_fraction": 0.1,
     "document_overlap": [],
-    "seed": 20260810
+    "pre_eligibility_train_examples": 108,
+    "seed": 20260810,
+    "training_excluded_count": 2
   },
   "train": {
     "documents": [
@@ -76,13 +88,11 @@
       20160009765,
       20160010440,
       20180000402,
-      20180005333,
       20180007082,
       20200000362,
       20205004194,
       20205004871,
       20210000751,
-      20210017939,
       20220013008,
       20220015806,
       20220016701,
@@ -104,18 +114,39 @@
       20260002125,
       20260007283
     ],
-    "examples": 116,
-    "path": "data/training/splits/aeroragx_lora_v0_1_train.jsonl",
-    "sha256": "6f8348a39bc70c349d4966cca943e1c834ecc8b31f3ab0bb85a1c49715b4baff",
+    "examples": 106,
+    "path": "data/training/splits/aeroragx_lora_v0_1_train_eligible.jsonl",
+    "sha256": "0210ada9daef286ca0adba8a41b2f58a1638de14d39ca88db06ad17e53c31617",
     "types": {
-      "ordinary": 70,
-      "refusal": 23,
-      "synthesis": 23
+      "ordinary": 64,
+      "refusal": 22,
+      "synthesis": 20
     }
   },
   "training_constraints": {
     "max_sequence_tokens": 4096,
     "thinking_mode": false
+  },
+  "training_eligibility": {
+    "canonical_examples": 120,
+    "dev_examples": 12,
+    "document_overlap": [],
+    "eligible_train_examples": 106,
+    "excluded_from_training": [
+      {
+        "example_id": "train_plan_0103",
+        "reason": "sequence exceeds 4096-token training limit",
+        "token_count": 4521
+      },
+      {
+        "example_id": "train_plan_0105",
+        "reason": "sequence exceeds 4096-token training limit",
+        "token_count": 5122
+      }
+    ],
+    "max_sequence_tokens": 4096,
+    "pre_eligibility_train_examples": 108,
+    "version": "0.1"
   },
   "version": "0.1"
 }
