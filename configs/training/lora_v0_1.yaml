@@ -8,6 +8,7 @@ provider_config:
   path: "configs/provider_v0_1.yaml"
 
 dataset:
+  source_selection_manifest: "data/training/manifests/source_documents_v0_1.json"
   training_input: "data/training/aeroragx_lora_v0_1.jsonl"
   manifest_output: "data/training/manifests/aeroragx_lora_v0_1.json"
 
@@ -52,5 +53,6 @@ notes:
   - "The frozen 32-query benchmark is evaluation-only."
   - "Do not use benchmark queries or outputs as training examples."
   - "Do not use documents listed in the protected document manifest for training."
+  - "Construct training examples only from documents in the frozen source-selection manifest."
   - "LoRA target modules will be selected after the PEFT/model-module audit."
   - "This configuration is not yet an executable training configuration."

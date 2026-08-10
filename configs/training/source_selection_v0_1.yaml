@@ -1,0 +1,34 @@
+version: "0.1"
+
+corpus_version: "ntrs_v0_1"
+
+target_document_count: 32
+
+minimum_chunks_per_document: 3
+
+expected_corpus_document_count: 94
+
+expected_protected_document_count: 45
+
+expected_candidate_document_count: 49
+
+expected_candidate_chunk_count: 717
+
+deduplicate_exact_titles: true
+
+source_query_minimums:
+  "electric aircraft thermal management": 3
+  "aircraft battery thermal management": 3
+  "fuel cell aircraft thermal management": 3
+  "electrified aircraft propulsion": 3
+  "hybrid electric aircraft propulsion safety": 3
+
+type_priority:
+  - "TECHNICAL_PUBLICATION"
+  - "TECHNICAL_MEMORANDUM"
+  - "TECHNICAL_REPORT"
+  - "CONFERENCE_PAPER"
+  - "ACCEPTED_MANUSCRIPT"
+  - "JOURNAL_ARTICLE"
+  - "PRESENTATION"
+  - "OTHER"
