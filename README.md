@@ -82,7 +82,10 @@ Generation backend:  openai
 - structured JSON validation
 - evidence-ID validation
 - authoritative application-side claim citations
+- deterministic, remote, and local-model telemetry classification
+- failure-tolerant generation benchmarking
 - provider latency and token telemetry
+- frozen untuned local-model evaluation
 - FastAPI serving
 - request IDs and structured errors
 - structured JSON logging
@@ -108,6 +111,8 @@ AeroRAG-X is built around several engineering questions:
 6. Can final citations remain application-controlled rather than model-generated?
 7. Can local and remote LLMs share the same grounded structured-provider interface?
 8. Can every major capability be compared against a frozen baseline?
+9. Can local-model failures be measured without terminating an evaluation run?
+10. Can fine-tuning be justified by measured failure modes rather than added only for architectural complexity?
 
 The project emphasizes:
 
@@ -119,6 +124,7 @@ The project emphasizes:
 - failure analysis
 - provider observability
 - backend interchangeability
+- frozen baselines
 - reproducible deployment
 
 ---
@@ -403,7 +409,7 @@ export AERORAGX_RUNTIME_MODE=transformers
 export AERORAGX_DENSE_BACKEND=numpy
 ```
 
-Current first local baseline:
+Current local baseline:
 
 ```text
 Qwen/Qwen3-0.6B
@@ -458,7 +464,7 @@ application-side citation resolution
 
 # Real local-model validation
 
-The real smoke workflow has been validated with:
+The local model has been validated with:
 
 ```text
 Model:         Qwen/Qwen3-0.6B
@@ -466,7 +472,7 @@ Dense backend: NumPy
 Device:        Apple MPS
 ```
 
-## Supported case
+## Supported smoke case
 
 Query:
 
@@ -490,7 +496,7 @@ Observed smoke behavior:
 | External API cost | $0 |
 | Provider latency | ~12.2 s |
 
-## Unsupported case
+## Unsupported smoke case
 
 Query:
 
@@ -508,7 +514,119 @@ Observed smoke behavior:
 | Citations | 0 |
 | Source documents | 0 |
 
-These are smoke validations, not a multi-query model benchmark. A frozen untuned local-model benchmark is the next evaluation milestone.
+These cases validate runtime behavior but are not used as the primary local-model quality result.
+
+## Frozen untuned local-model benchmark
+
+A frozen 32-query untuned `Qwen/Qwen3-0.6B` + RAG baseline has now been established.
+
+Evaluation configuration:
+
+```text
+Generation:        Qwen/Qwen3-0.6B
+Dense backend:     NumPy
+Reranker:          cross-encoder/ms-marco-MiniLM-L6-v2
+Candidate top-k:   20
+Evidence top-k:    5
+Sampling:          disabled
+```
+
+Evaluation set:
+
+| Category | Queries |
+|---|---:|
+| Expected-answerable | 20 |
+| Unsupported | 12 |
+| Total | 32 |
+
+Measured quality:
+
+| Metric | Result |
+|---|---:|
+| Completed queries | 32 / 32 |
+| Generation failures | 0 |
+| Generation failure rate | 0.0000 |
+| Answerability accuracy | 1.0000 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 1.0000 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Structural validity | 1.0000 |
+| Expected-term recall | 0.9138 |
+| Expected terms matched | 53 / 58 |
+
+Provider telemetry:
+
+| Metric | Result |
+|---|---:|
+| Provider kind | local model |
+| Provider calls | 20 |
+| Provider bypasses | 12 |
+| Unknown provider-call states | 0 |
+| Provider call-policy accuracy | 1.0000 |
+| Provider retries | 0 |
+| Input tokens | 49,589 |
+| Output tokens | 2,969 |
+| Total tokens | 52,558 |
+| Mean provider latency | 14.29 s |
+| P50 provider latency | 7.87 s |
+| P95 provider latency | 29.26 s |
+| External API inference cost | $0 |
+
+The `$0` figure refers to external API-token cost. Local compute cost is not estimated by this benchmark.
+
+Frozen artifacts:
+
+```text
+artifacts/evaluation/generation_transformers_base_v0_1.json
+artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json
+```
+
+---
+
+# Local-model failure analysis
+
+The untuned Qwen baseline produced:
+
+```text
+0 generation failures
+0 answerability errors
+0 structural failures
+```
+
+The exact expected-term metric found five answerable queries with one lexical term missing.
+
+| Query | Missing term | Manual interpretation |
+|---|---|---|
+| `core_008` | `detection` | Primarily lexical: the answer uses `detected` and describes precursor identification. |
+| `para_001` | `cell` | Genuine content weakness: cell-to-cell propagation was not explained adequately. |
+| `para_005` | `distributed` | Primarily lexical/semantic: the answer describes distributing power across the airframe. |
+| `para_009` | `detection` | Primarily lexical: the answer explicitly uses `detect` and identifies NDE methods. |
+| `synth_003` | `safety` | Semantic/compressed: faults, degradation, failure modes, sensing, and health management are discussed without the exact term. |
+
+This indicates that exact expected-term recall is useful as a deterministic diagnostic but should not be interpreted as a semantic-equivalence metric.
+
+The most defensible substantive content miss in the current 32-query baseline is `para_001`.
+
+---
+
+# Claim-decomposition observation
+
+The local model's larger quality difference is response decomposition rather than structural validity.
+
+Across the 20 answerable queries:
+
+| Provider | Formal claims | Claims per answerable query | Citations | Citation references |
+|---|---:|---:|---:|---:|
+| OpenAI v0.3 | 101 | 5.05 | 82 | 149 |
+| Qwen 0.6B local | 25 | 1.25 | 31 | 33 |
+
+The local model often compresses several technical statements into a small number of formal claims.
+
+The current structural-validity metric does not penalize this behavior because the claims that are produced remain correctly cited and source-backed.
+
+This observation gives the next model-adaptation phase a measurable target: improve grounded technical completeness and claim decomposition while preserving existing refusal, citation-validity, structural-validity, and generation-reliability behavior.
 
 ---
 
@@ -557,19 +675,22 @@ Implemented evaluation includes:
 - generation v0.3 development benchmark
 - deterministic-provider evaluation
 - OpenAI-provider evaluation
+- frozen local-Transformers evaluation
 - protected held-out deterministic evaluation
 - answerability metrics
 - refusal metrics
 - citation metrics
 - structural-validity checks
+- expected-term diagnostics
+- failure-tolerant generation evaluation
+- normalized generation-failure categories
+- deterministic / remote / local-model telemetry classification
 - latency metrics
 - token metrics
 - cost metrics
 - CI-enforced frozen regression policy
 
-The local Transformers provider has completed smoke validation. Its frozen benchmark has not yet been established.
-
-## Generation v0.3 development benchmark
+## Generation v0.3 OpenAI development benchmark
 
 | Category | Queries |
 |---|---:|
@@ -603,12 +724,76 @@ Provider telemetry:
 | Provider calls | 20 |
 | Provider bypasses | 12 |
 | Total tokens | 58,915 |
-| Estimated benchmark cost | $0.103745 |
+| Estimated benchmark API cost | $0.103745 |
 | P50 provider latency | 5.6394 s |
 | P95 provider latency | 7.6947 s |
 | Retry rate | 0.0 |
 
 These figures describe the development benchmark only and are not evidence of universal RAG correctness.
+
+## Untuned local Transformers benchmark
+
+The same 32-query v0.3 evaluation set was executed with:
+
+```text
+Qwen/Qwen3-0.6B
+```
+
+| Metric | Local Qwen |
+|---|---:|
+| Completed queries | 32 / 32 |
+| Generation failures | 0 |
+| Answerability accuracy | 1.0000 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 1.0000 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.9138 |
+| Structural validity | 1.0000 |
+| Provider call-policy accuracy | 1.0000 |
+
+Provider telemetry:
+
+| Metric | Value |
+|---|---:|
+| Provider calls | 20 |
+| Provider bypasses | 12 |
+| Provider retries | 0 |
+| Total tokens | 52,558 |
+| External API inference cost | $0 |
+| P50 provider latency | 7.87 s |
+| P95 provider latency | 29.26 s |
+
+## OpenAI vs local Qwen
+
+| Metric | OpenAI v0.3 | Qwen 0.6B local |
+|---|---:|---:|
+| Answerability accuracy | 1.0000 | 1.0000 |
+| Answerable completion | 1.0000 | 1.0000 |
+| Unsupported refusal | 1.0000 | 1.0000 |
+| Claim citation coverage | 1.0000 | 1.0000 |
+| Citation-reference validity | 1.0000 | 1.0000 |
+| Source-document coverage | 1.0000 | 1.0000 |
+| Structural validity | 1.0000 | 1.0000 |
+| Expected-term recall | 0.9310 | 0.9138 |
+| Total claims | 101 | 25 |
+| Total citations | 82 | 31 |
+| Total citation references | 149 | 33 |
+| Provider calls | 20 | 20 |
+| Provider bypasses | 12 | 12 |
+| Retry rate | 0.0000 | 0.0000 |
+| P50 provider latency | 5.64 s | 7.87 s |
+| P95 provider latency | 7.69 s | 29.26 s |
+| External API inference cost | $0.103745 | $0 |
+
+The local model preserves all currently measured answerability, refusal, citation-validity, source-grounding, and structural properties on this benchmark while using fewer output tokens and eliminating external API-token cost.
+
+Its clearest measured weaknesses are:
+
+- lower exact expected-term recall;
+- less granular claim decomposition;
+- substantially higher tail latency.
 
 ## Held-out deterministic evaluation v0.4
 
@@ -630,6 +815,8 @@ These figures describe the development benchmark only and are not evidence of un
 | Structural validity | 1.0000 |
 
 The held-out result is recorded as evidence and is not used as a tuning target.
+
+The frozen 32-query local-model benchmark must likewise remain outside LoRA training data.
 
 ---
 
@@ -765,7 +952,7 @@ GitHub Actions validates:
 - PostgreSQL + pgvector integration
 - Docker build
 
-The real Qwen smoke test remains opt-in.
+The real Qwen smoke test and multi-query local-model benchmark remain opt-in because they require local model weights and significantly more inference time than ordinary CI.
 
 Run the local quality gate:
 
@@ -776,6 +963,7 @@ ruff format .
 ruff check .
 
 mypy src/aeroragx
+mypy scripts/run_generation_v03.py
 mypy scripts/load_pgvector.py
 mypy scripts/benchmark_vector_backends.py
 mypy scripts/smoke_transformers.py
@@ -811,25 +999,29 @@ AeroRAG-X currently:
 - resolves final citations application-side
 - redacts provider secrets from transport errors
 - can reject unsupported questions before model invocation
+- records model-generation failures without fabricating refusals
 - uses environment variables for secrets
 - runs Docker as a non-root user
 - keeps deployed Cloud Run access private
 - preserves source-document checksums
 - validates pgvector corpus counts against versioned artifacts
+- keeps frozen evaluation artifacts separate from future training data
 
 Current limitations include:
 
 - no local-model fine-tuning yet
 - no PEFT / LoRA adapter yet
-- no frozen local-Transformers benchmark yet
 - no constrained-decoding JSON grammar
 - no semantic entailment verifier
+- exact expected-term recall is lexical rather than a semantic-equivalence metric
+- current structural validity does not directly measure answer-to-claim decomposition completeness
 - no general-purpose autonomous agent
 - no multimodal figure retrieval
 - no structured table retrieval
 - no managed production PostgreSQL deployment
 - no large-scale ANN benchmark
 - no production local-LLM GPU deployment benchmark
+- no measured local-compute monetary cost
 - no claim of Qualcomm-hardware optimization
 
 ---
@@ -839,11 +1031,11 @@ Current limitations include:
 ```text
 local Transformers provider                DONE
         ↓
-protected untuned local-model benchmark    NEXT
+protected untuned local-model benchmark    DONE
         ↓
-failure analysis
+baseline failure analysis                  DONE
         ↓
-PEFT / LoRA domain adaptation
+PEFT / LoRA domain adaptation              NEXT
         ↓
 base vs RAG vs LoRA vs LoRA + RAG
         ↓
@@ -853,6 +1045,28 @@ bounded tool-using research agent
         ↓
 agent evaluation
 ```
+
+The next model-adaptation objective is not basic JSON repair. The untuned local baseline already completed all 32 evaluation queries with zero generation failures.
+
+The next experiment should test whether PEFT / LoRA can improve:
+
+```text
+technical coverage
+claim decomposition
+evidence-grounded synthesis
+```
+
+while preserving:
+
+```text
+unsupported refusal
+citation validity
+source-document coverage
+structural validity
+generation reliability
+```
+
+The frozen 32-query benchmark must remain evaluation-only and must not be used as LoRA training data.
 
 The project uses measured behavior rather than architectural complexity as the criterion for adopting new capabilities.
 

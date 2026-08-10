@@ -45,6 +45,8 @@ local Hugging Face generation
         ↓
 protected local-model baseline
         ↓
+failure analysis
+        ↓
 PEFT / LoRA
         ↓
 model + RAG ablation study
@@ -62,7 +64,7 @@ multimodal retrieval
 
 # Current status
 
-The text-RAG infrastructure, persistent vector backend, and first real local Hugging Face generation path are implemented.
+The text-RAG infrastructure, persistent vector backend, local Hugging Face generation path, and first protected untuned local-model baseline are implemented.
 
 Validated capabilities include:
 
@@ -90,23 +92,46 @@ Validated capabilities include:
 - [x] CI regression policy
 - [x] real Qwen local smoke validation
 - [x] unsupported-query local-model bypass
+- [x] local-model provider telemetry classification
+- [x] failure-tolerant generation evaluation
+- [x] frozen 32-query untuned Qwen baseline
+- [x] local-model failure analysis
+- [x] OpenAI-vs-local-model baseline comparison
 
 ---
 
 # Current priority
 
-The next priority is to freeze a protected benchmark for the untuned local Qwen baseline.
+The current priority is PEFT / LoRA domain adaptation with a measured objective derived from the frozen untuned local-model baseline.
+
+The baseline showed:
+
+```text
+32 / 32 queries completed
+0 generation failures
+100% answerability accuracy
+100% answerable completion
+100% unsupported refusal
+100% claim citation coverage
+100% citation-reference validity
+100% source-document coverage
+100% structural validity
+91.38% exact expected-term recall
+```
+
+The main observed model-quality gap is less granular claim decomposition and some technical-content compression rather than basic structured-output failure.
 
 Immediate sequence:
 
-1. merge the local Transformers provider;
-2. freeze untuned Qwen + RAG evaluation;
-3. classify local-model failure modes;
-4. add PEFT / LoRA training;
-5. compare base, RAG, LoRA, and LoRA + RAG;
-6. benchmark reduced-precision inference;
-7. add a bounded tool-using research workflow;
-8. evaluate agent behavior.
+1. preserve the frozen 32-query benchmark as evaluation-only data;
+2. build a separate LoRA train/dev dataset;
+3. audit train/evaluation overlap;
+4. train a first PEFT / LoRA adapter;
+5. compare Base, RAG, LoRA, and LoRA + RAG;
+6. verify that adaptation preserves refusal and citation behavior;
+7. benchmark reduced-precision inference;
+8. add a bounded tool-using research workflow;
+9. evaluate agent behavior.
 
 ---
 
@@ -380,12 +405,16 @@ Future:
 - [x] provider telemetry
 - [x] deterministic baseline
 - [x] OpenAI baseline
+- [x] local Transformers baseline
+- [x] deterministic / remote / local-model provider classification
+- [x] failure-tolerant benchmark mode
+- [x] normalized generation-failure categories
 - [x] 32-query v0.3 development set
 - [x] 12-query protected v0.4 deterministic held-out set
 - [x] frozen artifacts
 - [x] CI regression policy
 
-## Development v0.3
+## Development v0.3 — OpenAI
 
 | Metric | Final |
 |---|---:|
@@ -397,6 +426,43 @@ Future:
 | Expected-term recall | 0.9310 |
 | Structural validity | 1.0000 |
 | Provider call-policy accuracy | 1.0000 |
+
+## Untuned local Transformers v0.1
+
+Model:
+
+```text
+Qwen/Qwen3-0.6B
+```
+
+| Metric | Result |
+|---|---:|
+| Queries completed | 32 / 32 |
+| Generation failures | 0 |
+| Answerability accuracy | 1.0000 |
+| Answerable completion | 1.0000 |
+| Unsupported refusal | 1.0000 |
+| Claim citation coverage | 1.0000 |
+| Citation-reference validity | 1.0000 |
+| Source-document coverage | 1.0000 |
+| Expected-term recall | 0.9138 |
+| Structural validity | 1.0000 |
+| Provider call-policy accuracy | 1.0000 |
+
+Provider telemetry:
+
+```text
+20 model calls
+12 provider bypasses
+0 unknown call states
+0 retries
+49,589 input tokens
+2,969 output tokens
+52,558 total tokens
+P50 provider latency = 7.87 s
+P95 provider latency = 29.26 s
+external API cost = $0
+```
 
 ## Protected deterministic held-out v0.4
 
@@ -415,6 +481,8 @@ Future:
 - [ ] semantic citation support
 - [ ] answer faithfulness
 - [ ] answer relevance
+- [ ] answer-to-claim decomposition completeness
+- [ ] semantic expected-concept matching
 - [ ] human review
 - [ ] multiple assessors
 
@@ -558,7 +626,7 @@ Future:
 
 # Phase 18 — Local neural generation — IMPLEMENTED
 
-Current first baseline model:
+Current baseline model:
 
 ```text
 Qwen/Qwen3-0.6B
@@ -618,73 +686,181 @@ Qwen/Qwen3-0.6B
 - [x] real unsupported-query provider bypass
 - [x] reproducible `scripts/smoke_transformers.py`
 
-This phase establishes functionality. It does not establish broad local-model quality.
+This phase establishes local neural-generation functionality.
 
 ---
 
-# Phase 19 — Untuned local-model benchmark — CURRENT PRIORITY
+# Phase 19 — Untuned local-model benchmark — IMPLEMENTED
 
 Goal:
 
 > Freeze the behavior of untuned Qwen + AeroRAG-X before any fine-tuning.
 
-## Evaluation design
+## Evaluation infrastructure
 
-- [ ] audit the existing generation evaluator for local providers
-- [ ] ensure local provider telemetry is recorded correctly
-- [ ] freeze benchmark configuration
-- [ ] preserve the existing held-out split
-- [ ] avoid tuning against protected held-out data
+- [x] audit the existing generation evaluator for local providers
+- [x] distinguish deterministic, remote, and local-model provider telemetry
+- [x] preserve telemetry for local neural models
+- [x] add failure-tolerant benchmark mode
+- [x] retain strict failure behavior outside benchmark mode
+- [x] normalize generation-failure categories
+- [x] prevent failed queries from receiving refusal/completion credit
+- [x] preserve unknown provider-call state for failed generations
+- [x] add local-provider telemetry tests
+- [x] add generation-failure tests
+- [x] freeze benchmark configuration
+- [x] preserve the existing evaluation split
+- [x] avoid tuning against the frozen evaluation set
+
+## Validation
+
+- [x] 6-query real-model canary
+- [x] 32-query untuned benchmark
+- [x] 32 / 32 completed queries
+- [x] zero generation failures
+- [x] valid benchmark JSON artifacts
+- [x] local-model provider telemetry
+- [x] manual expected-term miss analysis
+- [x] OpenAI comparison
 
 ## Metrics
 
-- [ ] answerability accuracy
-- [ ] answerable completion
-- [ ] unsupported refusal
-- [ ] claim citation coverage
-- [ ] citation-reference validity
-- [ ] source-document coverage
-- [ ] expected-term recall
-- [ ] structural validity
-- [ ] provider-call policy
-- [ ] JSON parse failure rate
-- [ ] provider failure rate
-- [ ] input tokens
-- [ ] output tokens
-- [ ] P50 provider latency
-- [ ] P95 provider latency
-- [ ] P50 total RAG latency
-- [ ] P95 total RAG latency
+- [x] answerability accuracy
+- [x] answerable completion
+- [x] unsupported refusal
+- [x] claim citation coverage
+- [x] citation-reference validity
+- [x] source-document coverage
+- [x] expected-term recall
+- [x] structural validity
+- [x] provider-call policy
+- [x] generation-failure rate
+- [x] normalized failure type
+- [x] input tokens
+- [x] output tokens
+- [x] provider attempts
+- [x] provider retries
+- [x] P50 provider latency
+- [x] P95 provider latency
+- [x] external API cost
 
-## Local-model failure analysis
+Future metric extensions:
 
-- [ ] answer-to-claim coverage
-- [ ] incomplete claim decomposition
-- [ ] unnecessary refusal
-- [ ] unsupported synthesis
-- [ ] malformed JSON
-- [ ] invalid evidence references
-- [ ] retrieval miss
-- [ ] reranking miss
-- [ ] sufficiency false positive
-- [ ] sufficiency false negative
+- [ ] P50 total RAG latency artifact
+- [ ] P95 total RAG latency artifact
+- [ ] semantic expected-concept recall
+- [ ] answer-to-claim decomposition completeness
+- [ ] independent human quality review
 
-Target artifacts:
+## Frozen results
+
+```text
+Model: Qwen/Qwen3-0.6B
+Queries: 32
+Answerable: 20
+Unsupported: 12
+
+Completed: 32 / 32
+Generation failures: 0
+Generation failure rate: 0.0000
+
+Answerability accuracy: 1.0000
+Answerable completion: 1.0000
+Unsupported refusal: 1.0000
+Claim citation coverage: 1.0000
+Citation-reference validity: 1.0000
+Source-document coverage: 1.0000
+Expected-term recall: 0.9138
+Structural validity: 1.0000
+Provider call-policy accuracy: 1.0000
+
+Provider calls: 20
+Provider bypasses: 12
+Provider retries: 0
+Input tokens: 49,589
+Output tokens: 2,969
+Total tokens: 52,558
+P50 provider latency: 7.87 s
+P95 provider latency: 29.26 s
+External API cost: $0
+```
+
+Artifacts:
 
 ```text
 artifacts/evaluation/generation_transformers_base_v0_1.json
 artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json
 ```
 
-The baseline must be frozen before LoRA training begins.
+## Local-model failure analysis
+
+Observed:
+
+- [x] zero malformed-JSON generation failures
+- [x] zero response-validation failures
+- [x] zero answerability errors
+- [x] zero unsupported-synthesis errors
+- [x] zero structural failures
+- [x] expected-term miss review
+- [x] claim-decomposition comparison
+
+Five exact expected-term misses were identified:
+
+| Query | Missing term | Interpretation |
+|---|---|---|
+| `core_008` | `detection` | lexical-equivalent |
+| `para_001` | `cell` | genuine content-coverage weakness |
+| `para_005` | `distributed` | lexical/semantic-equivalent |
+| `para_009` | `detection` | lexical-equivalent |
+| `synth_003` | `safety` | semantic-equivalent / compressed |
+
+The exact lexical metric therefore understates some semantically correct answers.
+
+The stronger model-level difference is claim decomposition:
+
+```text
+OpenAI baseline:
+101 claims / 20 answerable queries
+5.05 claims per answerable query
+
+Qwen baseline:
+25 claims / 20 answerable queries
+1.25 claims per answerable query
+```
+
+This provides the primary measurable target for Phase 20.
+
+The baseline is frozen before LoRA training begins and must not be used as training data.
 
 ---
 
-# Phase 20 — PEFT / LoRA domain adaptation — PLANNED
+# Phase 20 — PEFT / LoRA domain adaptation — CURRENT PRIORITY
 
 Goal:
 
-> Improve structured grounded synthesis behavior without training the model to memorize the NASA corpus.
+> Improve grounded technical completeness and claim decomposition while preserving the untuned baseline's refusal, citation, structural-validity, and generation-reliability behavior.
+
+The untuned baseline does **not** demonstrate a need for LoRA to repair basic JSON formatting or citation validity.
+
+The adaptation hypothesis should therefore focus on:
+
+```text
+technical completeness
+multi-claim decomposition
+evidence-grounded synthesis
+consistent structured claim granularity
+```
+
+while preserving:
+
+```text
+unsupported refusal
+citation validity
+evidence-ID validity
+source-document coverage
+structural validity
+zero/low generation failure rate
+```
 
 Planned subsystem:
 
@@ -704,30 +880,62 @@ Planned configuration:
 configs/training/lora_v0_1.yaml
 ```
 
-Data requirements:
+## Data requirements
 
+- [ ] build training examples independently of the frozen 32-query benchmark
 - [ ] preserve evidence IDs
 - [ ] preserve refusal examples
 - [ ] preserve structured output
+- [ ] preserve multi-claim examples
+- [ ] include technically complete grounded synthesis examples
 - [ ] train/dev/test boundaries
 - [ ] query-overlap audit
 - [ ] answer-overlap audit
 - [ ] source-document leakage audit
+- [ ] benchmark-query leakage audit
 - [ ] configuration hashes
 - [ ] deterministic seeds
 
-Training requirements:
+The following must remain evaluation-only:
+
+```text
+data/evaluation/generation_queries_v0_3.jsonl
+artifacts/evaluation/generation_transformers_base_v0_1.json
+artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json
+```
+
+## Training requirements
 
 - [ ] add PEFT
 - [ ] configure LoRA targets
+- [ ] build training manifest
 - [ ] train first adapter
 - [ ] track base-model revision
 - [ ] track adapter version
 - [ ] track dataset hash
 - [ ] track LoRA parameters
 - [ ] record trainable-parameter count
+- [ ] preserve reproducible seeds
+- [ ] save training/evaluation receipts
 
-LoRA should target better structured JSON, claim decomposition, evidence-ID use, refusal behavior, and concise synthesis. It is not a replacement for retrieval.
+## Success criteria
+
+The first adapter should be evaluated against the frozen base model.
+
+Primary target:
+
+- improve claim decomposition and technical completeness
+
+Non-regression requirements:
+
+- preserve answerability accuracy
+- preserve unsupported refusal
+- preserve citation-reference validity
+- preserve source-document coverage
+- preserve structural validity
+- avoid increasing generation-failure rate materially
+
+LoRA is not a replacement for retrieval, reranking, or evidence-sufficiency gating.
 
 ---
 
@@ -741,13 +949,38 @@ LoRA should target better structured JSON, claim decomposition, evidence-ID use,
 | LoRA | Yes | adapted RAG |
 | OpenAI | Yes | external reference |
 
-All configurations should use the same frozen evaluation set.
+All configurations must use the same frozen evaluation set.
 
-Metrics must include answerability, grounding, citation validity, expected-term recall, structure, refusal behavior, latency, and tokens.
+Metrics must include:
+
+- answerability
+- unsupported refusal
+- generation-failure rate
+- grounding
+- citation validity
+- source-document coverage
+- expected-term recall
+- claim count
+- claim decomposition
+- structural validity
+- latency
+- token usage
+- external cost
+
+The ablation should determine whether observed gains come from retrieval, adaptation, or their combination.
 
 ---
 
 # Phase 22 — Efficient local inference — PLANNED
+
+The untuned baseline establishes latency as the clearest current systems-level weakness.
+
+Current Qwen baseline:
+
+```text
+P50 provider latency = 7.87 s
+P95 provider latency = 29.26 s
+```
 
 Benchmark:
 
@@ -755,18 +988,27 @@ Benchmark:
 - [ ] peak memory
 - [ ] first-token latency
 - [ ] total generation latency
+- [ ] P50 generation latency
+- [ ] P95 generation latency
 - [ ] tokens per second
 - [ ] model size
 - [ ] structured-output validity
+- [ ] generation-failure rate
 - [ ] grounding quality after reduced precision
+- [ ] citation validity after reduced precision
 
 Candidates:
 
 - [ ] FP16
 - [ ] BF16 where supported
 - [ ] INT8 where supported
+- [ ] additional quantization only after runtime support is verified
+
+Quality and grounding must be compared against the frozen FP16/local baseline.
 
 Do not claim hardware-specific optimization without testing on that hardware.
+
+No Qualcomm hardware-performance claim should be made unless inference is actually benchmarked on Qualcomm hardware.
 
 ---
 
@@ -875,18 +1117,28 @@ Already implemented:
 - [x] development split
 - [x] held-out split
 - [x] frozen deterministic baseline
+- [x] frozen OpenAI baseline
+- [x] frozen untuned local-model baseline
+- [x] local-model failure-tolerant evaluation
+- [x] normalized generation-failure categories
+- [x] provider-type-aware telemetry
+- [x] local-vs-remote provider comparison
 
 Future:
 
 - [ ] larger retrieval benchmark
 - [ ] larger generation benchmark
+- [ ] dedicated LoRA development set
 - [ ] conflicting evidence
 - [ ] partial evidence
 - [ ] adversarial prompt injection
 - [ ] latency regression thresholds
 - [ ] semantic citation support
+- [ ] semantic expected-concept matching
 - [ ] semantic answer faithfulness
 - [ ] semantic answer relevance
+- [ ] answer-to-claim coverage metric
+- [ ] claim-decomposition completeness metric
 - [ ] independent human review
 - [ ] multiple assessors
 - [ ] inter-annotator agreement
@@ -907,6 +1159,9 @@ Completed:
 - [x] pgvector backend
 - [x] local Transformers provider
 - [x] real local-model smoke script
+- [x] frozen untuned local-model benchmark
+- [x] local-model benchmark telemetry
+- [x] local-model failure analysis
 
 Candidate future milestones:
 
@@ -940,22 +1195,28 @@ These may become appropriate later if measured requirements justify them.
 
 # Immediate next milestone
 
-The next branch should answer one question:
+The next branch should answer:
 
-> How well does the untuned local Qwen model perform across the existing protected AeroRAG-X evaluation framework?
+> Can a leakage-controlled PEFT / LoRA adapter improve grounded technical completeness and claim decomposition without degrading AeroRAG-X's existing refusal, citation, structural-validity, and generation-reliability behavior?
 
 ```text
-merge Transformers provider
+merge untuned Qwen baseline
         ↓
-create benchmark branch
+create LoRA branch
         ↓
-audit evaluator
+design independent training dataset
         ↓
-run untuned Qwen benchmark
+audit benchmark leakage
         ↓
-freeze artifacts
+train reproducible adapter
         ↓
-failure taxonomy
+evaluate LoRA + RAG
         ↓
-only then begin LoRA
+compare against frozen base + RAG
+        ↓
+run Base / RAG / LoRA / LoRA + RAG ablation
+        ↓
+only then optimize inference
 ```
+
+The frozen 32-query benchmark is now a test artifact and must not become training data.
