@@ -39,3 +39,6 @@ data/results/
 # Generated and downloaded corpus data
 data/raw/
 data/processed/
+
+# Local LoRA teacher-generation checkpoints
+data/training/work/
