@@ -1,0 +1,26 @@
+version: "0.1"
+
+expected_selected_document_count: 32
+expected_selected_chunk_count: 644
+
+ordinary_examples_per_document: 2
+extra_ordinary_document_count: 8
+
+synthesis_document_count: 24
+refusal_document_count: 24
+
+expected_ordinary_example_count: 72
+expected_synthesis_example_count: 24
+expected_refusal_example_count: 24
+expected_total_example_count: 120
+
+ordinary_evidence_chunks: 2
+synthesis_evidence_chunks: 3
+refusal_evidence_chunks: 2
+
+minimum_chunk_words: 80
+
+reference_section_prefixes:
+  - "references"
+  - "bibliography"
+  - "works cited"

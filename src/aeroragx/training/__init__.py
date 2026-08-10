@@ -16,6 +16,16 @@ from aeroragx.training.formatting import (
     format_training_example,
     format_training_examples,
 )
+from aeroragx.training.planning import (
+    ExamplePlanConfig,
+    ExamplePlanDocumentSummary,
+    LoRAExamplePlanManifest,
+    PlannedExample,
+    build_example_plan,
+    load_example_plan_config,
+    load_example_plan_manifest,
+    write_example_plan_manifest,
+)
 from aeroragx.training.protected import (
     ProtectedDocumentManifest,
     ProtectedQueryEvidence,
@@ -41,10 +51,14 @@ from aeroragx.training.split import (
 )
 
 __all__ = [
+    "ExamplePlanConfig",
+    "ExamplePlanDocumentSummary",
     "FormattedTrainingExample",
     "LeakageAuditReport",
     "LeakageFinding",
+    "LoRAExamplePlanManifest",
     "LoRASourceSelectionManifest",
+    "PlannedExample",
     "ProtectedDocumentManifest",
     "ProtectedQueryEvidence",
     "SourceDocumentMetadata",
@@ -56,8 +70,11 @@ __all__ = [
     "TrainingSplit",
     "assert_document_disjoint",
     "audit_training_leakage",
+    "build_example_plan",
     "format_training_example",
     "format_training_examples",
+    "load_example_plan_config",
+    "load_example_plan_manifest",
     "load_protected_document_manifest",
     "load_source_selection_config",
     "load_source_selection_manifest",
@@ -67,6 +84,7 @@ __all__ = [
     "select_source_documents",
     "sha256_file",
     "split_training_examples",
+    "write_example_plan_manifest",
     "write_protected_document_manifest",
     "write_source_selection_manifest",
     "write_training_examples",
