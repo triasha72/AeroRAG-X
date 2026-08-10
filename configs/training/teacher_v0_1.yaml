@@ -1,0 +1,25 @@
+version: "0.1"
+
+provider:
+  generation_config: "configs/generation_openai_v0_1.yaml"
+  provider_config: "configs/provider_v0_1.yaml"
+  http_transport_config: "configs/http_transport_openai_v0_1.yaml"
+  provider_runtime_config: "configs/provider_runtime_openai_v0_1.yaml"
+  teacher_schema_name: "aeroragx_training_teacher"
+
+question_generation:
+  timeout_seconds: 30.0
+  max_retries: 2
+  retry_backoff_seconds: 1.0
+  max_draft_attempts: 3
+  minimum_characters: 25
+  maximum_characters: 320
+
+ordinary:
+  max_claims: 4
+
+synthesis:
+  max_claims: 6
+
+refusal:
+  validation_enabled: true

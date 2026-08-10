@@ -1,0 +1,46 @@
+version: "0.1"
+
+inputs:
+  chunks: "data/processed/ntrs/v0_1/chunks.jsonl"
+
+  example_plan: "data/training/manifests/example_plan_v0_1.json"
+
+  source_selection: "data/training/manifests/source_documents_v0_1.json"
+
+  protected_manifest: "data/evaluation/generation_v0_3_protected_documents.json"
+
+  protected_queries: "data/evaluation/generation_queries_v0_3.jsonl"
+
+  protected_generation_report: "artifacts/evaluation/generation_transformers_base_v0_1.json"
+
+teacher:
+  config: "configs/training/teacher_v0_1.yaml"
+
+working:
+  examples: "data/training/work/accepted_examples_v0_1.jsonl"
+
+  receipt: "data/training/work/generation_receipt_v0_1.json"
+
+outputs:
+  dataset: "data/training/aeroragx_lora_v0_1.jsonl"
+
+  manifest: "data/training/manifests/aeroragx_lora_v0_1.json"
+
+  train: "data/training/splits/aeroragx_lora_v0_1_train.jsonl"
+
+  dev: "data/training/splits/aeroragx_lora_v0_1_dev.jsonl"
+
+  audit_report: "artifacts/evaluation/aeroragx_lora_dataset_audit_v0_1.json"
+
+expected:
+  total: 120
+  ordinary: 72
+  synthesis: 24
+  refusal: 24
+
+split:
+  dev_fraction: 0.10
+  seed: 20260810
+
+training:
+  max_sequence_tokens: 4096
