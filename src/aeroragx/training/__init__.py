@@ -16,6 +16,12 @@ from aeroragx.training.formatting import (
     format_training_example,
     format_training_examples,
 )
+from aeroragx.training.protected import (
+    ProtectedDocumentManifest,
+    ProtectedQueryEvidence,
+    load_protected_document_manifest,
+    write_protected_document_manifest,
+)
 from aeroragx.training.split import (
     TrainingSplit,
     assert_document_disjoint,
@@ -26,6 +32,8 @@ __all__ = [
     "FormattedTrainingExample",
     "LeakageAuditReport",
     "LeakageFinding",
+    "ProtectedDocumentManifest",
+    "ProtectedQueryEvidence",
     "TrainingEvidence",
     "TrainingExample",
     "TrainingMessage",
@@ -34,8 +42,10 @@ __all__ = [
     "audit_training_leakage",
     "format_training_example",
     "format_training_examples",
+    "load_protected_document_manifest",
     "load_training_examples",
     "normalize_training_text",
     "split_training_examples",
+    "write_protected_document_manifest",
     "write_training_examples",
 ]

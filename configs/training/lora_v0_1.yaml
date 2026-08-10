@@ -18,6 +18,7 @@ protected_evaluation:
   queries: "data/evaluation/generation_queries_v0_3.jsonl"
   base_report: "artifacts/evaluation/generation_transformers_base_v0_1.json"
   base_telemetry: "artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json"
+  document_manifest: "data/evaluation/generation_v0_3_protected_documents.json"
 
 formatting:
   use_production_prompt: true
@@ -50,5 +51,6 @@ objectives:
 notes:
   - "The frozen 32-query benchmark is evaluation-only."
   - "Do not use benchmark queries or outputs as training examples."
+  - "Do not use documents listed in the protected document manifest for training."
   - "LoRA target modules will be selected after the PEFT/model-module audit."
   - "This configuration is not yet an executable training configuration."

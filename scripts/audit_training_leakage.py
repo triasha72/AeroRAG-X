@@ -15,6 +15,9 @@ from aeroragx.training.dataset import (
     audit_training_leakage,
     load_training_examples,
 )
+from aeroragx.training.protected import (
+    load_protected_document_manifest,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -22,8 +25,9 @@ def parse_args() -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(
         description=(
-            "Check LoRA training JSONL for deterministic "
-            "overlap with protected AeroRAG-X evaluation data."
+            "Check LoRA training JSONL for "
+            "deterministic overlap with "
+            "protected AeroRAG-X evaluation data."
         )
     )
 
@@ -43,6 +47,12 @@ def parse_args() -> argparse.Namespace:
         "--protected-generation-report",
         type=Path,
         default=Path("artifacts/evaluation/generation_transformers_base_v0_1.json"),
+    )
+
+    parser.add_argument(
+        "--protected-document-manifest",
+        type=Path,
+        default=Path("data/evaluation/generation_v0_3_protected_documents.json"),
     )
 
     parser.add_argument(
@@ -67,10 +77,13 @@ def main() -> int:
 
     protected_answers = _load_supported_protected_answers(args.protected_generation_report)
 
+    protected_manifest = load_protected_document_manifest(args.protected_document_manifest)
+
     report = audit_training_leakage(
         training_examples,
         protected_queries=(protected_query_lookup),
         protected_answers=(protected_answers),
+        protected_document_ids=(protected_manifest.protected_document_ids),
     )
 
     _print_report(report)
@@ -101,7 +114,10 @@ def _load_supported_protected_answers(
 
     raw_value = json.loads(path.read_text(encoding="utf-8"))
 
-    if not isinstance(raw_value, dict):
+    if not isinstance(
+        raw_value,
+        dict,
+    ):
         raise ValueError("Protected generation report must contain a JSON object.")
 
     query_results = raw_value.get("query_results")
@@ -112,10 +128,16 @@ def _load_supported_protected_answers(
     ):
         raise ValueError("Protected generation report must contain query_results.")
 
-    answers: dict[str, str] = {}
+    answers: dict[
+        str,
+        str,
+    ] = {}
 
     for row in query_results:
-        if not isinstance(row, dict):
+        if not isinstance(
+            row,
+            dict,
+        ):
             raise ValueError("Protected query result must contain a JSON object.")
 
         if row.get("expected_answerable") is not True:
@@ -157,6 +179,7 @@ def _print_report(
 
     print()
     print("AeroRAG-X training leakage audit")
+
     print("-------------------------------")
 
     print(
@@ -175,12 +198,18 @@ def _print_report(
     )
 
     print(
+        "Protected documents:",
+        report.protected_document_count,
+    )
+
+    print(
         "Findings:",
         len(report.findings),
     )
 
     if not report.findings:
         print()
+
         print("No deterministic leakage was detected.")
 
         return

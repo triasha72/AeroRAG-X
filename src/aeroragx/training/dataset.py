@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from pathlib import Path
 from typing import Literal, Self
 
@@ -17,6 +17,7 @@ type LeakageKind = Literal[
     "normalized_query",
     "exact_target_answer",
     "normalized_target_answer",
+    "protected_source_document",
 ]
 
 
@@ -151,6 +152,11 @@ class LeakageAuditReport(BaseModel):
         ge=0,
     )
 
+    protected_document_count: int = Field(
+        default=0,
+        ge=0,
+    )
+
     findings: list[LeakageFinding]
 
     @property
@@ -245,12 +251,15 @@ def audit_training_leakage(
     *,
     protected_queries: Mapping[str, str],
     protected_answers: Mapping[str, str],
+    protected_document_ids: Collection[int] = (),
 ) -> LeakageAuditReport:
     """Check deterministic overlap with protected evaluation material."""
 
     findings: list[LeakageFinding] = []
 
     protected_query_ids = set(protected_queries)
+
+    protected_documents = set(protected_document_ids)
 
     exact_query_lookup = _first_reference_lookup(
         protected_queries,
@@ -307,6 +316,17 @@ def audit_training_leakage(
                     )
                 )
 
+        overlapping_documents = sorted(set(example.source_document_ids) & protected_documents)
+
+        for document_id in overlapping_documents:
+            findings.append(
+                LeakageFinding(
+                    kind=("protected_source_document"),
+                    training_example_id=(example.example_id),
+                    protected_reference=str(document_id),
+                )
+            )
+
         if example.response.insufficient_evidence:
             continue
 
@@ -330,7 +350,7 @@ def audit_training_leakage(
         if normalized_answer_reference is not None:
             findings.append(
                 LeakageFinding(
-                    kind="normalized_target_answer",
+                    kind=("normalized_target_answer"),
                     training_example_id=(example.example_id),
                     protected_reference=(normalized_answer_reference),
                 )
@@ -338,8 +358,9 @@ def audit_training_leakage(
 
     return LeakageAuditReport(
         training_example_count=len(examples),
-        protected_query_count=(len(protected_queries)),
-        protected_answer_count=(len(protected_answers)),
+        protected_query_count=len(protected_queries),
+        protected_answer_count=len(protected_answers),
+        protected_document_count=len(protected_documents),
         findings=findings,
     )
 
