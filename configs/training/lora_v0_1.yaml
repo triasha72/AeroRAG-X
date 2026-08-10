@@ -1,0 +1,54 @@
+version: "0.1"
+
+experiment_name: "qwen3_0_6b_grounded_lora_v0_1"
+
+base_model: "Qwen/Qwen3-0.6B"
+
+provider_config:
+  path: "configs/provider_v0_1.yaml"
+
+dataset:
+  training_input: "data/training/aeroragx_lora_v0_1.jsonl"
+  manifest_output: "data/training/manifests/aeroragx_lora_v0_1.json"
+
+  dev_fraction: 0.10
+  split_seed: 20260810
+
+protected_evaluation:
+  queries: "data/evaluation/generation_queries_v0_3.jsonl"
+  base_report: "artifacts/evaluation/generation_transformers_base_v0_1.json"
+  base_telemetry: "artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json"
+
+formatting:
+  use_production_prompt: true
+  preserve_evidence_ids: true
+  preserve_structured_response: true
+
+training:
+  status: "not_enabled_yet"
+  seed: 20260810
+  max_sequence_tokens: 4096
+
+lora:
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+
+objectives:
+  improve:
+    - "grounded technical completeness"
+    - "atomic claim decomposition"
+    - "evidence-grounded synthesis"
+
+  preserve:
+    - "unsupported refusal"
+    - "citation validity"
+    - "source-document coverage"
+    - "structural validity"
+    - "generation reliability"
+
+notes:
+  - "The frozen 32-query benchmark is evaluation-only."
+  - "Do not use benchmark queries or outputs as training examples."
+  - "LoRA target modules will be selected after the PEFT/model-module audit."
+  - "This configuration is not yet an executable training configuration."
