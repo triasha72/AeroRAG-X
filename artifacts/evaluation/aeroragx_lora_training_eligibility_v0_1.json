@@ -1,0 +1,21 @@
+{
+  "canonical_examples": 120,
+  "dev_examples": 12,
+  "document_overlap": [],
+  "eligible_train_examples": 106,
+  "excluded_from_training": [
+    {
+      "example_id": "train_plan_0103",
+      "reason": "sequence exceeds 4096-token training limit",
+      "token_count": 4521
+    },
+    {
+      "example_id": "train_plan_0105",
+      "reason": "sequence exceeds 4096-token training limit",
+      "token_count": 5122
+    }
+  ],
+  "max_sequence_tokens": 4096,
+  "pre_eligibility_train_examples": 108,
+  "version": "0.1"
+}

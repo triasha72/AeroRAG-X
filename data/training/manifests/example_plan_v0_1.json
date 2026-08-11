@@ -1,0 +1,1604 @@
+{
+  "corpus_chunks_path": "data/processed/ntrs/v0_1/chunks.jsonl",
+  "corpus_chunks_sha256": "73a076d3b68d40545560ccaa6e3391eac4191c2f90c5a9ef9df5c342d38ed3c3",
+  "documents": [
+    {
+      "available_chunk_count": 6,
+      "document_id": 20140017337,
+      "eligible_chunk_count": 6,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Material Challenges and Opportunities for Commercial Electric Aircraft",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 34,
+      "document_id": 20160009765,
+      "eligible_chunk_count": 34,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "Design and Development of a 200-kW Turbo-Electric Distributed Propulsion Testbed",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 29,
+      "document_id": 20160010440,
+      "eligible_chunk_count": 29,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "NASA Electric Aircraft Test Bed (NEAT) Development Plan - Design, Fabrication, Installation",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 13,
+      "document_id": 20180000402,
+      "eligible_chunk_count": 13,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Overview of NASA Electrified Aircraft Propulsion Research for Large Subsonic Transports",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 26,
+      "document_id": 20180005333,
+      "eligible_chunk_count": 26,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "NASA's Magnetic Gearing Research for Electrified Aircraft Propulsion",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 5,
+      "document_id": 20180007082,
+      "eligible_chunk_count": 4,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Creating a Multifunctional Composite Stator Slot Material System to Enable High Power Density Electric Machines for Electrified Aircraft Applications",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 4,
+      "document_id": 20200000362,
+      "eligible_chunk_count": 4,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "NASA Investments in Electrified Propulsion",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 22,
+      "document_id": 20205004194,
+      "eligible_chunk_count": 22,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "More / All Electric Vertical Take-Off and Landing (VTOL) Vehicle Sensitivities to Propulsion and Power Performance",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 4,
+      "document_id": 20205004871,
+      "eligible_chunk_count": 4,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Thermal Management System Design for Electrified Aircraft Propulsion Concepts",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 4,
+      "document_id": 20210000751,
+      "eligible_chunk_count": 4,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "HEATheR: High-efficiency Electric Aircraft Thermal Research",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 32,
+      "document_id": 20210017939,
+      "eligible_chunk_count": 32,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "Development and Integration of a Thermal Management Simulation for a Quadrotor Parallel Hybrid Propulsion System",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 6,
+      "document_id": 20220013008,
+      "eligible_chunk_count": 6,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Optimizing Thermal Management Systems in Electric Aircraft",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 14,
+      "document_id": 20220015806,
+      "eligible_chunk_count": 14,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "NASA's Megawatt Electric Aircraft Propulsion Research and Development",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 38,
+      "document_id": 20220016701,
+      "eligible_chunk_count": 38,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "Hybrid-Electric Aero-Propulsion Controls Testbed Results",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 16,
+      "document_id": 20220018208,
+      "eligible_chunk_count": 16,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Mission Profiles for the SUSAN Electrofan Concept",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 7,
+      "document_id": 20220018330,
+      "eligible_chunk_count": 7,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "NASA Glenn Electric Propulsion Work",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 29,
+      "document_id": 20230006256,
+      "eligible_chunk_count": 29,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "Electrified Aircraft Propulsion Controls Hardware Testing",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 8,
+      "document_id": 20230010111,
+      "eligible_chunk_count": 8,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Overview of NASA GRC Electrified Aircraft Propulsion (EAP) Controls Research",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 9,
+      "document_id": 20230018162,
+      "eligible_chunk_count": 9,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "SUbsonic Single Aft eNgine (SUSAN) Power/Propulsion System Control Architecture Updates",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 23,
+      "document_id": 20240003350,
+      "eligible_chunk_count": 23,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "A Comparison of Model Predictive Control Architectures for Application to Electrified Aircraft Propulsion Systems",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 8,
+      "document_id": 20240006706,
+      "eligible_chunk_count": 8,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Thin-Film Embedded Sensors for Battery Health Monitoring",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 41,
+      "document_id": 20240006741,
+      "eligible_chunk_count": 41,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "The Advanced Geared Turbofan 30,000 lb<sub>f</sub> \u2013 electrified (AGTF30-e): A Virtual Testbed for Electrified Aircraft Propulsion Research",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 24,
+      "document_id": 20240008078,
+      "eligible_chunk_count": 24,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Modeling and Trade Space for Fuel Cell Powered Aircraft",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 7,
+      "document_id": 20240011768,
+      "eligible_chunk_count": 7,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "NASA's Open Source Electrified Aircraft Propulsion Modeling and Simulation Tools",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 25,
+      "document_id": 20240015511,
+      "eligible_chunk_count": 25,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Boron Nitride Nanocomposites for Thermal Management of Aircraft Propulsion System",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 5,
+      "document_id": 20240016372,
+      "eligible_chunk_count": 5,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Thermoacoustic Thermal Management for Electric Aircraft",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 19,
+      "document_id": 20250005446,
+      "eligible_chunk_count": 19,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Tutorial: Electrified Aircraft Propulsion Approaches for Modeling and Electrical Hardware-in-the-Loop Testing",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 84,
+      "document_id": 20250006187,
+      "eligible_chunk_count": 84,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "Impact of Technology and Mission Variations on NASA Advanced Air Mobility Concept Vehicles",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 5,
+      "document_id": 20250006231,
+      "eligible_chunk_count": 5,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 0,
+      "title": "Megawatt and Beyond, NASA's Electrified Aircraft Propulsion",
+      "total_count": 3
+    },
+    {
+      "available_chunk_count": 24,
+      "document_id": 20260000697,
+      "eligible_chunk_count": 24,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Assessing National Airspace System Impact of the Hybrid Electric Turboprop Commercial Freighter",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 19,
+      "document_id": 20260002125,
+      "eligible_chunk_count": 19,
+      "ordinary_count": 2,
+      "refusal_count": 1,
+      "synthesis_count": 1,
+      "title": "Development of a Digital Twin for Electrified Aircraft Powertrain Health Management",
+      "total_count": 4
+    },
+    {
+      "available_chunk_count": 54,
+      "document_id": 20260007283,
+      "eligible_chunk_count": 54,
+      "ordinary_count": 3,
+      "refusal_count": 0,
+      "synthesis_count": 1,
+      "title": "CFD Modeling of Bi-Directional PMD inside Cryogenic Propellant Tanks Onboard Parabolic Flights",
+      "total_count": 4
+    }
+  ],
+  "examples": [
+    {
+      "chunk_ids": [
+        "20140017337:chunk:00000",
+        "20140017337:chunk:00001"
+      ],
+      "document_id": 20140017337,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0001"
+    },
+    {
+      "chunk_ids": [
+        "20140017337:chunk:00004",
+        "20140017337:chunk:00005"
+      ],
+      "document_id": 20140017337,
+      "evidence_word_count": 394,
+      "example_type": "ordinary",
+      "plan_id": "plan_0002"
+    },
+    {
+      "chunk_ids": [
+        "20140017337:chunk:00002",
+        "20140017337:chunk:00003"
+      ],
+      "document_id": 20140017337,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0003"
+    },
+    {
+      "chunk_ids": [
+        "20160009765:chunk:00000",
+        "20160009765:chunk:00001"
+      ],
+      "document_id": 20160009765,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0004"
+    },
+    {
+      "chunk_ids": [
+        "20160009765:chunk:00016",
+        "20160009765:chunk:00017"
+      ],
+      "document_id": 20160009765,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0005"
+    },
+    {
+      "chunk_ids": [
+        "20160009765:chunk:00032",
+        "20160009765:chunk:00033"
+      ],
+      "document_id": 20160009765,
+      "evidence_word_count": 532,
+      "example_type": "ordinary",
+      "plan_id": "plan_0006"
+    },
+    {
+      "chunk_ids": [
+        "20160009765:chunk:00015",
+        "20160009765:chunk:00016",
+        "20160009765:chunk:00017"
+      ],
+      "document_id": 20160009765,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0007"
+    },
+    {
+      "chunk_ids": [
+        "20160010440:chunk:00000",
+        "20160010440:chunk:00001"
+      ],
+      "document_id": 20160010440,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0008"
+    },
+    {
+      "chunk_ids": [
+        "20160010440:chunk:00014",
+        "20160010440:chunk:00015"
+      ],
+      "document_id": 20160010440,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0009"
+    },
+    {
+      "chunk_ids": [
+        "20160010440:chunk:00027",
+        "20160010440:chunk:00028"
+      ],
+      "document_id": 20160010440,
+      "evidence_word_count": 578,
+      "example_type": "ordinary",
+      "plan_id": "plan_0010"
+    },
+    {
+      "chunk_ids": [
+        "20160010440:chunk:00013",
+        "20160010440:chunk:00014",
+        "20160010440:chunk:00015"
+      ],
+      "document_id": 20160010440,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0011"
+    },
+    {
+      "chunk_ids": [
+        "20180000402:chunk:00000",
+        "20180000402:chunk:00001"
+      ],
+      "document_id": 20180000402,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0012"
+    },
+    {
+      "chunk_ids": [
+        "20180000402:chunk:00011",
+        "20180000402:chunk:00012"
+      ],
+      "document_id": 20180000402,
+      "evidence_word_count": 383,
+      "example_type": "ordinary",
+      "plan_id": "plan_0013"
+    },
+    {
+      "chunk_ids": [
+        "20180000402:chunk:00005",
+        "20180000402:chunk:00006",
+        "20180000402:chunk:00007"
+      ],
+      "document_id": 20180000402,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0014"
+    },
+    {
+      "chunk_ids": [
+        "20180000402:chunk:00007",
+        "20180000402:chunk:00008"
+      ],
+      "document_id": 20180000402,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0015"
+    },
+    {
+      "chunk_ids": [
+        "20180005333:chunk:00000",
+        "20180005333:chunk:00001"
+      ],
+      "document_id": 20180005333,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0016"
+    },
+    {
+      "chunk_ids": [
+        "20180005333:chunk:00024",
+        "20180005333:chunk:00025"
+      ],
+      "document_id": 20180005333,
+      "evidence_word_count": 388,
+      "example_type": "ordinary",
+      "plan_id": "plan_0017"
+    },
+    {
+      "chunk_ids": [
+        "20180005333:chunk:00011",
+        "20180005333:chunk:00012",
+        "20180005333:chunk:00013"
+      ],
+      "document_id": 20180005333,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0018"
+    },
+    {
+      "chunk_ids": [
+        "20180005333:chunk:00016",
+        "20180005333:chunk:00017"
+      ],
+      "document_id": 20180005333,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0019"
+    },
+    {
+      "chunk_ids": [
+        "20180007082:chunk:00000",
+        "20180007082:chunk:00001"
+      ],
+      "document_id": 20180007082,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0020"
+    },
+    {
+      "chunk_ids": [
+        "20180007082:chunk:00002",
+        "20180007082:chunk:00003"
+      ],
+      "document_id": 20180007082,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0021"
+    },
+    {
+      "chunk_ids": [
+        "20180007082:chunk:00001",
+        "20180007082:chunk:00002"
+      ],
+      "document_id": 20180007082,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0022"
+    },
+    {
+      "chunk_ids": [
+        "20200000362:chunk:00000",
+        "20200000362:chunk:00001"
+      ],
+      "document_id": 20200000362,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0023"
+    },
+    {
+      "chunk_ids": [
+        "20200000362:chunk:00002",
+        "20200000362:chunk:00003"
+      ],
+      "document_id": 20200000362,
+      "evidence_word_count": 541,
+      "example_type": "ordinary",
+      "plan_id": "plan_0024"
+    },
+    {
+      "chunk_ids": [
+        "20200000362:chunk:00001",
+        "20200000362:chunk:00002"
+      ],
+      "document_id": 20200000362,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0025"
+    },
+    {
+      "chunk_ids": [
+        "20205004194:chunk:00000",
+        "20205004194:chunk:00001"
+      ],
+      "document_id": 20205004194,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0026"
+    },
+    {
+      "chunk_ids": [
+        "20205004194:chunk:00020",
+        "20205004194:chunk:00021"
+      ],
+      "document_id": 20205004194,
+      "evidence_word_count": 429,
+      "example_type": "ordinary",
+      "plan_id": "plan_0027"
+    },
+    {
+      "chunk_ids": [
+        "20205004194:chunk:00009",
+        "20205004194:chunk:00010",
+        "20205004194:chunk:00011"
+      ],
+      "document_id": 20205004194,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0028"
+    },
+    {
+      "chunk_ids": [
+        "20205004194:chunk:00013",
+        "20205004194:chunk:00014"
+      ],
+      "document_id": 20205004194,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0029"
+    },
+    {
+      "chunk_ids": [
+        "20205004871:chunk:00000",
+        "20205004871:chunk:00001"
+      ],
+      "document_id": 20205004871,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0030"
+    },
+    {
+      "chunk_ids": [
+        "20205004871:chunk:00002",
+        "20205004871:chunk:00003"
+      ],
+      "document_id": 20205004871,
+      "evidence_word_count": 574,
+      "example_type": "ordinary",
+      "plan_id": "plan_0031"
+    },
+    {
+      "chunk_ids": [
+        "20205004871:chunk:00001",
+        "20205004871:chunk:00002"
+      ],
+      "document_id": 20205004871,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0032"
+    },
+    {
+      "chunk_ids": [
+        "20210000751:chunk:00000",
+        "20210000751:chunk:00001"
+      ],
+      "document_id": 20210000751,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0033"
+    },
+    {
+      "chunk_ids": [
+        "20210000751:chunk:00002",
+        "20210000751:chunk:00003"
+      ],
+      "document_id": 20210000751,
+      "evidence_word_count": 414,
+      "example_type": "ordinary",
+      "plan_id": "plan_0034"
+    },
+    {
+      "chunk_ids": [
+        "20210000751:chunk:00001",
+        "20210000751:chunk:00002"
+      ],
+      "document_id": 20210000751,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0035"
+    },
+    {
+      "chunk_ids": [
+        "20210017939:chunk:00000",
+        "20210017939:chunk:00001"
+      ],
+      "document_id": 20210017939,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0036"
+    },
+    {
+      "chunk_ids": [
+        "20210017939:chunk:00015",
+        "20210017939:chunk:00016"
+      ],
+      "document_id": 20210017939,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0037"
+    },
+    {
+      "chunk_ids": [
+        "20210017939:chunk:00030",
+        "20210017939:chunk:00031"
+      ],
+      "document_id": 20210017939,
+      "evidence_word_count": 536,
+      "example_type": "ordinary",
+      "plan_id": "plan_0038"
+    },
+    {
+      "chunk_ids": [
+        "20210017939:chunk:00014",
+        "20210017939:chunk:00015",
+        "20210017939:chunk:00016"
+      ],
+      "document_id": 20210017939,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0039"
+    },
+    {
+      "chunk_ids": [
+        "20220013008:chunk:00000",
+        "20220013008:chunk:00001"
+      ],
+      "document_id": 20220013008,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0040"
+    },
+    {
+      "chunk_ids": [
+        "20220013008:chunk:00004",
+        "20220013008:chunk:00005"
+      ],
+      "document_id": 20220013008,
+      "evidence_word_count": 428,
+      "example_type": "ordinary",
+      "plan_id": "plan_0041"
+    },
+    {
+      "chunk_ids": [
+        "20220013008:chunk:00002",
+        "20220013008:chunk:00003"
+      ],
+      "document_id": 20220013008,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0042"
+    },
+    {
+      "chunk_ids": [
+        "20220015806:chunk:00000",
+        "20220015806:chunk:00001"
+      ],
+      "document_id": 20220015806,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0043"
+    },
+    {
+      "chunk_ids": [
+        "20220015806:chunk:00012",
+        "20220015806:chunk:00013"
+      ],
+      "document_id": 20220015806,
+      "evidence_word_count": 408,
+      "example_type": "ordinary",
+      "plan_id": "plan_0044"
+    },
+    {
+      "chunk_ids": [
+        "20220015806:chunk:00005",
+        "20220015806:chunk:00006",
+        "20220015806:chunk:00007"
+      ],
+      "document_id": 20220015806,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0045"
+    },
+    {
+      "chunk_ids": [
+        "20220015806:chunk:00008",
+        "20220015806:chunk:00009"
+      ],
+      "document_id": 20220015806,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0046"
+    },
+    {
+      "chunk_ids": [
+        "20220016701:chunk:00000",
+        "20220016701:chunk:00001"
+      ],
+      "document_id": 20220016701,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0047"
+    },
+    {
+      "chunk_ids": [
+        "20220016701:chunk:00018",
+        "20220016701:chunk:00019"
+      ],
+      "document_id": 20220016701,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0048"
+    },
+    {
+      "chunk_ids": [
+        "20220016701:chunk:00036",
+        "20220016701:chunk:00037"
+      ],
+      "document_id": 20220016701,
+      "evidence_word_count": 412,
+      "example_type": "ordinary",
+      "plan_id": "plan_0049"
+    },
+    {
+      "chunk_ids": [
+        "20220016701:chunk:00017",
+        "20220016701:chunk:00018",
+        "20220016701:chunk:00019"
+      ],
+      "document_id": 20220016701,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0050"
+    },
+    {
+      "chunk_ids": [
+        "20220018208:chunk:00000",
+        "20220018208:chunk:00001"
+      ],
+      "document_id": 20220018208,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0051"
+    },
+    {
+      "chunk_ids": [
+        "20220018208:chunk:00014",
+        "20220018208:chunk:00015"
+      ],
+      "document_id": 20220018208,
+      "evidence_word_count": 482,
+      "example_type": "ordinary",
+      "plan_id": "plan_0052"
+    },
+    {
+      "chunk_ids": [
+        "20220018208:chunk:00006",
+        "20220018208:chunk:00007",
+        "20220018208:chunk:00008"
+      ],
+      "document_id": 20220018208,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0053"
+    },
+    {
+      "chunk_ids": [
+        "20220018208:chunk:00009",
+        "20220018208:chunk:00010"
+      ],
+      "document_id": 20220018208,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0054"
+    },
+    {
+      "chunk_ids": [
+        "20220018330:chunk:00000",
+        "20220018330:chunk:00001"
+      ],
+      "document_id": 20220018330,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0055"
+    },
+    {
+      "chunk_ids": [
+        "20220018330:chunk:00005",
+        "20220018330:chunk:00006"
+      ],
+      "document_id": 20220018330,
+      "evidence_word_count": 580,
+      "example_type": "ordinary",
+      "plan_id": "plan_0056"
+    },
+    {
+      "chunk_ids": [
+        "20220018330:chunk:00002",
+        "20220018330:chunk:00003",
+        "20220018330:chunk:00004"
+      ],
+      "document_id": 20220018330,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0057"
+    },
+    {
+      "chunk_ids": [
+        "20220018330:chunk:00003",
+        "20220018330:chunk:00004"
+      ],
+      "document_id": 20220018330,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0058"
+    },
+    {
+      "chunk_ids": [
+        "20230006256:chunk:00000",
+        "20230006256:chunk:00001"
+      ],
+      "document_id": 20230006256,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0059"
+    },
+    {
+      "chunk_ids": [
+        "20230006256:chunk:00014",
+        "20230006256:chunk:00015"
+      ],
+      "document_id": 20230006256,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0060"
+    },
+    {
+      "chunk_ids": [
+        "20230006256:chunk:00027",
+        "20230006256:chunk:00028"
+      ],
+      "document_id": 20230006256,
+      "evidence_word_count": 510,
+      "example_type": "ordinary",
+      "plan_id": "plan_0061"
+    },
+    {
+      "chunk_ids": [
+        "20230006256:chunk:00013",
+        "20230006256:chunk:00014",
+        "20230006256:chunk:00015"
+      ],
+      "document_id": 20230006256,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0062"
+    },
+    {
+      "chunk_ids": [
+        "20230010111:chunk:00000",
+        "20230010111:chunk:00001"
+      ],
+      "document_id": 20230010111,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0063"
+    },
+    {
+      "chunk_ids": [
+        "20230010111:chunk:00006",
+        "20230010111:chunk:00007"
+      ],
+      "document_id": 20230010111,
+      "evidence_word_count": 526,
+      "example_type": "ordinary",
+      "plan_id": "plan_0064"
+    },
+    {
+      "chunk_ids": [
+        "20230010111:chunk:00002",
+        "20230010111:chunk:00003",
+        "20230010111:chunk:00004"
+      ],
+      "document_id": 20230010111,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0065"
+    },
+    {
+      "chunk_ids": [
+        "20230010111:chunk:00004",
+        "20230010111:chunk:00005"
+      ],
+      "document_id": 20230010111,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0066"
+    },
+    {
+      "chunk_ids": [
+        "20230018162:chunk:00000",
+        "20230018162:chunk:00001"
+      ],
+      "document_id": 20230018162,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0067"
+    },
+    {
+      "chunk_ids": [
+        "20230018162:chunk:00007",
+        "20230018162:chunk:00008"
+      ],
+      "document_id": 20230018162,
+      "evidence_word_count": 557,
+      "example_type": "ordinary",
+      "plan_id": "plan_0068"
+    },
+    {
+      "chunk_ids": [
+        "20230018162:chunk:00003",
+        "20230018162:chunk:00004",
+        "20230018162:chunk:00005"
+      ],
+      "document_id": 20230018162,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0069"
+    },
+    {
+      "chunk_ids": [
+        "20230018162:chunk:00004",
+        "20230018162:chunk:00005"
+      ],
+      "document_id": 20230018162,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0070"
+    },
+    {
+      "chunk_ids": [
+        "20240003350:chunk:00000",
+        "20240003350:chunk:00001"
+      ],
+      "document_id": 20240003350,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0071"
+    },
+    {
+      "chunk_ids": [
+        "20240003350:chunk:00021",
+        "20240003350:chunk:00022"
+      ],
+      "document_id": 20240003350,
+      "evidence_word_count": 549,
+      "example_type": "ordinary",
+      "plan_id": "plan_0072"
+    },
+    {
+      "chunk_ids": [
+        "20240003350:chunk:00010",
+        "20240003350:chunk:00011",
+        "20240003350:chunk:00012"
+      ],
+      "document_id": 20240003350,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0073"
+    },
+    {
+      "chunk_ids": [
+        "20240003350:chunk:00014",
+        "20240003350:chunk:00015"
+      ],
+      "document_id": 20240003350,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0074"
+    },
+    {
+      "chunk_ids": [
+        "20240006706:chunk:00000",
+        "20240006706:chunk:00001"
+      ],
+      "document_id": 20240006706,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0075"
+    },
+    {
+      "chunk_ids": [
+        "20240006706:chunk:00006",
+        "20240006706:chunk:00007"
+      ],
+      "document_id": 20240006706,
+      "evidence_word_count": 384,
+      "example_type": "ordinary",
+      "plan_id": "plan_0076"
+    },
+    {
+      "chunk_ids": [
+        "20240006706:chunk:00002",
+        "20240006706:chunk:00003",
+        "20240006706:chunk:00004"
+      ],
+      "document_id": 20240006706,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0077"
+    },
+    {
+      "chunk_ids": [
+        "20240006706:chunk:00004",
+        "20240006706:chunk:00005"
+      ],
+      "document_id": 20240006706,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0078"
+    },
+    {
+      "chunk_ids": [
+        "20240006741:chunk:00000",
+        "20240006741:chunk:00001"
+      ],
+      "document_id": 20240006741,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0079"
+    },
+    {
+      "chunk_ids": [
+        "20240006741:chunk:00020",
+        "20240006741:chunk:00021"
+      ],
+      "document_id": 20240006741,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0080"
+    },
+    {
+      "chunk_ids": [
+        "20240006741:chunk:00039",
+        "20240006741:chunk:00040"
+      ],
+      "document_id": 20240006741,
+      "evidence_word_count": 487,
+      "example_type": "ordinary",
+      "plan_id": "plan_0081"
+    },
+    {
+      "chunk_ids": [
+        "20240006741:chunk:00019",
+        "20240006741:chunk:00020",
+        "20240006741:chunk:00021"
+      ],
+      "document_id": 20240006741,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0082"
+    },
+    {
+      "chunk_ids": [
+        "20240008078:chunk:00000",
+        "20240008078:chunk:00001"
+      ],
+      "document_id": 20240008078,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0083"
+    },
+    {
+      "chunk_ids": [
+        "20240008078:chunk:00022",
+        "20240008078:chunk:00023"
+      ],
+      "document_id": 20240008078,
+      "evidence_word_count": 547,
+      "example_type": "ordinary",
+      "plan_id": "plan_0084"
+    },
+    {
+      "chunk_ids": [
+        "20240008078:chunk:00010",
+        "20240008078:chunk:00011",
+        "20240008078:chunk:00012"
+      ],
+      "document_id": 20240008078,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0085"
+    },
+    {
+      "chunk_ids": [
+        "20240008078:chunk:00014",
+        "20240008078:chunk:00015"
+      ],
+      "document_id": 20240008078,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0086"
+    },
+    {
+      "chunk_ids": [
+        "20240011768:chunk:00000",
+        "20240011768:chunk:00001"
+      ],
+      "document_id": 20240011768,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0087"
+    },
+    {
+      "chunk_ids": [
+        "20240011768:chunk:00005",
+        "20240011768:chunk:00006"
+      ],
+      "document_id": 20240011768,
+      "evidence_word_count": 567,
+      "example_type": "ordinary",
+      "plan_id": "plan_0088"
+    },
+    {
+      "chunk_ids": [
+        "20240011768:chunk:00002",
+        "20240011768:chunk:00003",
+        "20240011768:chunk:00004"
+      ],
+      "document_id": 20240011768,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0089"
+    },
+    {
+      "chunk_ids": [
+        "20240011768:chunk:00003",
+        "20240011768:chunk:00004"
+      ],
+      "document_id": 20240011768,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0090"
+    },
+    {
+      "chunk_ids": [
+        "20240015511:chunk:00000",
+        "20240015511:chunk:00001"
+      ],
+      "document_id": 20240015511,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0091"
+    },
+    {
+      "chunk_ids": [
+        "20240015511:chunk:00023",
+        "20240015511:chunk:00024"
+      ],
+      "document_id": 20240015511,
+      "evidence_word_count": 567,
+      "example_type": "ordinary",
+      "plan_id": "plan_0092"
+    },
+    {
+      "chunk_ids": [
+        "20240015511:chunk:00011",
+        "20240015511:chunk:00012",
+        "20240015511:chunk:00013"
+      ],
+      "document_id": 20240015511,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0093"
+    },
+    {
+      "chunk_ids": [
+        "20240015511:chunk:00015",
+        "20240015511:chunk:00016"
+      ],
+      "document_id": 20240015511,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0094"
+    },
+    {
+      "chunk_ids": [
+        "20240016372:chunk:00000",
+        "20240016372:chunk:00001"
+      ],
+      "document_id": 20240016372,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0095"
+    },
+    {
+      "chunk_ids": [
+        "20240016372:chunk:00003",
+        "20240016372:chunk:00004"
+      ],
+      "document_id": 20240016372,
+      "evidence_word_count": 503,
+      "example_type": "ordinary",
+      "plan_id": "plan_0096"
+    },
+    {
+      "chunk_ids": [
+        "20240016372:chunk:00002",
+        "20240016372:chunk:00003"
+      ],
+      "document_id": 20240016372,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0097"
+    },
+    {
+      "chunk_ids": [
+        "20250005446:chunk:00000",
+        "20250005446:chunk:00001"
+      ],
+      "document_id": 20250005446,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0098"
+    },
+    {
+      "chunk_ids": [
+        "20250005446:chunk:00017",
+        "20250005446:chunk:00018"
+      ],
+      "document_id": 20250005446,
+      "evidence_word_count": 565,
+      "example_type": "ordinary",
+      "plan_id": "plan_0099"
+    },
+    {
+      "chunk_ids": [
+        "20250005446:chunk:00008",
+        "20250005446:chunk:00009",
+        "20250005446:chunk:00010"
+      ],
+      "document_id": 20250005446,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0100"
+    },
+    {
+      "chunk_ids": [
+        "20250005446:chunk:00011",
+        "20250005446:chunk:00012"
+      ],
+      "document_id": 20250005446,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0101"
+    },
+    {
+      "chunk_ids": [
+        "20250006187:chunk:00000",
+        "20250006187:chunk:00001"
+      ],
+      "document_id": 20250006187,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0102"
+    },
+    {
+      "chunk_ids": [
+        "20250006187:chunk:00041",
+        "20250006187:chunk:00042"
+      ],
+      "document_id": 20250006187,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0103"
+    },
+    {
+      "chunk_ids": [
+        "20250006187:chunk:00082",
+        "20250006187:chunk:00083"
+      ],
+      "document_id": 20250006187,
+      "evidence_word_count": 596,
+      "example_type": "ordinary",
+      "plan_id": "plan_0104"
+    },
+    {
+      "chunk_ids": [
+        "20250006187:chunk:00040",
+        "20250006187:chunk:00041",
+        "20250006187:chunk:00042"
+      ],
+      "document_id": 20250006187,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0105"
+    },
+    {
+      "chunk_ids": [
+        "20250006231:chunk:00000",
+        "20250006231:chunk:00001"
+      ],
+      "document_id": 20250006231,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0106"
+    },
+    {
+      "chunk_ids": [
+        "20250006231:chunk:00003",
+        "20250006231:chunk:00004"
+      ],
+      "document_id": 20250006231,
+      "evidence_word_count": 412,
+      "example_type": "ordinary",
+      "plan_id": "plan_0107"
+    },
+    {
+      "chunk_ids": [
+        "20250006231:chunk:00002",
+        "20250006231:chunk:00003"
+      ],
+      "document_id": 20250006231,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0108"
+    },
+    {
+      "chunk_ids": [
+        "20260000697:chunk:00000",
+        "20260000697:chunk:00001"
+      ],
+      "document_id": 20260000697,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0109"
+    },
+    {
+      "chunk_ids": [
+        "20260000697:chunk:00022",
+        "20260000697:chunk:00023"
+      ],
+      "document_id": 20260000697,
+      "evidence_word_count": 487,
+      "example_type": "ordinary",
+      "plan_id": "plan_0110"
+    },
+    {
+      "chunk_ids": [
+        "20260000697:chunk:00010",
+        "20260000697:chunk:00011",
+        "20260000697:chunk:00012"
+      ],
+      "document_id": 20260000697,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0111"
+    },
+    {
+      "chunk_ids": [
+        "20260000697:chunk:00014",
+        "20260000697:chunk:00015"
+      ],
+      "document_id": 20260000697,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0112"
+    },
+    {
+      "chunk_ids": [
+        "20260002125:chunk:00000",
+        "20260002125:chunk:00001"
+      ],
+      "document_id": 20260002125,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0113"
+    },
+    {
+      "chunk_ids": [
+        "20260002125:chunk:00017",
+        "20260002125:chunk:00018"
+      ],
+      "document_id": 20260002125,
+      "evidence_word_count": 544,
+      "example_type": "ordinary",
+      "plan_id": "plan_0114"
+    },
+    {
+      "chunk_ids": [
+        "20260002125:chunk:00008",
+        "20260002125:chunk:00009",
+        "20260002125:chunk:00010"
+      ],
+      "document_id": 20260002125,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0115"
+    },
+    {
+      "chunk_ids": [
+        "20260002125:chunk:00011",
+        "20260002125:chunk:00012"
+      ],
+      "document_id": 20260002125,
+      "evidence_word_count": 600,
+      "example_type": "refusal",
+      "plan_id": "plan_0116"
+    },
+    {
+      "chunk_ids": [
+        "20260007283:chunk:00000",
+        "20260007283:chunk:00001"
+      ],
+      "document_id": 20260007283,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0117"
+    },
+    {
+      "chunk_ids": [
+        "20260007283:chunk:00026",
+        "20260007283:chunk:00027"
+      ],
+      "document_id": 20260007283,
+      "evidence_word_count": 600,
+      "example_type": "ordinary",
+      "plan_id": "plan_0118"
+    },
+    {
+      "chunk_ids": [
+        "20260007283:chunk:00052",
+        "20260007283:chunk:00053"
+      ],
+      "document_id": 20260007283,
+      "evidence_word_count": 435,
+      "example_type": "ordinary",
+      "plan_id": "plan_0119"
+    },
+    {
+      "chunk_ids": [
+        "20260007283:chunk:00025",
+        "20260007283:chunk:00026",
+        "20260007283:chunk:00027"
+      ],
+      "document_id": 20260007283,
+      "evidence_word_count": 900,
+      "example_type": "synthesis",
+      "plan_id": "plan_0120"
+    }
+  ],
+  "ordinary_evidence_chunks": 2,
+  "ordinary_example_count": 72,
+  "plan_config_path": "configs/training/dataset_plan_v0_1.yaml",
+  "plan_config_sha256": "57de60437929a510fac937c65c294d7a753b50b759cce9e7d150decaaebb8965",
+  "planned_example_count": 120,
+  "protected_manifest_path": "data/evaluation/generation_v0_3_protected_documents.json",
+  "protected_manifest_sha256": "1bfa11206c0e87bd9b76c8a54a63363caf20f3f7a64fb10e6af5f2c9f41a4164",
+  "protected_overlap_count": 0,
+  "refusal_evidence_chunks": 2,
+  "refusal_example_count": 24,
+  "selected_document_count": 32,
+  "selected_source_chunk_count": 644,
+  "source_document_ids": [
+    20140017337,
+    20160009765,
+    20160010440,
+    20180000402,
+    20180005333,
+    20180007082,
+    20200000362,
+    20205004194,
+    20205004871,
+    20210000751,
+    20210017939,
+    20220013008,
+    20220015806,
+    20220016701,
+    20220018208,
+    20220018330,
+    20230006256,
+    20230010111,
+    20230018162,
+    20240003350,
+    20240006706,
+    20240006741,
+    20240008078,
+    20240011768,
+    20240015511,
+    20240016372,
+    20250005446,
+    20250006187,
+    20250006231,
+    20260000697,
+    20260002125,
+    20260007283
+  ],
+  "source_selection_manifest_path": "data/training/manifests/source_documents_v0_1.json",
+  "source_selection_manifest_sha256": "21fb8111dbbc85fedca3c86d3fa23f55a5513004d18573e5dc4607609e22dc92",
+  "synthesis_evidence_chunks": 3,
+  "synthesis_example_count": 24,
+  "unique_planned_chunk_count": 229,
+  "version": "0.1"
+}

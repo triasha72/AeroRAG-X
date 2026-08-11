@@ -1,0 +1,866 @@
+{
+  "candidate_chunk_count": 717,
+  "candidate_document_count": 49,
+  "corpus_chunks_path": "data/processed/ntrs/v0_1/chunks.jsonl",
+  "corpus_document_count": 94,
+  "corpus_version": "ntrs_v0_1",
+  "deduplicated_candidate_count": 41,
+  "documents": [
+    {
+      "chunk_count": 6,
+      "document_id": 20140017337,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: fuel cell aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management",
+        "electric aircraft thermal management",
+        "fuel cell aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Material Challenges and Opportunities for Commercial Electric Aircraft"
+    },
+    {
+      "chunk_count": 34,
+      "document_id": 20160009765,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: hybrid electric aircraft propulsion safety",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Design, Testing And Performance",
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Design and Development of a 200-kW Turbo-Electric Distributed Propulsion Testbed"
+    },
+    {
+      "chunk_count": 29,
+      "document_id": 20160010440,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: electric aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "TECHNICAL_MEMORANDUM",
+      "subject_categories": [
+        "Aircraft Design, Testing And Performance",
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "NASA Electric Aircraft Test Bed (NEAT) Development Plan - Design, Fabrication, Installation"
+    },
+    {
+      "chunk_count": 13,
+      "document_id": 20180000402,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Overview of NASA Electrified Aircraft Propulsion Research for Large Subsonic Transports"
+    },
+    {
+      "chunk_count": 26,
+      "document_id": 20180005333,
+      "duplicate_family_id": "title-9b6c0f3311d9",
+      "reason": "selected to satisfy source-query coverage: electrified aircraft propulsion",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion And Power",
+        "Mechanical Engineering"
+      ],
+      "title": "NASA's Magnetic Gearing Research for Electrified Aircraft Propulsion"
+    },
+    {
+      "chunk_count": 7,
+      "document_id": 20180005561,
+      "duplicate_family_id": "title-9b6c0f3311d9",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20180005333",
+      "representative_document_id": 20180005333,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power",
+        "Mechanical Engineering"
+      ],
+      "title": "NASA's Magnetic Gearing Research for Electrified Aircraft Propulsion"
+    },
+    {
+      "chunk_count": 5,
+      "document_id": 20180007082,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)",
+        "Composite Materials"
+      ],
+      "title": "Creating a Multifunctional Composite Stator Slot Material System to Enable High Power Density Electric Machines for Electrified Aircraft Applications"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20200000362,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "NASA Investments in Electrified Propulsion"
+    },
+    {
+      "chunk_count": 1,
+      "document_id": 20205003005,
+      "duplicate_family_id": null,
+      "reason": "not selected because chunk_count is below minimum_chunks_per_document",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Convergent Aeronautics Solutions (CAS) High Voltage Hybrid Electric Propulsion (HVHEP) Activity"
+    },
+    {
+      "chunk_count": 22,
+      "document_id": 20205004194,
+      "duplicate_family_id": "title-3e5a6faabdac",
+      "reason": "selected to satisfy source-query coverage: aircraft battery thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion And Power",
+        "Electronics And Electrical Engineering"
+      ],
+      "title": "More / All Electric Vertical Take-Off and Landing (VTOL) Vehicle Sensitivities to Propulsion and Power Performance"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20205004871,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Thermal Management System Design for Electrified Aircraft Propulsion Concepts"
+    },
+    {
+      "chunk_count": 2,
+      "document_id": 20205005267,
+      "duplicate_family_id": null,
+      "reason": "not selected because chunk_count is below minimum_chunks_per_document",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "Battery Evaluation Profiles for X-57 and Future Urban Electric Aircraft"
+    },
+    {
+      "chunk_count": 3,
+      "document_id": 20205006571,
+      "duplicate_family_id": null,
+      "reason": "eligible but outside the frozen target after coverage and deterministic ranking",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "NASA Electrified Aircraft Propulsion Control"
+    },
+    {
+      "chunk_count": 9,
+      "document_id": 20205007968,
+      "duplicate_family_id": "title-3e5a6faabdac",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20205004194",
+      "representative_document_id": 20205004194,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "More / All Electric Vertical Take-Off and Landing (VTOL) Vehicle Sensitivities to Propulsion and Power Performance"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20210000751,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Design, Testing And Performance"
+      ],
+      "title": "HEATheR: High-efficiency Electric Aircraft Thermal Research"
+    },
+    {
+      "chunk_count": 32,
+      "document_id": 20210017939,
+      "duplicate_family_id": "title-49234ff09384",
+      "reason": "selected to satisfy source-query coverage: electric aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Development and Integration of a Thermal Management Simulation for a Quadrotor Parallel Hybrid Propulsion System"
+    },
+    {
+      "chunk_count": 3,
+      "document_id": 20210018519,
+      "duplicate_family_id": "title-49234ff09384",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20210017939",
+      "representative_document_id": 20210017939,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Electronics And Electrical Engineering"
+      ],
+      "title": "Development and Integration of a Thermal Management Simulation for a Quadrotor Parallel Hybrid Propulsion System"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20210024663,
+      "duplicate_family_id": null,
+      "reason": "eligible but outside the frozen target after coverage and deterministic ranking",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Design, Testing And Performance",
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Implementation Approach for an Electrified Aircraft Concept Vehicle in a Research Flight Simulator"
+    },
+    {
+      "chunk_count": 3,
+      "document_id": 20220008770,
+      "duplicate_family_id": null,
+      "reason": "eligible but outside the frozen target after coverage and deterministic ranking",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Turbine Electrified Energy Management for Single Aisle Aircraft"
+    },
+    {
+      "chunk_count": 6,
+      "document_id": 20220013008,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management",
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion And Power"
+      ],
+      "title": "Optimizing Thermal Management Systems in Electric Aircraft"
+    },
+    {
+      "chunk_count": 14,
+      "document_id": 20220015806,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "NASA's Megawatt Electric Aircraft Propulsion Research and Development"
+    },
+    {
+      "chunk_count": 38,
+      "document_id": 20220016701,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: hybrid electric aircraft propulsion safety",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "Hybrid-Electric Aero-Propulsion Controls Testbed Results"
+    },
+    {
+      "chunk_count": 16,
+      "document_id": 20220018208,
+      "duplicate_family_id": "title-b71fb5132063",
+      "reason": "selected to satisfy source-query coverage: aircraft battery thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "Mission Profiles for the SUSAN Electrofan Concept"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20220018226,
+      "duplicate_family_id": "title-b71fb5132063",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20220018208",
+      "representative_document_id": 20220018208,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "Mission Profiles for the SUSAN Electrofan Concept"
+    },
+    {
+      "chunk_count": 7,
+      "document_id": 20220018330,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "NASA Glenn Electric Propulsion Work"
+    },
+    {
+      "chunk_count": 29,
+      "document_id": 20230006256,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: electrified aircraft propulsion",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Electrified Aircraft Propulsion Controls Hardware Testing"
+    },
+    {
+      "chunk_count": 1,
+      "document_id": 20230008581,
+      "duplicate_family_id": null,
+      "reason": "not selected because chunk_count is below minimum_chunks_per_document",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "NASA Ground Testing Contributions to Electrified Aircraft Propulsion"
+    },
+    {
+      "chunk_count": 8,
+      "document_id": 20230010111,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Overview of NASA GRC Electrified Aircraft Propulsion (EAP) Controls Research"
+    },
+    {
+      "chunk_count": 3,
+      "document_id": 20230015788,
+      "duplicate_family_id": null,
+      "reason": "eligible but outside the frozen target after coverage and deterministic ranking",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "Thermal Data-driven Model Reduction for Enhanced Battery Health Monitoring"
+    },
+    {
+      "chunk_count": 9,
+      "document_id": 20230018162,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "SUbsonic Single Aft eNgine (SUSAN) Power/Propulsion System Control Architecture Updates"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20230018227,
+      "duplicate_family_id": null,
+      "reason": "eligible but outside the frozen target after coverage and deterministic ranking",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "not_selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Air Transportation and Safety"
+      ],
+      "title": "Single Throttle Design for the Single Aft Engine (SUSAN) Transport Aircraft"
+    },
+    {
+      "chunk_count": 2,
+      "document_id": 20240002003,
+      "duplicate_family_id": null,
+      "reason": "not selected because chunk_count is below minimum_chunks_per_document",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "not_selected",
+      "sti_type": "POSTER",
+      "subject_categories": [
+        "Aeronautics (General)"
+      ],
+      "title": "SUbsonic Single Aft eNgine (SUSAN) Electrofan: An Advanced Hybrid Electric Concept for Future Single-Aisle Aircraft"
+    },
+    {
+      "chunk_count": 23,
+      "document_id": 20240003350,
+      "duplicate_family_id": "title-150221185a7f",
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion and Power",
+        "Aircraft Stability and Control"
+      ],
+      "title": "A Comparison of Model Predictive Control Architectures for Application to Electrified Aircraft Propulsion Systems"
+    },
+    {
+      "chunk_count": 14,
+      "document_id": 20240004147,
+      "duplicate_family_id": "title-083f40dafac2",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20250005446",
+      "representative_document_id": 20250005446,
+      "source_queries": [
+        "electrified aircraft propulsion",
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Tutorial: Electrified Aircraft Propulsion Approaches for Modeling and Electrical Hardware-in-the-Loop Testing"
+    },
+    {
+      "chunk_count": 8,
+      "document_id": 20240006706,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Instrumentation and Photography"
+      ],
+      "title": "Thin-Film Embedded Sensors for Battery Health Monitoring"
+    },
+    {
+      "chunk_count": 41,
+      "document_id": 20240006741,
+      "duplicate_family_id": "title-ecfd033ddfc5",
+      "reason": "selected to satisfy source-query coverage: electrified aircraft propulsion",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "The Advanced Geared Turbofan 30,000 lb<sub>f</sub> \u2013 electrified (AGTF30-e): A Virtual Testbed for Electrified Aircraft Propulsion Research"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20240007192,
+      "duplicate_family_id": "title-150221185a7f",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20240003350",
+      "representative_document_id": 20240003350,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power",
+        "Aircraft Stability and Control"
+      ],
+      "title": "A Comparison of Model Predictive Control Architectures for Application to Electrified Aircraft Propulsion Systems"
+    },
+    {
+      "chunk_count": 24,
+      "document_id": 20240008078,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: fuel cell aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management",
+        "fuel cell aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Modeling and Trade Space for Fuel Cell Powered Aircraft"
+    },
+    {
+      "chunk_count": 4,
+      "document_id": 20240008896,
+      "duplicate_family_id": "title-ecfd033ddfc5",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20240006741",
+      "representative_document_id": 20240006741,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "The Advanced Geared Turbofan 30,000 lbf \u2013 electrified (AGTF30-e): A Virtual Testbed for Electrified Aircraft Propulsion Research"
+    },
+    {
+      "chunk_count": 7,
+      "document_id": 20240011768,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aeronautics (General)",
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "NASA's Open Source Electrified Aircraft Propulsion Modeling and Simulation Tools"
+    },
+    {
+      "chunk_count": 25,
+      "document_id": 20240015511,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: electric aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "TECHNICAL_PUBLICATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Boron Nitride Nanocomposites for Thermal Management of Aircraft Propulsion System"
+    },
+    {
+      "chunk_count": 5,
+      "document_id": 20240016372,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electric aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Thermoacoustic Thermal Management for Electric Aircraft"
+    },
+    {
+      "chunk_count": 19,
+      "document_id": 20250005446,
+      "duplicate_family_id": "title-083f40dafac2",
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion",
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Tutorial: Electrified Aircraft Propulsion Approaches for Modeling and Electrical Hardware-in-the-Loop Testing"
+    },
+    {
+      "chunk_count": 84,
+      "document_id": 20250006187,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: aircraft battery thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "aircraft battery thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "TECHNICAL_PUBLICATION",
+      "subject_categories": [
+        "Aeronautics (General)",
+        "Air Transportation and Safety"
+      ],
+      "title": "Impact of Technology and Mission Variations on NASA Advanced Air Mobility Concept Vehicles"
+    },
+    {
+      "chunk_count": 5,
+      "document_id": 20250006231,
+      "duplicate_family_id": null,
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion"
+      ],
+      "status": "selected",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Megawatt and Beyond, NASA's Electrified Aircraft Propulsion"
+    },
+    {
+      "chunk_count": 24,
+      "document_id": 20260000697,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: hybrid electric aircraft propulsion safety",
+      "representative_document_id": null,
+      "source_queries": [
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "TECHNICAL_MEMORANDUM",
+      "subject_categories": [
+        "Air Transportation and Safety"
+      ],
+      "title": "Assessing National Airspace System Impact of the Hybrid Electric Turboprop Commercial Freighter"
+    },
+    {
+      "chunk_count": 19,
+      "document_id": 20260002125,
+      "duplicate_family_id": "title-ed38e9b659f5",
+      "reason": "selected by deterministic quality-ranking fill",
+      "representative_document_id": null,
+      "source_queries": [
+        "electrified aircraft propulsion",
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "selected",
+      "sti_type": "CONFERENCE_PAPER",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Development of a Digital Twin for Electrified Aircraft Powertrain Health Management"
+    },
+    {
+      "chunk_count": 5,
+      "document_id": 20260004592,
+      "duplicate_family_id": "title-ed38e9b659f5",
+      "reason": "excluded as an exact-title duplicate; richer deterministic representative is 20260002125",
+      "representative_document_id": 20260002125,
+      "source_queries": [
+        "electrified aircraft propulsion",
+        "hybrid electric aircraft propulsion safety"
+      ],
+      "status": "duplicate_excluded",
+      "sti_type": "PRESENTATION",
+      "subject_categories": [
+        "Aircraft Propulsion and Power"
+      ],
+      "title": "Development of a Digital Twin for Electrified Aircraft Powertrain Health Management"
+    },
+    {
+      "chunk_count": 54,
+      "document_id": 20260007283,
+      "duplicate_family_id": null,
+      "reason": "selected to satisfy source-query coverage: fuel cell aircraft thermal management",
+      "representative_document_id": null,
+      "source_queries": [
+        "fuel cell aircraft thermal management"
+      ],
+      "status": "selected",
+      "sti_type": "ACCEPTED_MANUSCRIPT",
+      "subject_categories": [
+        "Fluid Mechanics and Thermodynamics"
+      ],
+      "title": "CFD Modeling of Bi-Directional PMD inside Cryogenic Propellant Tanks Onboard Parabolic Flights"
+    }
+  ],
+  "duplicate_excluded_document_count": 8,
+  "metadata_manifest_path": "data/manifests/ntrs_v0_1.jsonl",
+  "not_selected_document_count": 9,
+  "protected_document_count": 45,
+  "protected_manifest_path": "data/evaluation/generation_v0_3_protected_documents.json",
+  "protected_manifest_sha256": "1bfa11206c0e87bd9b76c8a54a63363caf20f3f7a64fb10e6af5f2c9f41a4164",
+  "protected_overlap_count": 0,
+  "selected_chunk_count": 644,
+  "selected_document_count": 32,
+  "selected_document_ids": [
+    20140017337,
+    20160009765,
+    20160010440,
+    20180000402,
+    20180005333,
+    20180007082,
+    20200000362,
+    20205004194,
+    20205004871,
+    20210000751,
+    20210017939,
+    20220013008,
+    20220015806,
+    20220016701,
+    20220018208,
+    20220018330,
+    20230006256,
+    20230010111,
+    20230018162,
+    20240003350,
+    20240006706,
+    20240006741,
+    20240008078,
+    20240011768,
+    20240015511,
+    20240016372,
+    20250005446,
+    20250006187,
+    20250006231,
+    20260000697,
+    20260002125,
+    20260007283
+  ],
+  "selection_config_path": "configs/training/source_selection_v0_1.yaml",
+  "selection_config_sha256": "b10bb72b75300b7e503a04f4ac78541be78b6d7d09d206d981790755a79254a8",
+  "source_query_selected_counts": {
+    "aircraft battery thermal management": 6,
+    "electric aircraft thermal management": 12,
+    "electrified aircraft propulsion": 9,
+    "fuel cell aircraft thermal management": 3,
+    "hybrid electric aircraft propulsion safety": 8
+  },
+  "version": "0.1"
+}

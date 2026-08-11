@@ -1,0 +1,12 @@
+{
+  "errors": [],
+  "exact_duplicate_questions": {},
+  "frozen_plans": 120,
+  "leakage_findings": [],
+  "normalized_duplicate_questions": {},
+  "protected_answers": 20,
+  "protected_documents": 45,
+  "protected_queries": 32,
+  "selected_documents": 32,
+  "training_examples": 120
+}
