@@ -105,6 +105,20 @@ def build_grounded_prompt(
     if total_evidence_characters > config.max_evidence_characters:
         raise ValueError("evidence exceeds max_evidence_characters.")
 
+    additional_rules = ""
+
+    if config.prompt_version == "grounded-json-v0.2":
+        additional_rules = (
+            "\n8. If insufficient_evidence=false, return at least one supported claim."
+            "\n9. Within each claim, evidence_ids must be unique; never repeat "
+            "the same evidence ID."
+            "\n10. Return exactly one complete JSON object with no markdown, "
+            "code fences, prefix, or suffix."
+            "\n11. Keep the answer concise enough to finish the complete JSON "
+            "response within the generation budget."
+            "\n12. Avoid redundant claims and repeated answer text."
+        )
+
     system_prompt = (
         "You are the AeroRAG-X grounded-answer generation component.\n"
         f"Prompt version: {config.prompt_version}.\n\n"
@@ -120,6 +134,7 @@ def build_grounded_prompt(
         "6. If the evidence does not support a reliable answer, set "
         "insufficient_evidence=true and return no claims.\n"
         "7. Return only data matching the required structured response schema."
+        f"{additional_rules}"
     )
 
     user_payload = {

@@ -89,6 +89,7 @@ class TransformersRuntimeConfig(BaseModel):
     local_files_only: bool = False
 
     revision: str | None = None
+    adapter_path: Path | None = None
 
     @model_validator(mode="after")
     def validate_context_budget(
@@ -178,12 +179,39 @@ def resolve_transformers_dtype(
     raise AssertionError("Unexpected Transformers dtype.")
 
 
+def _resolve_adapter_path(
+    config: TransformersRuntimeConfig,
+) -> Path | None:
+    """Validate and return the optional local PEFT adapter directory."""
+
+    if config.adapter_path is None:
+        return None
+
+    adapter_path = config.adapter_path.expanduser()
+
+    if not adapter_path.is_dir():
+        raise ValueError(
+            f"Transformers adapter path does not exist or is not a directory: {adapter_path}"
+        )
+
+    adapter_config_path = adapter_path / "adapter_config.json"
+
+    if not adapter_config_path.is_file():
+        raise ValueError(
+            f"Transformers adapter directory is missing adapter_config.json: {adapter_path}"
+        )
+
+    return adapter_path
+
+
 def _load_transformers_components(
     *,
     model_name: str,
     config: TransformersRuntimeConfig,
 ) -> tuple[Any, Any, torch.device]:
     """Load one tokenizer/model pair for local generation."""
+
+    adapter_path = _resolve_adapter_path(config)
 
     try:
         from transformers import (
@@ -226,6 +254,23 @@ def _load_transformers_components(
         **model_kwargs,
     )
 
+    if adapter_path is not None:
+        try:
+            from peft import PeftModel
+
+        except ImportError as exc:
+            raise ValueError(
+                "LoRA adapter inference requires PEFT. "
+                "Install the llm dependencies with "
+                '`pip install -e ".[llm]"`.'
+            ) from exc
+
+        model = PeftModel.from_pretrained(
+            model,
+            str(adapter_path),
+            is_trainable=False,
+        )
+
     model.to(device)
     model.eval()
 
@@ -266,7 +311,7 @@ class TransformersStructuredModelTransport:
                 loaded_model,
                 loaded_device,
             ) = _load_transformers_components(
-                model_name=normalized_model_name,
+                model_name=(normalized_model_name),
                 config=config,
             )
 
@@ -298,6 +343,15 @@ class TransformersStructuredModelTransport:
 
         return str(self._device)
 
+    @property
+    def adapter_path(self) -> str | None:
+        """Return the configured PEFT adapter path, if any."""
+
+        if self._config.adapter_path is None:
+            return None
+
+        return str(self._config.adapter_path)
+
     def complete(
         self,
         *,
@@ -318,11 +372,11 @@ class TransformersStructuredModelTransport:
         messages = [
             {
                 "role": "system",
-                "content": request.system_prompt,
+                "content": (request.system_prompt),
             },
             {
                 "role": "user",
-                "content": request.user_prompt,
+                "content": (request.user_prompt),
             },
         ]
 
@@ -349,7 +403,10 @@ class TransformersStructuredModelTransport:
             try:
                 encoded_value = dict(encoded_value)
 
-            except (TypeError, ValueError) as exc:
+            except (
+                TypeError,
+                ValueError,
+            ) as exc:
                 raise ProviderTransportError(
                     "Transformers tokenizer returned an unsupported input structure.",
                     retryable=False,
@@ -385,10 +442,16 @@ class TransformersStructuredModelTransport:
                 retryable=False,
             )
 
-        model_inputs: dict[str, Any] = {}
+        model_inputs: dict[
+            str,
+            Any,
+        ] = {}
 
         for key, value in encoded.items():
-            if isinstance(value, torch.Tensor):
+            if isinstance(
+                value,
+                torch.Tensor,
+            ):
                 model_inputs[key] = value.to(self._device)
 
             else:

@@ -221,6 +221,9 @@ class StructuredGenerationProvider(GenerationProvider):
 
             try:
                 response = ProviderResponse.model_validate(result.payload)
+                response = self._normalize_duplicate_evidence_ids(
+                    response=response,
+                )
                 self._validate_response_evidence_ids(
                     response=response,
                     supplied_evidence=(copied_evidence),
@@ -311,6 +314,28 @@ class StructuredGenerationProvider(GenerationProvider):
             prompt_injection_safe=(injection.safe),
             prompt_injection_findings=len(injection.findings),
             error_type=error_type,
+        )
+
+    @staticmethod
+    def _normalize_duplicate_evidence_ids(
+        *,
+        response: ProviderResponse,
+    ) -> ProviderResponse:
+        """Deduplicate claim evidence IDs while preserving their order."""
+
+        normalized_claims = [
+            claim.model_copy(
+                update={"evidence_ids": list(dict.fromkeys(claim.evidence_ids))},
+                deep=True,
+            )
+            for claim in response.claims
+        ]
+
+        return response.model_copy(
+            update={
+                "claims": normalized_claims,
+            },
+            deep=True,
         )
 
     @staticmethod
