@@ -1,0 +1,30 @@
+{
+  "decision": "reject_single_cosine_threshold_as_binary_semantic_matcher",
+  "easy_v0_1": {
+    "balanced_accuracy": 1.0,
+    "false_negatives": 0,
+    "false_positives": 0,
+    "match_min": 0.3458940088748932,
+    "no_match_max": 0.2732032239437103,
+    "precision": 1.0,
+    "recall": 1.0,
+    "recommended_threshold": 0.30954861640930176,
+    "specificity": 1.0
+  },
+  "experiment": "easy-versus-hard semantic similarity calibration",
+  "hard_v0_2": {
+    "balanced_accuracy": 0.6666666666666667,
+    "false_negatives": 21,
+    "false_positives": 9,
+    "match_min": 0.3458940088748932,
+    "no_match_max": 0.8151476383209229,
+    "precision": 0.7272727272727273,
+    "recall": 0.5333333333333333,
+    "recommended_threshold": 0.7228716313838959,
+    "specificity": 0.8
+  },
+  "interpretation": "Hard negatives and valid semantic paraphrases have substantial cosine-score overlap. Embedding similarity may be used for candidate ranking or diagnostics, but not as the final semantic match decision.",
+  "positive_examples_preserved": true,
+  "threshold_frozen": false,
+  "version": "v0.2"
+}
