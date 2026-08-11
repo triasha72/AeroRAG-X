@@ -65,7 +65,12 @@ def make_result(
     return StructuredModelResult(
         payload={
             "answer": answer,
-            "claims": claims,
+            "claims": [
+                {
+                    "text": claim,
+                }
+                for claim in claims
+            ],
             "insufficient_knowledge": (insufficient_knowledge),
         },
         request_id=None,
@@ -225,7 +230,7 @@ def test_closed_book_prompt_has_no_evidence_contract() -> None:
 
     assert "No retrieved evidence is available" in request.system_prompt
 
-    assert "Do not invent citations" in request.system_prompt
+    assert "Do not output evidence_ids" in request.system_prompt
 
     assert "insufficient_knowledge" in request.system_prompt
 
@@ -270,3 +275,36 @@ def test_insufficient_response_rejects_claims() -> None:
     assert report.generation_failure_count == 1
 
     assert report.query_results[0].failure_type == "response_validation"
+
+
+def test_closed_book_prompt_contains_exact_response_contract() -> None:
+    """Local models should receive the exact closed-book JSON contract."""
+
+    transport = FakeTransport(
+        [
+            make_result(
+                answer=("Battery systems require thermal management."),
+                claims=[("Battery systems require thermal management.")],
+                insufficient_knowledge=False,
+            )
+        ]
+    )
+
+    generator = ClosedBookGenerator(
+        model_name="test-model",
+        transport=transport,
+    )
+
+    generator.generate("Why do aircraft batteries need cooling?")
+
+    prompt = transport.requests[0].system_prompt
+
+    assert '"answer": "string"' in prompt
+
+    assert '"insufficient_knowledge": false' in prompt
+
+    assert '"text": "string"' in prompt
+
+    assert "Do not output evidence_ids" in prompt
+
+    assert "insufficient_evidence" in prompt

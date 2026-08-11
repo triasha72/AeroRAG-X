@@ -39,6 +39,19 @@ type ClosedBookFailureType = Literal[
 ]
 
 
+class ClosedBookClaim(BaseModel):
+    """One technical claim in a closed-book response."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+    )
+
+    text: str = Field(
+        min_length=1,
+    )
+
+
 class ClosedBookResponse(BaseModel):
     """Structured response for one closed-book query."""
 
@@ -51,7 +64,7 @@ class ClosedBookResponse(BaseModel):
         min_length=1,
     )
 
-    claims: list[str] = Field(
+    claims: list[ClosedBookClaim] = Field(
         default_factory=list,
         max_length=8,
     )
@@ -64,10 +77,10 @@ class ClosedBookResponse(BaseModel):
     ) -> Self:
         """Enforce supported/refusal response invariants."""
 
-        if any(not claim.strip() for claim in self.claims):
+        if any(not claim.text.strip() for claim in self.claims):
             raise ValueError("Closed-book claims must not be blank.")
 
-        normalized_claims = [" ".join(claim.casefold().split()) for claim in self.claims]
+        normalized_claims = [" ".join(claim.text.casefold().split()) for claim in self.claims]
 
         if len(normalized_claims) != len(set(normalized_claims)):
             raise ValueError("Closed-book claims must not contain duplicates.")
@@ -316,23 +329,41 @@ class ClosedBookGenerator:
             "for this evaluation.\n"
             "Answer only from the model's internal "
             "knowledge.\n\n"
+            "Return exactly one JSON object using "
+            "this schema:\n"
+            "{\n"
+            '  "answer": "string",\n'
+            '  "claims": [\n'
+            "    {\n"
+            '      "text": "string"\n'
+            "    }\n"
+            "  ],\n"
+            '  "insufficient_knowledge": false\n'
+            "}\n\n"
+            "For a refusal, use:\n"
+            "{\n"
+            '  "answer": "I do not have sufficient '
+            'reliable knowledge to answer this question.",\n'
+            '  "claims": [],\n'
+            '  "insufficient_knowledge": true\n'
+            "}\n\n"
             "Rules:\n"
-            "1. Do not invent citations, evidence IDs, "
-            "URLs, page numbers, or source metadata.\n"
-            "2. If you do not have sufficient reliable "
-            "knowledge to answer, set "
-            "insufficient_knowledge=true and return "
-            "an empty claims list.\n"
-            "3. If insufficient_knowledge=false, "
-            "return at least one concise technical "
-            "claim.\n"
-            "4. Keep claims non-redundant.\n"
-            "5. Return exactly one complete JSON "
-            "object and no markdown or prose outside "
-            "that object.\n"
-            "6. The answer should summarize the "
-            "technical content represented by the "
-            "claims."
+            "1. Use exactly the keys answer, claims, "
+            "and insufficient_knowledge.\n"
+            "2. Each claims entry must be an object "
+            "containing exactly one key: text.\n"
+            "3. Do not output evidence_ids, citations, "
+            "URLs, page numbers, source metadata, or "
+            "insufficient_evidence.\n"
+            "4. If reliable knowledge is insufficient, "
+            "set insufficient_knowledge=true and return "
+            "an empty claims array.\n"
+            "5. Otherwise set "
+            "insufficient_knowledge=false and return "
+            "at least one concise technical claim.\n"
+            "6. Keep claims non-redundant.\n"
+            "7. Return no markdown, code fences, prefix, "
+            "or suffix outside the JSON object."
         )
 
         request = StructuredModelRequest(
