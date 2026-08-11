@@ -1,0 +1,21 @@
+version: v0.1
+model_name: cross-encoder/nli-deberta-v3-small
+device: cpu
+batch_size: 16
+
+calibration_dataset: data/evaluation/semantic_match_calibration_v0_2.jsonl
+
+pair_orientation:
+  premise: candidate_text
+  hypothesis: reference_text
+
+decision_metric: entailment_probability
+
+threshold_selection:
+  objective: balanced_accuracy
+  threshold_frozen: false
+
+acceptance_criteria:
+  minimum_balanced_accuracy: 0.85
+  minimum_recall: 0.80
+  minimum_specificity: 0.80
