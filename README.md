@@ -1,18 +1,70 @@
 # AeroRAG-X
 
-A production-oriented, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.
+**An evaluation-first, evidence-grounded RAG system for aerospace technical knowledge.**
 
-AeroRAG-X is built around a curated NASA Technical Reports Server (NTRS) corpus. It separates corpus provenance, retrieval, reranking, evidence sufficiency, generation, citation resolution, serving, and evaluation into independently testable layers.
+AeroRAG-X is an independent engineering project exploring a question I kept running into while working with technical aerospace literature:
 
-The current system supports deterministic local generation, OpenAI structured generation, and local Hugging Face Transformers generation through the same grounded provider interface.
+> How can a language model help retrieve and synthesize engineering knowledge without losing the evidence trail that makes the answer trustworthy?
+
+The project is built around public NASA Technical Reports Server (NTRS) material and treats retrieval, grounding, generation, citations, evaluation, and deployment as separate engineering problems rather than hiding them behind a chatbot interface.
+
+AeroRAG-X currently combines:
+
+- citation-preserving NASA document processing;
+- BM25 and dense retrieval;
+- hybrid Reciprocal Rank Fusion;
+- cross-encoder reranking;
+- evidence-sufficiency gating;
+- grounded structured generation;
+- application-controlled citations;
+- local and remote language-model backends;
+- PEFT / LoRA adaptation of a local Qwen model;
+- PostgreSQL + pgvector;
+- FastAPI serving;
+- Docker and private Cloud Run validation;
+- Prometheus and OpenTelemetry;
+- frozen evaluation benchmarks and failure analysis.
 
 ---
 
-## System architecture
+## Where the idea came from
+
+AeroRAG-X grew out of my interest in two related problems:
+
+1. technical knowledge in aerospace is distributed across large collections of reports, papers, presentations, and historical documents;
+2. a useful engineering assistant needs to show not only an answer, but also **why that answer can be trusted**.
+
+One project that influenced how I started thinking about the systems side of the problem was **HeRo — Adaptive Orchestration of Agentic RAG on Heterogeneous Mobile SoC**:
+
+https://arxiv.org/abs/2603.01661
+
+What interested me most was not reproducing HeRo's hardware environment. It was the broader idea that RAG should be treated as an **end-to-end system** whose retrieval stages, model calls, routing decisions, latency, resource usage, and failure modes can be measured independently.
+
+AeroRAG-X explores that systems mindset in a different setting: aerospace technical knowledge.
+
+The emphasis here is therefore on:
+
+- evidence provenance;
+- retrieval quality;
+- grounded refusal;
+- citation integrity;
+- local-model behavior;
+- model adaptation;
+- reproducible experiments;
+- failure diagnosis;
+- backend trade-offs;
+- bounded orchestration.
+
+The project has intentionally evolved through measured experiments rather than by adding components only because they are common in modern AI stacks.
+
+---
+
+# System architecture
 
 ```mermaid
 flowchart TD
-    A["NASA NTRS metadata and PDFs"] --> B["Versioned citation-preserving corpus"]
+    A["NASA NTRS metadata + technical reports"] --> B["Versioned citation-preserving corpus"]
+
     B --> C["BM25 lexical retrieval"]
     B --> D["Sentence Transformer embeddings"]
 
@@ -29,164 +81,59 @@ flowchart TD
     J --> K["Evidence-sufficiency gate"]
 
     K --> L{"Generation backend"}
+
     L --> M["Deterministic local provider"]
     L --> N["OpenAI Responses API"]
-    L --> O["Hugging Face Transformers"]
+    L --> O["Qwen3-0.6B"]
+    L --> P["Qwen3-0.6B + PEFT / LoRA"]
 
-    M --> P["Structured grounded response"]
-    N --> P
-    O --> P
+    M --> Q["Structured grounded response"]
+    N --> Q
+    O --> Q
+    P --> Q
 
-    P --> Q["Evidence-ID validation"]
-    Q --> R["Application-side citation resolution"]
-    R --> S["Shared RAG runtime"]
+    Q --> R["Structured-response validation"]
+    R --> S["Evidence-ID normalization + validation"]
+    S --> T["Application-side citation resolution"]
 
-    S --> T["Typer CLI"]
-    S --> U["FastAPI"]
-    U --> V["Structured logs + Prometheus + OpenTelemetry"]
-    U --> W["Docker / Cloud Run"]
-```
+    T --> U["Shared RAG runtime"]
 
-Dense retrieval and generation are selected independently. For example:
+    U --> V["Typer CLI"]
+    U --> W["FastAPI"]
 
-```text
-Dense backend:       numpy
-Generation backend:  transformers
-```
+    W --> X["Prometheus + OpenTelemetry"]
+    W --> Y["Docker / Cloud Run"]
 
-or:
-
-```text
-Dense backend:       pgvector
-Generation backend:  openai
+    U --> Z["Frozen evaluation framework"]
 ```
 
 ---
 
-## Current capabilities
+# Current capabilities
 
-- curated NASA NTRS corpus with **3,233 citation-preserving chunks**
+## Corpus and provenance
+
+- NASA NTRS corpus
+- **3,233 citation-preserving chunks**
+- document IDs
+- page IDs
+- page ranges
+- NASA citation URLs
+- original source URLs
+- source-document checksums
+- versioned processing artifacts
+- reproducible manifests
+
+## Retrieval
+
 - BM25 lexical retrieval
 - Sentence Transformer dense retrieval
 - exact NumPy cosine search
-- optional PostgreSQL + pgvector persistence
-- runtime-selectable dense backends
-- Reciprocal Rank Fusion hybrid retrieval
+- PostgreSQL + pgvector backend
+- runtime-selectable dense backend
+- Reciprocal Rank Fusion
 - cross-encoder reranking
-- deterministic facet-aware evidence selection
-- evidence-sufficiency gating
-- grounded refusals before model invocation
-- deterministic local generation
-- OpenAI Responses API structured generation
-- local Hugging Face Transformers generation
-- structured JSON validation
-- evidence-ID validation
-- authoritative application-side claim citations
-- deterministic, remote, and local-model telemetry classification
-- failure-tolerant generation benchmarking
-- provider latency and token telemetry
-- frozen untuned local-model evaluation
-- FastAPI serving
-- request IDs and structured errors
-- structured JSON logging
-- Prometheus metrics
-- OpenTelemetry tracing
-- Docker serving
-- GitHub Actions CI
-- private Google Cloud Run Gen2 validation
-
-The NumPy backend remains the default for the current static corpus. pgvector is available when persistence, transactional mutation, or database-backed metadata is useful.
-
----
-
-## Design principles
-
-AeroRAG-X is built around several engineering questions:
-
-1. Can the source corpus be reproduced?
-2. Can every retrieved chunk retain authoritative provenance?
-3. Can retrieval components be evaluated independently?
-4. Can unsupported questions be rejected before expensive model inference?
-5. Can generation providers be interchangeable without changing the RAG pipeline?
-6. Can final citations remain application-controlled rather than model-generated?
-7. Can local and remote LLMs share the same grounded structured-provider interface?
-8. Can every major capability be compared against a frozen baseline?
-9. Can local-model failures be measured without terminating an evaluation run?
-10. Can fine-tuning be justified by measured failure modes rather than added only for architectural complexity?
-
-The project emphasizes:
-
-- provenance preservation
-- reproducibility
-- protected evaluation splits
-- refusal behavior
-- citation validity
-- failure analysis
-- provider observability
-- backend interchangeability
-- frozen baselines
-- reproducible deployment
-
----
-
-# Reproducible local workflows
-
-## Deterministic local demo
-
-```bash
-./scripts/demo_local.sh
-```
-
-The deterministic runtime uses NumPy dense retrieval by default and does not require an external generation API.
-
-## Real local Transformers smoke test
-
-```bash
-python scripts/smoke_transformers.py
-```
-
-The smoke script loads the complete runtime once and runs:
-
-- one supported aerospace query, which must invoke the local model and return grounded citations;
-- one deliberately unsupported query, which must be rejected by the evidence-sufficiency gate before local-model inference.
-
-The real-model smoke test is intentionally not part of normal CI because model weights may need to be downloaded.
-
----
-
-# Corpus acquisition and provenance
-
-The NASA processing pipeline includes:
-
-- NTRS metadata search
-- reproducible corpus configuration
-- versioned manifests
-- PDF-link resolution
-- streamed acquisition
-- partial-download handling
-- checksum validation
-- acquisition receipts
-- page-level PDF extraction
-- citation-preserving overlapping chunks
-- document identifiers
-- page identifiers
-- page ranges
-- source URLs
-- NASA citation URLs
-- source-document checksums
-- embedding manifests
-
-Provenance is preserved through retrieval, generation, and citation resolution.
-
----
-
-# Retrieval and ranking
-
-## BM25
-
-The lexical retriever supports deterministic tokenization, configurable BM25 parameters, deterministic tie-breaking, and full chunk provenance.
-
-## Dense retrieval
+- facet-aware retrieval for selected synthesis questions
 
 Current embedding model:
 
@@ -200,96 +147,149 @@ Embedding dimension:
 384
 ```
 
-Dense retrieval can use either:
+Current reranker:
+
+```text
+cross-encoder/ms-marco-MiniLM-L6-v2
+```
+
+## Grounding
+
+- evidence-sufficiency gate
+- unsupported-query rejection before model inference
+- bounded evidence context
+- structured response schema
+- evidence-ID validation
+- duplicate evidence-ID normalization
+- unknown evidence-ID rejection
+- authoritative application-side citation resolution
+- source-document provenance
+
+## Generation
+
+Supported generation modes:
+
+```text
+local
+openai
+transformers
+```
+
+Local neural model:
+
+```text
+Qwen/Qwen3-0.6B
+```
+
+The local model can run as:
+
+```text
+Base Qwen
+```
+
+or:
+
+```text
+Base Qwen + PEFT / LoRA adapter
+```
+
+## Serving and operations
+
+- FastAPI
+- Docker
+- private Google Cloud Run Gen2 validation
+- request IDs
+- structured errors
+- structured JSON logs
+- Prometheus
+- OpenTelemetry
+- provider latency telemetry
+- provider token telemetry
+- provider-call / bypass telemetry
+- GitHub Actions CI
+
+---
+
+# Design principles
+
+AeroRAG-X is organized around a few recurring questions:
+
+1. Can the source corpus be reproduced?
+2. Can every answer be traced back to authoritative evidence?
+3. Can retrieval components be evaluated independently?
+4. Can unsupported questions be rejected before model inference?
+5. Can local and remote models use the same grounded interface?
+6. Can model-generated evidence references be validated before becoming citations?
+7. Can failures be recorded instead of silently converted into apparently valid answers?
+8. Can new capabilities be compared with frozen baselines?
+9. Can local-model adaptation be evaluated separately from retrieval improvements?
+10. Can orchestration remain bounded and observable as the system becomes more agentic?
+
+The project therefore emphasizes:
+
+```text
+provenance
+reproducibility
+measurement
+failure analysis
+bounded behavior
+grounded refusal
+citation integrity
+backend interchangeability
+protected evaluation
+```
+
+---
+
+# Retrieval pipeline
+
+## BM25
+
+The lexical retriever includes:
+
+- deterministic tokenization;
+- configurable BM25 parameters;
+- deterministic tie-breaking;
+- full chunk provenance.
+
+## Dense retrieval
+
+Dense retrieval supports:
 
 ```text
 NumPy exact cosine
 PostgreSQL + pgvector
 ```
 
+The current corpus is small enough that exact NumPy retrieval remains a strong default.
+
 ## Hybrid retrieval
 
-BM25 and dense results are combined with Reciprocal Rank Fusion while preserving source ranks, scores, and chunk provenance.
+BM25 and dense results are combined using Reciprocal Rank Fusion.
+
+The fused result retains:
+
+- lexical rank;
+- dense rank;
+- fused rank;
+- source scores;
+- chunk provenance.
 
 ## Cross-encoder reranking
 
-Current model:
+A bounded candidate set is reranked with:
 
 ```text
 cross-encoder/ms-marco-MiniLM-L6-v2
 ```
 
-The reranker operates over a bounded Hybrid RRF candidate set and records scoring latency separately.
-
-## Facet-aware evidence retrieval
-
-A deterministic facet-aware wrapper supports selected multi-part synthesis questions. It can derive facet-specific searches, validate facet support, deduplicate chunks, balance evidence, and fall back to ordinary retrieval.
-
-The current implementation is intentionally constrained and is not presented as a general-purpose autonomous agent.
+Reranker latency is recorded independently.
 
 ---
 
-# Dense retrieval backends
+# NumPy vs pgvector
 
-## NumPy exact cosine
-
-The NumPy backend:
-
-- loads versioned `.npy` embeddings
-- loads aligned metadata
-- performs exact cosine similarity
-- requires no database service
-- remains the default for the current corpus
-
-Select explicitly with:
-
-```bash
-export AERORAGX_DENSE_BACKEND=numpy
-```
-
-## PostgreSQL + pgvector
-
-Install optional dependencies:
-
-```bash
-python -m pip install -e ".[dev,vector]"
-```
-
-Start the local service:
-
-```bash
-docker compose -f docker-compose.vector.yml up -d
-```
-
-Configure the connection:
-
-```bash
-export AERORAGX_VECTOR_DATABASE_URL="postgresql://aeroragx:aeroragx@localhost:5432/aeroragx"
-```
-
-Load the existing versioned embeddings:
-
-```bash
-python scripts/load_pgvector.py
-```
-
-Select pgvector:
-
-```bash
-export AERORAGX_DENSE_BACKEND=pgvector
-```
-
-Stop PostgreSQL while preserving its volume:
-
-```bash
-docker compose -f docker-compose.vector.yml down
-```
-
-Do not use `down -v` unless the persistent database volume should intentionally be deleted.
-
----
-
-# NumPy vs pgvector validation
+The same stored embeddings were evaluated through both dense backends.
 
 | Property | Value |
 |---|---:|
@@ -316,28 +316,26 @@ Do not use `down -v` unless the persistent database volume should intentionally 
 
 ## Local latency
 
-| Backend | Mean | P50 | P95 |
-|---|---:|---:|---:|
-| NumPy | 7.121 ms | 6.410 ms | 10.068 ms |
-| pgvector | 20.517 ms | 20.254 ms | 22.301 ms |
+| Backend | Mean |
+|---|---:|
+| NumPy | 7.121 ms |
+| pgvector | 20.517 ms |
 
-At the current corpus scale, NumPy remains the lower-latency option. pgvector is retained for persistence, transactional updates, and future mutable-corpus requirements.
+At the current corpus size, NumPy remains the simpler low-latency backend.
 
-Comparison artifact:
+pgvector is retained because it becomes useful when the corpus needs:
 
-```text
-artifacts/evaluation/vector_backend_comparison_v0_1.json
-```
+- persistence;
+- transactional updates;
+- metadata filtering;
+- mutable indexing;
+- database-backed retrieval.
 
 ---
 
 # Evidence-sufficiency gate
 
-Primary implementation:
-
-```text
-src/aeroragx/generation/sufficiency.py
-```
+Before generation, AeroRAG-X asks whether the retrieved evidence is sufficient to support an answer.
 
 Current configuration:
 
@@ -345,308 +343,63 @@ Current configuration:
 configs/sufficiency_v0_2_1.yaml
 ```
 
-The gate checks:
+The gate considers:
 
-- minimum evidence count
-- informative query-term coverage
-- minimum supported terms
-- single-evidence coverage
-- numeric support
-- named-anchor support
-- claim-qualifier support
-- stricter behavior for exact-value questions
+- evidence count;
+- informative query-term coverage;
+- supported terms;
+- numeric evidence;
+- named anchors;
+- claim qualifiers;
+- exact-value questions.
 
-If evidence is insufficient, the generation provider can be bypassed completely. This improves grounding behavior and avoids unnecessary model latency.
-
----
-
-# Generation backends
-
-Supported runtime modes:
+When evidence is insufficient:
 
 ```text
-local
-openai
-transformers
+question
+   ↓
+retrieval
+   ↓
+sufficiency = false
+   ↓
+grounded refusal
 ```
 
-Select the mode with:
+The generation model is not called.
 
-```bash
-export AERORAGX_RUNTIME_MODE=<mode>
-```
-
-## Deterministic local generation
-
-```bash
-export AERORAGX_RUNTIME_MODE=local
-```
-
-This provider is useful for deterministic regression tests, CI, and reproducible local demos.
-
-## OpenAI structured generation
-
-```bash
-export AERORAGX_RUNTIME_MODE=openai
-export OPENAI_API_KEY="your-key"
-```
-
-Relevant configuration:
-
-```text
-configs/generation_openai_v0_1.yaml
-configs/provider_v0_1.yaml
-configs/http_transport_openai_v0_1.yaml
-configs/provider_runtime_openai_v0_1.yaml
-```
-
-Do not commit API keys.
-
-## Local Hugging Face Transformers generation
-
-```bash
-export AERORAGX_RUNTIME_MODE=transformers
-export AERORAGX_DENSE_BACKEND=numpy
-```
-
-Current local baseline:
-
-```text
-Qwen/Qwen3-0.6B
-```
-
-Relevant configuration:
-
-```text
-configs/generation_transformers_v0_1.yaml
-configs/transformers_runtime_v0_1.yaml
-configs/provider_v0_1.yaml
-```
-
-The local transport supports:
-
-- Hugging Face `AutoTokenizer`
-- Hugging Face `AutoModelForCausalLM`
-- model-specific chat templates
-- automatic CUDA / Apple MPS / CPU device selection
-- configurable dtype
-- deterministic decoding
-- optional thinking control
-- input-token budget validation
-- bounded output generation
-- strict JSON parsing
-- evidence-ID validation
-- input/output token telemetry
-- provider latency telemetry
-- zero external API-token cost
-
-The Transformers path reuses the existing `StructuredGenerationProvider`; it does not create a separate RAG implementation.
-
-```text
-retrieved evidence
-      ↓
-grounded prompt
-      ↓
-TransformersStructuredModelTransport
-      ↓
-local causal LM
-      ↓
-structured JSON payload
-      ↓
-Pydantic validation
-      ↓
-evidence-ID validation
-      ↓
-application-side citation resolution
-```
-
----
-
-# Real local-model validation
-
-The local model has been validated with:
-
-```text
-Model:         Qwen/Qwen3-0.6B
-Dense backend: NumPy
-Device:        Apple MPS
-```
-
-## Supported smoke case
-
-Query:
-
-```text
-How can battery thermal runaway propagate in electric aircraft?
-```
-
-Observed smoke behavior:
-
-| Field | Result |
-|---|---:|
-| Evidence sufficient | Yes |
-| Provider called | Yes |
-| Provider succeeded | Yes |
-| Claims | 1 |
-| Citations | 1 |
-| Source documents | 1 |
-| Input tokens | 2,295 |
-| Output tokens | 218 |
-| Total tokens | 2,513 |
-| External API cost | $0 |
-| Provider latency | ~12.2 s |
-
-## Unsupported smoke case
-
-Query:
-
-```text
-What was the exact cabin temperature recorded during NASA's 2047 hydrogen-electric aircraft certification flight?
-```
-
-Observed smoke behavior:
-
-| Field | Result |
-|---|---:|
-| Evidence sufficient | No |
-| Provider called | No |
-| Claims | 0 |
-| Citations | 0 |
-| Source documents | 0 |
-
-These cases validate runtime behavior but are not used as the primary local-model quality result.
-
-## Frozen untuned local-model benchmark
-
-A frozen 32-query untuned `Qwen/Qwen3-0.6B` + RAG baseline has now been established.
-
-Evaluation configuration:
-
-```text
-Generation:        Qwen/Qwen3-0.6B
-Dense backend:     NumPy
-Reranker:          cross-encoder/ms-marco-MiniLM-L6-v2
-Candidate top-k:   20
-Evidence top-k:    5
-Sampling:          disabled
-```
-
-Evaluation set:
-
-| Category | Queries |
-|---|---:|
-| Expected-answerable | 20 |
-| Unsupported | 12 |
-| Total | 32 |
-
-Measured quality:
-
-| Metric | Result |
-|---|---:|
-| Completed queries | 32 / 32 |
-| Generation failures | 0 |
-| Generation failure rate | 0.0000 |
-| Answerability accuracy | 1.0000 |
-| Answerable completion | 1.0000 |
-| Unsupported refusal | 1.0000 |
-| Claim citation coverage | 1.0000 |
-| Citation-reference validity | 1.0000 |
-| Source-document coverage | 1.0000 |
-| Structural validity | 1.0000 |
-| Expected-term recall | 0.9138 |
-| Expected terms matched | 53 / 58 |
-
-Provider telemetry:
-
-| Metric | Result |
-|---|---:|
-| Provider kind | local model |
-| Provider calls | 20 |
-| Provider bypasses | 12 |
-| Unknown provider-call states | 0 |
-| Provider call-policy accuracy | 1.0000 |
-| Provider retries | 0 |
-| Input tokens | 49,589 |
-| Output tokens | 2,969 |
-| Total tokens | 52,558 |
-| Mean provider latency | 14.29 s |
-| P50 provider latency | 7.87 s |
-| P95 provider latency | 29.26 s |
-| External API inference cost | $0 |
-
-The `$0` figure refers to external API-token cost. Local compute cost is not estimated by this benchmark.
-
-Frozen artifacts:
-
-```text
-artifacts/evaluation/generation_transformers_base_v0_1.json
-artifacts/evaluation/generation_transformers_base_telemetry_v0_1.json
-```
-
----
-
-# Local-model failure analysis
-
-The untuned Qwen baseline produced:
-
-```text
-0 generation failures
-0 answerability errors
-0 structural failures
-```
-
-The exact expected-term metric found five answerable queries with one lexical term missing.
-
-| Query | Missing term | Manual interpretation |
-|---|---|---|
-| `core_008` | `detection` | Primarily lexical: the answer uses `detected` and describes precursor identification. |
-| `para_001` | `cell` | Genuine content weakness: cell-to-cell propagation was not explained adequately. |
-| `para_005` | `distributed` | Primarily lexical/semantic: the answer describes distributing power across the airframe. |
-| `para_009` | `detection` | Primarily lexical: the answer explicitly uses `detect` and identifies NDE methods. |
-| `synth_003` | `safety` | Semantic/compressed: faults, degradation, failure modes, sensing, and health management are discussed without the exact term. |
-
-This indicates that exact expected-term recall is useful as a deterministic diagnostic but should not be interpreted as a semantic-equivalence metric.
-
-The most defensible substantive content miss in the current 32-query baseline is `para_001`.
-
----
-
-# Claim-decomposition observation
-
-The local model's larger quality difference is response decomposition rather than structural validity.
-
-Across the 20 answerable queries:
-
-| Provider | Formal claims | Claims per answerable query | Citations | Citation references |
-|---|---:|---:|---:|---:|
-| OpenAI v0.3 | 101 | 5.05 | 82 | 149 |
-| Qwen 0.6B local | 25 | 1.25 | 31 | 33 |
-
-The local model often compresses several technical statements into a small number of formal claims.
-
-The current structural-validity metric does not penalize this behavior because the claims that are produced remain correctly cited and source-backed.
-
-This observation gives the next model-adaptation phase a measurable target: improve grounded technical completeness and claim decomposition while preserving existing refusal, citation-validity, structural-validity, and generation-reliability behavior.
+This is both a grounding control and an inference-cost control.
 
 ---
 
 # Provider trust boundary
 
-The generation model is not trusted to construct final citation metadata.
+AeroRAG-X does not trust a language model to construct final citation metadata.
+
+The model returns evidence references:
 
 ```text
 model claim
     ↓
 evidence ID
-    ↓
-application-side evidence lookup
-    ↓
-authoritative citation
 ```
 
-Unknown evidence IDs are rejected.
+The application then performs:
 
-Final citation metadata can include:
+```text
+evidence-ID normalization
+        ↓
+known-ID validation
+        ↓
+authoritative evidence lookup
+        ↓
+application-generated citation
+```
+
+Exact repeated evidence references are deduplicated while preserving order.
+
+Unknown evidence IDs are still rejected.
+
+A final citation can include:
 
 ```text
 citation_id
@@ -663,191 +416,233 @@ reranker_rank
 
 ---
 
-# Evaluation
+# Local Qwen generation
 
-Retrieval and generation evaluation are treated separately.
-
-Implemented evaluation includes:
-
-- retrieval benchmark v0.1
-- pooled retrieval benchmark v0.2
-- NumPy-vs-pgvector comparison
-- generation v0.3 development benchmark
-- deterministic-provider evaluation
-- OpenAI-provider evaluation
-- frozen local-Transformers evaluation
-- protected held-out deterministic evaluation
-- answerability metrics
-- refusal metrics
-- citation metrics
-- structural-validity checks
-- expected-term diagnostics
-- failure-tolerant generation evaluation
-- normalized generation-failure categories
-- deterministic / remote / local-model telemetry classification
-- latency metrics
-- token metrics
-- cost metrics
-- CI-enforced frozen regression policy
-
-## Generation v0.3 OpenAI development benchmark
-
-| Category | Queries |
-|---|---:|
-| Expected-answerable | 20 |
-| Unsupported | 12 |
-| Total | 32 |
-
-Final evaluated configuration:
-
-```text
-Sufficiency v0.2.1
-+ Facet Retrieval v0.1
-+ OpenAI Responses API
-```
-
-| Metric | Final |
-|---|---:|
-| Answerability accuracy | 1.0000 |
-| Answerable completion | 1.0000 |
-| Unsupported refusal | 1.0000 |
-| Claim citation coverage | 1.0000 |
-| Citation-reference validity | 1.0000 |
-| Expected-term recall | 0.9310 |
-| Structural validity | 1.0000 |
-| Provider call-policy accuracy | 1.0000 |
-
-Provider telemetry:
-
-| Metric | Value |
-|---|---:|
-| Provider calls | 20 |
-| Provider bypasses | 12 |
-| Total tokens | 58,915 |
-| Estimated benchmark API cost | $0.103745 |
-| P50 provider latency | 5.6394 s |
-| P95 provider latency | 7.6947 s |
-| Retry rate | 0.0 |
-
-These figures describe the development benchmark only and are not evidence of universal RAG correctness.
-
-## Untuned local Transformers benchmark
-
-The same 32-query v0.3 evaluation set was executed with:
+The local generation backend uses:
 
 ```text
 Qwen/Qwen3-0.6B
 ```
 
-| Metric | Local Qwen |
-|---|---:|
-| Completed queries | 32 / 32 |
-| Generation failures | 0 |
-| Answerability accuracy | 1.0000 |
-| Answerable completion | 1.0000 |
-| Unsupported refusal | 1.0000 |
-| Claim citation coverage | 1.0000 |
-| Citation-reference validity | 1.0000 |
-| Source-document coverage | 1.0000 |
-| Expected-term recall | 0.9138 |
-| Structural validity | 1.0000 |
-| Provider call-policy accuracy | 1.0000 |
+through Hugging Face Transformers.
 
-Provider telemetry:
+The runtime supports:
 
-| Metric | Value |
-|---|---:|
-| Provider calls | 20 |
-| Provider bypasses | 12 |
-| Provider retries | 0 |
-| Total tokens | 52,558 |
-| External API inference cost | $0 |
-| P50 provider latency | 7.87 s |
-| P95 provider latency | 29.26 s |
+- `AutoTokenizer`
+- `AutoModelForCausalLM`
+- model-specific chat templates
+- CPU / Apple MPS / CUDA device selection
+- configurable dtype
+- deterministic decoding
+- bounded generation
+- strict JSON parsing
+- structured-response validation
+- token telemetry
+- provider latency telemetry
 
-## OpenAI vs local Qwen
+The local generation path uses the same RAG and grounding infrastructure as the other providers.
 
-| Metric | OpenAI v0.3 | Qwen 0.6B local |
+---
+
+# PEFT / LoRA adaptation
+
+AeroRAG-X includes a reproducible PEFT / LoRA adaptation pipeline for the local Qwen model.
+
+The purpose of the adaptation experiment was not to replace retrieval.
+
+The question was:
+
+> Can a small local model produce richer, more structured aerospace answers while preserving the grounding and refusal behavior of the RAG system?
+
+The training workflow includes:
+
+- independent training examples;
+- protected evaluation separation;
+- assistant-only loss masking;
+- deterministic train/dev splits;
+- context-window eligibility checks;
+- gradient checkpointing;
+- Apple MPS training support;
+- tiny-overfit learnability validation;
+- best-checkpoint selection;
+- adapter save/reload verification;
+- experiment provenance.
+
+Training configuration:
+
+```text
+Base model: Qwen/Qwen3-0.6B
+Training examples: 106
+Development examples: 12
+Epochs: 3
+
+LoRA rank: 16
+LoRA alpha: 32
+LoRA dropout: 0.05
+
+Target modules:
+q_proj
+k_proj
+v_proj
+o_proj
+```
+
+The best checkpoint was selected from development loss rather than simply taking the final training epoch.
+
+Adapter weights remain local and are not committed to the repository.
+
+---
+
+# Why failure analysis is part of the project
+
+The first LoRA evaluation was not treated as a successful experiment simply because training loss decreased.
+
+It exposed several structured-generation failures:
+
+```text
+truncated JSON
+supported response with missing claims
+duplicate evidence references
+```
+
+Those failures were preserved as experiment artifacts and investigated individually.
+
+The resulting robustness work introduced:
+
+- a larger but still bounded generation budget;
+- explicit complete-JSON instructions;
+- concise structured-output guidance;
+- supported-answer claim requirements;
+- unique evidence-ID guidance;
+- deterministic duplicate evidence-ID normalization;
+- strict continued rejection of unknown evidence IDs.
+
+This progression is intentionally part of the repository history.
+
+AeroRAG-X treats negative results as engineering evidence rather than something to remove from the project record.
+
+---
+
+# Final Base+RAG vs LoRA+RAG evaluation
+
+The final controlled benchmark uses:
+
+```text
+32 frozen queries
+20 expected-answerable
+12 deliberately unsupported
+```
+
+Both configurations use the same:
+
+- corpus;
+- retrieval pipeline;
+- dense backend;
+- RRF configuration;
+- reranker;
+- candidate depth;
+- evidence depth;
+- evidence-sufficiency gate;
+- prompt policy;
+- generation budget;
+- deterministic decoding configuration.
+
+The primary model-side difference is whether the trained LoRA adapter is active.
+
+## Final v0.3 results
+
+| Metric | Base + RAG | LoRA + RAG |
 |---|---:|---:|
+| Completed queries | 32 / 32 | 32 / 32 |
+| Generation failures | 0 | 0 |
 | Answerability accuracy | 1.0000 | 1.0000 |
 | Answerable completion | 1.0000 | 1.0000 |
 | Unsupported refusal | 1.0000 | 1.0000 |
 | Claim citation coverage | 1.0000 | 1.0000 |
 | Citation-reference validity | 1.0000 | 1.0000 |
 | Source-document coverage | 1.0000 | 1.0000 |
+| Expected-term recall | 0.9310 | 0.9310 |
 | Structural validity | 1.0000 | 1.0000 |
-| Expected-term recall | 0.9310 | 0.9138 |
-| Total claims | 101 | 25 |
-| Total citations | 82 | 31 |
-| Total citation references | 149 | 33 |
+| Formal claims | 32 | 53 |
+| Claims / answerable query | 1.600 | 2.650 |
+| Citation references | 40 | 96 |
 | Provider calls | 20 | 20 |
 | Provider bypasses | 12 | 12 |
-| Retry rate | 0.0000 | 0.0000 |
-| P50 provider latency | 5.64 s | 7.87 s |
-| P95 provider latency | 7.69 s | 29.26 s |
-| External API inference cost | $0.103745 | $0 |
+| External API cost | $0 | $0 |
 
-The local model preserves all currently measured answerability, refusal, citation-validity, source-grounding, and structural properties on this benchmark while using fewer output tokens and eliminating external API-token cost.
+## Runtime trade-off
 
-Its clearest measured weaknesses are:
+| Metric | Base + RAG | LoRA + RAG |
+|---|---:|---:|
+| Input tokens | 51,289 | 51,289 |
+| Output tokens | 3,314 | 5,182 |
+| Total tokens | 54,603 | 56,471 |
+| P50 provider latency | 8.88 s | 14.87 s |
+| P95 provider latency | 16.08 s | 19.13 s |
 
-- lower exact expected-term recall;
-- less granular claim decomposition;
-- substantially higher tail latency.
+The adapted model therefore produced substantially more output while preserving the benchmark's measured reliability and exact expected-term recall.
 
-## Held-out deterministic evaluation v0.4
-
-| Category | Queries |
-|---|---:|
-| Expected-answerable | 6 |
-| Unsupported | 6 |
-| Total | 12 |
-
-| Metric | Held-out result |
-|---|---:|
-| Answerability accuracy | 0.9167 |
-| Answerable completion | 1.0000 |
-| Unsupported refusal | 0.8333 |
-| Claim citation coverage | 1.0000 |
-| Citation-reference validity | 1.0000 |
-| Source-document coverage | 1.0000 |
-| Expected-term recall | 0.7778 |
-| Structural validity | 1.0000 |
-
-The held-out result is recorded as evidence and is not used as a tuning target.
-
-The frozen 32-query local-model benchmark must likewise remain outside LoRA training data.
+Longer output is not automatically treated as higher quality. More detailed claim-decomposition and semantic coverage remain separate evaluation questions.
 
 ---
 
-# FastAPI service
+# Evaluation philosophy
+
+AeroRAG-X keeps retrieval and generation evaluation separate.
+
+Implemented evaluation includes:
+
+- BM25 retrieval evaluation;
+- dense retrieval evaluation;
+- Hybrid RRF evaluation;
+- reranker evaluation;
+- NumPy-vs-pgvector equivalence;
+- deterministic-generation benchmarks;
+- OpenAI-generation benchmarks;
+- local-model benchmarks;
+- unsupported controls;
+- answerability accuracy;
+- refusal accuracy;
+- citation coverage;
+- citation-reference validity;
+- source-document coverage;
+- expected-term recall;
+- structured-response validity;
+- generation failure categories;
+- latency telemetry;
+- token telemetry;
+- provider-call telemetry.
+
+Exact expected-term recall is intentionally treated as a diagnostic rather than a complete semantic metric.
+
+For example:
+
+```text
+detect
+detection
+detected
+```
+
+may describe the same concept while scoring differently under exact lexical matching.
+
+Future evaluation therefore includes semantic concept matching and claim-evidence faithfulness.
+
+---
+
+# FastAPI
+
+Available endpoints:
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/health` | Process health |
-| `GET` | `/ready` | Runtime readiness |
-| `POST` | `/v1/query` | Grounded answer |
+| `GET` | `/health` | process health |
+| `GET` | `/ready` | runtime readiness |
+| `POST` | `/v1/query` | grounded query |
 | `GET` | `/metrics` | Prometheus metrics |
-| `GET` | `/docs` | Swagger/OpenAPI documentation |
-| `GET` | `/redoc` | ReDoc documentation |
+| `GET` | `/docs` | Swagger UI |
 | `GET` | `/openapi.json` | OpenAPI schema |
 
-Core environment variables:
-
-```text
-AERORAGX_RUNTIME_MODE
-AERORAGX_DENSE_BACKEND
-AERORAGX_CANDIDATE_TOP_K
-AERORAGX_EVIDENCE_TOP_K
-```
-
-pgvector additionally uses:
-
-```text
-AERORAGX_VECTOR_DATABASE_URL
-```
-
-## Run deterministic API
+Run the deterministic API:
 
 ```bash
 export AERORAGX_RUNTIME_MODE=local
@@ -858,11 +653,9 @@ python -m uvicorn aeroragx.api:app \
   --port 8000
 ```
 
-## Run local Transformers API
+Run local Transformers:
 
 ```bash
-python -m pip install -e ".[dev,llm]"
-
 export AERORAGX_RUNTIME_MODE=transformers
 export AERORAGX_DENSE_BACKEND=numpy
 
@@ -871,9 +664,7 @@ python -m uvicorn aeroragx.api:app \
   --port 8000
 ```
 
-The first run may download public Hugging Face model weights.
-
-Example query:
+Example:
 
 ```bash
 curl -sS \
@@ -887,190 +678,233 @@ curl -sS \
 
 ---
 
-# Installation
+# PostgreSQL + pgvector
 
-AeroRAG-X requires Python 3.12 or newer.
-
-```bash
-git clone https://github.com/triasha72/AeroRAG-X.git
-cd AeroRAG-X
-
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-```
-
-Core development:
-
-```bash
-python -m pip install -e ".[dev]"
-```
-
-With pgvector:
+Install:
 
 ```bash
 python -m pip install -e ".[dev,vector]"
 ```
 
-With local LLM support:
+Start PostgreSQL:
+
+```bash
+docker compose \
+  -f docker-compose.vector.yml \
+  up -d
+```
+
+Configure:
+
+```bash
+export AERORAGX_VECTOR_DATABASE_URL="postgresql://aeroragx:aeroragx@localhost:5432/aeroragx"
+```
+
+Load the current index:
+
+```bash
+python scripts/load_pgvector.py
+```
+
+Select the backend:
+
+```bash
+export AERORAGX_DENSE_BACKEND=pgvector
+```
+
+---
+
+# Installation
+
+Requires Python 3.12+.
+
+```bash
+git clone https://github.com/triasha72/AeroRAG-X.git
+
+cd AeroRAG-X
+
+python -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+```
+
+Development:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Local LLM:
 
 ```bash
 python -m pip install -e ".[dev,llm]"
 ```
 
+pgvector:
+
+```bash
+python -m pip install -e ".[dev,vector]"
+```
+
 Complete development environment:
 
 ```bash
-python -m pip install -e ".[dev,vector,llm]"
-```
-
-Conda example:
-
-```bash
-conda create -n aeroragx-py312 python=3.12
-conda activate aeroragx-py312
-python -m pip install --upgrade pip
-python -m pip install -e ".[dev,vector,llm]"
+python -m pip install -e ".[dev,vector,llm,training]"
 ```
 
 ---
 
-# CI and validation
+# Validation
 
-GitHub Actions validates:
-
-- Python 3.12
-- development dependencies
-- pgvector dependencies
-- local-LLM dependencies
-- Ruff formatting
-- Ruff linting
-- pytest and coverage
-- strict mypy
-- vector utility scripts
-- frozen generation-regression policy
-- PostgreSQL + pgvector integration
-- Docker build
-
-The real Qwen smoke test and multi-query local-model benchmark remain opt-in because they require local model weights and significantly more inference time than ordinary CI.
-
-Run the local quality gate:
+Run:
 
 ```bash
-unset AERORAGX_VECTOR_DATABASE_URL
-
-ruff format .
+ruff format --check .
 ruff check .
-
 mypy src/aeroragx
-mypy scripts/run_generation_v03.py
-mypy scripts/load_pgvector.py
-mypy scripts/benchmark_vector_backends.py
-mypy scripts/smoke_transformers.py
-
-pytest
-
-git diff --check
+pytest -q
 ```
 
-Real-model validation:
-
-```bash
-python scripts/smoke_transformers.py
-```
+Real-model tests remain opt-in because model weights and local inference are substantially more expensive than normal unit tests.
 
 ---
 
-# Docker and cloud status
+# Deployment
 
-AeroRAG-X has a non-root Docker serving path and a private Google Cloud Run Gen2 validation path.
+AeroRAG-X has been validated through:
 
-The existing deployed Cloud Run validation uses the artifact-backed baseline runtime. Local Transformers has been validated on Apple MPS, but no production local-LLM GPU deployment benchmark is claimed yet.
+```text
+local Python runtime
+        ↓
+FastAPI
+        ↓
+Docker
+        ↓
+private Google Cloud Run Gen2
+```
+
+The deployed cloud validation path is private.
+
+No production-scale local-LLM GPU deployment benchmark is currently claimed.
 
 ---
 
-# Security and limitations
+# Current research direction
 
-AeroRAG-X currently:
+The LoRA+RAG experiment is no longer the endpoint of the project.
 
-- treats retrieved evidence as untrusted model input
-- validates structured provider output
-- rejects unknown evidence IDs
-- resolves final citations application-side
-- redacts provider secrets from transport errors
-- can reject unsupported questions before model invocation
-- records model-generation failures without fabricating refusals
-- uses environment variables for secrets
-- runs Docker as a non-root user
-- keeps deployed Cloud Run access private
-- preserves source-document checksums
-- validates pgvector corpus counts against versioned artifacts
-- keeps frozen evaluation artifacts separate from future training data
+The next questions are:
 
-Current limitations include:
+### 1. What came from retrieval, and what came from adaptation?
 
-- no local-model fine-tuning yet
-- no PEFT / LoRA adapter yet
-- no constrained-decoding JSON grammar
-- no semantic entailment verifier
-- exact expected-term recall is lexical rather than a semantic-equivalence metric
-- current structural validity does not directly measure answer-to-claim decomposition completeness
-- no general-purpose autonomous agent
-- no multimodal figure retrieval
-- no structured table retrieval
-- no managed production PostgreSQL deployment
-- no large-scale ANN benchmark
-- no production local-LLM GPU deployment benchmark
-- no measured local-compute monetary cost
-- no claim of Qualcomm-hardware optimization
+Run a controlled four-way comparison:
+
+```text
+Base
+LoRA
+Base + RAG
+LoRA + RAG
+```
+
+### 2. Can evidence recovery become adaptive without becoming unbounded?
+
+Inspired in part by the systems thinking behind HeRo, the next orchestration experiment will evaluate a **bounded evidence-recovery workflow**:
+
+```text
+question
+   ↓
+retrieve
+   ↓
+assess evidence
+   ↓
+sufficient ─────────→ answer
+   │
+   └─ insufficient
+          ↓
+      rewrite query
+          ↓
+      retrieve once more
+          ↓
+      assess
+          ↓
+      answer or grounded refusal
+```
+
+The important constraint is:
+
+```text
+maximum retrieval attempts = 2
+```
+
+The objective is not to build a generic autonomous agent.
+
+The objective is to measure whether limited adaptive retrieval can improve difficult-query recovery without sacrificing:
+
+- grounding;
+- citation validity;
+- termination guarantees;
+- latency transparency;
+- reproducibility.
+
+### 3. Can evaluation move beyond lexical proxies?
+
+Planned work includes:
+
+- semantic expected-concept matching;
+- claim-evidence entailment;
+- answer-to-claim completeness;
+- human assessment;
+- larger protected benchmarks.
 
 ---
 
-# Development direction
+# What AeroRAG-X is not
+
+AeroRAG-X is not intended to be:
+
+- a generic chatbot;
+- a collection of AI frameworks added for breadth;
+- an autonomous agent with unbounded tool access;
+- a benchmark claiming universal aerospace correctness;
+- a hardware-optimization project;
+- a replacement for engineering judgment.
+
+It is a project about building and measuring **trustworthy technical knowledge systems**.
+
+---
+
+# Status
 
 ```text
-local Transformers provider                DONE
-        ↓
-protected untuned local-model benchmark    DONE
-        ↓
-baseline failure analysis                  DONE
-        ↓
-PEFT / LoRA domain adaptation              NEXT
-        ↓
-base vs RAG vs LoRA vs LoRA + RAG
-        ↓
-reduced-precision inference benchmark
-        ↓
-bounded tool-using research agent
-        ↓
-agent evaluation
+NASA corpus                              DONE
+citation-preserving processing           DONE
+BM25                                     DONE
+dense retrieval                          DONE
+Hybrid RRF                               DONE
+cross-encoder reranking                  DONE
+evidence sufficiency                     DONE
+grounded generation                      DONE
+OpenAI provider                          DONE
+local Qwen provider                      DONE
+FastAPI                                  DONE
+Docker                                   DONE
+observability                            DONE
+private Cloud Run validation             DONE
+pgvector                                 DONE
+PEFT / LoRA training                     DONE
+LoRA failure analysis                    DONE
+structured-generation hardening          DONE
+Base+RAG vs LoRA+RAG evaluation          DONE
+
+four-way model study                     NEXT
+bounded adaptive retrieval               PLANNED
+agent evaluation                         PLANNED
+semantic evaluation                      PLANNED
+multimodal technical-report retrieval    FUTURE
 ```
 
-The next model-adaptation objective is not basic JSON repair. The untuned local baseline already completed all 32 evaluation queries with zero generation failures.
-
-The next experiment should test whether PEFT / LoRA can improve:
-
-```text
-technical coverage
-claim decomposition
-evidence-grounded synthesis
-```
-
-while preserving:
-
-```text
-unsupported refusal
-citation validity
-source-document coverage
-structural validity
-generation reliability
-```
-
-The frozen 32-query benchmark must remain evaluation-only and must not be used as LoRA training data.
-
-The project uses measured behavior rather than architectural complexity as the criterion for adopting new capabilities.
-
-See `ROADMAP.md` for the detailed sequence.
+See [`ROADMAP.md`](ROADMAP.md) for the experiment sequence.
 
 ---
 
