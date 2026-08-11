@@ -59,6 +59,12 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--provider-config",
+        type=Path,
+        default=Path("configs/provider_v0_2.yaml"),
+    )
+
+    parser.add_argument(
         "--provider-runtime-config",
         type=Path,
         required=True,
@@ -133,6 +139,7 @@ def main() -> None:
             generation_config=args.generation_config,
             sufficiency_config=args.sufficiency_config,
             facet_retrieval_config=(args.facet_retrieval_config),
+            provider_config=(args.provider_config),
             provider_runtime_config=(args.provider_runtime_config),
             candidate_top_k=(args.candidate_top_k),
             evidence_top_k=(args.evidence_top_k),
