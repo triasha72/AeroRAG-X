@@ -12,15 +12,7 @@ The governing principle is:
 
 The questions behind AeroRAG-X grew out of my experience working on **HERO**, a Georgia Tech Grand Challenge project sponsored by **Delta Air Lines**.
 
-That experience motivated a broader interest in how aerospace technical information could be searched, synthesized, and connected back to the evidence supporting an engineering answer.
-
-AeroRAG-X is an independent continuation of that technical curiosity.
-
-It is not a HERO or Delta Air Lines deliverable.
-
-The project asks:
-
-> **How far can an evidence-grounded aerospace knowledge system be developed while keeping provenance, failure behavior, model adaptation, and system trade-offs measurable?**
+AeroRAG-X is an independent continuation of that technical curiosity and is not a HERO or Delta Air Lines deliverable.
 
 ---
 
@@ -63,17 +55,23 @@ protected local-model baseline
         ↓
 PEFT / LoRA adaptation
         ↓
-failure analysis
+LoRA failure analysis
         ↓
 structured-generation hardening
         ↓
 final Base+RAG vs LoRA+RAG evaluation
         ↓
-four-way model study
+closed-book Base / LoRA evaluation
+        ↓
+canonical-refusal normalization
+        ↓
+corrected four-way model/system study
+        ↓
+semantic and claim-level evaluation
         ↓
 bounded adaptive retrieval
         ↓
-semantic evaluation
+adaptive-retrieval evaluation
         ↓
 efficient inference
         ↓
@@ -106,30 +104,40 @@ Completed:
 - [x] OpenTelemetry
 - [x] private Cloud Run validation
 - [x] protected evaluation
-- [x] failure-tolerant generation benchmarking
 - [x] frozen local Qwen baseline
 - [x] PEFT / LoRA training
 - [x] assistant-only loss masking
 - [x] MPS-compatible training
 - [x] best-checkpoint selection
 - [x] adapter reload verification
-- [x] structured-generation failure analysis
-- [x] prompt hardening
+- [x] LoRA structured-generation failure analysis
+- [x] structured-generation prompt hardening
 - [x] bounded output-budget hardening
 - [x] duplicate evidence-ID normalization
 - [x] final Base+RAG benchmark
 - [x] final LoRA+RAG benchmark
+- [x] closed-book Base evaluator
+- [x] closed-book LoRA evaluator
+- [x] raw closed-book v0.1 benchmark
+- [x] raw refusal-payload diagnosis
+- [x] canonical-refusal normalization
+- [x] normalized closed-book v0.2 benchmark
+- [x] corrected four-way Base / LoRA system study
 
 Current:
 
-- [ ] Base / LoRA / Base+RAG / LoRA+RAG study
+- [ ] semantic and claim-level evaluation
 
 Next:
 
+- [ ] unsupported-response semantic taxonomy
+- [ ] claim-evidence entailment
+- [ ] answer-to-claim completeness
+- [ ] targeted human audit
 - [ ] bounded adaptive retrieval
-- [ ] semantic evaluation
+- [ ] adaptive-retrieval evaluation
 - [ ] efficient inference
-- [ ] multimodal report retrieval
+- [ ] multimodal technical-report retrieval
 
 ---
 
@@ -324,8 +332,6 @@ The gate remains independent of model adaptation.
 - [x] original-query evidence
 - [x] fallback behavior
 
-The implementation remains deliberately bounded.
-
 ---
 
 # Phase 11 — Provider hardening — COMPLETE
@@ -369,14 +375,25 @@ Implemented:
 - [x] generation failure categories
 - [x] local / remote provider classification
 - [x] frozen evaluation artifacts
+- [x] closed-book evaluation
+- [x] canonical-refusal normalization
+- [x] four-way system comparison
 
-Future:
+Current extensions:
 
 - [ ] semantic expected-concept matching
 - [ ] claim-evidence entailment
 - [ ] answer-to-claim completeness
-- [ ] human review
+- [ ] unsupported-response taxonomy
+- [ ] redundancy measurement
+- [ ] targeted human review
+
+Future:
+
 - [ ] larger protected benchmark
+- [ ] multiple human assessors
+- [ ] inter-annotator agreement
+- [ ] confidence intervals
 
 ---
 
@@ -471,8 +488,8 @@ Future:
 
 - [ ] metadata filtering
 - [ ] deletion workflow
-- [ ] backup/restore
-- [ ] ANN at larger corpus scale
+- [ ] backup / restore
+- [ ] ANN only at a larger corpus scale
 
 ---
 
@@ -490,16 +507,17 @@ Implemented:
 - [x] Accelerate
 - [x] model chat templates
 - [x] deterministic decoding
-- [x] output limits
+- [x] bounded output
 - [x] JSON parsing
 - [x] provider telemetry
 - [x] Apple MPS
 - [x] CUDA detection
 - [x] CPU fallback
+- [x] optional PEFT adapter loading
 
 ---
 
-# Phase 19 — Untuned local-model baseline — COMPLETE
+# Phase 19 — Untuned local-model grounded baseline — COMPLETE
 
 Original frozen local benchmark:
 
@@ -586,11 +604,13 @@ Best checkpoint:
 Epoch 2
 ```
 
+Training success is treated as a prerequisite for evaluation, not as evidence of generalization.
+
 ---
 
 # Phase 21 — LoRA failure analysis — COMPLETE
 
-The first protected LoRA run exposed:
+The first protected LoRA + RAG run exposed:
 
 ```text
 truncated JSON
@@ -614,7 +634,7 @@ Implemented investigation:
 - [x] targeted robustness benchmark
 - [x] full rerun
 
-This phase demonstrates an important project principle:
+This phase established:
 
 ```text
 training success
@@ -666,7 +686,7 @@ Claim-count increase:
 Across answerable queries:
 
 ```text
-claim count improved: 16
+claim count increased: 16
 claim count decreased: 2
 unchanged: 2
 ```
@@ -694,79 +714,221 @@ para_009:
 0.667 → 0.333
 ```
 
-Therefore the current conclusion is:
+Therefore:
 
 > LoRA increases structured decomposition substantially, but does not uniformly increase every measure of content coverage.
 
 ---
 
-# Phase 23 — Four-way model study — CURRENT
+# Phase 23 — Four-way Base / LoRA system study — COMPLETE
 
 Goal:
 
-> **Separate the contribution of retrieval from the contribution of adaptation.**
+> **Separate model-adaptation effects from the behavior of the full grounded system.**
 
 Conditions:
 
-| Condition | LoRA | RAG |
+| Condition | LoRA | Grounded RAG |
 |---|---|---|
-| Base | No | No |
-| LoRA | Yes | No |
+| Base closed-book | No | No |
+| LoRA closed-book | Yes | No |
 | Base + RAG | No | Yes |
 | LoRA + RAG | Yes | Yes |
 
-Already frozen:
+## Closed-book evaluator
 
-- [x] Base + RAG
-- [x] LoRA + RAG
+Implemented:
 
-Next:
+- [x] separate closed-book response contract
+- [x] no artificial citation fields
+- [x] shared Transformers transport
+- [x] Base / LoRA adapter checks
+- [x] answerability metrics
+- [x] refusal metrics
+- [x] expected-term recall
+- [x] formal claim counts
+- [x] structural validation
+- [x] latency telemetry
+- [x] token telemetry
+- [x] focused unit tests
+- [x] real-model canaries
 
-- [ ] closed-book Base evaluator
-- [ ] closed-book LoRA evaluator
-- [ ] Base closed-book run
-- [ ] LoRA closed-book run
-- [ ] common metrics
-- [ ] four-way comparison report
+## Raw closed-book v0.1
 
-## Closed-book metrics
-
-Measure:
-
-- completion
-- generation failures
-- expected-term recall
-- formal claims
-- claims/query
-- structural validity
-- provider latency
-- token usage
-
-Do not compute artificial citation metrics for closed-book responses.
-
-Citation fields should be:
+The first full Base run produced:
 
 ```text
-N/A
+27 / 32 completed
+5 response-validation failures
 ```
 
-The experiment should answer:
+Raw-payload investigation showed:
 
 ```text
-What does retrieval contribute?
+4 canonical refusals
++ explanatory claims
 
-What does LoRA contribute?
-
-What happens when retrieval and LoRA are combined?
+1 canonical refusal
++ missing insufficient_knowledge field
 ```
+
+These were schema-compliance failures rather than five independent hallucination failures.
+
+The original artifacts remain preserved.
+
+## Canonical-refusal normalization
+
+A narrow normalizer was introduced.
+
+Only the exact canonical refusal sentence may:
+
+- recover a missing `insufficient_knowledge=true`
+- discard explanatory claims when the response already represents a canonical refusal
+
+Unrelated malformed outputs remain invalid.
+
+Targeted five-query validation:
+
+```text
+5 / 5 completed
+0 failures
+1.0000 answerability
+1.0000 unsupported refusal
+1.0000 structural validity
+```
+
+## Corrected closed-book v0.2
+
+| Metric | Base closed-book | LoRA closed-book |
+|---|---:|---:|
+| Completed | 32 / 32 | 32 / 32 |
+| Failures | 0 | 0 |
+| Answerability | 0.7812 | 0.7812 |
+| Completion | 1.0000 | 1.0000 |
+| Strict unsupported refusal | 0.4167 | 0.4167 |
+| Expected-term recall | 0.9310 | 0.9310 |
+| Structural validity | 1.0000 | 1.0000 |
+| Formal answerable claims | 21 | 33 |
+| Claims / answerable query | 1.050 | 1.650 |
+
+Closed-book claim-count increase:
+
+```text
+57.1%
+```
+
+## Final corrected four-way study
+
+| Metric | Base closed-book | LoRA closed-book | Base + RAG | LoRA + RAG |
+|---|---:|---:|---:|---:|
+| Completed | 32 / 32 | 32 / 32 | 32 / 32 | 32 / 32 |
+| Failures | 0 | 0 | 0 | 0 |
+| Answerability | 0.7812 | 0.7812 | 1.0000 | 1.0000 |
+| Strict unsupported refusal | 0.4167 | 0.4167 | 1.0000 | 1.0000 |
+| Expected-term recall | 0.9310 | 0.9310 | 0.9310 | 0.9310 |
+| Structural validity | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| Formal claims | 21 | 33 | 32 | 53 |
+| Claims / answerable query | 1.050 | 1.650 | 1.600 | 2.650 |
+
+Primary conclusions:
+
+1. LoRA does not change the measured normalized closed-book reliability metrics on this benchmark.
+2. LoRA increases formal technical decomposition in both closed-book and grounded conditions.
+3. The full grounded evidence pipeline provides the strongest unsupported-query reliability boundary.
+4. Lexical expected-term recall cannot distinguish systems whose behavior differs substantially.
+5. Semantic and claim-level evaluation is required before adding more orchestration complexity.
 
 ---
 
-# Phase 24 — Bounded adaptive retrieval — PLANNED
+# Phase 24 — Semantic and claim-level evaluation — CURRENT
+
+Primary question:
+
+> **Does increased formal claim decomposition correspond to genuinely better supported technical content?**
+
+Planned metrics:
+
+- [ ] semantic expected-concept coverage
+- [ ] claim-evidence entailment
+- [ ] claim support
+- [ ] answer-to-claim completeness
+- [ ] unsupported-response semantic taxonomy
+- [ ] redundancy
+- [ ] answer relevance
+- [ ] targeted human review
+
+## Semantic expected-concept coverage
+
+Requirements:
+
+- [ ] preserve lexical expected-term recall as a baseline
+- [ ] define semantic expected concepts
+- [ ] define and calibrate semantic matching
+- [ ] inspect lexical / semantic disagreements
+- [ ] record versioned evaluation artifacts
+
+## Claim-evidence entailment
+
+Applicable to grounded-RAG responses.
+
+For each formal claim:
+
+```text
+claim
+   +
+cited evidence
+   ↓
+support assessment
+```
+
+Candidate labels:
+
+```text
+SUPPORTED
+PARTIALLY_SUPPORTED
+UNSUPPORTED
+CONTRADICTED
+```
+
+The current citation metrics establish valid provenance and known evidence references.
+
+They do not yet prove semantic entailment.
+
+## Answer-to-claim completeness
+
+Measure whether material technical statements in the prose answer are represented in the formal claim structure.
+
+## Unsupported-response taxonomy
+
+Use:
+
+```text
+EXPLICIT_REFUSAL
+CORRECTIVE_DENIAL
+UNSUPPORTED_ASSERTION
+STRUCTURAL_FAILURE
+```
+
+The strict refusal metric remains useful but is not treated as a complete hallucination metric.
+
+## Targeted human audit
+
+Use a bounded review subset to assess:
+
+- technical correctness
+- completeness
+- relevance
+- groundedness
+- useful decomposition
+- redundancy
+
+---
+
+# Phase 25 — Bounded adaptive retrieval — PLANNED
 
 Goal:
 
-> Determine whether one bounded recovery step can improve questions where the initial retrieved evidence is weak.
+> Determine whether one bounded recovery step can improve questions where initial evidence is weak.
 
 Proposed state machine:
 
@@ -805,19 +967,7 @@ evidence provenance preserved
 grounded refusal preserved
 ```
 
-Potential operations:
-
-```text
-retrieve
-assess_evidence
-rewrite_query
-retrieve_facet_evidence
-inspect_source
-```
-
-The objective is not autonomous behavior.
-
-The objective is a measurable comparison between:
+The objective is a measured comparison between:
 
 ```text
 single-pass retrieval
@@ -825,19 +975,21 @@ vs
 bounded adaptive retrieval
 ```
 
+not unrestricted autonomous behavior.
+
 ---
 
-# Phase 25 — Adaptive-retrieval evaluation — PLANNED
+# Phase 26 — Adaptive-retrieval evaluation — PLANNED
 
 Metrics:
 
 - [ ] difficult-query recovery
 - [ ] answerability
 - [ ] unsupported refusal
-- [ ] grounding
+- [ ] semantic claim support
 - [ ] citation validity
 - [ ] unnecessary second retrievals
-- [ ] retrieval attempts/query
+- [ ] retrieval attempts / query
 - [ ] invalid transitions
 - [ ] termination failures
 - [ ] latency overhead
@@ -858,29 +1010,9 @@ citation failure
 
 ---
 
-# Phase 26 — Semantic evaluation — PLANNED
-
-The current expected-term metric is deterministic but lexical.
-
-Next metrics:
-
-- [ ] semantic expected-concept recall
-- [ ] claim-evidence entailment
-- [ ] claim support
-- [ ] answer-to-claim completeness
-- [ ] answer relevance
-- [ ] redundancy
-- [ ] independent human assessment
-
-Primary question:
-
-> Does increased claim decomposition correspond to genuinely better technical coverage?
-
----
-
 # Phase 27 — Efficient local inference — PLANNED
 
-Only after the model-quality studies are complete.
+Only after the model-quality and adaptive-retrieval studies are complete.
 
 Measure:
 
@@ -889,7 +1021,7 @@ Measure:
 - [ ] generation latency
 - [ ] P50
 - [ ] P95
-- [ ] tokens/second
+- [ ] tokens / second
 - [ ] structured-output validity
 - [ ] grounding preservation
 
@@ -901,7 +1033,7 @@ BF16 where supported
 INT8 where supported
 ```
 
-Hardware-specific performance claims require actual measurements on that hardware.
+Hardware-specific performance claims require measurements on the hardware being discussed.
 
 ---
 
@@ -936,14 +1068,23 @@ Completed:
 - [x] structured-generation regression tests
 - [x] provider telemetry
 - [x] backend comparison
+- [x] four-way Base / LoRA system study
+- [x] raw versus normalized contract analysis
+
+Current:
+
+- [ ] semantic expected-concept evaluation
+- [ ] claim-evidence entailment
+- [ ] unsupported-response taxonomy
+- [ ] answer-to-claim completeness
+- [ ] targeted human assessment
 
 Future:
 
 - [ ] larger protected set
 - [ ] conflicting evidence
 - [ ] partial evidence
-- [ ] adversarial unsupported questions
-- [ ] semantic metrics
+- [ ] broader adversarial unsupported controls
 - [ ] multiple human assessors
 - [ ] inter-annotator agreement
 - [ ] confidence intervals
@@ -952,7 +1093,7 @@ Future:
 
 # Phase 30 — Releases and reproducibility — ONGOING
 
-The repository history now records:
+The repository history records:
 
 ```text
 retrieval baseline
@@ -965,14 +1106,20 @@ failed LoRA evaluation
 failure diagnosis
 structured-output hardening
 final Base+RAG / LoRA+RAG evaluation
+raw closed-book v0.1
+closed-book failure diagnosis
+canonical-refusal normalization
+normalized closed-book v0.2
+corrected four-way model/system study
 ```
 
 Candidate future experiment milestones:
 
 ```text
-four-way adaptation/retrieval study
-bounded adaptive retrieval
 semantic evaluation
+claim/evidence faithfulness
+bounded adaptive retrieval
+adaptive-retrieval evaluation
 efficient inference
 multimodal retrieval
 ```
@@ -1004,34 +1151,32 @@ New infrastructure should follow a measured engineering requirement.
 
 # Immediate next milestone
 
+The four-way Base / LoRA experiment is complete.
+
 The next question is:
 
-> **How much of AeroRAG-X's final behavior comes from retrieval, and how much comes from LoRA adaptation?**
+> **Does LoRA's increase in formal technical claims correspond to better semantic coverage and stronger evidence support?**
 
 Sequence:
 
 ```text
-freeze Base+RAG
+freeze corrected four-way results
         ↓
-freeze LoRA+RAG
+semantic expected-concept evaluation
         ↓
-build closed-book response schema
+claim-evidence entailment
         ↓
-build closed-book evaluator
+answer-to-claim completeness
         ↓
-run Base closed-book
+unsupported-response taxonomy
         ↓
-run LoRA closed-book
+targeted human audit
         ↓
-compare all four conditions
-        ↓
-analyze retrieval/adaptation interaction
+freeze semantic evaluation baseline
         ↓
 begin bounded adaptive retrieval
 ```
 
-After that:
+Only after that should AeroRAG-X ask:
 
 > **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, termination, or citation integrity?**
-
-That becomes the next systems experiment.

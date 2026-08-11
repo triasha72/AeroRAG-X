@@ -2,9 +2,7 @@
 
 **An evaluation-first, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.**
 
-AeroRAG-X is an independent engineering project exploring how language models can retrieve and synthesize aerospace technical information without losing the evidence trail needed to evaluate the answer.
-
-The system is built around public NASA Technical Reports Server (NTRS) material and treats corpus construction, retrieval, reranking, grounding, generation, citations, evaluation, and deployment as separately measurable engineering problems.
+AeroRAG-X is an independent engineering project built around public NASA Technical Reports Server (NTRS) material. It treats corpus construction, retrieval, reranking, grounding, generation, citations, model adaptation, evaluation, and deployment as separately measurable engineering problems.
 
 ---
 
@@ -12,15 +10,9 @@ The system is built around public NASA Technical Reports Server (NTRS) material 
 
 The idea for AeroRAG-X grew out of questions I became interested in while working on **HERO**, a Georgia Tech Grand Challenge project sponsored by **Delta Air Lines**.
 
-That experience motivated me to think more deeply about how large collections of aerospace technical information could be searched and synthesized while retaining clear traceability between an answer and the evidence supporting it.
+AeroRAG-X developed from that interest as an independent project and is not a HERO or Delta Air Lines deliverable.
 
-AeroRAG-X developed from that interest as an independent project.
-
-It is not a HERO or Delta Air Lines deliverable. Instead, it explores a related technical question independently:
-
-> **Can a language-model system help navigate aerospace technical literature while making provenance, evidence sufficiency, citations, model behavior, and failure modes measurable?**
-
-That question has driven the project more than any particular software stack.
+> **Can a language-model system help navigate aerospace technical literature while making provenance, evidence sufficiency, citations, model behavior, adaptation effects, and failure modes measurable?**
 
 ---
 
@@ -52,7 +44,7 @@ flowchart TD
     L --> O["Qwen3-0.6B"]
     L --> P["Qwen3-0.6B + PEFT / LoRA"]
 
-    M --> Q["Structured response"]
+    M --> Q["Structured grounded response"]
     N --> Q
     O --> Q
     P --> Q
@@ -71,51 +63,35 @@ flowchart TD
     W --> Z["Docker / private Cloud Run"]
 ```
 
+Closed-book Base and LoRA evaluation is implemented separately from the grounded RAG path so model adaptation can be studied without introducing artificial retrieval or citation fields.
+
 ---
 
-# What the project currently includes
+# Current system
 
 ## Corpus and provenance
 
 - public NASA NTRS technical material
 - **3,233 citation-preserving chunks**
 - document identifiers
-- page identifiers
-- page ranges
+- page identifiers and page ranges
 - source URLs
 - NASA citation URLs
-- source-document checksums
+- source-document SHA-256 checksums
 - reproducible manifests
 - versioned processing artifacts
 
 ## Retrieval
 
-- BM25
-- Sentence Transformer embeddings
+- BM25 lexical retrieval
+- `sentence-transformers/all-MiniLM-L6-v2`
+- 384-dimensional embeddings
 - exact NumPy cosine retrieval
 - PostgreSQL + pgvector
 - runtime-selectable dense backends
 - Reciprocal Rank Fusion
-- cross-encoder reranking
+- `cross-encoder/ms-marco-MiniLM-L6-v2`
 - deterministic facet-aware evidence retrieval
-
-Current embedding model:
-
-```text
-sentence-transformers/all-MiniLM-L6-v2
-```
-
-Embedding dimension:
-
-```text
-384
-```
-
-Current reranker:
-
-```text
-cross-encoder/ms-marco-MiniLM-L6-v2
-```
 
 ## Grounding
 
@@ -131,7 +107,7 @@ cross-encoder/ms-marco-MiniLM-L6-v2
 
 ## Generation
 
-Supported modes:
+Supported runtime modes:
 
 ```text
 local
@@ -145,7 +121,7 @@ Current local model:
 Qwen/Qwen3-0.6B
 ```
 
-Local generation can run as:
+Transformers generation can run as:
 
 ```text
 Base Qwen
@@ -164,10 +140,10 @@ Qwen + PEFT / LoRA adapter
 - private Google Cloud Run Gen2 validation
 - structured logging
 - request IDs
-- Prometheus metrics
-- OpenTelemetry tracing
+- Prometheus
+- OpenTelemetry
 - provider latency telemetry
-- provider token telemetry
+- token telemetry
 - provider call/bypass telemetry
 - GitHub Actions CI
 
@@ -182,11 +158,12 @@ AeroRAG-X is organized around measurable questions.
 3. Can lexical, dense, hybrid, and reranked retrieval be evaluated independently?
 4. Can unsupported questions be rejected before model inference?
 5. Can different language models use the same grounded interface?
-6. Can citations remain application-controlled instead of model-generated?
-7. Can invalid model outputs be detected rather than silently accepted?
+6. Can citations remain application-controlled rather than model-authored?
+7. Can invalid model outputs be detected instead of silently accepted?
 8. Can negative experiments be preserved and diagnosed?
-9. Can model adaptation be separated experimentally from retrieval improvements?
-10. Can future adaptive workflows remain bounded and observable?
+9. Can model-adaptation effects be separated from full-system effects?
+10. Can evaluation distinguish semantic behavior from response-schema compliance?
+11. Can future adaptive workflows remain bounded and observable?
 
 The project emphasizes:
 
@@ -200,6 +177,7 @@ protected evaluation
 backend interchangeability
 bounded behavior
 measured trade-offs
+negative-result preservation
 ```
 
 ---
@@ -223,9 +201,13 @@ The dense index uses:
 sentence-transformers/all-MiniLM-L6-v2
 ```
 
-and stores 384-dimensional embeddings.
+Embedding dimension:
 
-Available backends:
+```text
+384
+```
+
+Available dense backends:
 
 ```text
 NumPy exact cosine
@@ -241,7 +223,7 @@ The system retains:
 - lexical rank
 - dense rank
 - fused rank
-- scores
+- retrieval scores
 - complete chunk provenance
 
 ## Cross-encoder reranking
@@ -292,7 +274,7 @@ The same stored embeddings were evaluated through both dense backends.
 
 At the current corpus size, exact NumPy retrieval remains the simpler and faster default.
 
-pgvector is retained for future requirements involving:
+pgvector is retained for requirements involving:
 
 - persistence
 - transactional updates
@@ -338,12 +320,12 @@ grounded refusal
 
 The language model is not called.
 
-The gate is therefore both:
+The gate therefore acts as both:
 
 ```text
-a grounding control
+grounding control
 +
-an inference-cost control
+inference-cost control
 ```
 
 ---
@@ -391,6 +373,8 @@ document_sha256
 reranker_rank
 ```
 
+This keeps citation authority on the application side.
+
 ---
 
 # Local language-model generation
@@ -414,10 +398,11 @@ The Hugging Face runtime supports:
 - bounded output
 - strict JSON parsing
 - structured-response validation
+- optional PEFT adapter loading
 - token telemetry
 - latency telemetry
 
-The local model uses the same retrieval and grounding infrastructure as the other generation providers.
+The same Transformers transport is reused for Base and LoRA conditions.
 
 ---
 
@@ -467,7 +452,11 @@ The training workflow includes:
 - adapter save/reload verification
 - dataset and environment provenance
 
-The best checkpoint was selected at **Epoch 2** based on development loss.
+Best checkpoint:
+
+```text
+Epoch 2
+```
 
 The adapter weights remain local and are not committed to the repository.
 
@@ -475,9 +464,9 @@ The adapter weights remain local and are not committed to the repository.
 
 # Why negative results are preserved
 
-The first full LoRA evaluation did not pass all reliability requirements.
+AeroRAG-X keeps failed experiments when they expose meaningful system behavior.
 
-Observed failure modes included:
+The first full LoRA + RAG evaluation exposed:
 
 ```text
 truncated JSON
@@ -485,57 +474,85 @@ supported response without formal claims
 duplicate evidence references
 ```
 
-Instead of discarding that run, the project preserved it and reproduced each failure.
+Those failures were reproduced rather than discarded.
 
 The investigation led to:
 
 - a larger but still bounded output budget
 - explicit complete-JSON instructions
 - more concise structured-output guidance
-- explicit claim requirements for supported answers
+- explicit claim requirements
 - evidence-reference uniqueness guidance
 - deterministic duplicate-reference normalization
-- regression testing of unknown-ID rejection
+- regression testing of unknown evidence IDs
 
-This distinction is important:
+The first closed-book Base study exposed a different issue.
+
+Five responses were initially classified as response-validation failures. Raw-payload inspection showed:
 
 ```text
-successful training
-!=
-reliable deployed behavior
+4 canonical refusals
++ explanatory claims
+
+1 canonical refusal
++ missing insufficient_knowledge field
 ```
 
-The project evaluates both.
+A narrow normalization layer was introduced for the corrected v0.2 evaluation.
+
+Only the exact canonical refusal representation is normalized.
+
+The original v0.1 artifacts remain preserved as raw response-contract-compliance evidence.
+
+These experiments reinforce:
+
+```text
+training success
+!=
+system reliability
+```
+
+and:
+
+```text
+semantic behavior
+!=
+response-schema compliance
+```
 
 ---
 
-# Final Base+RAG vs LoRA+RAG benchmark
+# Protected evaluation set
 
-The final controlled benchmark contains:
+The current controlled generation benchmark contains:
 
 ```text
 32 queries
+
 20 expected-answerable
 12 unsupported controls
 ```
 
-Both conditions use the same:
+The protected set remains separated from LoRA training.
 
-- corpus
-- BM25 index
-- dense index
-- Hybrid RRF
-- reranker
-- candidate depth
-- evidence depth
-- sufficiency policy
-- prompt configuration
-- generation budget
-- deterministic decoding
+The four-way study uses the same question set for:
 
-The model-side intervention is the presence or absence of the LoRA adapter.
+```text
+Base closed-book
+LoRA closed-book
+Base + grounded RAG
+LoRA + grounded RAG
+```
 
-## Quality and reliability
+The grounded conditions additionally include retrieval, reranking, evidence sufficiency, grounded prompting, evidence references, and citation validation.
+
+Cross-system comparisons should therefore be interpreted as **system-level ablations**, not as the isolated effect of retrieval alone.
+
+---
+
+# Final Base + RAG vs LoRA + RAG
+
+## Reliability
 
 | Metric | Base + RAG | LoRA + RAG |
 |---|---:|---:|
@@ -558,13 +575,11 @@ The model-side intervention is the presence or absence of the LoRA adapter.
 | Claims / answerable query | 1.600 | 2.650 |
 | Citation references | 40 | 96 |
 
-The adapter increased formal-claim count by:
+Formal-claim count increased by:
 
 ```text
 65.625%
 ```
-
-while aggregate expected-term recall and the measured reliability metrics remained unchanged.
 
 Across the 20 answerable questions:
 
@@ -574,9 +589,122 @@ Across the 20 answerable questions:
 2 were unchanged
 ```
 
-This supports a narrower conclusion than simply saying that LoRA made the model "better":
+This supports the narrower conclusion:
 
 > **LoRA substantially increased structured technical decomposition on this benchmark while preserving the measured system-level reliability properties.**
+
+---
+
+# Corrected four-way Base / LoRA system study
+
+The completed v0.2 study compares model adaptation with and without the full grounded evidence pipeline.
+
+| Metric | Base closed-book | LoRA closed-book | Base + grounded RAG | LoRA + grounded RAG |
+|---|---:|---:|---:|---:|
+| Completed | 32 / 32 | 32 / 32 | 32 / 32 | 32 / 32 |
+| Generation failures | 0 | 0 | 0 | 0 |
+| Answerability accuracy | 0.7812 | 0.7812 | 1.0000 | 1.0000 |
+| Answerable completion | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| Strict unsupported refusal | 0.4167 | 0.4167 | 1.0000 | 1.0000 |
+| Expected-term recall | 0.9310 | 0.9310 | 0.9310 | 0.9310 |
+| Structural validity | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| Formal answerable claims | 21 | 33 | 32 | 53 |
+| Claims / answerable query | 1.050 | 1.650 | 1.600 | 2.650 |
+
+## LoRA effect in closed-book generation
+
+After canonical-refusal normalization, Base and LoRA have the same benchmark-level:
+
+```text
+completion
+generation failures
+answerability accuracy
+strict refusal
+expected-term recall
+structural validity
+```
+
+The main measured difference is response decomposition:
+
+```text
+Base closed-book: 21 claims
+LoRA closed-book: 33 claims
+```
+
+Increase:
+
+```text
+57.1%
+```
+
+This supports:
+
+> **The LoRA adapter primarily increased structured technical decomposition rather than benchmark-level closed-book refusal behavior.**
+
+## Grounded-system effect
+
+Closed-book:
+
+```text
+answerability accuracy = 0.7812
+strict unsupported refusal = 0.4167
+```
+
+Grounded RAG:
+
+```text
+answerability accuracy = 1.0000
+strict unsupported refusal = 1.0000
+```
+
+The grounded condition includes:
+
+```text
+BM25
++
+dense retrieval
++
+RRF
++
+cross-encoder reranking
++
+facet-aware retrieval
++
+evidence-sufficiency assessment
++
+grounded structured generation
++
+evidence-ID validation
++
+citation resolution
+```
+
+The system-level conclusion is:
+
+> **The grounded evidence pipeline provides a stronger unsupported-query reliability boundary than model adaptation alone on this protected benchmark.**
+
+---
+
+# Strict refusal versus semantic behavior
+
+The strict refusal metric counts responses represented as:
+
+```text
+insufficient_knowledge = true
+```
+
+It is not a complete hallucination metric.
+
+Some unsupported closed-book responses reject a false premise while still being represented as ordinary answers.
+
+The next semantic-evaluation phase separates unsupported-query behavior into:
+
+```text
+EXPLICIT_REFUSAL
+CORRECTIVE_DENIAL
+UNSUPPORTED_ASSERTION
+STRUCTURAL_FAILURE
+```
 
 ---
 
@@ -584,7 +712,7 @@ This supports a narrower conclusion than simply saying that LoRA made the model 
 
 Aggregate metrics do not tell the entire story.
 
-For example:
+In the final Base + RAG versus LoRA + RAG comparison:
 
 ```text
 para_005
@@ -600,21 +728,20 @@ expected-term recall:
 0.667 → 0.333
 ```
 
-Therefore increased response decomposition does not guarantee improved content coverage on every query.
+Increased response decomposition therefore does not guarantee improved concept coverage on every question.
 
-The exact expected-term metric is also lexical rather than semantic.
+The expected-term metric is a lexical coverage proxy rather than a semantic entailment metric.
 
-For example:
+The limitation is especially visible in the corrected four-way study:
 
 ```text
-detect
-detected
-detection
+Base closed-book       0.9310
+LoRA closed-book       0.9310
+Base + grounded RAG    0.9310
+LoRA + grounded RAG    0.9310
 ```
 
-may express the same concept while producing different exact-term scores.
-
-This motivates the next semantic-evaluation phase.
+The systems behave differently, yet the lexical metric cannot distinguish them.
 
 ---
 
@@ -631,43 +758,52 @@ This motivates the next semantic-evaluation phase.
 
 The LoRA model produces more structured output but also requires more generation time.
 
-The project records that trade-off rather than treating longer output as automatically superior.
+Longer output is not treated as automatically better.
 
 ---
 
 # Evaluation philosophy
 
-Retrieval and generation are evaluated separately.
+Retrieval, model behavior, grounding, and serving are evaluated separately wherever possible.
 
 Current evaluation includes:
 
-- BM25 retrieval benchmarks
-- dense retrieval benchmarks
+- Recall@5
+- Recall@10
+- MRR@10
+- NDCG@10
+- BM25 comparison
+- dense retrieval comparison
 - Hybrid RRF comparison
 - reranker comparison
-- NumPy vs pgvector equivalence
+- NumPy / pgvector equivalence
 - answerability
 - unsupported controls
 - grounded refusal
+- strict closed-book refusal
 - citation coverage
 - citation-reference validity
 - source-document coverage
-- expected-term recall
+- lexical expected-term recall
+- formal claim decomposition
 - structural validity
 - generation-failure categories
 - provider-call policy
 - latency
 - token usage
 - external API cost
+- raw response-contract analysis
+- normalized behavioral evaluation
+- controlled four-way model/system study
 
-Planned semantic evaluation includes:
+The next evaluation layer focuses on:
 
 - semantic expected-concept matching
 - claim-evidence entailment
 - answer-to-claim completeness
-- answer relevance
-- redundancy measurement
-- human review
+- unsupported-response taxonomy
+- redundancy
+- targeted human review
 
 ---
 
@@ -728,7 +864,7 @@ Install:
 python -m pip install -e ".[dev,vector]"
 ```
 
-Start the database:
+Start:
 
 ```bash
 docker compose \
@@ -742,7 +878,7 @@ Configure:
 export AERORAGX_VECTOR_DATABASE_URL="postgresql://aeroragx:aeroragx@localhost:5432/aeroragx"
 ```
 
-Load the existing embeddings:
+Load embeddings:
 
 ```bash
 python scripts/load_pgvector.py
@@ -839,37 +975,34 @@ The project does not currently claim production-scale local-LLM GPU deployment p
 
 # Current research direction
 
-The completed LoRA experiment leads to three new questions.
+The controlled four-way Base / LoRA system study is complete.
 
-## 1. Retrieval versus adaptation
+The next research question is:
 
-The next experiment is a four-way study:
+> **Does increased formal claim decomposition correspond to genuinely better supported technical content?**
 
-```text
-Base
-LoRA
-Base + RAG
-LoRA + RAG
-```
+## 1. Semantic and claim-level evaluation
 
-This separates:
+The next evaluation layer will measure:
 
 ```text
-model knowledge
-adaptation
-retrieval
-adaptation + retrieval
+semantic expected-concept coverage
+claim-evidence entailment
+answer-to-claim completeness
+unsupported-response taxonomy
+redundancy
+targeted human assessment
 ```
 
-The Base+RAG and LoRA+RAG conditions are already frozen.
+The existing citation metrics establish valid provenance and evidence-reference validity.
 
-The next step is to evaluate closed-book Base and LoRA using the same question set.
+They do not yet prove that every cited passage semantically entails every formal claim.
 
----
+The strict refusal metric is also retained but is not treated as a complete hallucination metric.
 
 ## 2. Bounded adaptive retrieval
 
-After the four-way study, AeroRAG-X will test whether limited retrieval adaptation helps difficult questions.
+Bounded adaptive retrieval follows the semantic-evaluation baseline.
 
 Proposed workflow:
 
@@ -901,7 +1034,7 @@ maximum retrieval passes = 2
 
 The objective is not a generic autonomous agent.
 
-The objective is to measure whether bounded adaptive retrieval improves difficult-query recovery without sacrificing:
+The objective is to measure whether one bounded recovery step improves difficult-query recovery without sacrificing:
 
 - termination guarantees
 - grounding
@@ -911,60 +1044,37 @@ The objective is to measure whether bounded adaptive retrieval improves difficul
 
 ---
 
-## 3. Semantic evaluation
-
-The current benchmark deliberately uses deterministic metrics.
-
-The next evaluation layer should determine whether:
-
-```text
-more claims
-```
-
-actually correspond to:
-
-```text
-better supported technical coverage
-```
-
-Planned metrics include:
-
-- semantic expected-concept recall
-- claim-evidence entailment
-- claim redundancy
-- answer-to-claim completeness
-- human assessment
-
----
-
 # Current status
 
 ```text
-NASA corpus                              DONE
-citation-preserving processing           DONE
-BM25                                     DONE
-dense retrieval                          DONE
-Hybrid RRF                               DONE
-cross-encoder reranking                  DONE
-evidence sufficiency                     DONE
-grounded generation                      DONE
-OpenAI provider                          DONE
-local Qwen provider                      DONE
-FastAPI                                  DONE
-Docker                                   DONE
-observability                            DONE
-private Cloud Run validation             DONE
-pgvector                                 DONE
-PEFT / LoRA training                     DONE
-LoRA failure analysis                    DONE
-structured-generation hardening          DONE
-Base+RAG vs LoRA+RAG evaluation          DONE
+NASA corpus                               DONE
+citation-preserving processing            DONE
+BM25                                      DONE
+dense retrieval                           DONE
+Hybrid RRF                                DONE
+cross-encoder reranking                   DONE
+evidence sufficiency                      DONE
+grounded generation                       DONE
+OpenAI provider                           DONE
+local Qwen provider                       DONE
+FastAPI                                   DONE
+Docker                                    DONE
+observability                             DONE
+private Cloud Run validation              DONE
+pgvector                                  DONE
+PEFT / LoRA training                      DONE
+LoRA failure analysis                     DONE
+structured-generation hardening           DONE
+Base+RAG vs LoRA+RAG evaluation           DONE
+closed-book Base / LoRA evaluation        DONE
+canonical-refusal normalization           DONE
+four-way Base / LoRA system study         DONE
 
-four-way model study                     NEXT
-bounded adaptive retrieval               PLANNED
-semantic evaluation                      PLANNED
-efficient local inference                PLANNED
-multimodal technical-report retrieval    FUTURE
+semantic and claim-level evaluation       NEXT
+bounded adaptive retrieval                PLANNED
+adaptive-retrieval evaluation             PLANNED
+efficient local inference                 LATER
+multimodal technical-report retrieval     FUTURE
 ```
 
 ---
