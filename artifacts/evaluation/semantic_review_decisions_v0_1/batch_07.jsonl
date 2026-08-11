@@ -1,25 +1,25 @@
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_151"}
-{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_152"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_153"}
-{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_154"}
-{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_155"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_156"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_157"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_158"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_159"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_160"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_161"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_162"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_163"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_164"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_165"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_166"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_167"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_168"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_169"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_170"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_171"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_172"}
-{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_173"}
-{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_174"}
-{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Human review: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_175"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_151"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_152"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_153"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_154"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_155"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_156"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_157"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_158"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_159"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_160"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_161"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_162"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_163"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_164"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_165"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_166"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_167"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_168"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_169"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_170"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_171"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_172"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer does not clearly express the expected technical proposition.", "unit_id": "semrev_173"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer clearly expresses the expected technical proposition.", "unit_id": "semrev_174"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Adjudication: the answer partially overlaps with the expected proposition but does not clearly establish the full proposition.", "unit_id": "semrev_175"}

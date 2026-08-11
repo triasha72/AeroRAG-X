@@ -128,7 +128,7 @@ def main() -> None:
 
             label = str(decision["human_label"])
 
-            source = "human_review:" + unit_id
+            source = "adjudication:" + unit_id
 
             note = str(decision["reviewer_note"])
 
@@ -263,7 +263,7 @@ def main() -> None:
         "concept_instances_per_system": 76,
         "total_concept_instances": 304,
         "auto_supported_count": auto_count,
-        "human_reviewed_count": manual_count,
+        "adjudicated_count": manual_count,
         "global_label_counts": dict(global_counts),
         "ambiguity_policy": (
             "Conservative lower-bound coverage "
@@ -305,7 +305,7 @@ def main() -> None:
             "Ten concept instances were accepted "
             "through deterministic canonical/alias "
             "matching. The remaining 294 were "
-            "human-reviewed."
+            "adjudicated using the frozen review protocol."
         ),
         "",
         (
@@ -380,7 +380,7 @@ def main() -> None:
     )
 
     print(
-        "human-reviewed:",
+        "adjudicated:",
         manual_count,
     )
 

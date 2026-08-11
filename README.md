@@ -796,14 +796,22 @@ Current evaluation includes:
 - normalized behavioral evaluation
 - controlled four-way model/system study
 
+The completed semantic extension now includes:
+
+- versioned semantic expected concepts
+- hard-negative similarity calibration
+- NLI-verifier calibration
+- preservation of failed automatic matcher experiments
+- frozen four-way expected-concept adjudication
+- lower/upper semantic-coverage bounds
+
 The next evaluation layer focuses on:
 
-- semantic expected-concept matching
 - claim-evidence entailment
 - answer-to-claim completeness
 - unsupported-response taxonomy
 - redundancy
-- targeted human review
+- targeted independent human audit
 
 ---
 
