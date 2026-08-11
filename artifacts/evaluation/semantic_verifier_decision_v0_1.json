@@ -1,0 +1,26 @@
+{
+  "cosine_binary_matcher": {
+    "decision": "reject_single_cosine_threshold_as_binary_semantic_matcher",
+    "hard_balanced_accuracy": 0.6666666666666667,
+    "hard_precision": 0.7272727272727273,
+    "hard_recall": 0.5333333333333333,
+    "hard_specificity": 0.8,
+    "threshold_frozen": false
+  },
+  "decision": "use_human_adjudication_for_protected_semantic_benchmark",
+  "interpretation": "Neither a single embedding cosine threshold nor the calibrated NLI verifier reliably separates valid technical paraphrases from semantically adjacent but propositionally distinct concepts on the hard calibration set.",
+  "nli_binary_matcher": {
+    "acceptance_pass": false,
+    "balanced_accuracy": 0.6444444444444445,
+    "false_negatives": 9,
+    "false_positives": 23,
+    "model_commit": "fa2804872c3b4bd748f38c0185cc85775361e735",
+    "model_name": "cross-encoder/nli-deberta-v3-small",
+    "precision": 0.6101694915254238,
+    "recall": 0.8,
+    "recommended_threshold": 0.001499942785966137,
+    "specificity": 0.4888888888888889,
+    "threshold_frozen": false
+  },
+  "version": "v0.1"
+}

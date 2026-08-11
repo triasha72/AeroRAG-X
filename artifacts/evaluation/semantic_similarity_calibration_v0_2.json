@@ -1,0 +1,847 @@
+{
+  "device": "cpu",
+  "match_count": 45,
+  "match_score_summary": {
+    "max": 0.9280255436897278,
+    "median": 0.7342383861541748,
+    "min": 0.3458940088748932,
+    "p25": 0.5808626413345337,
+    "p75": 0.817176103591919
+  },
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "no_match_count": 45,
+  "no_match_score_summary": {
+    "max": 0.8151476383209229,
+    "median": 0.6372124552726746,
+    "min": 0.2397865504026413,
+    "p25": 0.5627729892730713,
+    "p75": 0.6922938823699951
+  },
+  "pair_count": 90,
+  "recommended_metrics": {
+    "balanced_accuracy": 0.6666666666666667,
+    "fn": 21,
+    "fp": 9,
+    "precision": 0.7272727272727273,
+    "recall": 0.5333333333333333,
+    "specificity": 0.8,
+    "threshold": 0.7228716313838959,
+    "tn": 36,
+    "tp": 24
+  },
+  "recommended_threshold": 0.7228716313838959,
+  "scored_pairs": [
+    {
+      "candidate_text": "dendrite induced internal short circuit",
+      "concept_id": "internal_short_circuit_initiation",
+      "cosine_similarity": 0.5416156649589539,
+      "label": "MATCH",
+      "pair_id": "hardcal_001",
+      "reference_text": "internal short circuit initiates thermal runaway",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal runaway propagates to neighboring cells",
+      "concept_id": "internal_short_circuit_initiation",
+      "cosine_similarity": 0.5601710677146912,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_002",
+      "reference_text": "internal short circuit initiates thermal runaway",
+      "source": "human_reviewed_hard_negative:cell_to_cell_propagation"
+    },
+    {
+      "candidate_text": "cell to cell propagation",
+      "concept_id": "cell_to_cell_propagation",
+      "cosine_similarity": 0.5808626413345337,
+      "label": "MATCH",
+      "pair_id": "hardcal_003",
+      "reference_text": "thermal runaway propagates to neighboring cells",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "exothermic reactions create self heating that accelerates thermal runaway",
+      "concept_id": "cell_to_cell_propagation",
+      "cosine_similarity": 0.5858475565910339,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_004",
+      "reference_text": "thermal runaway propagates to neighboring cells",
+      "source": "human_reviewed_hard_negative:exothermic_self_heating_feedback"
+    },
+    {
+      "candidate_text": "cascading battery module failure",
+      "concept_id": "cascading_module_failure",
+      "cosine_similarity": 0.828197717666626,
+      "label": "MATCH",
+      "pair_id": "hardcal_005",
+      "reference_text": "propagation can cause cascading failure of a battery module",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "internal battery defects can be detected before thermal runaway becomes catastrophic",
+      "concept_id": "cascading_module_failure",
+      "cosine_similarity": 0.5768013000488281,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_006",
+      "reference_text": "propagation can cause cascading failure of a battery module",
+      "source": "human_reviewed_hard_negative:battery_defect_precursor_detection"
+    },
+    {
+      "candidate_text": "increasing temperature accelerates exothermic reactions",
+      "concept_id": "exothermic_self_heating_feedback",
+      "cosine_similarity": 0.7342383861541748,
+      "label": "MATCH",
+      "pair_id": "hardcal_007",
+      "reference_text": "exothermic reactions create self heating that accelerates thermal runaway",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "internal short circuit initiates thermal runaway",
+      "concept_id": "exothermic_self_heating_feedback",
+      "cosine_similarity": 0.6276561617851257,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_008",
+      "reference_text": "exothermic reactions create self heating that accelerates thermal runaway",
+      "source": "human_reviewed_hard_negative:internal_short_circuit_initiation"
+    },
+    {
+      "candidate_text": "excessive battery heat compromises safety",
+      "concept_id": "heat_accumulation_safety_risk",
+      "cosine_similarity": 0.8347153663635254,
+      "label": "MATCH",
+      "pair_id": "hardcal_009",
+      "reference_text": "accumulated battery heat can damage cells and create a safety risk",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "active battery cooling can use forced convection of ambient air",
+      "concept_id": "heat_accumulation_safety_risk",
+      "cosine_similarity": 0.5481007695198059,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_010",
+      "reference_text": "accumulated battery heat can damage cells and create a safety risk",
+      "source": "human_reviewed_hard_negative:forced_air_heat_rejection"
+    },
+    {
+      "candidate_text": "large fuel cell heat rejection requirement",
+      "concept_id": "large_heat_rejection_load",
+      "cosine_similarity": 0.815954327583313,
+      "label": "MATCH",
+      "pair_id": "hardcal_011",
+      "reference_text": "fuel cells require substantial waste heat rejection",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "low fuel cell operating temperature makes heat rejection difficult",
+      "concept_id": "large_heat_rejection_load",
+      "cosine_similarity": 0.8052163124084473,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_012",
+      "reference_text": "fuel cells require substantial waste heat rejection",
+      "source": "human_reviewed_hard_negative:low_temperature_difference_challenge"
+    },
+    {
+      "candidate_text": "small temperature difference makes heat rejection difficult",
+      "concept_id": "low_temperature_difference_challenge",
+      "cosine_similarity": 0.7303899526596069,
+      "label": "MATCH",
+      "pair_id": "hardcal_013",
+      "reference_text": "low fuel cell operating temperature makes heat rejection difficult",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "power electronics generate low grade waste heat that must be rejected",
+      "concept_id": "low_temperature_difference_challenge",
+      "cosine_similarity": 0.5657628774642944,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_014",
+      "reference_text": "low fuel cell operating temperature makes heat rejection difficult",
+      "source": "human_reviewed_hard_negative:low_grade_waste_heat_rejection"
+    },
+    {
+      "candidate_text": "heat rejection is difficult during takeoff and climb",
+      "concept_id": "takeoff_climb_heat_rejection",
+      "cosine_similarity": 0.9280255436897278,
+      "label": "MATCH",
+      "pair_id": "hardcal_015",
+      "reference_text": "takeoff and climb create difficult heat rejection conditions",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management systems introduce aircraft mass and drag penalties",
+      "concept_id": "takeoff_climb_heat_rejection",
+      "cosine_similarity": 0.4482998847961426,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_016",
+      "reference_text": "takeoff and climb create difficult heat rejection conditions",
+      "source": "human_reviewed_hard_negative:thermal_management_mass_drag_penalties"
+    },
+    {
+      "candidate_text": "heat exchanger weight penalty",
+      "concept_id": "thermal_management_system_penalties",
+      "cosine_similarity": 0.5505397319793701,
+      "label": "MATCH",
+      "pair_id": "hardcal_017",
+      "reference_text": "thermal management adds aircraft mass and performance penalties",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "aircraft waste heat can be difficult to reject to available heat sinks",
+      "concept_id": "thermal_management_system_penalties",
+      "cosine_similarity": 0.6168904900550842,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_018",
+      "reference_text": "thermal management adds aircraft mass and performance penalties",
+      "source": "human_reviewed_hard_negative:waste_heat_rejection_difficulty"
+    },
+    {
+      "candidate_text": "unique hybrid electric propulsion hazards",
+      "concept_id": "novel_hybrid_electric_safety_hazards",
+      "cosine_similarity": 0.910961389541626,
+      "label": "MATCH",
+      "pair_id": "hardcal_019",
+      "reference_text": "hybrid electric propulsion introduces safety hazards beyond conventional propulsion",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion introduces faults and degradation that require health management",
+      "concept_id": "novel_hybrid_electric_safety_hazards",
+      "cosine_similarity": 0.6754605770111084,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_020",
+      "reference_text": "hybrid electric propulsion introduces safety hazards beyond conventional propulsion",
+      "source": "human_reviewed_hard_negative:eap_fault_health_management"
+    },
+    {
+      "candidate_text": "high voltage electrical safety risks",
+      "concept_id": "high_voltage_current_hazards",
+      "cosine_similarity": 0.9108653664588928,
+      "label": "MATCH",
+      "pair_id": "hardcal_021",
+      "reference_text": "high voltage and current create electrical safety hazards",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "accumulated battery heat can damage cells and create a safety risk",
+      "concept_id": "high_voltage_current_hazards",
+      "cosine_similarity": 0.4254937171936035,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_022",
+      "reference_text": "high voltage and current create electrical safety hazards",
+      "source": "human_reviewed_hard_negative:heat_accumulation_safety_risk"
+    },
+    {
+      "candidate_text": "certification and safety challenges",
+      "concept_id": "safety_assurance_certification_complexity",
+      "cosine_similarity": 0.5710902214050293,
+      "label": "MATCH",
+      "pair_id": "hardcal_023",
+      "reference_text": "novel hybrid electric systems complicate safety assurance and certification",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management can be integrated with electrical fault protection",
+      "concept_id": "safety_assurance_certification_complexity",
+      "cosine_similarity": 0.4580629765987396,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_024",
+      "reference_text": "novel hybrid electric systems complicate safety assurance and certification",
+      "source": "human_reviewed_hard_negative:integrated_thermal_fault_management"
+    },
+    {
+      "candidate_text": "subsystem integration and control design challenges",
+      "concept_id": "integration_control_validation_risk",
+      "cosine_similarity": 0.4742305278778076,
+      "label": "MATCH",
+      "pair_id": "hardcal_025",
+      "reference_text": "system complexity creates integration control and validation challenges",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "novel hybrid electric systems complicate safety assurance and certification",
+      "concept_id": "integration_control_validation_risk",
+      "cosine_similarity": 0.2397865504026413,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_026",
+      "reference_text": "system complexity creates integration control and validation challenges",
+      "source": "human_reviewed_hard_negative:safety_assurance_certification_complexity"
+    },
+    {
+      "candidate_text": "distributed electrically driven fans",
+      "concept_id": "distributed_electric_propulsors",
+      "cosine_similarity": 0.3458940088748932,
+      "label": "MATCH",
+      "pair_id": "hardcal_027",
+      "reference_text": "electric propulsion enables multiple propulsors distributed across the aircraft",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "distributed electric propulsion enables stronger propulsion airframe integration",
+      "concept_id": "distributed_electric_propulsors",
+      "cosine_similarity": 0.7153533101081848,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_028",
+      "reference_text": "electric propulsion enables multiple propulsors distributed across the aircraft",
+      "source": "human_reviewed_hard_negative:propulsion_airframe_integration"
+    },
+    {
+      "candidate_text": "electric propulsion is relatively scale independent",
+      "concept_id": "electric_machine_scale_independence",
+      "cosine_similarity": 0.7490900158882141,
+      "label": "MATCH",
+      "pair_id": "hardcal_029",
+      "reference_text": "electric propulsion can retain favorable performance when divided among smaller motors",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "distributed electric propulsion enables stronger propulsion airframe integration",
+      "concept_id": "electric_machine_scale_independence",
+      "cosine_similarity": 0.6922938823699951,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_030",
+      "reference_text": "electric propulsion can retain favorable performance when divided among smaller motors",
+      "source": "human_reviewed_hard_negative:propulsion_airframe_integration"
+    },
+    {
+      "candidate_text": "propulsion airframe integration",
+      "concept_id": "propulsion_airframe_integration",
+      "cosine_similarity": 0.7511453628540039,
+      "label": "MATCH",
+      "pair_id": "hardcal_031",
+      "reference_text": "distributed electric propulsion enables stronger propulsion airframe integration",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion requires integrated system level control and subsystem coordination",
+      "concept_id": "propulsion_airframe_integration",
+      "cosine_similarity": 0.6372124552726746,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_032",
+      "reference_text": "distributed electric propulsion enables stronger propulsion airframe integration",
+      "source": "human_reviewed_hard_negative:system_level_integration_and_control"
+    },
+    {
+      "candidate_text": "electric power distribution to distributed fans",
+      "concept_id": "electrical_power_distribution_flexibility",
+      "cosine_similarity": 0.5915800333023071,
+      "label": "MATCH",
+      "pair_id": "hardcal_033",
+      "reference_text": "electrical power can be routed to distributed propulsion units",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "distributed electric propulsion enables stronger propulsion airframe integration",
+      "concept_id": "electrical_power_distribution_flexibility",
+      "cosine_similarity": 0.7362920641899109,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_034",
+      "reference_text": "electrical power can be routed to distributed propulsion units",
+      "source": "human_reviewed_hard_negative:propulsion_airframe_integration"
+    },
+    {
+      "candidate_text": "hydrogen requires bulky storage tanks",
+      "concept_id": "low_volumetric_density_large_tanks",
+      "cosine_similarity": 0.8644086122512817,
+      "label": "MATCH",
+      "pair_id": "hardcal_035",
+      "reference_text": "liquid hydrogen low volumetric density requires large storage tanks",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "liquid hydrogen requires storage at extremely low cryogenic temperature",
+      "concept_id": "low_volumetric_density_large_tanks",
+      "cosine_similarity": 0.7439733743667603,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_036",
+      "reference_text": "liquid hydrogen low volumetric density requires large storage tanks",
+      "source": "human_reviewed_hard_negative:cryogenic_temperature_insulation"
+    },
+    {
+      "candidate_text": "cryogenic hydrogen requires insulation",
+      "concept_id": "cryogenic_temperature_insulation",
+      "cosine_similarity": 0.7711124420166016,
+      "label": "MATCH",
+      "pair_id": "hardcal_037",
+      "reference_text": "liquid hydrogen requires storage at extremely low cryogenic temperature",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "cryogenic hydrogen systems require materials that tolerate embrittlement and repeated cycles",
+      "concept_id": "cryogenic_temperature_insulation",
+      "cosine_similarity": 0.7502885460853577,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_038",
+      "reference_text": "liquid hydrogen requires storage at extremely low cryogenic temperature",
+      "source": "human_reviewed_hard_negative:materials_cycle_durability"
+    },
+    {
+      "candidate_text": "hydrogen is difficult to contain against leakage",
+      "concept_id": "leakage_flammability_safety",
+      "cosine_similarity": 0.8157374262809753,
+      "label": "MATCH",
+      "pair_id": "hardcal_039",
+      "reference_text": "hydrogen leakage and flammability create safety challenges",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "liquid hydrogen requires storage at extremely low cryogenic temperature",
+      "concept_id": "leakage_flammability_safety",
+      "cosine_similarity": 0.5627729892730713,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_040",
+      "reference_text": "hydrogen leakage and flammability create safety challenges",
+      "source": "human_reviewed_hard_negative:cryogenic_temperature_insulation"
+    },
+    {
+      "candidate_text": "cryogenic materials must withstand thousands of cycles",
+      "concept_id": "materials_cycle_durability",
+      "cosine_similarity": 0.7456026673316956,
+      "label": "MATCH",
+      "pair_id": "hardcal_041",
+      "reference_text": "cryogenic hydrogen systems require materials that tolerate embrittlement and repeated cycles",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "liquid hydrogen low volumetric density requires large storage tanks",
+      "concept_id": "materials_cycle_durability",
+      "cosine_similarity": 0.4682326316833496,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_042",
+      "reference_text": "cryogenic hydrogen systems require materials that tolerate embrittlement and repeated cycles",
+      "source": "human_reviewed_hard_negative:low_volumetric_density_large_tanks"
+    },
+    {
+      "candidate_text": "passive battery cooling",
+      "concept_id": "passive_active_battery_cooling",
+      "cosine_similarity": 0.817176103591919,
+      "label": "MATCH",
+      "pair_id": "hardcal_043",
+      "reference_text": "aircraft batteries can use passive or active cooling",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "battery cooling architecture trades cooling effectiveness against system weight and power consumption",
+      "concept_id": "passive_active_battery_cooling",
+      "cosine_similarity": 0.6637558937072754,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_044",
+      "reference_text": "aircraft batteries can use passive or active cooling",
+      "source": "human_reviewed_hard_negative:cooling_weight_power_tradeoff"
+    },
+    {
+      "candidate_text": "forced air battery cooling",
+      "concept_id": "forced_air_heat_rejection",
+      "cosine_similarity": 0.8293408751487732,
+      "label": "MATCH",
+      "pair_id": "hardcal_045",
+      "reference_text": "active battery cooling can use forced convection of ambient air",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "battery cooling architecture trades cooling effectiveness against system weight and power consumption",
+      "concept_id": "forced_air_heat_rejection",
+      "cosine_similarity": 0.6910995244979858,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_046",
+      "reference_text": "active battery cooling can use forced convection of ambient air",
+      "source": "human_reviewed_hard_negative:cooling_weight_power_tradeoff"
+    },
+    {
+      "candidate_text": "battery heat pump cooling",
+      "concept_id": "thermal_buffering_and_heat_pumps",
+      "cosine_similarity": 0.4388391375541687,
+      "label": "MATCH",
+      "pair_id": "hardcal_047",
+      "reference_text": "hot ground conditions may require heat pumps or thermal buffering",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "aircraft waste heat can be difficult to reject to available heat sinks",
+      "concept_id": "thermal_buffering_and_heat_pumps",
+      "cosine_similarity": 0.5115220546722412,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_048",
+      "reference_text": "hot ground conditions may require heat pumps or thermal buffering",
+      "source": "human_reviewed_hard_negative:waste_heat_rejection_difficulty"
+    },
+    {
+      "candidate_text": "liquid cooling loop for batteries",
+      "concept_id": "coolant_loops_and_heat_exchangers",
+      "cosine_similarity": 0.7887759208679199,
+      "label": "MATCH",
+      "pair_id": "hardcal_049",
+      "reference_text": "battery cooling can use coolant loops and liquid air heat exchangers",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "active battery cooling can use forced convection of ambient air",
+      "concept_id": "coolant_loops_and_heat_exchangers",
+      "cosine_similarity": 0.7509355545043945,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_050",
+      "reference_text": "battery cooling can use coolant loops and liquid air heat exchangers",
+      "source": "human_reviewed_hard_negative:forced_air_heat_rejection"
+    },
+    {
+      "candidate_text": "battery cooling has weight and power penalties",
+      "concept_id": "cooling_weight_power_tradeoff",
+      "cosine_similarity": 0.8366259336471558,
+      "label": "MATCH",
+      "pair_id": "hardcal_051",
+      "reference_text": "battery cooling architecture trades cooling effectiveness against system weight and power consumption",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "battery cooling can use coolant loops and liquid air heat exchangers",
+      "concept_id": "cooling_weight_power_tradeoff",
+      "cosine_similarity": 0.7097615003585815,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_052",
+      "reference_text": "battery cooling architecture trades cooling effectiveness against system weight and power consumption",
+      "source": "human_reviewed_hard_negative:coolant_loops_and_heat_exchangers"
+    },
+    {
+      "candidate_text": "electrical components create low grade heat loads",
+      "concept_id": "low_grade_waste_heat_rejection",
+      "cosine_similarity": 0.6746890544891357,
+      "label": "MATCH",
+      "pair_id": "hardcal_053",
+      "reference_text": "power electronics generate low grade waste heat that must be rejected",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "fuel cells require substantial waste heat rejection",
+      "concept_id": "low_grade_waste_heat_rejection",
+      "cosine_similarity": 0.6837811470031738,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_054",
+      "reference_text": "power electronics generate low grade waste heat that must be rejected",
+      "source": "human_reviewed_hard_negative:large_heat_rejection_load"
+    },
+    {
+      "candidate_text": "active cooling of power electronics",
+      "concept_id": "active_component_temperature_control",
+      "cosine_similarity": 0.541189432144165,
+      "label": "MATCH",
+      "pair_id": "hardcal_055",
+      "reference_text": "active thermal control keeps electrical components within operating temperature limits",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "component temperature limits influence thermal management system sizing",
+      "concept_id": "active_component_temperature_control",
+      "cosine_similarity": 0.6767327785491943,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_056",
+      "reference_text": "active thermal control keeps electrical components within operating temperature limits",
+      "source": "human_reviewed_hard_negative:component_temperature_limits_drive_tms"
+    },
+    {
+      "candidate_text": "two phase heat transport",
+      "concept_id": "two_phase_heat_transport",
+      "cosine_similarity": 0.5916812419891357,
+      "label": "MATCH",
+      "pair_id": "hardcal_057",
+      "reference_text": "heat pipes and two phase systems can transport electrical waste heat",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "power electronics generate low grade waste heat that must be rejected",
+      "concept_id": "two_phase_heat_transport",
+      "cosine_similarity": 0.5915994048118591,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_058",
+      "reference_text": "heat pipes and two phase systems can transport electrical waste heat",
+      "source": "human_reviewed_hard_negative:low_grade_waste_heat_rejection"
+    },
+    {
+      "candidate_text": "integrated thermal and fault management",
+      "concept_id": "integrated_thermal_fault_management",
+      "cosine_similarity": 0.8440474271774292,
+      "label": "MATCH",
+      "pair_id": "hardcal_059",
+      "reference_text": "thermal management can be integrated with electrical fault protection",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management keeps components within allowable temperature limits",
+      "concept_id": "integrated_thermal_fault_management",
+      "cosine_similarity": 0.6317625045776367,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_060",
+      "reference_text": "thermal management can be integrated with electrical fault protection",
+      "source": "human_reviewed_hard_negative:component_temperature_limit_control"
+    },
+    {
+      "candidate_text": "overheating reduces powertrain efficiency",
+      "concept_id": "system_efficiency_preservation",
+      "cosine_similarity": 0.6754684448242188,
+      "label": "MATCH",
+      "pair_id": "hardcal_061",
+      "reference_text": "thermal control is needed to preserve electrified powertrain efficiency",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion requires system cooling and heat dissipation",
+      "concept_id": "system_efficiency_preservation",
+      "cosine_similarity": 0.6379357576370239,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_062",
+      "reference_text": "thermal control is needed to preserve electrified powertrain efficiency",
+      "source": "human_reviewed_hard_negative:system_cooling_and_heat_dissipation"
+    },
+    {
+      "candidate_text": "megawatt electrical components create large heat loads",
+      "concept_id": "high_power_component_heat_generation",
+      "cosine_similarity": 0.6754146814346313,
+      "label": "MATCH",
+      "pair_id": "hardcal_063",
+      "reference_text": "high power electrified propulsion components generate substantial heat",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion requires system cooling and heat dissipation",
+      "concept_id": "high_power_component_heat_generation",
+      "cosine_similarity": 0.7505476474761963,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_064",
+      "reference_text": "high power electrified propulsion components generate substantial heat",
+      "source": "human_reviewed_hard_negative:system_cooling_and_heat_dissipation"
+    },
+    {
+      "candidate_text": "low temperature limits increase cooling-system requirements",
+      "concept_id": "component_temperature_limits_drive_tms",
+      "cosine_similarity": 0.656700074672699,
+      "label": "MATCH",
+      "pair_id": "hardcal_065",
+      "reference_text": "component temperature limits influence thermal management system sizing",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management adds aircraft mass and performance penalties",
+      "concept_id": "component_temperature_limits_drive_tms",
+      "cosine_similarity": 0.6444426774978638,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_066",
+      "reference_text": "component temperature limits influence thermal management system sizing",
+      "source": "human_reviewed_hard_negative:thermal_management_system_penalties"
+    },
+    {
+      "candidate_text": "detect precursors before catastrophic battery failure",
+      "concept_id": "battery_defect_precursor_detection",
+      "cosine_similarity": 0.7342458367347717,
+      "label": "MATCH",
+      "pair_id": "hardcal_067",
+      "reference_text": "internal battery defects can be detected before thermal runaway becomes catastrophic",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "accumulated battery heat can damage cells and create a safety risk",
+      "concept_id": "battery_defect_precursor_detection",
+      "cosine_similarity": 0.6325533986091614,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_068",
+      "reference_text": "internal battery defects can be detected before thermal runaway becomes catastrophic",
+      "source": "human_reviewed_hard_negative:heat_accumulation_safety_risk"
+    },
+    {
+      "candidate_text": "ultrasonic battery inspection",
+      "concept_id": "ultrasonic_nde_detection",
+      "cosine_similarity": 0.8273172378540039,
+      "label": "MATCH",
+      "pair_id": "hardcal_069",
+      "reference_text": "ultrasonic nondestructive evaluation can detect internal battery defects",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "embedded sensors and prognostics can monitor batteries for runaway risk",
+      "concept_id": "ultrasonic_nde_detection",
+      "cosine_similarity": 0.49573224782943726,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_070",
+      "reference_text": "ultrasonic nondestructive evaluation can detect internal battery defects",
+      "source": "human_reviewed_hard_negative:embedded_sensor_prognostics"
+    },
+    {
+      "candidate_text": "sensor based prognostics for thermal runaway",
+      "concept_id": "embedded_sensor_prognostics",
+      "cosine_similarity": 0.6252718567848206,
+      "label": "MATCH",
+      "pair_id": "hardcal_071",
+      "reference_text": "embedded sensors and prognostics can monitor batteries for runaway risk",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "accumulated battery heat can damage cells and create a safety risk",
+      "concept_id": "embedded_sensor_prognostics",
+      "cosine_similarity": 0.510221004486084,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_072",
+      "reference_text": "embedded sensors and prognostics can monitor batteries for runaway risk",
+      "source": "human_reviewed_hard_negative:heat_accumulation_safety_risk"
+    },
+    {
+      "candidate_text": "maintain safe component temperatures",
+      "concept_id": "component_temperature_limit_control",
+      "cosine_similarity": 0.7072749137878418,
+      "label": "MATCH",
+      "pair_id": "hardcal_073",
+      "reference_text": "thermal management keeps components within allowable temperature limits",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "component temperature limits influence thermal management system sizing",
+      "concept_id": "component_temperature_limit_control",
+      "cosine_similarity": 0.7926555275917053,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_074",
+      "reference_text": "thermal management keeps components within allowable temperature limits",
+      "source": "human_reviewed_hard_negative:component_temperature_limits_drive_tms"
+    },
+    {
+      "candidate_text": "low grade heat is difficult to reject",
+      "concept_id": "waste_heat_rejection_difficulty",
+      "cosine_similarity": 0.5493193864822388,
+      "label": "MATCH",
+      "pair_id": "hardcal_075",
+      "reference_text": "aircraft waste heat can be difficult to reject to available heat sinks",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management systems introduce aircraft mass and drag penalties",
+      "concept_id": "waste_heat_rejection_difficulty",
+      "cosine_similarity": 0.6281660795211792,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_076",
+      "reference_text": "aircraft waste heat can be difficult to reject to available heat sinks",
+      "source": "human_reviewed_hard_negative:thermal_management_mass_drag_penalties"
+    },
+    {
+      "candidate_text": "cooling systems add weight and drag",
+      "concept_id": "thermal_management_mass_drag_penalties",
+      "cosine_similarity": 0.5638582706451416,
+      "label": "MATCH",
+      "pair_id": "hardcal_077",
+      "reference_text": "thermal management systems introduce aircraft mass and drag penalties",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "aircraft thermal management is constrained by limited heat sink capacity",
+      "concept_id": "thermal_management_mass_drag_penalties",
+      "cosine_similarity": 0.8146102428436279,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_078",
+      "reference_text": "thermal management systems introduce aircraft mass and drag penalties",
+      "source": "human_reviewed_hard_negative:limited_heat_sink_capacity"
+    },
+    {
+      "candidate_text": "active cooling is needed to manage waste heat",
+      "concept_id": "active_thermal_control_requirement",
+      "cosine_similarity": 0.6614412665367126,
+      "label": "MATCH",
+      "pair_id": "hardcal_079",
+      "reference_text": "active thermal control may be required to prevent overheating",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management can be integrated with electrical fault protection",
+      "concept_id": "active_thermal_control_requirement",
+      "cosine_similarity": 0.5953412055969238,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_080",
+      "reference_text": "active thermal control may be required to prevent overheating",
+      "source": "human_reviewed_hard_negative:integrated_thermal_fault_management"
+    },
+    {
+      "candidate_text": "aircraft have limited thermal sink capacity",
+      "concept_id": "limited_heat_sink_capacity",
+      "cosine_similarity": 0.8571296334266663,
+      "label": "MATCH",
+      "pair_id": "hardcal_081",
+      "reference_text": "aircraft thermal management is constrained by limited heat sink capacity",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "thermal management adds aircraft mass and performance penalties",
+      "concept_id": "limited_heat_sink_capacity",
+      "cosine_similarity": 0.8151476383209229,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_082",
+      "reference_text": "aircraft thermal management is constrained by limited heat sink capacity",
+      "source": "human_reviewed_hard_negative:thermal_management_system_penalties"
+    },
+    {
+      "candidate_text": "thermal management provides cooling and heat rejection",
+      "concept_id": "system_cooling_and_heat_dissipation",
+      "cosine_similarity": 0.45384442806243896,
+      "label": "MATCH",
+      "pair_id": "hardcal_083",
+      "reference_text": "electrified propulsion requires system cooling and heat dissipation",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion requires integrated system level control and subsystem coordination",
+      "concept_id": "system_cooling_and_heat_dissipation",
+      "cosine_similarity": 0.6885462999343872,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_084",
+      "reference_text": "electrified propulsion requires system cooling and heat dissipation",
+      "source": "human_reviewed_hard_negative:system_level_integration_and_control"
+    },
+    {
+      "candidate_text": "electrical propulsion requires system health monitoring",
+      "concept_id": "eap_fault_health_management",
+      "cosine_similarity": 0.7911447286605835,
+      "label": "MATCH",
+      "pair_id": "hardcal_085",
+      "reference_text": "electrified propulsion introduces faults and degradation that require health management",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrified propulsion requires system cooling and heat dissipation",
+      "concept_id": "eap_fault_health_management",
+      "cosine_similarity": 0.6822332143783569,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_086",
+      "reference_text": "electrified propulsion introduces faults and degradation that require health management",
+      "source": "human_reviewed_hard_negative:system_cooling_and_heat_dissipation"
+    },
+    {
+      "candidate_text": "current and voltage sensing support fault diagnosis",
+      "concept_id": "electrical_fault_sensing_and_diagnosis",
+      "cosine_similarity": 0.7536945343017578,
+      "label": "MATCH",
+      "pair_id": "hardcal_087",
+      "reference_text": "electrical faults require appropriate sensing and timely diagnosis",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "embedded sensors and prognostics can monitor batteries for runaway risk",
+      "concept_id": "electrical_fault_sensing_and_diagnosis",
+      "cosine_similarity": 0.4183099567890167,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_088",
+      "reference_text": "electrical faults require appropriate sensing and timely diagnosis",
+      "source": "human_reviewed_hard_negative:embedded_sensor_prognostics"
+    },
+    {
+      "candidate_text": "system level EAP control is required",
+      "concept_id": "system_level_integration_and_control",
+      "cosine_similarity": 0.4173092246055603,
+      "label": "MATCH",
+      "pair_id": "hardcal_089",
+      "reference_text": "electrified propulsion requires integrated system level control and subsystem coordination",
+      "source": "accepted_alias:v0_1"
+    },
+    {
+      "candidate_text": "electrical power can be routed to distributed propulsion units",
+      "concept_id": "system_level_integration_and_control",
+      "cosine_similarity": 0.6496596336364746,
+      "label": "NO_MATCH",
+      "pair_id": "hardcal_090",
+      "reference_text": "electrified propulsion requires integrated system level control and subsystem coordination",
+      "source": "human_reviewed_hard_negative:electrical_power_distribution_flexibility"
+    }
+  ],
+  "threshold_frozen": false,
+  "version": "v0.2"
+}

@@ -1,0 +1,25 @@
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Answer discusses heat management but not aircraft mass or drag penalties.", "unit_id": "semrev_001"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Cooling components are mentioned, but not heat pipes or two-phase transport.", "unit_id": "semrev_002"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Answer explicitly states lower density requires larger bulky storage tanks.", "unit_id": "semrev_003"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "NDE precursor detection is described, but not embedded sensors or prognostics.", "unit_id": "semrev_004"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Multiple control functions are listed without clear coordinated system-level integration.", "unit_id": "semrev_005"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Power electronics and waste-heat management are linked, but the full low-grade rejection proposition is incomplete.", "unit_id": "semrev_006"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Generic battery and fuel-cell waste heat is discussed rather than power-electronics low-grade waste heat.", "unit_id": "semrev_007"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Cryogenic storage challenges are discussed without low volumetric density or large tank requirements.", "unit_id": "semrev_008"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Answer explicitly describes cascading propagation into neighboring cells.", "unit_id": "semrev_009"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Answer explicitly identifies ultrasonic NDE for detecting embedded battery defects.", "unit_id": "semrev_010"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Answer describes thermal imaging, temperature profiles, and predictive analytics rather than ultrasonic NDE.", "unit_id": "semrev_011"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Electrical degradation, health management, diagnosis, and maintenance are explicitly described.", "unit_id": "semrev_012"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Dendrite growth is explicitly linked to internal short circuit and thermal runaway.", "unit_id": "semrev_013"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "General safety risks are stated without safety-assurance or certification complexity.", "unit_id": "semrev_014"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Cell-to-cell propagation is described, but cascading failure of the module is not explicitly established.", "unit_id": "semrev_015"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "The answer concerns cryogenic temperature rather than low volumetric density and large tanks.", "unit_id": "semrev_016"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Waste-heat management is discussed without clearly requiring active thermal control to prevent overheating.", "unit_id": "semrev_017"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "The answer explicitly states large heavy thermal-management systems cause drag.", "unit_id": "semrev_018"}
+{"human_label": "AMBIGUOUS", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Control and health-management concepts are present, but integrated subsystem coordination is not explicit.", "unit_id": "semrev_019"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Battery and fuel-cell heat rejection is discussed rather than low-grade waste heat from power electronics.", "unit_id": "semrev_020"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Centralized versus decentralized power/control does not establish electric-machine scale independence.", "unit_id": "semrev_021"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Distributed electric motors are described without a scaling-performance claim.", "unit_id": "semrev_022"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "General battery and electrical reliability risks do not establish high-voltage/current hazards.", "unit_id": "semrev_023"}
+{"human_label": "ABSENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "Thermal control and efficiency are discussed without mass or drag penalties.", "unit_id": "semrev_024"}
+{"human_label": "PRESENT", "review_status": "PROPOSED_REVIEWED", "reviewer_note": "The answer provides active and passive battery-cooling approaches including heat pumps, precooling, phase-change materials, and evaporative cooling.", "unit_id": "semrev_025"}
