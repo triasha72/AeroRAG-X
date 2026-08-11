@@ -989,17 +989,18 @@ The next research question is:
 
 > **Does increased formal claim decomposition correspond to genuinely better supported technical content?**
 
-## 1. Semantic and claim-level evaluation
+## 1. Claim-level and unsupported-response evaluation
+
+Semantic expected-concept coverage is complete.
 
 The next evaluation layer will measure:
 
 ```text
-semantic expected-concept coverage
 claim-evidence entailment
 answer-to-claim completeness
 unsupported-response taxonomy
 redundancy
-targeted human assessment
+targeted independent human audit
 ```
 
 The existing citation metrics establish valid provenance and evidence-reference validity.
@@ -1078,7 +1079,8 @@ closed-book Base / LoRA evaluation        DONE
 canonical-refusal normalization           DONE
 four-way Base / LoRA system study         DONE
 
-semantic and claim-level evaluation       NEXT
+semantic expected-concept evaluation      DONE
+claim-level evaluation                    NEXT
 bounded adaptive retrieval                PLANNED
 adaptive-retrieval evaluation             PLANNED
 efficient local inference                 LATER

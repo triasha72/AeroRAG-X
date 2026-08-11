@@ -123,10 +123,11 @@ Completed:
 - [x] canonical-refusal normalization
 - [x] normalized closed-book v0.2 benchmark
 - [x] corrected four-way Base / LoRA system study
+- [x] semantic expected-concept baseline
 
 Current:
 
-- [ ] semantic and claim-level evaluation
+- [ ] claim-level and unsupported-response evaluation
 
 Next:
 
@@ -848,7 +849,7 @@ Primary question:
 
 Planned metrics:
 
-- [ ] semantic expected-concept coverage
+- [x] semantic expected-concept coverage
 - [ ] claim-evidence entailment
 - [ ] claim support
 - [ ] answer-to-claim completeness
@@ -861,11 +862,24 @@ Planned metrics:
 
 Requirements:
 
-- [ ] preserve lexical expected-term recall as a baseline
-- [ ] define semantic expected concepts
-- [ ] define and calibrate semantic matching
-- [ ] inspect lexical / semantic disagreements
-- [ ] record versioned evaluation artifacts
+- [x] preserve lexical expected-term recall as a baseline
+- [x] define semantic expected concepts
+- [x] define and calibrate semantic matching
+- [x] inspect lexical / semantic disagreements
+- [x] record versioned evaluation artifacts
+
+### Completed semantic baseline
+
+The protected four-way semantic study evaluated 20 answerable queries and 76 expected concepts per system.
+
+| System | Micro lower | Micro upper |
+|---|---:|---:|
+| Base closed-book | 0.1711 | 0.3421 |
+| LoRA closed-book | 0.1842 | 0.3553 |
+| Base + RAG | 0.3816 | 0.5395 |
+| LoRA + RAG | 0.5132 | 0.6579 |
+
+The hard-negative cosine matcher and calibrated NLI verifier did not satisfy the predefined acceptance criteria, so no automatic semantic threshold was frozen.
 
 ## Claim-evidence entailment
 

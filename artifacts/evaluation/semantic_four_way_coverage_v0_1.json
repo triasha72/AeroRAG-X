@@ -1,4 +1,5 @@
 {
+  "adjudicated_count": 294,
   "ambiguity_policy": "Conservative lower-bound coverage counts PRESENT only. Upper-bound coverage additionally includes AMBIGUOUS.",
   "auto_supported_count": 10,
   "concept_instances_per_system": 76,
@@ -7,7 +8,6 @@
     "AMBIGUOUS": 49,
     "PRESENT": 95
   },
-  "human_reviewed_count": 294,
   "query_count_per_system": 20,
   "system_count": 4,
   "systems": {
