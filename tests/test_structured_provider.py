@@ -406,3 +406,73 @@ def test_constructor_rejects_negative_costs() -> None:
             config=make_config(),
             input_cost_per_million_tokens=-1.0,
         )
+
+
+def test_duplicate_evidence_ids_are_normalized() -> None:
+    """Exact duplicate evidence references should be deduplicated in order."""
+
+    transport = FakeTransport(
+        [
+            StructuredModelResult(
+                payload={
+                    "answer": ("Two supplied evidence records support the claim."),
+                    "claims": [
+                        {
+                            "text": ("The claim is supported by two evidence records."),
+                            "evidence_ids": [
+                                "E1",
+                                "E1",
+                                "E2",
+                                "E1",
+                            ],
+                        }
+                    ],
+                    "insufficient_evidence": False,
+                },
+                request_id="req-duplicate-evidence",
+                usage=ProviderUsage(
+                    input_tokens=100,
+                    output_tokens=40,
+                ),
+            )
+        ]
+    )
+
+    provider = StructuredGenerationProvider(
+        model_name="test-model",
+        transport=transport,
+        config=make_config(),
+        clock=FakeClock(
+            [
+                1.0,
+                1.2,
+            ]
+        ),
+    )
+
+    response = provider.generate(
+        query="Question",
+        evidence=[
+            evidence(
+                evidence_id="E1",
+                text="First supporting record.",
+            ),
+            evidence(
+                evidence_id="E2",
+                text="Second supporting record.",
+            ),
+        ],
+        max_claims=2,
+    )
+
+    assert len(response.claims) == 1
+
+    assert response.claims[0].evidence_ids == [
+        "E1",
+        "E2",
+    ]
+
+    telemetry = provider.last_telemetry
+
+    assert telemetry is not None
+    assert telemetry.succeeded is True
