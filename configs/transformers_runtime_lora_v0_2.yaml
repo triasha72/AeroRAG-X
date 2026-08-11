@@ -1,0 +1,22 @@
+version: "0.2"
+
+device: "auto"
+dtype: "float16"
+
+context_window_tokens: 32768
+max_input_tokens: 16000
+max_new_tokens: 768
+
+do_sample: false
+
+temperature: 0.7
+top_p: 0.8
+top_k: 20
+
+enable_thinking: false
+
+trust_remote_code: false
+local_files_only: false
+revision: null
+
+adapter_path: "artifacts/training/adapters/aeroragx_lora_v0_1_best"
