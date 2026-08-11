@@ -1,0 +1,12 @@
+{
+  "calibration_dataset_sha256": "478b69985f904b2c2ff3632965038375711f89065ba9734b0297a1068152feb5",
+  "calibration_report_sha256": "af73a13d05e87ba984aad6902aa8b41a99b723d9d7e590dcf5a8016381cc5208",
+  "match_count": 45,
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "negative_design": "Cross-domain negatives used as an initial semantic-separation baseline. Threshold is not frozen until hard-negative stress testing.",
+  "no_match_count": 45,
+  "pair_count": 90,
+  "recommended_threshold": 0.30954861640930176,
+  "threshold_frozen": false,
+  "version": "v0.1"
+}
