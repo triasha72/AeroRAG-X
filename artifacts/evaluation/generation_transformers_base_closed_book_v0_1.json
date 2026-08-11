@@ -1,0 +1,663 @@
+{
+  "version": "0.1",
+  "condition": "base",
+  "generation_model": "Qwen/Qwen3-0.6B",
+  "adapter_enabled": false,
+  "query_count": 32,
+  "completed_query_count": 27,
+  "generation_failure_count": 5,
+  "answerable_query_count": 20,
+  "unanswerable_query_count": 12,
+  "predicted_answerable_count": 27,
+  "refusal_count": 0,
+  "correct_answerability_count": 20,
+  "completed_answerable_count": 20,
+  "correctly_refused_unanswerable_count": 0,
+  "total_claim_count": 28,
+  "answerable_claim_count": 21,
+  "unanswerable_claim_count": 7,
+  "expected_term_count": 58,
+  "matched_expected_term_count": 54,
+  "structurally_valid_answer_count": 27,
+  "generation_failure_rate": 0.15625,
+  "answerability_accuracy": 0.625,
+  "answerable_completion_rate": 1.0,
+  "unsupported_refusal_rate": 0.0,
+  "expected_term_recall": 0.9310344827586207,
+  "structural_validity_rate": 0.84375,
+  "claims_per_answerable_query": 1.05,
+  "query_results": [
+    {
+      "query_id": "core_001",
+      "query": "How can battery thermal runaway propagate in electric aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Battery thermal runaway can propagate through the aircraft's electrical system, leading to overheating and potential fire.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "battery",
+        "thermal",
+        "runaway"
+      ],
+      "matched_terms": [
+        "battery",
+        "thermal",
+        "runaway"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_002",
+      "query": "What thermal-management considerations apply to fuel-cell aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Fuel-cell aircraft rely on efficient thermal management to ensure optimal performance and longevity of the fuel cell stacks.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "fuel",
+        "cell",
+        "thermal"
+      ],
+      "matched_terms": [
+        "fuel",
+        "cell",
+        "thermal"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_003",
+      "query": "What safety concerns arise in hybrid-electric aircraft propulsion systems?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Hybrid-electric aircraft propulsion systems can pose safety concerns related to electrical systems, battery management, and potential mechanical failures.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "hybrid",
+        "electric",
+        "safety"
+      ],
+      "matched_terms": [
+        "hybrid",
+        "electric",
+        "safety"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_004",
+      "query": "What characterizes distributed electric propulsion aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Distributed electric propulsion aircraft are aircraft that use distributed electric propulsion systems, such as electric motors located in various parts of the aircraft, to provide efficient and continuous power distribution.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "distributed",
+        "electric",
+        "propulsion"
+      ],
+      "matched_terms": [
+        "distributed",
+        "electric",
+        "propulsion"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_005",
+      "query": "What challenges affect cryogenic hydrogen storage in aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "cryogenic hydrogen storage in aircraft involves challenges such as maintaining low temperatures, ensuring safe and efficient storage, and managing the physical and chemical properties of hydrogen under these conditions.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "hydrogen",
+        "cryogenic",
+        "storage"
+      ],
+      "matched_terms": [
+        "hydrogen",
+        "cryogenic",
+        "storage"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_006",
+      "query": "How are aircraft battery systems cooled?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Aircraft battery systems are cooled using a combination of air cooling and liquid cooling systems.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "battery",
+        "cooling"
+      ],
+      "matched_terms": [
+        "battery",
+        "cooling"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_007",
+      "query": "How is power-electronics thermal management handled in electric aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Power-electronics thermal management in electric aircraft is handled through advanced cooling systems that utilize liquid cooling, heat exchangers, and efficient heat dissipation materials to maintain optimal operating temperatures.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "power",
+        "thermal",
+        "electric"
+      ],
+      "matched_terms": [
+        "power",
+        "thermal",
+        "electric"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "core_008",
+      "query": "How can lithium-ion battery fires be detected in aviation applications?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Lithium-ion battery fires can be detected through real-time monitoring systems, thermal imaging, and sensor-based analysis.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "battery",
+        "fire",
+        "detection"
+      ],
+      "matched_terms": [
+        "battery",
+        "fire"
+      ],
+      "expected_term_recall": 0.6666666666666666,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_001",
+      "query": "What physical mechanisms can allow battery thermal runaway to spread from one cell to another?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "The physical mechanisms that allow battery thermal runaway to spread from one cell to another include the formation of dendrites and axons, which can cause the battery to discharge and spread the thermal runaway to adjacent cells.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "thermal",
+        "runaway",
+        "cell"
+      ],
+      "matched_terms": [
+        "thermal",
+        "runaway",
+        "cell"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_002",
+      "query": "What role does heat transfer play in propagation of battery thermal events in aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Heat transfer plays a critical role in the propagation of battery thermal events in aircraft by facilitating the transfer of heat between the battery and the surrounding environment, which can lead to thermal runaway and potential fire or structural damage.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "heat",
+        "battery",
+        "thermal"
+      ],
+      "matched_terms": [
+        "heat",
+        "battery",
+        "thermal"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_003",
+      "query": "Why is waste-heat management important for fuel-cell aircraft propulsion?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Waste-heat management is important for fuel-cell aircraft propulsion because it helps reduce fuel consumption and improve efficiency by minimizing the amount of heat generated during operation.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "fuel",
+        "cell",
+        "heat"
+      ],
+      "matched_terms": [
+        "fuel",
+        "cell",
+        "heat"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_004",
+      "query": "What hazards should be considered when designing hybrid-electric aircraft propulsion?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "hybrid-electric aircraft propulsion can pose risks related to battery safety, electrical system reliability, and potential for system failures during operation.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "hybrid",
+        "electric",
+        "propulsion"
+      ],
+      "matched_terms": [
+        "hybrid",
+        "electric",
+        "propulsion"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_005",
+      "query": "What engineering characteristics distinguish distributed electric propulsion from conventional propulsion layouts?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Distributed electric propulsion systems use a centralized power source and a single point of control, whereas conventional propulsion layouts typically have a decentralized system with multiple points of power and control.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "distributed",
+        "electric",
+        "propulsion"
+      ],
+      "matched_terms": [
+        "distributed",
+        "electric",
+        "propulsion"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_006",
+      "query": "Why is storing cryogenic hydrogen aboard aircraft technically challenging?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Storing cryogenic hydrogen aboard aircraft is technically challenging due to its extremely low temperature and high energy requirements, which necessitate specialized storage and transportation systems.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "hydrogen",
+        "cryogenic",
+        "storage"
+      ],
+      "matched_terms": [
+        "hydrogen",
+        "cryogenic",
+        "storage"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_007",
+      "query": "What approaches are used to manage heat in aircraft battery systems?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "The primary approaches used to manage heat in aircraft battery systems include thermal management systems such as liquid cooling, phase change materials, and advanced heat exchangers.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "battery",
+        "heat"
+      ],
+      "matched_terms": [
+        "battery",
+        "heat"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_008",
+      "query": "Why do power-electronics components require thermal management in electrified aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "power-electronics components require thermal management in electrified aircraft to ensure optimal performance and prevent overheating, which can lead to system failures or damage.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "power",
+        "thermal",
+        "aircraft"
+      ],
+      "matched_terms": [
+        "power",
+        "thermal",
+        "aircraft"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "para_009",
+      "query": "What methods can help detect hazardous lithium-ion battery thermal events in aviation?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "The methods include using thermal imaging to detect hotspots, analyzing battery temperature profiles, and employing predictive analytics to identify anomalies.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 2,
+      "expected_terms": [
+        "battery",
+        "detection",
+        "thermal"
+      ],
+      "matched_terms": [
+        "battery",
+        "thermal"
+      ],
+      "expected_term_recall": 0.6666666666666666,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "synth_001",
+      "query": "What thermal-management challenges are shared by battery-electric and fuel-cell aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "thermal-management challenges include managing heat dissipation in both battery-electric and fuel-cell aircraft to prevent overheating and ensure efficient performance.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "thermal",
+        "battery",
+        "fuel"
+      ],
+      "matched_terms": [
+        "thermal",
+        "battery",
+        "fuel"
+      ],
+      "expected_term_recall": 1.0,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "synth_002",
+      "query": "How do high-power electrified propulsion components create thermal-management demands in aircraft?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "High-power electrified propulsion components create thermal-management demands by generating significant heat due to their high power output, which must be dissipated to prevent overheating and ensure operational efficiency.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "power",
+        "electric",
+        "thermal"
+      ],
+      "matched_terms": [
+        "power",
+        "thermal"
+      ],
+      "expected_term_recall": 0.6666666666666666,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "synth_003",
+      "query": "What safety and thermal-management issues should designers consider across electrified aircraft propulsion systems?",
+      "expected_answerable": true,
+      "predicted_answerable": true,
+      "answerability_correct": true,
+      "answer": "Designers should consider safety and thermal-management issues such as overheating, structural integrity, and system reliability in electrified aircraft propulsion systems.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [
+        "safety",
+        "thermal",
+        "electric"
+      ],
+      "matched_terms": [
+        "safety",
+        "thermal"
+      ],
+      "expected_term_recall": 0.6666666666666666,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "exact_001",
+      "query": "What was the exact passenger ticket price of NASA's 2035 hydrogen airliner?",
+      "expected_answerable": false,
+      "predicted_answerable": null,
+      "answerability_correct": false,
+      "answer": "",
+      "generation_failed": true,
+      "failure_type": "response_validation",
+      "claim_count": 0,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": false
+    },
+    {
+      "query_id": "fiction_001",
+      "query": "Which fictional Zephyr-X battery received FAA certification on January 1, 2040?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "The fictional Zephyr-X battery received FAA certification on January 1, 2040.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "fiction_002",
+      "query": "What was the exact certified mass of the fictional NovaCell-900 aircraft battery pack in NASA's 2038 fleet?",
+      "expected_answerable": false,
+      "predicted_answerable": null,
+      "answerability_correct": false,
+      "answer": "",
+      "generation_failed": true,
+      "failure_type": "response_validation",
+      "claim_count": 0,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": false
+    },
+    {
+      "query_id": "fiction_003",
+      "query": "On what exact date did the fictional H2Skyliner receive FAA hydrogen-airliner certification in 2044?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "2044-05-15",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "over_001",
+      "query": "What universal maximum battery-cell temperature does NASA mandate for every electric aircraft?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "The temperature range for electric aircraft is typically between -50°C and 100°C.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "over_002",
+      "query": "Which single coolant does the FAA require for every battery-electric aircraft thermal-management system?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "The FAA requires a single coolant for every battery-electric aircraft thermal-management system.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "over_003",
+      "query": "What exact cryogenic hydrogen tank pressure is legally required for every hydrogen aircraft worldwide?",
+      "expected_answerable": false,
+      "predicted_answerable": null,
+      "answerability_correct": false,
+      "answer": "",
+      "generation_failed": true,
+      "failure_type": "response_validation",
+      "claim_count": 0,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": false
+    },
+    {
+      "query_id": "over_004",
+      "query": "What exact failure probability does NASA assign to every hybrid-electric aircraft propulsion system?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "NASA does not provide specific failure probability data for every hybrid-electric aircraft propulsion system.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "fiction_004",
+      "query": "Which FAA certificate was issued to the fictional Project AetherWing superconducting aircraft motor?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "The FAA certificate issued to the fictional Project AetherWing superconducting aircraft motor is the FAA-1234 certificate.",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    },
+    {
+      "query_id": "fiction_005",
+      "query": "What chemical formula does NASA specify for the fictional ThermoShield-X aviation battery coolant?",
+      "expected_answerable": false,
+      "predicted_answerable": null,
+      "answerability_correct": false,
+      "answer": "",
+      "generation_failed": true,
+      "failure_type": "response_validation",
+      "claim_count": 0,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": false
+    },
+    {
+      "query_id": "exact_002",
+      "query": "What exact 2042 retail price did NASA set for a kilogram of aviation hydrogen at every U.S. airport?",
+      "expected_answerable": false,
+      "predicted_answerable": null,
+      "answerability_correct": false,
+      "answer": "",
+      "generation_failed": true,
+      "failure_type": "response_validation",
+      "claim_count": 0,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": false
+    },
+    {
+      "query_id": "over_005",
+      "query": "Which battery chemistry does NASA mandate for every electric aircraft entering service in 2040?",
+      "expected_answerable": false,
+      "predicted_answerable": true,
+      "answerability_correct": false,
+      "answer": "none",
+      "generation_failed": false,
+      "failure_type": null,
+      "claim_count": 1,
+      "expected_terms": [],
+      "matched_terms": [],
+      "expected_term_recall": null,
+      "structurally_valid": true
+    }
+  ]
+}
