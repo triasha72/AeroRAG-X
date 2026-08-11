@@ -1,24 +1,26 @@
 # AeroRAG-X Roadmap
 
-AeroRAG-X is an independent, evaluation-first project exploring evidence-grounded language-model systems for aerospace technical knowledge.
+AeroRAG-X is an independent, evaluation-first engineering project exploring evidence-grounded language-model systems for aerospace technical knowledge.
 
 The governing principle is:
 
 > **Add capability only when its behavior can be measured against an existing baseline.**
 
-The project did not begin with a target stack.
+---
 
-It began with a question:
+# Origin
 
-> Can an AI system help navigate aerospace technical literature while keeping retrieval provenance, evidence sufficiency, citations, and failure behavior visible?
+The questions behind AeroRAG-X grew out of my experience working on **HERO**, a Georgia Tech Grand Challenge project sponsored by **Delta Air Lines**.
 
-As the project evolved, work such as **HeRo — Adaptive Orchestration of Agentic RAG on Heterogeneous Mobile SoC** influenced how I thought about RAG as a systems problem rather than only a retrieval-plus-prompting problem:
+That experience motivated a broader interest in how aerospace technical information could be searched, synthesized, and connected back to the evidence supporting an engineering answer.
 
-https://arxiv.org/abs/2603.01661
+AeroRAG-X is an independent continuation of that technical curiosity.
 
-The useful idea for AeroRAG-X is the broader systems perspective: retrieval, routing, generation, latency, resource use, and failure handling should be measurable components.
+It is not a HERO or Delta Air Lines deliverable.
 
-AeroRAG-X applies that mindset to a different domain and set of questions: aerospace technical knowledge, provenance, grounded synthesis, model adaptation, and bounded orchestration.
+The project asks:
+
+> **How far can an evidence-grounded aerospace knowledge system be developed while keeping provenance, failure behavior, model adaptation, and system trade-offs measurable?**
 
 ---
 
@@ -53,7 +55,7 @@ observability
         ↓
 private Cloud Run validation
         ↓
-pgvector backend
+pgvector
         ↓
 local Qwen generation
         ↓
@@ -65,15 +67,15 @@ failure analysis
         ↓
 structured-generation hardening
         ↓
-final Base+RAG vs LoRA+RAG benchmark
+final Base+RAG vs LoRA+RAG evaluation
         ↓
-four-way Base / LoRA / RAG study
+four-way model study
         ↓
 bounded adaptive retrieval
         ↓
-agent evaluation
-        ↓
 semantic evaluation
+        ↓
+efficient inference
         ↓
 multimodal technical reports
 ```
@@ -82,109 +84,68 @@ multimodal technical reports
 
 # Current status
 
-## Completed
+Completed:
 
-- [x] reproducible NASA NTRS corpus
+- [x] NASA NTRS corpus
 - [x] 3,233 citation-preserving chunks
 - [x] BM25 retrieval
 - [x] Sentence Transformer embeddings
-- [x] exact NumPy dense retrieval
+- [x] NumPy exact dense retrieval
 - [x] PostgreSQL + pgvector
 - [x] Hybrid Reciprocal Rank Fusion
 - [x] cross-encoder reranking
-- [x] facet-aware evidence retrieval
 - [x] evidence-sufficiency gating
+- [x] facet-aware retrieval
 - [x] deterministic grounded generation
 - [x] OpenAI structured generation
-- [x] local Hugging Face generation
+- [x] Hugging Face Transformers generation
 - [x] application-side citation resolution
 - [x] FastAPI
 - [x] Docker
 - [x] Prometheus
 - [x] OpenTelemetry
 - [x] private Cloud Run validation
-- [x] protected evaluation split
-- [x] failure-tolerant generation evaluation
+- [x] protected evaluation
+- [x] failure-tolerant generation benchmarking
 - [x] frozen local Qwen baseline
-- [x] PEFT / LoRA training pipeline
-- [x] leakage-aware LoRA train/dev preparation
+- [x] PEFT / LoRA training
 - [x] assistant-only loss masking
 - [x] MPS-compatible training
-- [x] tiny-overfit learnability gate
 - [x] best-checkpoint selection
-- [x] real PEFT adapter loading
-- [x] Base+RAG vs LoRA+RAG evaluation
+- [x] adapter reload verification
 - [x] structured-generation failure analysis
+- [x] prompt hardening
 - [x] bounded output-budget hardening
-- [x] prompt-contract hardening
 - [x] duplicate evidence-ID normalization
-- [x] strict unknown evidence-ID validation
-- [x] final 32-query zero-failure Base+RAG benchmark
-- [x] final 32-query zero-failure LoRA+RAG benchmark
+- [x] final Base+RAG benchmark
+- [x] final LoRA+RAG benchmark
 
----
+Current:
 
-# Current milestone
+- [ ] Base / LoRA / Base+RAG / LoRA+RAG study
 
-The current milestone is no longer fine-tuning.
+Next:
 
-The first full LoRA evaluation exposed real structured-generation failure modes.
-
-Those failures were retained and diagnosed rather than discarded.
-
-The progression was approximately:
-
-```text
-LoRA training
-    ↓
-initial protected evaluation
-    ↓
-structured-generation failures observed
-    ↓
-failure reproduction
-    ↓
-root-cause isolation
-    ↓
-prompt + budget hardening
-    ↓
-duplicate evidence-ID normalization
-    ↓
-final controlled evaluation
-```
-
-The final Base+RAG and LoRA+RAG configurations both achieved:
-
-```text
-32 / 32 completed
-0 generation failures
-
-answerability accuracy          1.0000
-answerable completion           1.0000
-unsupported refusal             1.0000
-claim citation coverage         1.0000
-citation-reference validity     1.0000
-source-document coverage        1.0000
-expected-term recall            0.9310
-structural validity             1.0000
-```
-
-The model-adaptation phase can therefore be treated as complete enough to move to controlled ablations.
+- [ ] bounded adaptive retrieval
+- [ ] semantic evaluation
+- [ ] efficient inference
+- [ ] multimodal report retrieval
 
 ---
 
 # Phase 1 — Repository foundation — COMPLETE
 
-- [x] Python `src/` layout
 - [x] Python 3.12
+- [x] `src/` layout
 - [x] `pyproject.toml`
 - [x] editable installation
+- [x] configuration files
 - [x] Typer CLI
-- [x] YAML configuration
 - [x] Ruff
 - [x] pytest
 - [x] strict mypy
 - [x] GitHub Actions
-- [x] branch / pull-request workflow
+- [x] pull-request workflow
 - [x] MIT license
 
 Future:
@@ -196,13 +157,12 @@ Future:
 
 # Phase 2 — NASA corpus acquisition — COMPLETE
 
-- [x] NASA NTRS metadata search
+- [x] NASA NTRS metadata acquisition
 - [x] reproducible corpus definition
-- [x] versioned corpus configuration
+- [x] versioned configuration
 - [x] manifests
 - [x] PDF-link resolution
 - [x] streamed acquisition
-- [x] partial-download handling
 - [x] validation
 - [x] checksums
 - [x] acquisition receipts
@@ -211,9 +171,9 @@ Future:
 
 Future:
 
+- [ ] additional public aerospace sources
 - [ ] refined inclusion/exclusion rules
 - [ ] corpus-version comparison
-- [ ] additional public aerospace sources
 
 ---
 
@@ -221,19 +181,18 @@ Future:
 
 - [x] PDF extraction
 - [x] page-boundary preservation
-- [x] page records
-- [x] deterministic overlapping chunks
+- [x] deterministic chunking
 - [x] document IDs
 - [x] page IDs
 - [x] page ranges
 - [x] source URLs
-- [x] NASA citation URLs
+- [x] citation URLs
 - [x] source checksums
 - [x] processing receipts
 
 Future:
 
-- [ ] semantic chunking comparison
+- [ ] semantic chunking experiment
 - [ ] structured table extraction
 - [ ] figure extraction
 - [ ] OCR fallback
@@ -246,27 +205,29 @@ Future:
 
 - [x] deterministic tokenization
 - [x] inverted index
-- [x] configurable parameters
+- [x] configurable BM25 parameters
 - [x] deterministic tie-breaking
-- [x] provenance
-- [x] CLI
-- [x] tests
+- [x] provenance preservation
 
-## Dense
+## Dense retrieval
 
-Current model:
+Model:
 
 ```text
 sentence-transformers/all-MiniLM-L6-v2
 ```
 
 - [x] normalized embeddings
-- [x] 384-dimensional vectors
-- [x] versioned metadata
-- [x] exact cosine retrieval
+- [x] 384 dimensions
 - [x] NumPy persistence
-- [x] tests
+- [x] aligned metadata
+- [x] exact cosine search
 - [x] 3,233-chunk index
+
+Future:
+
+- [ ] embedding-model comparison
+- [ ] larger-scale ANN experiment only when justified
 
 ---
 
@@ -286,85 +247,84 @@ Implemented:
 
 Future:
 
-- [ ] larger retrieval benchmark
-- [ ] multiple relevance assessors
+- [ ] larger relevance set
+- [ ] multiple assessors
 - [ ] inter-annotator agreement
 
 ---
 
-# Phase 6 — Hybrid RRF — COMPLETE
+# Phase 6 — Hybrid retrieval — COMPLETE
 
-- [x] independent lexical and dense retrieval
 - [x] Reciprocal Rank Fusion
-- [x] candidate deduplication
-- [x] source-rank preservation
+- [x] lexical + dense retrieval
+- [x] deterministic deduplication
+- [x] rank preservation
+- [x] score preservation
 - [x] provenance
-- [x] evaluation
 
 ---
 
 # Phase 7 — Cross-encoder reranking — COMPLETE
 
-Current model:
+Model:
 
 ```text
 cross-encoder/ms-marco-MiniLM-L6-v2
 ```
 
-- [x] bounded candidate reranking
-- [x] deterministic testing
-- [x] latency telemetry
+- [x] bounded reranking
+- [x] deterministic tests
+- [x] latency measurement
 - [x] provenance
 - [x] evaluation
 
 Future:
 
-- [ ] alternate reranker comparison
+- [ ] reranker comparison
 
 ---
 
 # Phase 8 — Grounded generation — COMPLETE
 
-- [x] provider protocol
+- [x] provider interface
 - [x] deterministic provider
 - [x] OpenAI provider
-- [x] local Transformers provider
+- [x] Transformers provider
 - [x] structured response schema
 - [x] claim schema
 - [x] evidence references
 - [x] bounded context
 - [x] application-controlled citations
-- [x] unknown-ID rejection
+- [x] invalid-state rejection
 
 ---
 
 # Phase 9 — Evidence sufficiency — COMPLETE
 
-- [x] minimum evidence requirements
+- [x] minimum evidence
 - [x] informative query-term coverage
 - [x] numeric support
-- [x] named-anchor support
+- [x] named anchors
 - [x] exact-value handling
 - [x] claim qualifiers
 - [x] auditable rejection reasons
-- [x] model bypass
+- [x] provider bypass
 
-The sufficiency gate remains part of the system even after model adaptation.
-
-LoRA does not replace evidence validation.
+The gate remains independent of model adaptation.
 
 ---
 
-# Phase 10 — Facet-aware evidence retrieval — COMPLETE
+# Phase 10 — Facet-aware retrieval — COMPLETE
 
 - [x] deterministic facet planning
-- [x] facet-specific retrieval
+- [x] facet-specific search
+- [x] semantic facet verification
 - [x] evidence deduplication
 - [x] balanced evidence selection
-- [x] original-query retrieval
+- [x] original-query evidence
 - [x] fallback behavior
 
-This remains intentionally constrained rather than being called a general autonomous agent.
+The implementation remains deliberately bounded.
 
 ---
 
@@ -373,21 +333,20 @@ This remains intentionally constrained rather than being called a general autono
 - [x] versioned provider configuration
 - [x] grounded prompt builder
 - [x] response validation
-- [x] evidence delimiters
-- [x] timeout configuration
 - [x] bounded retries
+- [x] evidence delimiters
+- [x] token telemetry
+- [x] latency telemetry
+- [x] cost telemetry
 - [x] secret redaction
 - [x] prompt-injection heuristics
 - [x] unknown evidence-ID rejection
-- [x] duplicate evidence-ID normalization
-- [x] token telemetry
-- [x] latency telemetry
-- [x] external cost telemetry
+- [x] exact duplicate evidence-ID normalization
 
 Future:
 
-- [ ] broader adversarial benchmark
-- [ ] fault-injection testing
+- [ ] broader adversarial testing
+- [ ] fault-injection benchmark
 - [ ] circuit-breaker experiment
 
 ---
@@ -398,18 +357,17 @@ Implemented:
 
 - [x] answerability labels
 - [x] unsupported controls
-- [x] completion metrics
-- [x] refusal metrics
+- [x] answerability accuracy
+- [x] answerable completion
+- [x] unsupported refusal
 - [x] citation coverage
-- [x] citation-reference validity
+- [x] citation validity
 - [x] source-document coverage
 - [x] expected-term recall
 - [x] structural validity
-- [x] failure categories
 - [x] provider telemetry
-- [x] latency
-- [x] tokens
-- [x] cost
+- [x] generation failure categories
+- [x] local / remote provider classification
 - [x] frozen evaluation artifacts
 
 Future:
@@ -418,35 +376,36 @@ Future:
 - [ ] claim-evidence entailment
 - [ ] answer-to-claim completeness
 - [ ] human review
-- [ ] larger protected set
+- [ ] larger protected benchmark
 
 ---
 
 # Phase 13 — FastAPI — COMPLETE
 
 - [x] application factory
-- [x] shared runtime
+- [x] shared heavy runtime
+- [x] environment configuration
 - [x] `/health`
 - [x] `/ready`
 - [x] `/v1/query`
 - [x] `/metrics`
 - [x] request IDs
 - [x] structured errors
-- [x] NumPy mode
-- [x] pgvector mode
-- [x] local generation
-- [x] OpenAI generation
-- [x] Transformers generation
+- [x] NumPy backend
+- [x] pgvector backend
+- [x] deterministic provider
+- [x] OpenAI provider
+- [x] Transformers provider
 
 ---
 
 # Phase 14 — Docker — COMPLETE
 
-- [x] Python 3.12 container
+- [x] Python 3.12 image
 - [x] non-root runtime
-- [x] health checks
-- [x] read-only artifact mounts
-- [x] CI Docker build
+- [x] health check
+- [x] artifact mounts
+- [x] CI build
 
 ---
 
@@ -454,13 +413,14 @@ Future:
 
 - [x] structured logs
 - [x] request correlation
-- [x] OpenTelemetry
 - [x] Prometheus
-- [x] retrieval latency
+- [x] OpenTelemetry
+- [x] BM25 latency
+- [x] dense latency
+- [x] RRF latency
 - [x] reranker latency
 - [x] sufficiency telemetry
-- [x] provider call / bypass
-- [x] provider latency
+- [x] provider telemetry
 - [x] token counts
 - [x] citation counts
 
@@ -472,8 +432,8 @@ Future:
 - [x] Cloud Run Gen2
 - [x] private invocation
 - [x] dedicated runtime identity
-- [x] Cloud Storage artifact mounts
-- [x] authenticated health checks
+- [x] Cloud Storage artifacts
+- [x] authenticated health validation
 - [x] authenticated query validation
 
 Future:
@@ -489,17 +449,19 @@ Future:
 - [x] PostgreSQL
 - [x] pgvector
 - [x] Docker Compose
+- [x] persistent embeddings
 - [x] transactional upserts
-- [x] model/dimension validation
-- [x] NumPy equivalence benchmark
-- [x] PostgreSQL integration tests
-- [x] CI service
+- [x] model metadata
+- [x] dimension validation
+- [x] NumPy comparison
+- [x] PostgreSQL tests
+- [x] CI integration
 - [x] runtime backend selection
 
 Measured:
 
 ```text
-3,233 vectors
+3,233 chunks
 384 dimensions
 8 / 8 exact top-10 matches
 mean overlap@10 = 1.0
@@ -509,8 +471,8 @@ Future:
 
 - [ ] metadata filtering
 - [ ] deletion workflow
-- [ ] backup / restore
-- [ ] ANN only when corpus size justifies it
+- [ ] backup/restore
+- [ ] ANN at larger corpus scale
 
 ---
 
@@ -526,20 +488,20 @@ Implemented:
 
 - [x] Hugging Face Transformers
 - [x] Accelerate
-- [x] chat templates
-- [x] automatic MPS / CUDA / CPU selection
-- [x] configurable dtype
+- [x] model chat templates
 - [x] deterministic decoding
-- [x] bounded output
+- [x] output limits
 - [x] JSON parsing
-- [x] token telemetry
-- [x] real Apple MPS validation
+- [x] provider telemetry
+- [x] Apple MPS
+- [x] CUDA detection
+- [x] CPU fallback
 
 ---
 
-# Phase 19 — Untuned local benchmark — COMPLETE
+# Phase 19 — Untuned local-model baseline — COMPLETE
 
-Frozen baseline:
+Original frozen local benchmark:
 
 ```text
 Queries: 32
@@ -547,7 +509,7 @@ Answerable: 20
 Unsupported: 12
 
 Completed: 32 / 32
-Failures: 0
+Generation failures: 0
 
 Answerability: 1.0000
 Completion: 1.0000
@@ -559,107 +521,112 @@ Structural validity: 1.0000
 Expected-term recall: 0.9138
 ```
 
-The baseline was frozen before LoRA training.
+This baseline was frozen before adapter training.
 
 ---
 
-# Phase 20 — PEFT / LoRA adaptation — COMPLETE
+# Phase 20 — PEFT / LoRA training — COMPLETE
 
 Goal:
 
-> Improve the behavior of a small local model without sacrificing the grounding guarantees already provided by the RAG system.
+> Increase structured technical decomposition while preserving grounded system behavior.
 
-Implemented:
-
-## Dataset
+## Data
 
 - [x] independent training-data construction
-- [x] benchmark separation
+- [x] protected benchmark separation
 - [x] train/dev split
-- [x] overlap auditing
+- [x] overlap audit
 - [x] context-window eligibility
-- [x] structured grounded targets
 - [x] refusal examples
+- [x] structured grounded targets
 
-## Tokenization
-
-- [x] production chat template
-- [x] assistant-only loss
-- [x] prompt-token masking
-- [x] tokenization audit
-
-## Training
-
-- [x] Qwen3-0.6B
-- [x] PEFT
-- [x] LoRA
-- [x] rank 16
-- [x] alpha 32
-- [x] q/k/v/o projection targets
-- [x] gradient checkpointing
-- [x] MPS validation
-- [x] tiny-overfit gate
-- [x] full 3-epoch run
-- [x] dev-loss model selection
-- [x] adapter reload verification
-
-Training data:
+Final eligible data:
 
 ```text
 106 training examples
 12 development examples
 ```
 
-The best checkpoint was selected at Epoch 2.
+## Tokenization
+
+- [x] production chat template
+- [x] assistant-only loss
+- [x] prompt masking
+- [x] tokenization audit
+
+## Training
+
+```text
+Model: Qwen/Qwen3-0.6B
+
+LoRA rank: 16
+alpha: 32
+dropout: 0.05
+
+targets:
+q_proj
+k_proj
+v_proj
+o_proj
+```
+
+- [x] PEFT
+- [x] gradient checkpointing
+- [x] Apple MPS training
+- [x] tiny-overfit gate
+- [x] 3-epoch full run
+- [x] development evaluation
+- [x] best-checkpoint selection
+- [x] adapter save/reload validation
+
+Best checkpoint:
+
+```text
+Epoch 2
+```
 
 ---
 
-# Phase 21 — LoRA failure analysis and robustness — COMPLETE
+# Phase 21 — LoRA failure analysis — COMPLETE
 
-The initial LoRA benchmark exposed:
+The first protected LoRA run exposed:
 
 ```text
-truncated structured JSON
-supported response without claims
+truncated JSON
+supported response with zero formal claims
 duplicate evidence IDs
 ```
 
-The project intentionally retained the failed experiment.
+Implemented investigation:
 
-Implemented corrections:
-
-- [x] reproduce each failure
-- [x] isolate transport vs validation failures
-- [x] test larger bounded output budget
-- [x] add structured prompt v0.2
+- [x] preserve failed benchmark
+- [x] reproduce failures
+- [x] distinguish transport and validation failures
+- [x] test increased bounded output budget
+- [x] harden structured prompt
 - [x] require claims for supported responses
-- [x] encourage concise complete JSON
-- [x] require unique evidence IDs
+- [x] require complete JSON
+- [x] reduce redundant generation
+- [x] request unique evidence IDs
 - [x] normalize exact duplicate evidence IDs
-- [x] preserve strict unknown-ID rejection
-- [x] regression-test normalization
-- [x] rerun problematic-query gate
-- [x] rerun full protected benchmark
+- [x] preserve unknown-ID rejection
+- [x] targeted robustness benchmark
+- [x] full rerun
 
-This phase is an important part of the project because it demonstrates the distinction between:
-
-```text
-model training success
-```
-
-and:
+This phase demonstrates an important project principle:
 
 ```text
+training success
+!=
 system reliability
 ```
-
-They are not the same thing.
 
 ---
 
 # Phase 22 — Final Base+RAG vs LoRA+RAG — COMPLETE
 
-Frozen evaluation:
+Evaluation set:
 
 ```text
 20 answerable
@@ -667,7 +634,7 @@ Frozen evaluation:
 32 total
 ```
 
-## Final quality
+## Reliability
 
 | Metric | Base + RAG | LoRA + RAG |
 |---|---:|---:|
@@ -681,9 +648,28 @@ Frozen evaluation:
 | Source coverage | 1.0000 | 1.0000 |
 | Expected-term recall | 0.9310 | 0.9310 |
 | Structural validity | 1.0000 | 1.0000 |
+
+## Response decomposition
+
+| Metric | Base + RAG | LoRA + RAG |
+|---|---:|---:|
 | Formal claims | 32 | 53 |
 | Claims / answerable query | 1.600 | 2.650 |
 | Citation references | 40 | 96 |
+
+Claim-count increase:
+
+```text
+65.625%
+```
+
+Across answerable queries:
+
+```text
+claim count improved: 16
+claim count decreased: 2
+unchanged: 2
+```
 
 ## Systems trade-off
 
@@ -694,43 +680,358 @@ Frozen evaluation:
 | P95 provider latency | 16.08 s | 19.13 s |
 | External API cost | $0 | $0 |
 
-The adapter therefore changes generation behavior without degrading the currently measured reliability metrics.
+## Important limitation
 
-Semantic quality remains a separate evaluation problem.
+Aggregate expected-term recall is unchanged, but individual query behavior differs.
+
+Observed:
+
+```text
+para_005:
+0.667 → 1.000
+
+para_009:
+0.667 → 0.333
+```
+
+Therefore the current conclusion is:
+
+> LoRA increases structured decomposition substantially, but does not uniformly increase every measure of content coverage.
 
 ---
 
-# Phase 23 — Four-way model study — NEXT
+# Phase 23 — Four-way model study — CURRENT
 
 Goal:
 
-> Separate the effects of retrieval from the effects of model adaptation.
+> **Separate the contribution of retrieval from the contribution of adaptation.**
 
 Conditions:
 
-| Condition | LoRA | Retrieval |
+| Condition | LoRA | RAG |
 |---|---|---|
 | Base | No | No |
 | LoRA | Yes | No |
 | Base + RAG | No | Yes |
 | LoRA + RAG | Yes | Yes |
 
-The Base+RAG and LoRA+RAG conditions are already available.
+Already frozen:
 
-Next implementation:
+- [x] Base + RAG
+- [x] LoRA + RAG
+
+Next:
 
 - [ ] closed-book Base evaluator
 - [ ] closed-book LoRA evaluator
-- [ ] common frozen query set
-- [ ] no synthetic citation scoring in closed-book conditions
-- [ ] structural validity
-- [ ] expected-concept recall
-- [ ] latency
-- [ ] token usage
-- [ ] failure rate
-- [ ] comparative report
+- [ ] Base closed-book run
+- [ ] LoRA closed-book run
+- [ ] common metrics
+- [ ] four-way comparison report
+
+## Closed-book metrics
+
+Measure:
+
+- completion
+- generation failures
+- expected-term recall
+- formal claims
+- claims/query
+- structural validity
+- provider latency
+- token usage
+
+Do not compute artificial citation metrics for closed-book responses.
+
+Citation fields should be:
+
+```text
+N/A
+```
 
 The experiment should answer:
 
 ```text
-What
+What does retrieval contribute?
+
+What does LoRA contribute?
+
+What happens when retrieval and LoRA are combined?
+```
+
+---
+
+# Phase 24 — Bounded adaptive retrieval — PLANNED
+
+Goal:
+
+> Determine whether one bounded recovery step can improve questions where the initial retrieved evidence is weak.
+
+Proposed state machine:
+
+```text
+QUESTION
+   ↓
+RETRIEVE
+   ↓
+ASSESS
+   │
+   ├── sufficient ─────────────→ GENERATE
+   │
+   └── insufficient
+             ↓
+        REWRITE QUERY
+             ↓
+        RETRIEVE AGAIN
+             ↓
+           ASSESS
+             │
+             ├── sufficient → GENERATE
+             │
+             └── insufficient
+                     ↓
+               GROUNDED REFUSAL
+```
+
+Hard constraints:
+
+```text
+maximum retrieval passes = 2
+bounded state transitions
+deterministic termination
+validated inputs
+evidence provenance preserved
+grounded refusal preserved
+```
+
+Potential operations:
+
+```text
+retrieve
+assess_evidence
+rewrite_query
+retrieve_facet_evidence
+inspect_source
+```
+
+The objective is not autonomous behavior.
+
+The objective is a measurable comparison between:
+
+```text
+single-pass retrieval
+vs
+bounded adaptive retrieval
+```
+
+---
+
+# Phase 25 — Adaptive-retrieval evaluation — PLANNED
+
+Metrics:
+
+- [ ] difficult-query recovery
+- [ ] answerability
+- [ ] unsupported refusal
+- [ ] grounding
+- [ ] citation validity
+- [ ] unnecessary second retrievals
+- [ ] retrieval attempts/query
+- [ ] invalid transitions
+- [ ] termination failures
+- [ ] latency overhead
+- [ ] token overhead
+
+Failure categories:
+
+```text
+routing failure
+rewrite failure
+retrieval failure
+evidence-assessment failure
+unnecessary recovery
+termination failure
+unsupported synthesis
+citation failure
+```
+
+---
+
+# Phase 26 — Semantic evaluation — PLANNED
+
+The current expected-term metric is deterministic but lexical.
+
+Next metrics:
+
+- [ ] semantic expected-concept recall
+- [ ] claim-evidence entailment
+- [ ] claim support
+- [ ] answer-to-claim completeness
+- [ ] answer relevance
+- [ ] redundancy
+- [ ] independent human assessment
+
+Primary question:
+
+> Does increased claim decomposition correspond to genuinely better technical coverage?
+
+---
+
+# Phase 27 — Efficient local inference — PLANNED
+
+Only after the model-quality studies are complete.
+
+Measure:
+
+- [ ] model-load time
+- [ ] peak memory
+- [ ] generation latency
+- [ ] P50
+- [ ] P95
+- [ ] tokens/second
+- [ ] structured-output validity
+- [ ] grounding preservation
+
+Candidates:
+
+```text
+FP16
+BF16 where supported
+INT8 where supported
+```
+
+Hardware-specific performance claims require actual measurements on that hardware.
+
+---
+
+# Phase 28 — Multimodal technical reports — FUTURE
+
+Potential work:
+
+- [ ] figure detection
+- [ ] figure captions
+- [ ] page linkage
+- [ ] table extraction
+- [ ] structured tables
+- [ ] image retrieval
+- [ ] image citations
+- [ ] table citations
+- [ ] multimodal evaluation
+- [ ] OCR fallback
+
+---
+
+# Phase 29 — Evaluation maturity — ONGOING
+
+Completed:
+
+- [x] retrieval evaluation
+- [x] generation evaluation
+- [x] protected benchmark
+- [x] local-model baseline
+- [x] LoRA benchmark
+- [x] negative-result preservation
+- [x] failure categorization
+- [x] structured-generation regression tests
+- [x] provider telemetry
+- [x] backend comparison
+
+Future:
+
+- [ ] larger protected set
+- [ ] conflicting evidence
+- [ ] partial evidence
+- [ ] adversarial unsupported questions
+- [ ] semantic metrics
+- [ ] multiple human assessors
+- [ ] inter-annotator agreement
+- [ ] confidence intervals
+
+---
+
+# Phase 30 — Releases and reproducibility — ONGOING
+
+The repository history now records:
+
+```text
+retrieval baseline
+generation baseline
+OpenAI reference
+local Qwen baseline
+pgvector comparison
+LoRA training
+failed LoRA evaluation
+failure diagnosis
+structured-output hardening
+final Base+RAG / LoRA+RAG evaluation
+```
+
+Candidate future experiment milestones:
+
+```text
+four-way adaptation/retrieval study
+bounded adaptive retrieval
+semantic evaluation
+efficient inference
+multimodal retrieval
+```
+
+Release labels should follow completed experiments rather than a fixed schedule.
+
+---
+
+# Explicit non-priorities
+
+The project will not add technologies purely for stack breadth.
+
+Current non-priorities include:
+
+- Kubernetes
+- Redis
+- additional vector databases
+- unrestricted autonomous agents
+- reinforcement learning without a measured need
+- HNSW at the current corpus scale
+- multiple orchestration frameworks
+- additional cloud providers
+- speculative hardware optimization
+- frontend redesign
+
+New infrastructure should follow a measured engineering requirement.
+
+---
+
+# Immediate next milestone
+
+The next question is:
+
+> **How much of AeroRAG-X's final behavior comes from retrieval, and how much comes from LoRA adaptation?**
+
+Sequence:
+
+```text
+freeze Base+RAG
+        ↓
+freeze LoRA+RAG
+        ↓
+build closed-book response schema
+        ↓
+build closed-book evaluator
+        ↓
+run Base closed-book
+        ↓
+run LoRA closed-book
+        ↓
+compare all four conditions
+        ↓
+analyze retrieval/adaptation interaction
+        ↓
+begin bounded adaptive retrieval
+```
+
+After that:
+
+> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, termination, or citation integrity?**
+
+That becomes the next systems experiment.
