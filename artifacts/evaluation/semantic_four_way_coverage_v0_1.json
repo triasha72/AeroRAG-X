@@ -1,0 +1,785 @@
+{
+  "ambiguity_policy": "Conservative lower-bound coverage counts PRESENT only. Upper-bound coverage additionally includes AMBIGUOUS.",
+  "auto_supported_count": 10,
+  "concept_instances_per_system": 76,
+  "global_label_counts": {
+    "ABSENT": 160,
+    "AMBIGUOUS": 49,
+    "PRESENT": 95
+  },
+  "human_reviewed_count": 294,
+  "query_count_per_system": 20,
+  "system_count": 4,
+  "systems": {
+    "base_closed_book": {
+      "absent_count": 50,
+      "ambiguous_count": 13,
+      "concept_count": 76,
+      "macro_query_coverage_lower_bound": 0.16666666666666669,
+      "macro_query_coverage_upper_bound": 0.34750000000000003,
+      "micro_coverage_lower_bound": 0.17105263157894737,
+      "micro_coverage_upper_bound": 0.34210526315789475,
+      "present_count": 13,
+      "query_metrics": [
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "core_001"
+        },
+        {
+          "absent_count": 4,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "core_002"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_003"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "core_004"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_005"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 3,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.75,
+          "present_count": 0,
+          "query_id": "core_006"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_007"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 2,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 0,
+          "query_id": "core_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.3333333333333333,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 1,
+          "query_id": "para_001"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_002"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "para_003"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_004"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "para_005"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_006"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 2,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.5,
+          "present_count": 0,
+          "query_id": "para_007"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "para_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 2,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 0,
+          "query_id": "para_009"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "synth_001"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "synth_002"
+        },
+        {
+          "absent_count": 4,
+          "ambiguous_count": 1,
+          "concept_count": 5,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.2,
+          "present_count": 0,
+          "query_id": "synth_003"
+        }
+      ]
+    },
+    "base_rag": {
+      "absent_count": 35,
+      "ambiguous_count": 12,
+      "concept_count": 76,
+      "macro_query_coverage_lower_bound": 0.38666666666666666,
+      "macro_query_coverage_upper_bound": 0.5425,
+      "micro_coverage_lower_bound": 0.3815789473684211,
+      "micro_coverage_upper_bound": 0.5394736842105263,
+      "present_count": 29,
+      "query_metrics": [
+        {
+          "absent_count": 0,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 1.0,
+          "coverage_upper_bound": 1.0,
+          "present_count": 3,
+          "query_id": "core_001"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.75,
+          "coverage_upper_bound": 0.75,
+          "present_count": 3,
+          "query_id": "core_002"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "core_003"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "core_004"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.25,
+          "present_count": 0,
+          "query_id": "core_005"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "core_006"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_007"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.3333333333333333,
+          "coverage_upper_bound": 0.3333333333333333,
+          "present_count": 1,
+          "query_id": "core_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.3333333333333333,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 1,
+          "query_id": "para_001"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "para_002"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.3333333333333333,
+          "present_count": 0,
+          "query_id": "para_003"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_004"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "para_005"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_006"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "para_007"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "para_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.6666666666666666,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 2,
+          "query_id": "para_009"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 2,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.5,
+          "present_count": 0,
+          "query_id": "synth_001"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "synth_002"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 5,
+          "coverage_lower_bound": 0.4,
+          "coverage_upper_bound": 0.6,
+          "present_count": 2,
+          "query_id": "synth_003"
+        }
+      ]
+    },
+    "lora_closed_book": {
+      "absent_count": 49,
+      "ambiguous_count": 13,
+      "concept_count": 76,
+      "macro_query_coverage_lower_bound": 0.17916666666666667,
+      "macro_query_coverage_upper_bound": 0.36,
+      "micro_coverage_lower_bound": 0.18421052631578946,
+      "micro_coverage_upper_bound": 0.35526315789473684,
+      "present_count": 14,
+      "query_metrics": [
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "core_001"
+        },
+        {
+          "absent_count": 4,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "core_002"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "core_003"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "core_004"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_005"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 3,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.75,
+          "present_count": 0,
+          "query_id": "core_006"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_007"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 2,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 0,
+          "query_id": "core_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.3333333333333333,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 1,
+          "query_id": "para_001"
+        },
+        {
+          "absent_count": 4,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "para_002"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.0,
+          "present_count": 0,
+          "query_id": "para_003"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_004"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "para_005"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_006"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "para_007"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "para_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 2,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 0,
+          "query_id": "para_009"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.25,
+          "present_count": 0,
+          "query_id": "synth_001"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "synth_002"
+        },
+        {
+          "absent_count": 4,
+          "ambiguous_count": 1,
+          "concept_count": 5,
+          "coverage_lower_bound": 0.0,
+          "coverage_upper_bound": 0.2,
+          "present_count": 0,
+          "query_id": "synth_003"
+        }
+      ]
+    },
+    "lora_rag": {
+      "absent_count": 26,
+      "ambiguous_count": 11,
+      "concept_count": 76,
+      "macro_query_coverage_lower_bound": 0.515,
+      "macro_query_coverage_upper_bound": 0.6541666666666667,
+      "micro_coverage_lower_bound": 0.5131578947368421,
+      "micro_coverage_upper_bound": 0.6578947368421053,
+      "present_count": 39,
+      "query_metrics": [
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.6666666666666666,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 2,
+          "query_id": "core_001"
+        },
+        {
+          "absent_count": 0,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.75,
+          "coverage_upper_bound": 1.0,
+          "present_count": 3,
+          "query_id": "core_002"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "core_003"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_004"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "core_005"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.5,
+          "present_count": 2,
+          "query_id": "core_006"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "core_007"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.6666666666666666,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 2,
+          "query_id": "core_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.3333333333333333,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 1,
+          "query_id": "para_001"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 2,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.75,
+          "present_count": 1,
+          "query_id": "para_002"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.6666666666666666,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 2,
+          "query_id": "para_003"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "para_004"
+        },
+        {
+          "absent_count": 0,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.75,
+          "coverage_upper_bound": 1.0,
+          "present_count": 3,
+          "query_id": "para_005"
+        },
+        {
+          "absent_count": 3,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.25,
+          "present_count": 1,
+          "query_id": "para_006"
+        },
+        {
+          "absent_count": 0,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.75,
+          "coverage_upper_bound": 1.0,
+          "present_count": 3,
+          "query_id": "para_007"
+        },
+        {
+          "absent_count": 0,
+          "ambiguous_count": 0,
+          "concept_count": 4,
+          "coverage_lower_bound": 1.0,
+          "coverage_upper_bound": 1.0,
+          "present_count": 4,
+          "query_id": "para_008"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 0,
+          "concept_count": 3,
+          "coverage_lower_bound": 0.6666666666666666,
+          "coverage_upper_bound": 0.6666666666666666,
+          "present_count": 2,
+          "query_id": "para_009"
+        },
+        {
+          "absent_count": 2,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.25,
+          "coverage_upper_bound": 0.5,
+          "present_count": 1,
+          "query_id": "synth_001"
+        },
+        {
+          "absent_count": 1,
+          "ambiguous_count": 1,
+          "concept_count": 4,
+          "coverage_lower_bound": 0.5,
+          "coverage_upper_bound": 0.75,
+          "present_count": 2,
+          "query_id": "synth_002"
+        },
+        {
+          "absent_count": 0,
+          "ambiguous_count": 1,
+          "concept_count": 5,
+          "coverage_lower_bound": 0.8,
+          "coverage_upper_bound": 1.0,
+          "present_count": 4,
+          "query_id": "synth_003"
+        }
+      ]
+    }
+  },
+  "total_concept_instances": 304,
+  "version": "v0.1"
+}
