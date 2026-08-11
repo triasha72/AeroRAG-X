@@ -39,6 +39,9 @@ type ClosedBookFailureType = Literal[
 ]
 
 
+_CANONICAL_REFUSAL_ANSWER = "I do not have sufficient reliable knowledge to answer this question."
+
+
 class ClosedBookClaim(BaseModel):
     """One technical claim in a closed-book response."""
 
@@ -134,7 +137,7 @@ class ClosedBookEvaluationReport(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    version: str = "0.1"
+    version: str = "0.2"
 
     condition: ClosedBookCondition
 
@@ -240,7 +243,7 @@ class ClosedBookTelemetryReport(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    version: str = "0.1"
+    version: str = "0.2"
 
     condition: ClosedBookCondition
     generation_model: str
@@ -381,8 +384,10 @@ class ClosedBookGenerator:
             timeout_seconds=(self._timeout_seconds),
         )
 
+        normalized_payload = _normalize_closed_book_payload(result.payload)
+
         try:
-            response = ClosedBookResponse.model_validate(result.payload)
+            response = ClosedBookResponse.model_validate(normalized_payload)
 
         except ValidationError as exc:
             raise ProviderResponseValidationError(
@@ -393,6 +398,43 @@ class ClosedBookGenerator:
             response,
             result.usage,
         )
+
+
+def _normalize_closed_book_payload(
+    payload: dict[str, object],
+) -> dict[str, object]:
+    """Normalize only the canonical closed-book refusal shape.
+
+    The model sometimes emits the exact canonical refusal answer
+    while either:
+    - attaching explanatory claims despite
+      insufficient_knowledge=true; or
+    - omitting insufficient_knowledge entirely.
+
+    Only the exact canonical refusal sentence is normalized.
+    Other malformed or contradictory outputs remain invalid.
+    """
+
+    normalized = dict(payload)
+
+    answer = normalized.get("answer")
+
+    if not isinstance(
+        answer,
+        str,
+    ):
+        return normalized
+
+    if _normalize_text(answer) != _normalize_text(_CANONICAL_REFUSAL_ANSWER):
+        return normalized
+
+    if "insufficient_knowledge" not in normalized:
+        normalized["insufficient_knowledge"] = True
+
+    if normalized.get("insufficient_knowledge") is True:
+        normalized["claims"] = []
+
+    return normalized
 
 
 def evaluate_closed_book(

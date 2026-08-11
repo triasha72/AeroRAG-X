@@ -131,7 +131,7 @@ def main() -> None:
     )
 
     print()
-    print("Closed-book evaluation v0.1")
+    print(f"Closed-book evaluation v{report.version}")
     print("---------------------------")
 
     print(

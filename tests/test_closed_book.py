@@ -308,3 +308,76 @@ def test_closed_book_prompt_contains_exact_response_contract() -> None:
     assert "Do not output evidence_ids" in prompt
 
     assert "insufficient_evidence" in prompt
+
+
+def test_canonical_refusal_with_claims_is_normalized() -> None:
+    """Canonical refusal may discard explanatory claims."""
+
+    transport = FakeTransport(
+        [
+            StructuredModelResult(
+                payload={
+                    "answer": (
+                        "I do not have sufficient reliable knowledge to answer this question."
+                    ),
+                    "claims": [
+                        {"text": ("The requested fictional system does not have a reliable value.")}
+                    ],
+                    "insufficient_knowledge": True,
+                },
+                request_id=None,
+                usage=ProviderUsage(
+                    input_tokens=100,
+                    output_tokens=40,
+                ),
+            )
+        ]
+    )
+
+    generator = ClosedBookGenerator(
+        model_name="test-model",
+        transport=transport,
+    )
+
+    response, usage = generator.generate("Unsupported question")
+
+    assert response.insufficient_knowledge is True
+
+    assert response.claims == []
+
+    assert usage is not None
+    assert usage.input_tokens == 100
+    assert usage.output_tokens == 40
+
+
+def test_canonical_refusal_missing_flag_is_normalized() -> None:
+    """Canonical refusal may recover a missing refusal flag."""
+
+    transport = FakeTransport(
+        [
+            StructuredModelResult(
+                payload={
+                    "answer": (
+                        "I do not have sufficient reliable knowledge to answer this question."
+                    ),
+                    "claims": [],
+                },
+                request_id=None,
+                usage=ProviderUsage(
+                    input_tokens=100,
+                    output_tokens=40,
+                ),
+            )
+        ]
+    )
+
+    generator = ClosedBookGenerator(
+        model_name="test-model",
+        transport=transport,
+    )
+
+    response, _ = generator.generate("Unsupported question")
+
+    assert response.insufficient_knowledge is True
+
+    assert response.claims == []
