@@ -8,6 +8,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from aeroragx.generation.grounded import (
+    AdaptiveRetrievalOrchestrator,
+)
 from aeroragx.runtime import (
     DenseBackendName,
     RuntimeConfig,
@@ -32,6 +35,7 @@ class ApiRuntimeSettings:
     evidence_top_k: int = 5
 
     adaptive_retrieval_enabled: bool = False
+    adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator = "native"
 
     def to_runtime_config(
         self,
@@ -51,6 +55,7 @@ class ApiRuntimeSettings:
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
                 adaptive_retrieval_config=adaptive_retrieval_config,
+                adaptive_retrieval_orchestrator=(self.adaptive_retrieval_orchestrator),
                 candidate_top_k=self.candidate_top_k,
                 evidence_top_k=self.evidence_top_k,
             )
@@ -62,6 +67,7 @@ class ApiRuntimeSettings:
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
                 adaptive_retrieval_config=adaptive_retrieval_config,
+                adaptive_retrieval_orchestrator=(self.adaptive_retrieval_orchestrator),
                 provider_config=Path("configs/provider_v0_1.yaml"),
                 provider_runtime_config=Path("configs/transformers_runtime_v0_1.yaml"),
                 candidate_top_k=self.candidate_top_k,
@@ -74,6 +80,7 @@ class ApiRuntimeSettings:
             sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
             facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
             adaptive_retrieval_config=adaptive_retrieval_config,
+            adaptive_retrieval_orchestrator=(self.adaptive_retrieval_orchestrator),
             provider_config=Path("configs/provider_v0_1.yaml"),
             http_transport_config=Path("configs/http_transport_openai_v0_1.yaml"),
             provider_runtime_config=Path("configs/provider_runtime_openai_v0_1.yaml"),
@@ -196,10 +203,33 @@ def load_api_runtime_settings(
         name="AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL",
     )
 
+    raw_adaptive_retrieval_orchestrator = (
+        env.get(
+            "AERORAGX_ADAPTIVE_RETRIEVAL_ORCHESTRATOR",
+            "native",
+        )
+        .strip()
+        .lower()
+    )
+
+    adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator
+
+    if raw_adaptive_retrieval_orchestrator == "native":
+        adaptive_retrieval_orchestrator = "native"
+
+    elif raw_adaptive_retrieval_orchestrator == "langgraph":
+        adaptive_retrieval_orchestrator = "langgraph"
+
+    else:
+        raise ValueError(
+            "AERORAGX_ADAPTIVE_RETRIEVAL_ORCHESTRATOR must be 'native' or 'langgraph'."
+        )
+
     return ApiRuntimeSettings(
         mode=mode,
         dense_backend=dense_backend,
         candidate_top_k=candidate_top_k,
         evidence_top_k=evidence_top_k,
         adaptive_retrieval_enabled=adaptive_retrieval_enabled,
+        adaptive_retrieval_orchestrator=adaptive_retrieval_orchestrator,
     )

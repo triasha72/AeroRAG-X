@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, cast
 
 import typer
 from rich.console import Console
@@ -34,6 +34,7 @@ from aeroragx.generation.evaluation import (
     write_generation_evaluation_report,
 )
 from aeroragx.generation.grounded import (
+    AdaptiveRetrievalOrchestrator,
     GenerationConfig,
     GroundedAnswerGenerator,
     write_grounded_answer,
@@ -2037,6 +2038,7 @@ def _load_grounded_answer_generator(
     evidence_top_k: int | None,
     facet_retrieval_config: Path | None = None,
     adaptive_retrieval_config: Path | None = None,
+    adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator = "native",
 ) -> tuple[
     GroundedAnswerGenerator,
     RerankerConfig,
@@ -2054,6 +2056,7 @@ def _load_grounded_answer_generator(
         sufficiency_config=sufficiency_config,
         facet_retrieval_config=(facet_retrieval_config),
         adaptive_retrieval_config=(adaptive_retrieval_config),
+        adaptive_retrieval_orchestrator=(adaptive_retrieval_orchestrator),
         provider_config=provider_config,
         http_transport_config=(http_transport_config),
         provider_runtime_config=(provider_runtime_config),
@@ -2169,6 +2172,13 @@ def ntrs_grounded_answer(
             help=("Optional Phase 25 policy for one bounded evidence-recovery retrieval pass."),
         ),
     ] = None,
+    adaptive_retrieval_orchestrator: Annotated[
+        str,
+        typer.Option(
+            "--adaptive-retrieval-orchestrator",
+            help=("Adaptive-retrieval controller: native or LangGraph."),
+        ),
+    ] = "native",
     provider_config: Annotated[
         Path | None,
         typer.Option(
@@ -2253,6 +2263,19 @@ def ntrs_grounded_answer(
 ) -> None:
     """Generate a citation-verified answer from reranked evidence."""
 
+    normalized_adaptive_retrieval_orchestrator = adaptive_retrieval_orchestrator.strip().lower()
+
+    if normalized_adaptive_retrieval_orchestrator not in {"native", "langgraph"}:
+        raise typer.BadParameter(
+            "must be 'native' or 'langgraph'.",
+            param_hint="--adaptive-retrieval-orchestrator",
+        )
+
+    selected_adaptive_retrieval_orchestrator = cast(
+        AdaptiveRetrievalOrchestrator,
+        normalized_adaptive_retrieval_orchestrator,
+    )
+
     (
         generator,
         reranker_settings,
@@ -2267,6 +2290,7 @@ def ntrs_grounded_answer(
         sufficiency_config=sufficiency_config,
         facet_retrieval_config=facet_retrieval_config,
         adaptive_retrieval_config=adaptive_retrieval_config,
+        adaptive_retrieval_orchestrator=(selected_adaptive_retrieval_orchestrator),
         provider_config=provider_config,
         http_transport_config=http_transport_config,
         provider_runtime_config=provider_runtime_config,

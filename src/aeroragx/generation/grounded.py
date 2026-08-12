@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
-from typing import Protocol, Self, runtime_checkable
+from typing import TYPE_CHECKING, Literal, Protocol, Self, runtime_checkable
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
@@ -42,6 +42,12 @@ from aeroragx.retrieval.reranker import (
     RerankerSearchTimings,
 )
 
+if TYPE_CHECKING:
+    from aeroragx.orchestration.langgraph_adaptive import (
+        LangGraphBoundedAdaptiveRetrievalController,
+    )
+
+type AdaptiveRetrievalOrchestrator = Literal["native", "langgraph"]
 INSUFFICIENT_EVIDENCE_ANSWER = (
     "The retrieved evidence is insufficient to answer this question reliably."
 )
@@ -732,23 +738,53 @@ class GroundedAnswerGenerator:
         config: GenerationConfig,
         sufficiency_assessor: EvidenceSufficiencyAssessor | None = None,
         adaptive_retrieval_config: AdaptiveRetrievalConfig | None = None,
+        adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator = "native",
     ) -> None:
         self._index = index
         self._provider = provider
         self._config = config
         self._sufficiency_assessor = sufficiency_assessor
         self._adaptive_retrieval_config = adaptive_retrieval_config
+        self._adaptive_retrieval_orchestrator = adaptive_retrieval_orchestrator
         self._adaptive_retrieval: (
             BoundedAdaptiveRetrievalController[
                 _RetrievedEvidenceAttempt,
                 GenerationEvidence,
             ]
+            | LangGraphBoundedAdaptiveRetrievalController[
+                _RetrievedEvidenceAttempt,
+                GenerationEvidence,
+            ]
             | None
-        ) = (
-            BoundedAdaptiveRetrievalController(adaptive_retrieval_config)
-            if adaptive_retrieval_config is not None
-            else None
         )
+
+        if adaptive_retrieval_config is None:
+            self._adaptive_retrieval = None
+
+        elif adaptive_retrieval_orchestrator == "native":
+            self._adaptive_retrieval = BoundedAdaptiveRetrievalController(adaptive_retrieval_config)
+
+        elif adaptive_retrieval_orchestrator == "langgraph":
+            try:
+                from aeroragx.orchestration.langgraph_adaptive import (
+                    LangGraphBoundedAdaptiveRetrievalController,
+                )
+            except ModuleNotFoundError as exc:
+                if exc.name != "langgraph":
+                    raise
+
+                raise ValueError(
+                    "The LangGraph adaptive-retrieval orchestrator requires "
+                    'the optional "agentic" dependencies. Install them with '
+                    '`python -m pip install -e ".[agentic]"`.'
+                ) from exc
+
+            self._adaptive_retrieval = LangGraphBoundedAdaptiveRetrievalController(
+                adaptive_retrieval_config
+            )
+
+        else:
+            raise ValueError("adaptive_retrieval_orchestrator must be 'native' or 'langgraph'.")
 
     @property
     def config(self) -> GenerationConfig:
@@ -761,6 +797,12 @@ class GroundedAnswerGenerator:
         """Return the optional bounded adaptive-retrieval policy."""
 
         return self._adaptive_retrieval_config
+
+    @property
+    def adaptive_retrieval_orchestrator(self) -> AdaptiveRetrievalOrchestrator:
+        """Return the controller selected for adaptive retrieval."""
+
+        return self._adaptive_retrieval_orchestrator
 
     def _retrieve_evidence_attempt(
         self,
