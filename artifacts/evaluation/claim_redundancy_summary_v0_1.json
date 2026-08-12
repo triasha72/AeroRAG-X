@@ -1,0 +1,42 @@
+{
+  "adjudicated_count": 69,
+  "automatic_singleton_distinct_count": 16,
+  "evaluation": "within_answer_claim_redundancy",
+  "lora_minus_base": {
+    "nonredundant_rate": -0.018868,
+    "overlap_rate": 0.271226,
+    "redundancy_rate": 0.018868
+  },
+  "methodology": "Single structured adjudication pass under a frozen within-answer claim-redundancy policy; not an independent multi-assessor human annotation study.",
+  "overall": {
+    "distinct": 59,
+    "nonredundant_rate": 0.988235,
+    "overlap_rate": 0.294118,
+    "overlapping": 25,
+    "redundancy_rate": 0.011765,
+    "redundant": 1,
+    "total_claims": 85
+  },
+  "systems": {
+    "base_rag": {
+      "distinct": 28,
+      "nonredundant_rate": 1.0,
+      "overlap_rate": 0.125,
+      "overlapping": 4,
+      "redundancy_rate": 0.0,
+      "redundant": 0,
+      "total_claims": 32
+    },
+    "lora_rag": {
+      "distinct": 31,
+      "nonredundant_rate": 0.981132,
+      "overlap_rate": 0.396226,
+      "overlapping": 21,
+      "redundancy_rate": 0.018868,
+      "redundant": 1,
+      "total_claims": 53
+    }
+  },
+  "total_claims": 85,
+  "version": "v0.1"
+}
