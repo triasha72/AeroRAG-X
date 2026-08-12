@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Literal
 
 import pytest
 
@@ -207,7 +208,13 @@ def test_rejection_raises_when_refusals_are_disabled() -> None:
         generator.generate("Which fictional Zephyr-X battery received FAA certification in 2040?")
 
 
-def test_adaptive_retrieval_recovers_with_one_rewrite_and_preserves_trace() -> None:
+@pytest.mark.parametrize(
+    "orchestrator",
+    ["native", "langgraph"],
+)
+def test_adaptive_retrieval_recovers_with_one_rewrite_and_preserves_trace(
+    orchestrator: Literal["native", "langgraph"],
+) -> None:
     query = "How can battery thermal runaway propagate in electric aircraft?"
     rewritten_query = f"{query} NASA aerospace technical report"
     index = QueryAwareFakeIndex(
@@ -228,6 +235,7 @@ def test_adaptive_retrieval_recovers_with_one_rewrite_and_preserves_trace() -> N
         config=generation_config(),
         sufficiency_assessor=assessor(),
         adaptive_retrieval_config=adaptive_config(),
+        adaptive_retrieval_orchestrator=orchestrator,
     )
 
     answer = generator.generate(query)
@@ -237,6 +245,7 @@ def test_adaptive_retrieval_recovers_with_one_rewrite_and_preserves_trace() -> N
     assert test_provider.call_count == 1
     assert index.received_queries == [query, rewritten_query]
     assert answer.retrieval_metadata is not None
+    assert answer.retrieval_metadata.adaptive_retrieval_orchestrator == orchestrator
     trace = answer.retrieval_metadata.adaptive_retrieval
     assert trace is not None
     assert trace.rewritten_query == rewritten_query
