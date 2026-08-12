@@ -12,6 +12,13 @@ from typing import Protocol, Self, runtime_checkable
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
 
+from aeroragx.generation.adaptive_retrieval import (
+    AdaptiveEvidenceAssessment,
+    AdaptiveEvidenceProvenance,
+    AdaptiveRetrievalConfig,
+    AdaptiveRetrievalTrace,
+    BoundedAdaptiveRetrievalController,
+)
 from aeroragx.generation.facet_retrieval import (
     FacetRetrievalTimings,
 )
@@ -217,6 +224,7 @@ class RetrievalMetadata(BaseModel):
     generation_provider: str = Field(min_length=1)
     generation_model: str = Field(min_length=1)
     evidence_sufficiency: EvidenceSufficiencyResult | None = None
+    adaptive_retrieval: AdaptiveRetrievalTrace | None = None
     provider_telemetry: ProviderTelemetry | None = None
 
 
@@ -231,6 +239,8 @@ class RAGStageTimings(BaseModel):
     hybrid_fusion_ms: float | None = Field(default=None, ge=0.0)
     reranker_scoring_ms: float | None = Field(default=None, ge=0.0)
     retrieval_search_count: int | None = Field(default=None, ge=1)
+    retrieval_attempt_count: int = Field(default=1, ge=1, le=2)
+    query_rewrite_count: int = Field(default=0, ge=0, le=1)
     facet_search_count: int | None = Field(default=None, ge=0)
     facet_overhead_ms: float | None = Field(default=None, ge=0.0)
     facet_used: bool | None = None
@@ -504,6 +514,7 @@ def _retrieval_metadata(
     used_evidence_count: int,
     reranker_model: str | None,
     evidence_sufficiency: EvidenceSufficiencyResult | None,
+    adaptive_retrieval: AdaptiveRetrievalTrace | None = None,
     provider_telemetry: ProviderTelemetry | None = None,
 ) -> RetrievalMetadata | None:
     """Build optional retrieval and generation metadata."""
@@ -520,6 +531,7 @@ def _retrieval_metadata(
         generation_provider=config.provider,
         generation_model=config.model_name,
         evidence_sufficiency=evidence_sufficiency,
+        adaptive_retrieval=adaptive_retrieval,
         provider_telemetry=provider_telemetry,
     )
 
@@ -533,6 +545,7 @@ def _insufficient_answer(
     used_evidence_count: int,
     reranker_model: str | None,
     evidence_sufficiency: EvidenceSufficiencyResult | None,
+    adaptive_retrieval: AdaptiveRetrievalTrace | None = None,
     provider_telemetry: ProviderTelemetry | None = None,
 ) -> GroundedAnswer:
     """Build a validated insufficient-evidence response."""
@@ -550,6 +563,7 @@ def _insufficient_answer(
             used_evidence_count=used_evidence_count,
             reranker_model=reranker_model,
             evidence_sufficiency=evidence_sufficiency,
+            adaptive_retrieval=adaptive_retrieval,
             provider_telemetry=provider_telemetry,
         ),
     )
@@ -613,6 +627,101 @@ def _build_source_documents(
     ]
 
 
+@dataclass(frozen=True, slots=True)
+class _RetrievedEvidenceAttempt:
+    """One retrieval pass and the bounded evidence built from its hits."""
+
+    hits: list[RerankedSearchHit]
+    evidence: list[GenerationEvidence]
+    retrieval_ms: float
+    detailed_retrieval: _DetailedRetrievalTimings
+    evidence_build_ms: float
+
+
+def _adaptive_evidence_provenance(
+    hits: Sequence[RerankedSearchHit],
+    *,
+    attempt_number: int,
+) -> list[AdaptiveEvidenceProvenance]:
+    """Preserve source and retrieval provenance for a complete attempt."""
+
+    return [
+        AdaptiveEvidenceProvenance(
+            attempt_number=attempt_number,
+            reranker_rank=hit.rank,
+            chunk_id=hit.chunk.chunk_id,
+            document_id=hit.chunk.document_id,
+            page_start=hit.chunk.page_start,
+            page_end=hit.chunk.page_end,
+            citation_url=hit.chunk.citation_url,
+            source_url=hit.chunk.source_url,
+            document_sha256=hit.chunk.document_sha256,
+            reranker_score=hit.score,
+            hybrid_rank=hit.hybrid_rank,
+            hybrid_score=hit.hybrid_score,
+            retrieved_by=hit.retrieved_by,
+            bm25_rank=hit.bm25_rank,
+            bm25_score=hit.bm25_score,
+            dense_rank=hit.dense_rank,
+            dense_score=hit.dense_score,
+        )
+        for hit in hits
+    ]
+
+
+def _sum_optional_timing_values(
+    values: Sequence[float | None],
+) -> float | None:
+    """Sum a timing only when every retrieval attempt supplied it."""
+
+    if not values or any(value is None for value in values):
+        return None
+
+    return round(sum(value for value in values if value is not None), 3)
+
+
+def _aggregate_detailed_retrieval_timings(
+    attempts: Sequence[_DetailedRetrievalTimings],
+) -> _DetailedRetrievalTimings:
+    """Combine timing snapshots from one or two bounded retrieval attempts."""
+
+    if not attempts:
+        return _DetailedRetrievalTimings()
+
+    retrieval_search_counts = [attempt.retrieval_search_count for attempt in attempts]
+    facet_search_counts = [attempt.facet_search_count for attempt in attempts]
+    facet_used_values = [attempt.facet_used for attempt in attempts]
+
+    return _DetailedRetrievalTimings(
+        bm25_ms=_sum_optional_timing_values([attempt.bm25_ms for attempt in attempts]),
+        dense_ms=_sum_optional_timing_values([attempt.dense_ms for attempt in attempts]),
+        hybrid_fusion_ms=_sum_optional_timing_values(
+            [attempt.hybrid_fusion_ms for attempt in attempts]
+        ),
+        reranker_scoring_ms=_sum_optional_timing_values(
+            [attempt.reranker_scoring_ms for attempt in attempts]
+        ),
+        retrieval_search_count=(
+            sum(count for count in retrieval_search_counts if count is not None)
+            if all(count is not None for count in retrieval_search_counts)
+            else None
+        ),
+        facet_search_count=(
+            sum(count for count in facet_search_counts if count is not None)
+            if all(count is not None for count in facet_search_counts)
+            else None
+        ),
+        facet_overhead_ms=_sum_optional_timing_values(
+            [attempt.facet_overhead_ms for attempt in attempts]
+        ),
+        facet_used=(
+            any(value for value in facet_used_values if value is not None)
+            if all(value is not None for value in facet_used_values)
+            else None
+        ),
+    )
+
+
 class GroundedAnswerGenerator:
     """Generate answers whose citations are resolved from retrieved evidence."""
 
@@ -622,11 +731,24 @@ class GroundedAnswerGenerator:
         provider: GenerationProvider,
         config: GenerationConfig,
         sufficiency_assessor: EvidenceSufficiencyAssessor | None = None,
+        adaptive_retrieval_config: AdaptiveRetrievalConfig | None = None,
     ) -> None:
         self._index = index
         self._provider = provider
         self._config = config
         self._sufficiency_assessor = sufficiency_assessor
+        self._adaptive_retrieval_config = adaptive_retrieval_config
+        self._adaptive_retrieval: (
+            BoundedAdaptiveRetrievalController[
+                _RetrievedEvidenceAttempt,
+                GenerationEvidence,
+            ]
+            | None
+        ) = (
+            BoundedAdaptiveRetrievalController(adaptive_retrieval_config)
+            if adaptive_retrieval_config is not None
+            else None
+        )
 
     @property
     def config(self) -> GenerationConfig:
@@ -634,7 +756,417 @@ class GroundedAnswerGenerator:
 
         return self._config
 
+    @property
+    def adaptive_retrieval_config(self) -> AdaptiveRetrievalConfig | None:
+        """Return the optional bounded adaptive-retrieval policy."""
+
+        return self._adaptive_retrieval_config
+
+    def _retrieve_evidence_attempt(
+        self,
+        *,
+        query: str,
+        attempt_number: int,
+    ) -> _RetrievedEvidenceAttempt:
+        """Retrieve and build bounded evidence for one state-machine attempt."""
+
+        with trace_span(
+            "aeroragx.retrieval",
+        ) as retrieval_span:
+            if retrieval_span is not None:
+                retrieval_span.set_attribute(
+                    "aeroragx.top_k",
+                    self._config.evidence_top_k,
+                )
+                retrieval_span.set_attribute(
+                    "aeroragx.retrieval_attempt",
+                    attempt_number,
+                )
+
+            retrieval_started_at = perf_counter()
+            hits = list(
+                self._index.search(
+                    query=query,
+                    top_k=self._config.evidence_top_k,
+                )
+            )
+            retrieval_ms = round(
+                (perf_counter() - retrieval_started_at) * 1000.0,
+                3,
+            )
+            detailed_retrieval = _detailed_retrieval_timings(
+                self._index,
+            )
+
+            if retrieval_span is not None:
+                retrieval_span.set_attribute(
+                    "aeroragx.result_count",
+                    len(hits),
+                )
+
+                if detailed_retrieval.retrieval_search_count is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.retrieval_search_count",
+                        detailed_retrieval.retrieval_search_count,
+                    )
+
+                if detailed_retrieval.facet_search_count is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.facet_search_count",
+                        detailed_retrieval.facet_search_count,
+                    )
+
+                if detailed_retrieval.facet_used is not None:
+                    retrieval_span.set_attribute(
+                        "aeroragx.facet_used",
+                        detailed_retrieval.facet_used,
+                    )
+
+        with trace_span(
+            "aeroragx.evidence_build",
+        ) as evidence_span:
+            evidence_started_at = perf_counter()
+            evidence = build_generation_evidence(
+                hits,
+                self._config,
+            )
+            evidence_build_ms = round(
+                (perf_counter() - evidence_started_at) * 1000.0,
+                3,
+            )
+
+            if evidence_span is not None:
+                evidence_span.set_attribute(
+                    "aeroragx.evidence_count",
+                    len(evidence),
+                )
+                evidence_span.set_attribute(
+                    "aeroragx.retrieval_attempt",
+                    attempt_number,
+                )
+
+        return _RetrievedEvidenceAttempt(
+            hits=hits,
+            evidence=evidence,
+            retrieval_ms=retrieval_ms,
+            detailed_retrieval=detailed_retrieval,
+            evidence_build_ms=evidence_build_ms,
+        )
+
+    def _assess_evidence(
+        self,
+        *,
+        query: str,
+        evidence: Sequence[GenerationEvidence],
+        attempt_number: int,
+    ) -> tuple[AdaptiveEvidenceAssessment, float | None]:
+        """Apply the existing gate and normalize its result for recovery logic."""
+
+        if len(evidence) < self._config.minimum_evidence_count:
+            return (
+                AdaptiveEvidenceAssessment(
+                    sufficient=False,
+                    reasons=["insufficient_evidence_count"],
+                ),
+                None,
+            )
+
+        if self._sufficiency_assessor is None:
+            return AdaptiveEvidenceAssessment(sufficient=True), None
+
+        with trace_span(
+            "aeroragx.sufficiency",
+        ) as sufficiency_span:
+            sufficiency_started_at = perf_counter()
+            evidence_sufficiency = self._sufficiency_assessor.assess(
+                query=query,
+                evidence=evidence,
+            )
+            sufficiency_ms = round(
+                (perf_counter() - sufficiency_started_at) * 1000.0,
+                3,
+            )
+
+            if sufficiency_span is not None:
+                sufficiency_span.set_attribute(
+                    "aeroragx.evidence_count",
+                    len(evidence),
+                )
+                sufficiency_span.set_attribute(
+                    "aeroragx.sufficient",
+                    evidence_sufficiency.sufficient,
+                )
+                sufficiency_span.set_attribute(
+                    "aeroragx.retrieval_attempt",
+                    attempt_number,
+                )
+
+        return (
+            AdaptiveEvidenceAssessment(
+                sufficient=evidence_sufficiency.sufficient,
+                reasons=evidence_sufficiency.reasons,
+                evidence_sufficiency=evidence_sufficiency,
+            ),
+            sufficiency_ms,
+        )
+
     def generate(
+        self,
+        query: str,
+        *,
+        reranker_model: str | None = None,
+    ) -> GroundedAnswer:
+        """Generate a single-pass or bounded-adaptive grounded answer."""
+
+        if self._adaptive_retrieval is None:
+            return self._generate_single_pass(
+                query,
+                reranker_model=reranker_model,
+            )
+
+        return self._generate_adaptive(
+            query,
+            reranker_model=reranker_model,
+        )
+
+    def _generate_adaptive(
+        self,
+        query: str,
+        *,
+        reranker_model: str | None,
+    ) -> GroundedAnswer:
+        """Generate after one optional, deterministic evidence-recovery pass."""
+
+        total_started_at = perf_counter()
+        normalized_query = query.strip()
+
+        if not normalized_query:
+            raise ValueError("query must not be blank.")
+
+        retrieval_attempts: list[_RetrievedEvidenceAttempt] = []
+        sufficiency_timings: list[float] = []
+
+        def retrieve(retrieval_query: str) -> _RetrievedEvidenceAttempt:
+            attempt = self._retrieve_evidence_attempt(
+                query=retrieval_query,
+                attempt_number=len(retrieval_attempts) + 1,
+            )
+            retrieval_attempts.append(attempt)
+            return attempt
+
+        def assess(
+            evidence: Sequence[GenerationEvidence],
+        ) -> AdaptiveEvidenceAssessment:
+            assessment, sufficiency_ms = self._assess_evidence(
+                query=normalized_query,
+                evidence=evidence,
+                attempt_number=len(retrieval_attempts),
+            )
+
+            if sufficiency_ms is not None:
+                sufficiency_timings.append(sufficiency_ms)
+
+            return assessment
+
+        controller = self._adaptive_retrieval
+
+        if controller is None:
+            raise RuntimeError("Bounded adaptive retrieval was not configured.")
+
+        outcome = controller.execute(
+            original_query=normalized_query,
+            retrieve=retrieve,
+            build_evidence=lambda attempt: attempt.evidence,
+            assess_evidence=assess,
+            build_provenance=lambda attempt, attempt_number: _adaptive_evidence_provenance(
+                attempt.hits,
+                attempt_number=attempt_number,
+            ),
+            returned_evidence_count=lambda attempt: len(attempt.hits),
+        )
+
+        final_attempt = outcome.hit_sets[-1]
+        hits = final_attempt.hits
+        evidence = outcome.evidence
+        assessment = outcome.assessment
+        adaptive_trace = outcome.trace
+        detailed_retrieval = _aggregate_detailed_retrieval_timings(
+            [attempt.detailed_retrieval for attempt in retrieval_attempts]
+        )
+        retrieval_ms = round(
+            sum(attempt.retrieval_ms for attempt in retrieval_attempts),
+            3,
+        )
+        evidence_build_ms = round(
+            sum(attempt.evidence_build_ms for attempt in retrieval_attempts),
+            3,
+        )
+        sufficiency_ms = round(sum(sufficiency_timings), 3) if sufficiency_timings else None
+        provider_stage_ms: float | None = None
+        citation_resolution_ms: float | None = None
+
+        def finalize(answer: GroundedAnswer) -> GroundedAnswer:
+            answer.attach_stage_timings(
+                RAGStageTimings(
+                    retrieval_ms=retrieval_ms,
+                    bm25_ms=detailed_retrieval.bm25_ms,
+                    dense_ms=detailed_retrieval.dense_ms,
+                    hybrid_fusion_ms=(detailed_retrieval.hybrid_fusion_ms),
+                    reranker_scoring_ms=(detailed_retrieval.reranker_scoring_ms),
+                    retrieval_search_count=(detailed_retrieval.retrieval_search_count),
+                    retrieval_attempt_count=len(retrieval_attempts),
+                    query_rewrite_count=(1 if adaptive_trace.rewritten_query is not None else 0),
+                    facet_search_count=(detailed_retrieval.facet_search_count),
+                    facet_overhead_ms=(detailed_retrieval.facet_overhead_ms),
+                    facet_used=detailed_retrieval.facet_used,
+                    evidence_build_ms=evidence_build_ms,
+                    sufficiency_ms=sufficiency_ms,
+                    provider_stage_ms=provider_stage_ms,
+                    citation_resolution_ms=citation_resolution_ms,
+                    total_ms=round(
+                        (perf_counter() - total_started_at) * 1000.0,
+                        3,
+                    ),
+                )
+            )
+            return answer
+
+        if not assessment.sufficient:
+            if not self._config.allow_insufficient_evidence:
+                if len(evidence) < self._config.minimum_evidence_count:
+                    raise ValueError(
+                        "Retrieved evidence is below minimum_evidence_count and "
+                        "insufficient-evidence responses are disabled."
+                    )
+
+                raise ValueError(
+                    "Evidence sufficiency assessment failed and "
+                    "insufficient-evidence responses are disabled."
+                )
+
+            return finalize(
+                _insufficient_answer(
+                    query=normalized_query,
+                    answer=INSUFFICIENT_EVIDENCE_ANSWER,
+                    config=self._config,
+                    returned_evidence_count=len(hits),
+                    used_evidence_count=len(evidence),
+                    reranker_model=reranker_model,
+                    evidence_sufficiency=assessment.evidence_sufficiency,
+                    adaptive_retrieval=adaptive_trace,
+                )
+            )
+
+        provider_evidence = [
+            ProviderEvidence(
+                evidence_id=item.evidence_id,
+                text=item.text,
+            )
+            for item in evidence
+        ]
+
+        with trace_span(
+            "aeroragx.provider",
+        ) as provider_span:
+            if provider_span is not None:
+                provider_span.set_attribute(
+                    "aeroragx.provider",
+                    self._config.provider,
+                )
+                provider_span.set_attribute(
+                    "aeroragx.model",
+                    self._config.model_name,
+                )
+                provider_span.set_attribute(
+                    "aeroragx.evidence_count",
+                    len(provider_evidence),
+                )
+
+            provider_started_at = perf_counter()
+            response = self._provider.generate(
+                query=normalized_query,
+                evidence=provider_evidence,
+                max_claims=self._config.max_claims,
+            )
+            provider_stage_ms = round(
+                (perf_counter() - provider_started_at) * 1000.0,
+                3,
+            )
+
+            provider_telemetry = (
+                self._provider.last_telemetry
+                if isinstance(
+                    self._provider,
+                    StructuredGenerationProvider,
+                )
+                else None
+            )
+
+            if provider_span is not None:
+                provider_span.set_attribute(
+                    "aeroragx.response_insufficient_evidence",
+                    response.insufficient_evidence,
+                )
+
+                if provider_telemetry is not None:
+                    provider_span.set_attribute(
+                        "aeroragx.provider_succeeded",
+                        provider_telemetry.succeeded,
+                    )
+                    provider_span.set_attribute(
+                        "aeroragx.provider_attempts",
+                        provider_telemetry.attempts,
+                    )
+
+                    if provider_telemetry.usage is not None:
+                        total_tokens = provider_telemetry.usage.total_tokens
+
+                        if total_tokens is not None:
+                            provider_span.set_attribute(
+                                "aeroragx.total_tokens",
+                                total_tokens,
+                            )
+
+        with trace_span(
+            "aeroragx.citation_resolution",
+        ) as citation_span:
+            resolution_started_at = perf_counter()
+            answer = self._resolve_response(
+                query=normalized_query,
+                response=response,
+                evidence=evidence,
+                returned_evidence_count=len(hits),
+                reranker_model=reranker_model,
+                evidence_sufficiency=assessment.evidence_sufficiency,
+                adaptive_retrieval=adaptive_trace,
+                provider_telemetry=provider_telemetry,
+            )
+            citation_resolution_ms = round(
+                (perf_counter() - resolution_started_at) * 1000.0,
+                3,
+            )
+
+            if citation_span is not None:
+                citation_span.set_attribute(
+                    "aeroragx.claim_count",
+                    len(answer.claims),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.citation_count",
+                    len(answer.citations),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.source_document_count",
+                    len(answer.source_documents),
+                )
+                citation_span.set_attribute(
+                    "aeroragx.insufficient_evidence",
+                    answer.insufficient_evidence,
+                )
+
+        return finalize(answer)
+
+    def _generate_single_pass(
         self,
         query: str,
         *,
@@ -925,6 +1457,7 @@ class GroundedAnswerGenerator:
         reranker_model: str | None,
         evidence_sufficiency: EvidenceSufficiencyResult | None,
         provider_telemetry: ProviderTelemetry | None,
+        adaptive_retrieval: AdaptiveRetrievalTrace | None = None,
     ) -> GroundedAnswer:
         """Resolve provider evidence IDs into authoritative citations."""
 
@@ -950,6 +1483,7 @@ class GroundedAnswerGenerator:
                 used_evidence_count=len(evidence),
                 reranker_model=reranker_model,
                 evidence_sufficiency=evidence_sufficiency,
+                adaptive_retrieval=adaptive_retrieval,
                 provider_telemetry=provider_telemetry,
             )
 
@@ -1021,6 +1555,7 @@ class GroundedAnswerGenerator:
                 used_evidence_count=len(evidence),
                 reranker_model=reranker_model,
                 evidence_sufficiency=evidence_sufficiency,
+                adaptive_retrieval=adaptive_retrieval,
                 provider_telemetry=provider_telemetry,
             ),
         )

@@ -282,6 +282,7 @@ def test_grounded_answer_options() -> None:
         "reranker_config",
         "generation_config",
         "sufficiency_config",
+        "adaptive_retrieval_config",
         "provider_config",
         "http_transport_config",
         "provider_runtime_config",

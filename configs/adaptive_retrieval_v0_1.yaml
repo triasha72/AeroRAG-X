@@ -1,0 +1,18 @@
+version: "0.1"
+
+# Phase 25 hard bounds. This policy permits one initial retrieval and, only
+# after an insufficient-evidence assessment, one deterministic recovery pass.
+maximum_retrieval_passes: 2
+maximum_query_rewrites: 1
+
+recovery_trigger: "insufficient_evidence"
+rewrite_strategy: "append_domain_context"
+
+# The rewrite preserves the original question and appends fixed corpus context.
+# It is retrieval-only: the original user question remains the sufficiency and
+# generation query.
+rewrite_context_terms:
+  - "NASA"
+  - "aerospace"
+  - "technical"
+  - "report"

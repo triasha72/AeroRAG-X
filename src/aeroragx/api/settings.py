@@ -31,10 +31,18 @@ class ApiRuntimeSettings:
     candidate_top_k: int = 20
     evidence_top_k: int = 5
 
+    adaptive_retrieval_enabled: bool = False
+
     def to_runtime_config(
         self,
     ) -> RuntimeConfig:
         """Translate API settings into core runtime configuration."""
+
+        adaptive_retrieval_config = (
+            Path("configs/adaptive_retrieval_v0_1.yaml")
+            if self.adaptive_retrieval_enabled
+            else None
+        )
 
         if self.mode == "local":
             return RuntimeConfig(
@@ -42,6 +50,7 @@ class ApiRuntimeSettings:
                 generation_config=Path("configs/generation_v0_1.yaml"),
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
+                adaptive_retrieval_config=adaptive_retrieval_config,
                 candidate_top_k=self.candidate_top_k,
                 evidence_top_k=self.evidence_top_k,
             )
@@ -52,6 +61,7 @@ class ApiRuntimeSettings:
                 generation_config=Path("configs/generation_transformers_v0_1.yaml"),
                 sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
                 facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
+                adaptive_retrieval_config=adaptive_retrieval_config,
                 provider_config=Path("configs/provider_v0_1.yaml"),
                 provider_runtime_config=Path("configs/transformers_runtime_v0_1.yaml"),
                 candidate_top_k=self.candidate_top_k,
@@ -63,6 +73,7 @@ class ApiRuntimeSettings:
             generation_config=Path("configs/generation_openai_v0_1.yaml"),
             sufficiency_config=Path("configs/sufficiency_v0_2_1.yaml"),
             facet_retrieval_config=Path("configs/facet_retrieval_v0_1.yaml"),
+            adaptive_retrieval_config=adaptive_retrieval_config,
             provider_config=Path("configs/provider_v0_1.yaml"),
             http_transport_config=Path("configs/http_transport_openai_v0_1.yaml"),
             provider_runtime_config=Path("configs/provider_runtime_openai_v0_1.yaml"),
@@ -88,6 +99,24 @@ def _positive_integer(
         raise ValueError(f"{name} must be at least 1.")
 
     return parsed
+
+
+def _boolean(
+    *,
+    value: str,
+    name: str,
+) -> bool:
+    """Parse one explicit boolean environment variable."""
+
+    normalized = value.strip().casefold()
+
+    if normalized in {"1", "true"}:
+        return True
+
+    if normalized in {"0", "false"}:
+        return False
+
+    raise ValueError(f"{name} must be 'true', 'false', '1', or '0'.")
 
 
 def load_api_runtime_settings(
@@ -159,9 +188,18 @@ def load_api_runtime_settings(
     if evidence_top_k > candidate_top_k:
         raise ValueError("AERORAGX_EVIDENCE_TOP_K must not exceed AERORAGX_CANDIDATE_TOP_K.")
 
+    adaptive_retrieval_enabled = _boolean(
+        value=env.get(
+            "AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL",
+            "false",
+        ),
+        name="AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL",
+    )
+
     return ApiRuntimeSettings(
         mode=mode,
         dense_backend=dense_backend,
         candidate_top_k=candidate_top_k,
         evidence_top_k=evidence_top_k,
+        adaptive_retrieval_enabled=adaptive_retrieval_enabled,
     )

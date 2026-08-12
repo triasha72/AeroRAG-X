@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pytest
 
+from aeroragx.generation.adaptive_retrieval import AdaptiveRetrievalConfig
 from aeroragx.generation.grounded import GenerationConfig, GroundedAnswerGenerator
 from aeroragx.generation.provider import (
     ProviderClaim,
@@ -29,6 +30,18 @@ class FakeIndex:
     def search(self, query: str, top_k: int = 10) -> list[RerankedSearchHit]:
         del query
         return self.hits[:top_k]
+
+
+@dataclass
+class QueryAwareFakeIndex:
+    """Return deterministic retrieval results keyed by the retrieval query."""
+
+    hits_by_query: dict[str, list[RerankedSearchHit]]
+    received_queries: list[str] = field(default_factory=list)
+
+    def search(self, query: str, top_k: int = 10) -> list[RerankedSearchHit]:
+        self.received_queries.append(query)
+        return self.hits_by_query[query][:top_k]
 
 
 def make_hit(text: str) -> RerankedSearchHit:
@@ -99,6 +112,19 @@ def assessor() -> EvidenceSufficiencyAssessor:
             require_all_numeric_terms=True,
             require_named_anchors=True,
         )
+    )
+
+
+def adaptive_config() -> AdaptiveRetrievalConfig:
+    """Create the Phase 25 two-pass recovery policy."""
+
+    return AdaptiveRetrievalConfig(
+        version="0.1",
+        maximum_retrieval_passes=2,
+        maximum_query_rewrites=1,
+        recovery_trigger="insufficient_evidence",
+        rewrite_strategy="append_domain_context",
+        rewrite_context_terms=["NASA", "aerospace", "technical", "report"],
     )
 
 
@@ -179,3 +205,81 @@ def test_rejection_raises_when_refusals_are_disabled() -> None:
         match="Evidence sufficiency assessment failed",
     ):
         generator.generate("Which fictional Zephyr-X battery received FAA certification in 2040?")
+
+
+def test_adaptive_retrieval_recovers_with_one_rewrite_and_preserves_trace() -> None:
+    query = "How can battery thermal runaway propagate in electric aircraft?"
+    rewritten_query = f"{query} NASA aerospace technical report"
+    index = QueryAwareFakeIndex(
+        hits_by_query={
+            query: [make_hit("NASA studied hydrogen aircraft concepts for service in 2035.")],
+            rewritten_query: [
+                make_hit(
+                    "Battery thermal runaway can propagate between adjacent "
+                    "cells in electric aircraft."
+                )
+            ],
+        }
+    )
+    test_provider = provider()
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=test_provider,
+        config=generation_config(),
+        sufficiency_assessor=assessor(),
+        adaptive_retrieval_config=adaptive_config(),
+    )
+
+    answer = generator.generate(query)
+
+    assert answer.query == query
+    assert answer.insufficient_evidence is False
+    assert test_provider.call_count == 1
+    assert index.received_queries == [query, rewritten_query]
+    assert answer.retrieval_metadata is not None
+    trace = answer.retrieval_metadata.adaptive_retrieval
+    assert trace is not None
+    assert trace.rewritten_query == rewritten_query
+    assert trace.retrieval_terminal_state == "generate"
+    assert len(trace.attempts) == 2
+    assert trace.attempts[0].assessment.sufficient is False
+    assert trace.attempts[1].assessment.sufficient is True
+    assert trace.attempts[0].evidence_provenance[0].chunk_id == "1001:chunk:00000"
+    assert trace.attempts[1].evidence_provenance[0].chunk_id == "1001:chunk:00000"
+    assert answer.stage_timings is not None
+    assert answer.stage_timings.retrieval_attempt_count == 2
+    assert answer.stage_timings.query_rewrite_count == 1
+
+
+def test_adaptive_retrieval_refuses_after_a_second_insufficient_pass() -> None:
+    query = "What was the exact passenger ticket price of NASA's 2035 hydrogen airliner?"
+    rewritten_query = f"{query} NASA aerospace technical report"
+    weak_hit = make_hit("NASA studied hydrogen aircraft concepts for service in 2035.")
+    index = QueryAwareFakeIndex(
+        hits_by_query={
+            query: [weak_hit],
+            rewritten_query: [weak_hit],
+        }
+    )
+    test_provider = provider()
+    generator = GroundedAnswerGenerator(
+        index=index,
+        provider=test_provider,
+        config=generation_config(),
+        sufficiency_assessor=assessor(),
+        adaptive_retrieval_config=adaptive_config(),
+    )
+
+    answer = generator.generate(query)
+
+    assert answer.insufficient_evidence is True
+    assert answer.claims == []
+    assert answer.citations == []
+    assert test_provider.call_count == 0
+    assert index.received_queries == [query, rewritten_query]
+    assert answer.retrieval_metadata is not None
+    trace = answer.retrieval_metadata.adaptive_retrieval
+    assert trace is not None
+    assert trace.retrieval_terminal_state == "grounded_refusal"
+    assert len(trace.attempts) == 2
+    assert trace.attempts[-1].assessment.sufficient is False

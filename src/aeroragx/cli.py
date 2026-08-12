@@ -2036,6 +2036,7 @@ def _load_grounded_answer_generator(
     candidate_top_k: int | None,
     evidence_top_k: int | None,
     facet_retrieval_config: Path | None = None,
+    adaptive_retrieval_config: Path | None = None,
 ) -> tuple[
     GroundedAnswerGenerator,
     RerankerConfig,
@@ -2052,6 +2053,7 @@ def _load_grounded_answer_generator(
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
         facet_retrieval_config=(facet_retrieval_config),
+        adaptive_retrieval_config=(adaptive_retrieval_config),
         provider_config=provider_config,
         http_transport_config=(http_transport_config),
         provider_runtime_config=(provider_runtime_config),
@@ -2157,6 +2159,16 @@ def ntrs_grounded_answer(
             help=("Optional facet-aware evidence retrieval configuration for synthesis queries."),
         ),
     ] = None,
+    adaptive_retrieval_config: Annotated[
+        Path | None,
+        typer.Option(
+            "--adaptive-retrieval-config",
+            exists=True,
+            dir_okay=False,
+            readable=True,
+            help=("Optional Phase 25 policy for one bounded evidence-recovery retrieval pass."),
+        ),
+    ] = None,
     provider_config: Annotated[
         Path | None,
         typer.Option(
@@ -2254,6 +2266,7 @@ def ntrs_grounded_answer(
         generation_config=generation_config,
         sufficiency_config=sufficiency_config,
         facet_retrieval_config=facet_retrieval_config,
+        adaptive_retrieval_config=adaptive_retrieval_config,
         provider_config=provider_config,
         http_transport_config=http_transport_config,
         provider_runtime_config=provider_runtime_config,

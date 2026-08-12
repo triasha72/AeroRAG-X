@@ -7,6 +7,9 @@ from pathlib import Path
 from typing import Literal
 
 from aeroragx.evaluation.retrieval import RetrievalIndex
+from aeroragx.generation.adaptive_retrieval import (
+    load_adaptive_retrieval_config,
+)
 from aeroragx.generation.facet_retrieval import (
     FacetAwareEvidenceIndex,
     load_facet_retrieval_config,
@@ -80,6 +83,8 @@ class RuntimeConfig:
     generation_config: Path = Path("configs/generation_v0_1.yaml")
 
     sufficiency_config: Path = Path("configs/sufficiency_v0_2_1.yaml")
+
+    adaptive_retrieval_config: Path | None = None
 
     facet_retrieval_config: Path | None = Path("configs/facet_retrieval_v0_1.yaml")
 
@@ -290,11 +295,18 @@ def load_grounded_runtime(
         load_sufficiency_config(config.sufficiency_config)
     )
 
+    adaptive_retrieval_settings = (
+        load_adaptive_retrieval_config(config.adaptive_retrieval_config)
+        if config.adaptive_retrieval_config is not None
+        else None
+    )
+
     generator = GroundedAnswerGenerator(
         index=generation_index,
         provider=provider,
         config=generation_settings,
         sufficiency_assessor=(sufficiency_assessor),
+        adaptive_retrieval_config=(adaptive_retrieval_settings),
     )
 
     return AeroRAGRuntime(
