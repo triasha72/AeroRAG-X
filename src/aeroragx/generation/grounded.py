@@ -231,6 +231,7 @@ class RetrievalMetadata(BaseModel):
     generation_model: str = Field(min_length=1)
     evidence_sufficiency: EvidenceSufficiencyResult | None = None
     adaptive_retrieval: AdaptiveRetrievalTrace | None = None
+    adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator | None = None
     provider_telemetry: ProviderTelemetry | None = None
 
 
@@ -1048,6 +1049,13 @@ class GroundedAnswerGenerator:
         citation_resolution_ms: float | None = None
 
         def finalize(answer: GroundedAnswer) -> GroundedAnswer:
+            if answer.retrieval_metadata is not None:
+                answer.retrieval_metadata = answer.retrieval_metadata.model_copy(
+                    update={
+                        "adaptive_retrieval_orchestrator": (self._adaptive_retrieval_orchestrator),
+                    }
+                )
+
             answer.attach_stage_timings(
                 RAGStageTimings(
                     retrieval_ms=retrieval_ms,
