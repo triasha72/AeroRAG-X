@@ -15,6 +15,7 @@ from aeroragx.generation.facet_retrieval import (
     load_facet_retrieval_config,
 )
 from aeroragx.generation.grounded import (
+    AdaptiveRetrievalOrchestrator,
     GenerationConfig,
     GroundedAnswerGenerator,
     RerankedEvidenceIndex,
@@ -85,6 +86,8 @@ class RuntimeConfig:
     sufficiency_config: Path = Path("configs/sufficiency_v0_2_1.yaml")
 
     adaptive_retrieval_config: Path | None = None
+
+    adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator = "native"
 
     facet_retrieval_config: Path | None = Path("configs/facet_retrieval_v0_1.yaml")
 
@@ -307,6 +310,7 @@ def load_grounded_runtime(
         config=generation_settings,
         sufficiency_assessor=(sufficiency_assessor),
         adaptive_retrieval_config=(adaptive_retrieval_settings),
+        adaptive_retrieval_orchestrator=(config.adaptive_retrieval_orchestrator),
     )
 
     return AeroRAGRuntime(
