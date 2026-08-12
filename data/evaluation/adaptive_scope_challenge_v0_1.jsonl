@@ -1,0 +1,14 @@
+{"query_id":"scope_dev_001","query":"Which wind speed requires every electric aircraft to remain grounded worldwide?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_002","query":"What temperature universally makes all lithium-ion aviation batteries unsafe for flight?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_003","query":"Which single battery cooling architecture must every hybrid-electric aircraft use?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_004","query":"What FAA rule requires every electric aircraft to use an identical propulsion system?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_005","query":"Which certification regulation guarantees that hydrogen-powered aircraft will have zero operational risk?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_006","query":"What date will all commercial aircraft permanently replace turbine engines with batteries?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_007","query":"What universal passenger capacity will every electric vertical-takeoff aircraft have in 2040?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_008","query":"Which future weather event will make every distributed-propulsion aircraft unable to fly?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_009","query":"What thermal-failure procedure was approved for the fictional AeroVolt Z9 aircraft?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_010","query":"Which NASA report certifies the fictional SkyCell Infinity battery for all flight conditions?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_dev_011","query":"What safety concerns arise in hybrid-electric aircraft propulsion systems?","expected_answerable":true,"expected_terms":["hybrid","electric","safety"]}
+{"query_id":"scope_dev_012","query":"How can battery thermal runaway propagate in electric aircraft?","expected_answerable":true,"expected_terms":["battery","thermal","runaway"]}
+{"query_id":"scope_dev_013","query":"What thermal-management considerations apply to fuel-cell aircraft?","expected_answerable":true,"expected_terms":["fuel","cell","thermal"]}
+{"query_id":"scope_dev_014","query":"What characterizes distributed electric propulsion aircraft?","expected_answerable":true,"expected_terms":["distributed","electric","propulsion"]}

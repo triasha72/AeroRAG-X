@@ -145,6 +145,9 @@ class SufficiencyConfig(BaseModel):
     require_named_anchors: bool = True
     require_claim_qualifiers: bool = False
 
+    # Development-only opt-in guard for absolute or universal claim wording.
+    require_scope_qualifiers: bool = False
+
     @model_validator(mode="after")
     def validate_thresholds(self) -> Self:
         """Ensure stricter exact-query coverage is internally consistent."""
@@ -180,6 +183,9 @@ class EvidenceSufficiencyResult(BaseModel):
 
     required_claim_qualifiers: list[str] = Field(default_factory=list)
     supported_claim_qualifiers: list[str] = Field(default_factory=list)
+
+    required_scope_qualifiers: list[str] = Field(default_factory=list)
+    supported_scope_qualifiers: list[str] = Field(default_factory=list)
 
     reasons: list[str]
 
@@ -254,6 +260,19 @@ class EvidenceSufficiencyAssessor:
             term for term in required_claim_qualifiers if term in combined_evidence_terms
         ]
 
+        required_scope_qualifiers = _scope_qualifiers(normalized_query)
+        combined_scope_qualifiers = {
+            qualifier
+            for item in evidence
+            if item.text.strip()
+            for qualifier in _scope_qualifiers(item.text)
+        }
+        supported_scope_qualifiers = [
+            qualifier
+            for qualifier in required_scope_qualifiers
+            if qualifier in combined_scope_qualifiers
+        ]
+
         required_coverage = (
             self._config.exact_query_minimum_coverage
             if "exact" in query_terms
@@ -292,6 +311,11 @@ class EvidenceSufficiencyAssessor:
         ):
             reasons.append("missing_claim_qualifier_support")
 
+        if self._config.require_scope_qualifiers and set(required_scope_qualifiers) != set(
+            supported_scope_qualifiers
+        ):
+            reasons.append("missing_scope_qualifier_support")
+
         return EvidenceSufficiencyResult(
             sufficient=not reasons,
             evidence_count=len(evidence_token_sets),
@@ -306,6 +330,8 @@ class EvidenceSufficiencyAssessor:
             supported_named_anchors=supported_named_anchors,
             required_claim_qualifiers=(required_claim_qualifiers),
             supported_claim_qualifiers=(supported_claim_qualifiers),
+            required_scope_qualifiers=(required_scope_qualifiers),
+            supported_scope_qualifiers=(supported_scope_qualifiers),
             reasons=reasons,
         )
 
@@ -454,6 +480,42 @@ def _claim_qualifiers(
         qualifier = _CLAIM_QUALIFIER_ALIASES.get(token)
 
         if qualifier is not None and qualifier not in qualifiers:
+            qualifiers.append(qualifier)
+
+    return qualifiers
+
+
+def _scope_qualifiers(
+    value: str,
+) -> list[str]:
+    """Return short absolute-claim phrases requiring exact evidence support."""
+
+    markers = {
+        "all",
+        "every",
+        "guarantee",
+        "permanent",
+        "permanently",
+        "universal",
+        "universally",
+        "worldwide",
+        "zero",
+    }
+
+    tokens = _normalized_tokens(value)
+    qualifiers: list[str] = []
+
+    for index, token in enumerate(tokens):
+        if token not in markers:
+            continue
+
+        following_terms = [
+            candidate for candidate in tokens[index + 1 :] if candidate not in _STOP_WORDS
+        ][:2]
+
+        qualifier = "_".join([token, *following_terms])
+
+        if qualifier not in qualifiers:
             qualifiers.append(qualifier)
 
     return qualifiers
