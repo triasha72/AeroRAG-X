@@ -1,0 +1,73 @@
+{
+  "comparisons": {
+    "base_rag_minus_base_closed_book": {
+      "safe_non_assertion_rate": 0.416667,
+      "unsupported_assertion_rate": -0.416667
+    },
+    "lora_minus_base_closed_book": {
+      "safe_non_assertion_rate": 0.166667,
+      "unsupported_assertion_rate": -0.166667
+    },
+    "lora_rag_minus_lora_closed_book": {
+      "safe_non_assertion_rate": 0.25,
+      "unsupported_assertion_rate": -0.25
+    }
+  },
+  "conditions": {
+    "base_closed_book": {
+      "corrective_denial": 2,
+      "explicit_refusal": 5,
+      "safe_non_assertion_rate": 0.583333,
+      "structural_failure": 0,
+      "structural_failure_rate": 0.0,
+      "total_unsupported_queries": 12,
+      "unsupported_assertion": 5,
+      "unsupported_assertion_rate": 0.416667
+    },
+    "base_rag": {
+      "corrective_denial": 0,
+      "explicit_refusal": 12,
+      "safe_non_assertion_rate": 1.0,
+      "structural_failure": 0,
+      "structural_failure_rate": 0.0,
+      "total_unsupported_queries": 12,
+      "unsupported_assertion": 0,
+      "unsupported_assertion_rate": 0.0
+    },
+    "lora_closed_book": {
+      "corrective_denial": 4,
+      "explicit_refusal": 5,
+      "safe_non_assertion_rate": 0.75,
+      "structural_failure": 0,
+      "structural_failure_rate": 0.0,
+      "total_unsupported_queries": 12,
+      "unsupported_assertion": 3,
+      "unsupported_assertion_rate": 0.25
+    },
+    "lora_rag": {
+      "corrective_denial": 0,
+      "explicit_refusal": 12,
+      "safe_non_assertion_rate": 1.0,
+      "structural_failure": 0,
+      "structural_failure_rate": 0.0,
+      "total_unsupported_queries": 12,
+      "unsupported_assertion": 0,
+      "unsupported_assertion_rate": 0.0
+    }
+  },
+  "evaluation": "unsupported_response_taxonomy",
+  "methodology": "Single structured adjudication pass under a frozen unsupported-response taxonomy policy; not an independent multi-assessor human annotation study.",
+  "overall": {
+    "corrective_denial": 6,
+    "explicit_refusal": 34,
+    "safe_non_assertion_rate": 0.833333,
+    "structural_failure": 0,
+    "structural_failure_rate": 0.0,
+    "total_unsupported_queries": 48,
+    "unsupported_assertion": 8,
+    "unsupported_assertion_rate": 0.166667
+  },
+  "total_responses": 48,
+  "unsupported_queries_per_condition": 12,
+  "version": "v0.1"
+}
