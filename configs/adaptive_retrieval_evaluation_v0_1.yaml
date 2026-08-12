@@ -1,0 +1,95 @@
+version: "0.1"
+phase: 26
+
+# The Phase 26 study compares the existing single-pass system with the Phase 25
+# bounded policy on the same protected held-out v0.4 queries.
+queries_input: "data/evaluation/generation_queries_v0_4_heldout.jsonl"
+protected_baseline_report:
+  "artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json"
+phase25_baseline_manifest: "artifacts/evaluation/phase25_baseline_manifest_v0_1.json"
+
+chunks_input: "data/processed/ntrs/v0_1/chunks.jsonl"
+bm25_config: "configs/bm25_v0_1.yaml"
+dense_config: "configs/dense_v0_1.yaml"
+hybrid_config: "configs/hybrid_v0_1.yaml"
+reranker_config: "configs/reranker_v0_1.yaml"
+generation_config: "configs/generation_v0_1.yaml"
+sufficiency_config: "configs/sufficiency_v0_2_1.yaml"
+facet_retrieval_config: "configs/facet_retrieval_v0_1.yaml"
+adaptive_retrieval_config: "configs/adaptive_retrieval_v0_1.yaml"
+embeddings_input: "artifacts/embeddings/ntrs_v0_1.npy"
+metadata_input: "artifacts/embeddings/ntrs_v0_1_metadata.jsonl"
+manifest_input: "artifacts/embeddings/ntrs_v0_1_manifest.json"
+
+candidate_top_k: 20
+evidence_top_k: 5
+
+# These are the predeclared Phase 25 limits; Phase 26 must not tune them after
+# observing the held-out result.
+maximum_retrieval_passes: 2
+maximum_query_rewrites: 1
+minimum_successful_recoveries: 1
+
+# Each listed file is checksummed before the paired run. Generated outputs are
+# intentionally excluded because they are results, not experimental inputs.
+frozen_inputs:
+  - "configs/adaptive_retrieval_evaluation_v0_1.yaml"
+  - "data/evaluation/generation_queries_v0_4_heldout.jsonl"
+  - "artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json"
+  - "artifacts/evaluation/phase25_baseline_manifest_v0_1.json"
+  - "data/processed/ntrs/v0_1/chunks.jsonl"
+  - "artifacts/embeddings/ntrs_v0_1.npy"
+  - "artifacts/embeddings/ntrs_v0_1_metadata.jsonl"
+  - "artifacts/embeddings/ntrs_v0_1_manifest.json"
+  - "configs/bm25_v0_1.yaml"
+  - "configs/dense_v0_1.yaml"
+  - "configs/hybrid_v0_1.yaml"
+  - "configs/reranker_v0_1.yaml"
+  - "configs/generation_v0_1.yaml"
+  - "configs/sufficiency_v0_2_1.yaml"
+  - "configs/facet_retrieval_v0_1.yaml"
+  - "configs/adaptive_retrieval_v0_1.yaml"
+  - "src/aeroragx/generation/adaptive_evaluation.py"
+  - "src/aeroragx/generation/adaptive_retrieval.py"
+  - "src/aeroragx/generation/grounded.py"
+  - "scripts/run_adaptive_retrieval_evaluation_v01.py"
+
+# These values make a changed protected query set, baseline, or retrieval / generation
+# configuration a hard pre-run error. The generated corpus and embedding files are also
+# checksummed in inputs_output so their exact local versions remain auditable.
+pinned_input_sha256:
+  "data/evaluation/generation_queries_v0_4_heldout.jsonl":
+    "ec444a265f5bf2d9435b01f3b73cf4263097745d5e6828f50d38299ece2e5a97"
+  "artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json":
+    "72e7b7ea752870e6a892724cf06a1de14f1adcbf5af09b3efffab21e38206bb6"
+  "artifacts/evaluation/phase25_baseline_manifest_v0_1.json":
+    "fde6b8c26623f04f30bdaf3f75ed959d087c391b3147e0a81bcd087641dd28c1"
+  "configs/bm25_v0_1.yaml": "73a079248997eca5cb9f42ff7d668f86b4700ce55c3105230741049a87a1789f"
+  "configs/dense_v0_1.yaml": "288d664d14c3db08ec1afdb6daa7745c5656c2206f0d7c5749dce0f9cc939021"
+  "configs/hybrid_v0_1.yaml": "91b0291b08ba6ce99bde5838c150ab44d7346414843453bd4507f228f2812fcf"
+  "configs/reranker_v0_1.yaml": "167ef5eb3cf71794e6ab9d336ae3e37cb0e575ccefb45e96b167454beeaab093"
+  "configs/generation_v0_1.yaml": "9531ec43298183ed563b7203e268a43c9e1e11e32b9feaa363a25cb70c616839"
+  "configs/sufficiency_v0_2_1.yaml":
+    "03eed16785cb1fb2157b2aef289d71e9f0524f37b936330d54a257da29b8cf2a"
+  "configs/facet_retrieval_v0_1.yaml":
+    "eef234fcb35f7c3cafb57aad90c115ba40df8e2fb43e3e45b77d3dbd0cc78f93"
+  "configs/adaptive_retrieval_v0_1.yaml":
+    "9cd01e1454fde21c29e4d84501d21bc1f7b8d1a18ce90642d7700f24577e8365"
+  "artifacts/embeddings/ntrs_v0_1_manifest.json":
+    "4481865ebc33a6350eb21d85400c63a4fd948006994c6f2f2897cf46b26e9df0"
+
+inputs_output: "artifacts/evaluation/adaptive_retrieval_v0_1_inputs.sha256"
+baseline_output: "artifacts/evaluation/adaptive_retrieval_v0_1_baseline.json"
+adaptive_output: "artifacts/evaluation/adaptive_retrieval_v0_1_adaptive.json"
+comparison_output: "artifacts/evaluation/adaptive_retrieval_v0_1_comparison.json"
+report_output: "reports/adaptive_retrieval_v0_1.md"
+
+protected_constraints:
+  - >-
+    Do not change model configuration, retrieval configuration, sufficiency
+    configuration, queries, labels, or decision rules in response to this result.
+  - "Run each condition once against the same protected held-out v0.4 query set."
+  - "Do not retrain, retune the rewrite, or alter retrieval depth after observing the comparison."
+  - >-
+    Treat no recovery activation or no measured benefit as valid results when
+    the integrity checks pass.

@@ -1,0 +1,3522 @@
+{
+  "bound_violation_count": 0,
+  "condition": "bounded_adaptive",
+  "generation_report": {
+    "answerability_accuracy": 0.8333333333333334,
+    "answerable_completion_rate": 1.0,
+    "answerable_query_count": 6,
+    "citation_count": 40,
+    "citation_reference_validity_rate": 1.0,
+    "cited_claim_count": 40,
+    "claim_citation_coverage_rate": 1.0,
+    "completed_answerable_count": 6,
+    "completed_query_count": 12,
+    "correct_answerability_count": 10,
+    "correctly_refused_unanswerable_count": 4,
+    "expected_term_count": 18,
+    "expected_term_recall": 0.7777777777777778,
+    "generation_failure_count": 0,
+    "generation_failure_rate": 0.0,
+    "generation_model": "deterministic-grounded-v0",
+    "generation_provider": "fake",
+    "matched_expected_term_count": 14,
+    "predicted_answerable_count": 8,
+    "query_count": 12,
+    "query_results": [
+      {
+        "answer": "(200C) to achieve large temperature differential between coolant and airstream during takeoff and climb \u2022 Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct \u2022 At takeoff, the air is relatively hot, making heat transfer difficult \u2022 Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement \u2022\u2026 voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. and difficult to reject \u2022 adds system mass from large heat exchangers, plumbing, fluids, \u2022 reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction, \u2022 has a limited thermal capacity due to sink temperature or surface availability \u2022 maintenance increases due to thermal management system complexity or structural integration challenges Figure 4. low -grade heat on an aircraft can mitigate both the reduction in powertrain efficiency and the release of low -grade heat throughout the aircraft from solid -state circuit breakers. And then the potentially very high -speed fault response can be leveraged to protect not just personnel and airframe, but also all the sensitive power electronics and sensors on the powertrain during both hard and soft fault events. approaches for MW fuel cell stacks \u2013 Lightweight BOP , water and thermal management \u2022 Systems Analysis to assess new vehicle configurations Thermal Management System Considerations \u2022 Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) \u2022 Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb \u2022 Heat rejection\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.6666666666666666,
+        "expected_terms": [
+          "heat",
+          "rejection",
+          "airspeed"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "heat",
+          "rejection"
+        ],
+        "predicted_answerable": true,
+        "query": "Why is heat rejection difficult at low aircraft airspeed?",
+        "query_id": "heldout_ans_001",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. and difficult to reject \u2022 adds system mass from large heat exchangers, plumbing, fluids, \u2022 reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction, \u2022 has a limited thermal capacity due to sink temperature or surface availability \u2022 maintenance increases due to thermal management system complexity or structural integration challenges Figure 4. testbed designs are meant to handle up to 800 Ws of high-grade waste heat, demonstrate acoustic energy amplification, and be utilized as a diagnostic t oolset for new TAHP designs that required higher loads of high-grade waste heat. Table 1. power levels. Fully electric, hybrid, and turboelectric are potential EAP system configurations. Electrified aircraft propulsion impacts vary on aircraft design, depending on the key requirements of the market the vehicle is intended to serve. \u2013 limited thermal capacity \u2022 Dumping heat into lubricating oil \u2013 limited thermal capacity \u2022 Active cooling \u2013 adds weight and consumes engine power \u2022 Phase change cooling \u2013adds weight and limited thermal capacity \u2022 Heat pipe, pumped multiphase, vapor compression \u2013 adds weight and consumes engine power 50kW to >600kW of low-grade thermal heat trapped within composite aircraft body Electric Aircraft Thermal Challenge\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.3333333333333333,
+        "expected_terms": [
+          "fuel",
+          "cell",
+          "weight"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "weight"
+        ],
+        "predicted_answerable": true,
+        "query": "Why must aircraft fuel-cell thermal systems balance weight, drag, and pumping power?",
+        "query_id": "heldout_ans_002",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "applications, whereas larger PEM fuel cells are being designed for primary power in airplanes and in uninhabited air vehicles. Typically, PEM fuel cells operate at temperatures up to 80 \u00b0C. To increase the ef\ufb01ciency and power density of the fuel cell system, researchers are pursuing methods to extend the operating temperature of the PEM fuel cell to 180 \u00b0C. approaches for MW fuel cell stacks \u2013 Lightweight BOP , water and thermal management \u2022 Systems Analysis to assess new vehicle configurations Thermal Management System Considerations \u2022 Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) \u2022 Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb \u2022 Heat rejection\u2026 Fuel Cells Task PI: Dr. James F. Klausner, Mechanical and Aerospace Engineering, University of Florida Co-Investigator: Dr. limited, a gap for aviation \u2022 Need to transition to and mature high temperature fuel cells \u2013 enabling technology and major challenge ~ 2041-45 Boeing 737 flight demo with 20 MW HT FC TRL 7~8 FC eVTOL ~ 2027 2024-2026 Novel cooling concepts and TMS architectures Starting TRL 2-3 2027-2031 Individual component development utilizing novel concepts; laboratory testing of concepts TRL 3-4 2037-2040 Relevant demonstration\u2026 \u2013 Introduction of High Temperature PEM FC \u2013 Scale up approaches for MW fuel cell stacks \u2013 Lightweight BOP , water and thermal management \u2022 Systems Analysis to assess new vehicle configurations General Fuel Cell Roadmap 2024\u2013 2026 LT PEM FC 60% efficiency 5,000 hours 2027-2035 65-68% efficiency 25,000 hours 2036-2040 70-72% efficiency 30,000+ hours Strategy \u2022 Power density, mass, lifetime, and energy efficiency are\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 1.0,
+        "expected_terms": [
+          "high",
+          "temperature",
+          "fuel"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "high",
+          "temperature",
+          "fuel"
+        ],
+        "predicted_answerable": true,
+        "query": "How can high-temperature PEM fuel cells improve aircraft heat rejection?",
+        "query_id": "heldout_ans_003",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "small secondary batteries used to power the electric engines as well as larger single-use primary batteries that are used in the event of turbofan failure [9, 10]. III. Critical Phases of Flight A typical transport aircraft flight mission profile can be broken into several critical phases, each of which have their own flight characteristics and performance requirements, based on existing regulations. In on-design, the battery voltage and current are setpoints at the design point. For example, the battery system may operate at 1000 V DC and output 300 A for a total output power of 300 kW at takeoff. No battery sizing operation is performed in on-design; this feature is set as a provision for on-design sizing. produced by the turbogenerator. The difference represents the contribution of the battery to the motor load. For the taxi/takeoff, full power climb, climb, powered landing, and landing/taxi segments, the turbogenerator does not produce enough power to cover the commanded motor load, so the batteries provide the headroom. within an engine deck modeled with NASA\u2019s Numerical Propulsion System Simulation (NPSS) which provides a consolidated hybrid electric propulsion system model. The NPSS was used to determine thrust and rates of fuel consumption for a given Mach number, altitude, and throttle [12,13]. The Weight Analysis of Turbine Engines (WATE++) tool was used to calculate weights for engine subsystems. James.F.Soeder@nasa.gov University of Toledo contact: Ralph H. Jansen, 216\u2013433\u20136038, Ralph.H.Jansen@grc.nasa.gov Authors: Ralph H. Jansen and Kerry L. McLallin Headquarters program office: Exploration Systems Programs/Projects: Human & Robotic Technology, CEV, Human Lunar Return, Earth and Space Science NASA G2 \ufb02ywheel module.",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.6666666666666666,
+        "expected_terms": [
+          "battery",
+          "fuel",
+          "cell"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "battery",
+          "fuel"
+        ],
+        "predicted_answerable": true,
+        "query": "Why may battery support be useful for a fuel-cell aircraft during takeoff or climb?",
+        "query_id": "heldout_ans_004",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "2016) . It is a means for transporting heat energy relatively short distances and at constant temperature. However, when integrated with Exergy increasing components and dynamic heat pipes it no longer has that drawback and its mass impacts are mitigated from reusing the waste heat which serves to increase the effective powertrain efficiency. And as shown in Fig. all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. low -grade heat on an aircraft can mitigate both the reduction in powertrain efficiency and the release of low -grade heat throughout the aircraft from solid -state circuit breakers. And then the potentially very high -speed fault response can be leveraged to protect not just personnel and airframe, but also all the sensitive power electronics and sensors on the powertrain during both hard and soft fault events. 1 American Institute of Aeronautics and Astronautics Thermal Management System Design for Electrified Aircraft Propulsion Concepts Jeffryes W. Thermal Management Ideas and ChallengesSydney SchnuloNASA Glenn Research CenterCleveland, OHAIAA/IEEE Electric Aircraft Technology SymposiumThermal Management Panel-Challenges and OpportunitiesAugust28,2020 Challenge: Current electrified aircraft concepts produce large amounts of low-grade waste heat and require large, heavy thermal management systems that cause drag.",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 1.0,
+        "expected_terms": [
+          "thermal",
+          "mass",
+          "aircraft"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "thermal",
+          "mass",
+          "aircraft"
+        ],
+        "predicted_answerable": true,
+        "query": "How can thermal-management design affect the mass of an electric aircraft?",
+        "query_id": "heldout_ans_005",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. powertrain efficiency and the new distributed heat loads would constrain breaker technology to the selection of a hybrid circuit breaker despite its relatively slow response time. Also, electric air vehicles would need to be designed to compensate for this increased risk of powertrain component damage during fault events. low -grade heat on an aircraft can mitigate both the reduction in powertrain efficiency and the release of low -grade heat throughout the aircraft from solid -state circuit breakers. And then the potentially very high -speed fault response can be leveraged to protect not just personnel and airframe, but also all the sensitive power electronics and sensors on the powertrain during both hard and soft fault events. and difficult to reject \u2022 adds system mass from large heat exchangers, plumbing, fluids, \u2022 reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction, \u2022 has a limited thermal capacity due to sink temperature or surface availability \u2022 maintenance increases due to thermal management system complexity or structural integration challenges Figure 4.",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 1.0,
+        "expected_terms": [
+          "thermal",
+          "heat",
+          "components"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "thermal",
+          "heat",
+          "components"
+        ],
+        "predicted_answerable": true,
+        "query": "Why are thermal-management requirements linked to aircraft component heat loads?",
+        "query_id": "heldout_ans_006",
+        "source_backed_citation_count": 5,
+        "source_document_count": 3,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What exact coolant flow rate does the FAA require for every electric-aircraft battery pack?",
+        "query_id": "heldout_exact_001",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "fuel cells developed for the purpose of making cryogenic fuels viable in commercial aviation would not only contribute to the safety and durability of cryogenic space systems but would also help to enable the use of renewable cryogenic fuels in other transportation and energy applications of the future. rejection \u2022 Improved thermal materials 35 Advanced Configurations Optimal designs to maximize specific energy densities, performance, reliability and safety \u2022 Multifunctionality \u2022 Structure \u2022 Thermal \u2022 Other? L., Lund, M. T. , Millar, R. J., Owen, B., Penner, J. E., Pitari, G., Prather, M. J., Sausen, R. and Wilcox, L. .J., \"The Contribution of Global Aviation to Anthropogenic ClimateForcing for 2000 to 2018,\" Atmospheric Environment, vol. 244, January 2021. [3] Miake-Lye, R. , Waitz, I. , Fahey, D., Wesoky, H. and Wey, C., \"Aviation and the changing climate,\" Aerospace America, 2000. [4] Daggett, D., Hadaller, O. control strategies developed at Arm strong: o A 6-d egree-of-freedom hardware-in-the-loop flight simulation will provide accurate dynamic load s and exercise hardware and energy management across a broad-spectrum of flight profiles. o New and unique flight control algorithm s will optimize flight-path energy consumption. analysis and risk classification form completed by the prospective flight project for each hazard condition. Information on this form maps very closely to the hazard -related information supporting the ARP 4671 FHA process in general.",
+        "answerability_correct": false,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [],
+        "predicted_answerable": true,
+        "query": "Which federal regulation sets a single mandatory thermal-management design for all fuel-cell aircraft?",
+        "query_id": "heldout_policy_001",
+        "source_backed_citation_count": 5,
+        "source_document_count": 5,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA?",
+        "query_id": "heldout_fiction_001",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043?",
+        "query_id": "heldout_fiction_002",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032?",
+        "query_id": "heldout_scope_001",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "Authors: Dr. Rocco Viggiano (NASA GRC) Dr. Donald Dornbusch (NASA GRC) Dr. Yi Lin (NASA LaRC) National Aeronautics and Space Administration www.nasa. Aircraft: Challenges, Barriers, and Potential Impacts,\u201d National Renewable Energy Laboraty, Golden, CO, 2021. 5. E. Pi\u00f1ero, \u201cElectric vertical takeoff and landing aircraft dominate powered-lift community focus,\u201d Aerospace America, December 2022. [Online]. Available: https://aerospaceamerica.aiaa.org/year-in- review/electric-vertical-takeoff-and-landing-aircraft-dominate-powered-lift-community-focus/. Aircraft Electric/Hybrid-Electric Power & Propulsion Workshop Perspective of the V/STOL Aircraft Systems Tech Committee Workshop to be held July 28th, 2016 at the Hilton Salt Lake City Center in Salt Lake City, Utah Schedule 2 0700 \u2013 0800 Check-in and Continental Breakfast 0800 \u2013 0830 Introduction and welcome by AIAA 0830 \u2013 0930 Speakers from adjacent research Large Scale Batteries, by R. Aircraft Technologies Symposium (EATS), 2019, pp. 1\u201314. [5] Sampson, B., \u201cNASA picks GE and Magnix for major electric aircraft propulsion testing program,\u201d Aerospace Testing International, October 2021. [6] ] Lampert, F., \u201cFirst all -electric trainer plane gets air worthiness certification from the FAA in the US,\u201d Electrek, April 2018. [7] [7] Korn, J. National Aeronautics and Space Administration. Level of Review: This material has been technically reviewed by technical management. This report is a formal draft or working paper, intended to solicit comments and ideas from a technical peer group. This report contains preliminary \ufb01 ndings, subject to revision as analysis proceeds.",
+        "answerability_correct": false,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [],
+        "predicted_answerable": true,
+        "query": "What weather forecast causes every battery-electric aircraft to be grounded?",
+        "query_id": "heldout_scope_002",
+        "source_backed_citation_count": 5,
+        "source_document_count": 5,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      }
+    ],
+    "refusal_count": 4,
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "source_backed_citation_count": 40,
+    "source_document_coverage_rate": 1.0,
+    "structural_validity_rate": 1.0,
+    "structurally_valid_answer_count": 12,
+    "total_citation_reference_count": 40,
+    "total_claim_count": 40,
+    "unanswerable_query_count": 6,
+    "unsupported_refusal_rate": 0.6666666666666666,
+    "valid_citation_reference_count": 40,
+    "version": "0.1"
+  },
+  "invalid_provenance_count": 0,
+  "invalid_trace_count": 0,
+  "mean_evidence_build_ms": 0.081,
+  "mean_retrieval_attempt_count": 1.417,
+  "mean_retrieval_ms": 987.881,
+  "mean_total_latency_ms": 990.612,
+  "missing_trace_count": 0,
+  "p50_retrieval_ms": 767.474,
+  "p50_total_latency_ms": 769.646,
+  "p95_retrieval_ms": 1437.539,
+  "p95_total_latency_ms": 1441.129,
+  "query_diagnostics": [
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.8333333333333334,
+                "query_terms": [
+                  "heat",
+                  "rejection",
+                  "difficult",
+                  "low",
+                  "aircraft",
+                  "airspe"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.6666666666666666,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "heat",
+                  "rejection",
+                  "difficult",
+                  "low",
+                  "aircraft"
+                ],
+                "unsupported_terms": [
+                  "airspe"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 1,
+                "bm25_score": 16.49298621,
+                "chunk_id": "20240008370:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008370",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20240008370,
+                "document_sha256": "ec33f7afb2ee2d9a5a24626b3ffbf087d23cdd7efd7f910c770810a0ed136155",
+                "hybrid_rank": 16,
+                "hybrid_score": 0.016393442623,
+                "page_end": 11,
+                "page_start": 9,
+                "reranker_rank": 1,
+                "reranker_score": 3.81146240234375,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008370/downloads/ISABE2024%20September%202024.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 6,
+                "bm25_score": 12.47979613,
+                "chunk_id": "20205005005:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205005005",
+                "dense_rank": 35,
+                "dense_score": 0.39269572,
+                "document_id": 20205005005,
+                "document_sha256": "98a8362edde5b0449e1e8e8c298d37dec8f197adca612f938a19f7fb77fbaea6",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.025677830941,
+                "page_end": 7,
+                "page_start": 6,
+                "reranker_rank": 2,
+                "reranker_score": 3.4688873291015625,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205005005/downloads/E-19850-Elsevier_Chapter16withFigs-1-lp.docx.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 4,
+                "bm25_score": 13.85883296,
+                "chunk_id": "20205004982:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 32,
+                "dense_score": 0.39356273,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 6,
+                "hybrid_score": 0.026494565217,
+                "page_end": 5,
+                "page_start": 5,
+                "reranker_rank": 3,
+                "reranker_score": 3.0574254989624023,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 14.21180952,
+                "chunk_id": "20205004982:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 19,
+                "hybrid_score": 0.015873015873,
+                "page_end": 5,
+                "page_start": 3,
+                "reranker_rank": 4,
+                "reranker_score": 2.1297855377197266,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 2,
+                "bm25_score": 15.93766616,
+                "chunk_id": "20260003867:chunk:00010",
+                "citation_url": "https://ntrs.nasa.gov/citations/20260003867",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20260003867,
+                "document_sha256": "c839e45bc3d6e6c70372a12fc6632bc8ad2b8c22aa7f1085d8b3e58cb97ab534",
+                "hybrid_rank": 17,
+                "hybrid_score": 0.016129032258,
+                "page_end": 15,
+                "page_start": 12,
+                "reranker_rank": 5,
+                "reranker_score": 1.7837364673614502,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20260003867/downloads/VLvovich%20Hydrogen%20AIAA%20Aero%20Forum%202026.pdf"
+              }
+            ],
+            "retrieval_query": "Why is heat rejection difficult at low aircraft airspeed?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Why is heat rejection difficult at low aircraft airspeed?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.084,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_001",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 567.482,
+      "sufficiency_ms": 1.684,
+      "total_latency_ms": 569.915,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.8181818181818182,
+                "query_terms": [
+                  "must",
+                  "aircraft",
+                  "fuel",
+                  "cell",
+                  "thermal",
+                  "system",
+                  "balance",
+                  "weight",
+                  "drag",
+                  "pump",
+                  "power"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.8181818181818182,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "must",
+                  "aircraft",
+                  "fuel",
+                  "thermal",
+                  "system",
+                  "weight",
+                  "drag",
+                  "pump",
+                  "power"
+                ],
+                "unsupported_terms": [
+                  "cell",
+                  "balance"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 19.37899244,
+                "chunk_id": "20205005005:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205005005",
+                "dense_rank": 22,
+                "dense_score": 0.51020712,
+                "document_id": 20205005005,
+                "document_sha256": "98a8362edde5b0449e1e8e8c298d37dec8f197adca612f938a19f7fb77fbaea6",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.028068137824,
+                "page_end": 7,
+                "page_start": 6,
+                "reranker_rank": 1,
+                "reranker_score": 2.0979342460632324,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205005005/downloads/E-19850-Elsevier_Chapter16withFigs-1-lp.docx.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 4,
+                "bm25_score": 19.18962349,
+                "chunk_id": "20205004982:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 5,
+                "dense_score": 0.5553211,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.031009615385,
+                "page_end": 5,
+                "page_start": 5,
+                "reranker_rank": 2,
+                "reranker_score": 1.2416236400604248,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 6,
+                "bm25_score": 18.18076351,
+                "chunk_id": "20240015017:chunk:00003",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240015017",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20240015017,
+                "document_sha256": "8a4dd209e4178cae6fa15c427c562fcd3b28748d8d9540facf740f397a953682",
+                "hybrid_rank": 20,
+                "hybrid_score": 0.015151515152,
+                "page_end": 3,
+                "page_start": 2,
+                "reranker_rank": 3,
+                "reranker_score": 1.180618166923523,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240015017/downloads/Rodriguez_Paper_TREES_2025SciTech_20240015017_3.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 5,
+                "bm25_score": 18.66999508,
+                "chunk_id": "20220013008:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220013008",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20220013008,
+                "document_sha256": "d58b68db51757545494f61aaa9b8465b4fecb29b9ee23d761b33a063b714a515",
+                "hybrid_rank": 18,
+                "hybrid_score": 0.015384615385,
+                "page_end": 7,
+                "page_start": 4,
+                "reranker_rank": 4,
+                "reranker_score": 0.3368491530418396,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220013008/downloads/SAE-Summit-TMS-Optimization-Nov.2-Dyson-FINAL.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 19,
+                "bm25_score": 14.30915395,
+                "chunk_id": "20220013008:chunk:00002",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220013008",
+                "dense_rank": 18,
+                "dense_score": 0.51273781,
+                "document_id": 20220013008,
+                "document_sha256": "d58b68db51757545494f61aaa9b8465b4fecb29b9ee23d761b33a063b714a515",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.025478740669,
+                "page_end": 12,
+                "page_start": 7,
+                "reranker_rank": 5,
+                "reranker_score": 0.3157271146774292,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220013008/downloads/SAE-Summit-TMS-Optimization-Nov.2-Dyson-FINAL.pdf"
+              }
+            ],
+            "retrieval_query": "Why must aircraft fuel-cell thermal systems balance weight, drag, and pumping power?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Why must aircraft fuel-cell thermal systems balance weight, drag, and pumping power?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.065,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_002",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 760.865,
+      "sufficiency_ms": 1.698,
+      "total_latency_ms": 763.209,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 1.0,
+                "query_terms": [
+                  "high",
+                  "temperature",
+                  "pem",
+                  "fuel",
+                  "cell",
+                  "improve",
+                  "aircraft",
+                  "heat",
+                  "rejection"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [
+                  "pem"
+                ],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.8888888888888888,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [
+                  "pem"
+                ],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "high",
+                  "temperature",
+                  "pem",
+                  "fuel",
+                  "cell",
+                  "improve",
+                  "aircraft",
+                  "heat",
+                  "rejection"
+                ],
+                "unsupported_terms": []
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 19.81806266,
+                "chunk_id": "20050228985:chunk:00129",
+                "citation_url": "https://ntrs.nasa.gov/citations/20050228985",
+                "dense_rank": 3,
+                "dense_score": 0.62456471,
+                "document_id": 20050228985,
+                "document_sha256": "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.031746031746,
+                "page_end": 68,
+                "page_start": 68,
+                "reranker_rank": 1,
+                "reranker_score": 3.1835787296295166,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20050228985/downloads/20050228985.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 14,
+                "bm25_score": 16.75357941,
+                "chunk_id": "20260003867:chunk:00010",
+                "citation_url": "https://ntrs.nasa.gov/citations/20260003867",
+                "dense_rank": 14,
+                "dense_score": 0.51804137,
+                "document_id": 20260003867,
+                "document_sha256": "c839e45bc3d6e6c70372a12fc6632bc8ad2b8c22aa7f1085d8b3e58cb97ab534",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.027027027027,
+                "page_end": 15,
+                "page_start": 12,
+                "reranker_rank": 2,
+                "reranker_score": 2.6604719161987305,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20260003867/downloads/VLvovich%20Hydrogen%20AIAA%20Aero%20Forum%202026.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 16,
+                "bm25_score": 16.59011331,
+                "chunk_id": "20090012238:chunk:00257",
+                "citation_url": "https://ntrs.nasa.gov/citations/20090012238",
+                "dense_rank": 2,
+                "dense_score": 0.62731898,
+                "document_id": 20090012238,
+                "document_sha256": "2256149487d4f430836dd42bfdb89125d31a9cf3ad8b48a77c538446619037c3",
+                "hybrid_rank": 5,
+                "hybrid_score": 0.029286926995,
+                "page_end": 191,
+                "page_start": 191,
+                "reranker_rank": 3,
+                "reranker_score": 2.175825357437134,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20090012238/downloads/20090012238.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 11,
+                "bm25_score": 17.33409555,
+                "chunk_id": "20240003885:chunk:00009",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 32,
+                "dense_score": 0.48753887,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 10,
+                "hybrid_score": 0.02495407226,
+                "page_end": 17,
+                "page_start": 14,
+                "reranker_rank": 4,
+                "reranker_score": 2.0057919025421143,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 5,
+                "bm25_score": 19.59152698,
+                "chunk_id": "20240003885:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 5,
+                "dense_score": 0.61286485,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 3,
+                "hybrid_score": 0.030769230769,
+                "page_end": 14,
+                "page_start": 11,
+                "reranker_rank": 5,
+                "reranker_score": 1.7200486660003662,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              }
+            ],
+            "retrieval_query": "How can high-temperature PEM fuel cells improve aircraft heat rejection?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "How can high-temperature PEM fuel cells improve aircraft heat rejection?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.052,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_003",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 774.082,
+      "sufficiency_ms": 1.462,
+      "total_latency_ms": 776.083,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.9,
+                "query_terms": [
+                  "may",
+                  "battery",
+                  "support",
+                  "useful",
+                  "fuel",
+                  "cell",
+                  "aircraft",
+                  "dur",
+                  "takeoff",
+                  "climb"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.7,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "may",
+                  "battery",
+                  "support",
+                  "fuel",
+                  "cell",
+                  "aircraft",
+                  "dur",
+                  "takeoff",
+                  "climb"
+                ],
+                "unsupported_terms": [
+                  "useful"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 18.18241815,
+                "chunk_id": "20220018208:chunk:00003",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220018208",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20220018208,
+                "document_sha256": "cc935bdac3fa571e9ae5a454003338d9362060132877d0dba8327a5d95aba7c6",
+                "hybrid_rank": 12,
+                "hybrid_score": 0.015873015873,
+                "page_end": 3,
+                "page_start": 2,
+                "reranker_rank": 1,
+                "reranker_score": 0.6129802465438843,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220018208/downloads/MissionProfilesforSUSANElectrofanConcept.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 18,
+                "bm25_score": 15.42782667,
+                "chunk_id": "20240008078:chunk:00011",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008078",
+                "dense_rank": 27,
+                "dense_score": 0.44269714,
+                "document_id": 20240008078,
+                "document_sha256": "8b21a6f43d26c483e4ffdd4267a0cafc01996b2c4cf85e270cfca04ad34b0598",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.024314765694,
+                "page_end": 6,
+                "page_start": 6,
+                "reranker_rank": 2,
+                "reranker_score": 0.5929815173149109,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008078/downloads/Hanlon_CP_ModelFuelCellAir_EATS2024_%2020240008078.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 33,
+                "bm25_score": 13.90631161,
+                "chunk_id": "20160009765:chunk:00031",
+                "citation_url": "https://ntrs.nasa.gov/citations/20160009765",
+                "dense_rank": 26,
+                "dense_score": 0.44554597,
+                "document_id": 20160009765,
+                "document_sha256": "78627ef403ee75300cb420da86c6fa996e9933e5f8de9ea2e822edff3f3cd6f3",
+                "hybrid_rank": 7,
+                "hybrid_score": 0.022380595149,
+                "page_end": 16,
+                "page_start": 16,
+                "reranker_rank": 3,
+                "reranker_score": 0.4083460569381714,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20160009765/downloads/20160009765.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 1,
+                "bm25_score": 21.64841355,
+                "chunk_id": "20220018208:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220018208",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20220018208,
+                "document_sha256": "cc935bdac3fa571e9ae5a454003338d9362060132877d0dba8327a5d95aba7c6",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.016393442623,
+                "page_end": 4,
+                "page_start": 4,
+                "reranker_rank": 4,
+                "reranker_score": -0.8899496793746948,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220018208/downloads/MissionProfilesforSUSANElectrofanConcept.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 2,
+                "bm25_score": 19.35106314,
+                "chunk_id": "20050228985:chunk:00271",
+                "citation_url": "https://ntrs.nasa.gov/citations/20050228985",
+                "dense_rank": 34,
+                "dense_score": 0.43391329,
+                "document_id": 20050228985,
+                "document_sha256": "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.02676733013,
+                "page_end": 146,
+                "page_start": 145,
+                "reranker_rank": 5,
+                "reranker_score": -1.009721279144287,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20050228985/downloads/20050228985.pdf"
+              }
+            ],
+            "retrieval_query": "Why may battery support be useful for a fuel-cell aircraft during takeoff or climb?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Why may battery support be useful for a fuel-cell aircraft during takeoff or climb?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.083,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_004",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 722.02,
+      "sufficiency_ms": 1.496,
+      "total_latency_ms": 724.073,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 1.0,
+                "query_terms": [
+                  "thermal",
+                  "management",
+                  "design",
+                  "affect",
+                  "mass",
+                  "electric",
+                  "aircraft"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.8571428571428571,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "thermal",
+                  "management",
+                  "design",
+                  "affect",
+                  "mass",
+                  "electric",
+                  "aircraft"
+                ],
+                "unsupported_terms": []
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 36,
+                "bm25_score": 9.47782025,
+                "chunk_id": "20205004982:chunk:00008",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 44,
+                "dense_score": 0.49951848,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 10,
+                "hybrid_score": 0.020032051282,
+                "page_end": 6,
+                "page_start": 5,
+                "reranker_rank": 1,
+                "reranker_score": 2.2497916221618652,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240015017:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240015017",
+                "dense_rank": 4,
+                "dense_score": 0.58866972,
+                "document_id": 20240015017,
+                "document_sha256": "8a4dd209e4178cae6fa15c427c562fcd3b28748d8d9540facf740f397a953682",
+                "hybrid_rank": 14,
+                "hybrid_score": 0.015625,
+                "page_end": 2,
+                "page_start": 1,
+                "reranker_rank": 2,
+                "reranker_score": 0.7977817058563232,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240015017/downloads/Rodriguez_Paper_TREES_2025SciTech_20240015017_3.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 41,
+                "bm25_score": 9.24656566,
+                "chunk_id": "20205004982:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 25,
+                "dense_score": 0.52862591,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.021665695981,
+                "page_end": 5,
+                "page_start": 3,
+                "reranker_rank": 3,
+                "reranker_score": 0.7826583385467529,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 4,
+                "bm25_score": 13.02478714,
+                "chunk_id": "20205004080:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004080",
+                "dense_rank": 3,
+                "dense_score": 0.58909172,
+                "document_id": 20205004080,
+                "document_sha256": "dbeb5b3d48a482e22f50c42700403a0a1c8d54903b5cd79a7080358fc2cfd01d",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.031498015873,
+                "page_end": 1,
+                "page_start": 1,
+                "reranker_rank": 4,
+                "reranker_score": 0.5605242252349854,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004080/downloads/TMS2_v5.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20205006797:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205006797",
+                "dense_rank": 5,
+                "dense_score": 0.57675636,
+                "document_id": 20205006797,
+                "document_sha256": "b0c9ca0d3c3c81853096857e79c45233d9880912f571fce7e639dbc6a1dc1e71",
+                "hybrid_rank": 16,
+                "hybrid_score": 0.015384615385,
+                "page_end": 6,
+                "page_start": 1,
+                "reranker_rank": 5,
+                "reranker_score": 0.1902691125869751,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205006797/downloads/EATS_panel.pdf"
+              }
+            ],
+            "retrieval_query": "How can thermal-management design affect the mass of an electric aircraft?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "How can thermal-management design affect the mass of an electric aircraft?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.051,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_005",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 669.331,
+      "sufficiency_ms": 1.356,
+      "total_latency_ms": 671.183,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.75,
+                "query_terms": [
+                  "thermal",
+                  "management",
+                  "requirement",
+                  "link",
+                  "aircraft",
+                  "component",
+                  "heat",
+                  "load"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.75,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "thermal",
+                  "management",
+                  "aircraft",
+                  "component",
+                  "heat",
+                  "load"
+                ],
+                "unsupported_terms": [
+                  "requirement",
+                  "link"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 46,
+                "bm25_score": 9.31152244,
+                "chunk_id": "20240015017:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240015017",
+                "dense_rank": 3,
+                "dense_score": 0.61623514,
+                "document_id": 20240015017,
+                "document_sha256": "8a4dd209e4178cae6fa15c427c562fcd3b28748d8d9540facf740f397a953682",
+                "hybrid_rank": 9,
+                "hybrid_score": 0.025306978137,
+                "page_end": 2,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": 4.284084796905518,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240015017/downloads/Rodriguez_Paper_TREES_2025SciTech_20240015017_3.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 9,
+                "bm25_score": 11.94468982,
+                "chunk_id": "20205005005:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205005005",
+                "dense_rank": 2,
+                "dense_score": 0.62566495,
+                "document_id": 20205005005,
+                "document_sha256": "98a8362edde5b0449e1e8e8c298d37dec8f197adca612f938a19f7fb77fbaea6",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.030621785881,
+                "page_end": 7,
+                "page_start": 6,
+                "reranker_rank": 2,
+                "reranker_score": 4.014429092407227,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205005005/downloads/E-19850-Elsevier_Chapter16withFigs-1-lp.docx.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 5,
+                "bm25_score": 13.41989451,
+                "chunk_id": "20205005005:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205005005",
+                "dense_rank": 37,
+                "dense_score": 0.50496429,
+                "document_id": 20205005005,
+                "document_sha256": "98a8362edde5b0449e1e8e8c298d37dec8f197adca612f938a19f7fb77fbaea6",
+                "hybrid_rank": 7,
+                "hybrid_score": 0.025693893735,
+                "page_end": 6,
+                "page_start": 4,
+                "reranker_rank": 3,
+                "reranker_score": 3.4190731048583984,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205005005/downloads/E-19850-Elsevier_Chapter16withFigs-1-lp.docx.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 15,
+                "bm25_score": 11.46336973,
+                "chunk_id": "20205004982:chunk:00006",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 19,
+                "dense_score": 0.52981806,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 5,
+                "hybrid_score": 0.025991561181,
+                "page_end": 5,
+                "page_start": 3,
+                "reranker_rank": 4,
+                "reranker_score": 2.4256222248077393,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20205004982:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004982",
+                "dense_rank": 1,
+                "dense_score": 0.63427031,
+                "document_id": 20205004982,
+                "document_sha256": "1d767bea92fa1ce8eab072707e5ccbfdc1989ec2f30135098855e6342eadf88f",
+                "hybrid_rank": 13,
+                "hybrid_score": 0.016393442623,
+                "page_end": 5,
+                "page_start": 5,
+                "reranker_rank": 5,
+                "reranker_score": 1.9308964014053345,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004982/downloads/EATS-Thermal-Fault-Paper-8-5-2020.pdf"
+              }
+            ],
+            "retrieval_query": "Why are thermal-management requirements linked to aircraft component heat loads?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Why are thermal-management requirements linked to aircraft component heat loads?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.047,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_ans_006",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 660.476,
+      "sufficiency_ms": 1.469,
+      "total_latency_ms": 662.44,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.7272727272727273,
+                "query_terms": [
+                  "exact",
+                  "coolant",
+                  "flow",
+                  "rate",
+                  "faa",
+                  "require",
+                  "every",
+                  "electric",
+                  "aircraft",
+                  "battery",
+                  "pack"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "missing_named_anchor_support",
+                  "missing_claim_qualifier_support"
+                ],
+                "required_claim_qualifiers": [
+                  "require",
+                  "every"
+                ],
+                "required_named_anchors": [
+                  "faa"
+                ],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.5454545454545454,
+                "sufficient": false,
+                "supported_claim_qualifiers": [
+                  "require"
+                ],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "coolant",
+                  "flow",
+                  "rate",
+                  "require",
+                  "electric",
+                  "aircraft",
+                  "battery",
+                  "pack"
+                ],
+                "unsupported_terms": [
+                  "exact",
+                  "faa",
+                  "every"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "missing_named_anchor_support",
+                "missing_claim_qualifier_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 39,
+                "bm25_score": 11.89956076,
+                "chunk_id": "20240014672:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240014672",
+                "dense_rank": 19,
+                "dense_score": 0.50611323,
+                "document_id": 20240014672,
+                "document_sha256": "17651e02d2e09c35da4214a595f7b709219963d2b449ae934b1fdc9f99e9974a",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.022759237949,
+                "page_end": 2,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": -1.523896336555481,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240014672/downloads/Paper_Battery_Aerothermal-5.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 5,
+                "bm25_score": 14.62359389,
+                "chunk_id": "20180004867:chunk:00007",
+                "citation_url": "https://ntrs.nasa.gov/citations/20180004867",
+                "dense_rank": 26,
+                "dense_score": 0.49482754,
+                "document_id": 20180004867,
+                "document_sha256": "2dce924ace7a48c782706a194fe5cac7ee054b7c1309bd4c52000788c5e1143f",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.027012522361,
+                "page_end": 4,
+                "page_start": 3,
+                "reranker_rank": 2,
+                "reranker_score": -1.6809630393981934,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20180004867/downloads/20180004867.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20205004080:chunk:00005",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004080",
+                "dense_rank": 2,
+                "dense_score": 0.55591059,
+                "document_id": 20205004080,
+                "document_sha256": "dbeb5b3d48a482e22f50c42700403a0a1c8d54903b5cd79a7080358fc2cfd01d",
+                "hybrid_rank": 17,
+                "hybrid_score": 0.016129032258,
+                "page_end": 3,
+                "page_start": 3,
+                "reranker_rank": 3,
+                "reranker_score": -2.1160950660705566,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004080/downloads/TMS2_v5.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 21,
+                "bm25_score": 12.99791608,
+                "chunk_id": "20240015505:chunk:00024",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240015505",
+                "dense_rank": 17,
+                "dense_score": 0.51471305,
+                "document_id": 20240015505,
+                "document_sha256": "75d9b79fef5134556dc27c8d4b4ac73f5f10f9e17790fe2b7c1f9d81e0354c83",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.025332691999,
+                "page_end": 17,
+                "page_start": 17,
+                "reranker_rank": 4,
+                "reranker_score": -3.090439796447754,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240015505/downloads/Stalcup%20SUSAN%20SciTech%202025%20Manuscript.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 29,
+                "bm25_score": 12.29776637,
+                "chunk_id": "20210017939:chunk:00013",
+                "citation_url": "https://ntrs.nasa.gov/citations/20210017939",
+                "dense_rank": 5,
+                "dense_score": 0.5379619,
+                "document_id": 20210017939,
+                "document_sha256": "2b43c357b426966fbdd464d901abf7f151fdfdd001599c64e833e6e4016d41d1",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.026620570441,
+                "page_end": 10,
+                "page_start": 9,
+                "reranker_rank": 5,
+                "reranker_score": -3.1030263900756836,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20210017939/downloads/PHQ6_v3.pdf"
+              }
+            ],
+            "retrieval_query": "What exact coolant flow rate does the FAA require for every electric-aircraft battery pack?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          },
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.6363636363636364,
+                "query_terms": [
+                  "exact",
+                  "coolant",
+                  "flow",
+                  "rate",
+                  "faa",
+                  "require",
+                  "every",
+                  "electric",
+                  "aircraft",
+                  "battery",
+                  "pack"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "missing_named_anchor_support",
+                  "missing_claim_qualifier_support"
+                ],
+                "required_claim_qualifiers": [
+                  "require",
+                  "every"
+                ],
+                "required_named_anchors": [
+                  "faa"
+                ],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.5454545454545454,
+                "sufficient": false,
+                "supported_claim_qualifiers": [
+                  "require"
+                ],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "flow",
+                  "rate",
+                  "require",
+                  "electric",
+                  "aircraft",
+                  "battery",
+                  "pack"
+                ],
+                "unsupported_terms": [
+                  "exact",
+                  "coolant",
+                  "faa",
+                  "every"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "missing_named_anchor_support",
+                "missing_claim_qualifier_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 2,
+            "evidence_provenance": [
+              {
+                "attempt_number": 2,
+                "bm25_rank": 36,
+                "bm25_score": 14.3571015,
+                "chunk_id": "20220012921:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220012921",
+                "dense_rank": 20,
+                "dense_score": 0.50909269,
+                "document_id": 20220012921,
+                "document_sha256": "0441d6ece1a5a5d29875d1c8663c7df4931760d22c038a7d383e934134a84602",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.022916666667,
+                "page_end": 4,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": 0.3414735198020935,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220012921/downloads/Solid-state%20Architecture%20Batteries%20for%20Enhanced%20Rechargeability%20and%20Safety%20(SABERS)%20for%20Electric%20Aircraft%20-%20Final.pptx.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 33,
+                "bm25_score": 14.50263368,
+                "chunk_id": "20230000051:chunk:00003",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230000051",
+                "dense_rank": 37,
+                "dense_score": 0.48772836,
+                "document_id": 20230000051,
+                "document_sha256": "a929174b16cf181087cebeea125dd558295eaa862168f4f5a83991a4d91b5a3d",
+                "hybrid_rank": 6,
+                "hybrid_score": 0.021061966523,
+                "page_end": 15,
+                "page_start": 11,
+                "reranker_rank": 2,
+                "reranker_score": -0.24960844218730927,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230000051/downloads/Walker%20Presentation%20V1%20(002).pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 19,
+                "bm25_score": 15.75331063,
+                "chunk_id": "20240014672:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240014672",
+                "dense_rank": 26,
+                "dense_score": 0.50261593,
+                "document_id": 20240014672,
+                "document_sha256": "17651e02d2e09c35da4214a595f7b709219963d2b449ae934b1fdc9f99e9974a",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.024286134825,
+                "page_end": 2,
+                "page_start": 1,
+                "reranker_rank": 3,
+                "reranker_score": -0.643756091594696,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240014672/downloads/Paper_Battery_Aerothermal-5.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 38,
+                "bm25_score": 14.11538058,
+                "chunk_id": "20230000051:chunk:00002",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230000051",
+                "dense_rank": 21,
+                "dense_score": 0.50906885,
+                "document_id": 20230000051,
+                "document_sha256": "a929174b16cf181087cebeea125dd558295eaa862168f4f5a83991a4d91b5a3d",
+                "hybrid_rank": 3,
+                "hybrid_score": 0.022549760645,
+                "page_end": 12,
+                "page_start": 7,
+                "reranker_rank": 4,
+                "reranker_score": -0.9600300788879395,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230000051/downloads/Walker%20Presentation%20V1%20(002).pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20230000051:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230000051",
+                "dense_rank": 2,
+                "dense_score": 0.57048661,
+                "document_id": 20230000051,
+                "document_sha256": "a929174b16cf181087cebeea125dd558295eaa862168f4f5a83991a4d91b5a3d",
+                "hybrid_rank": 10,
+                "hybrid_score": 0.016129032258,
+                "page_end": 8,
+                "page_start": 4,
+                "reranker_rank": 5,
+                "reranker_score": -0.9722084999084473,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230000051/downloads/Walker%20Presentation%20V1%20(002).pdf"
+              }
+            ],
+            "retrieval_query": "What exact coolant flow rate does the FAA require for every electric-aircraft battery pack? NASA aerospace technical report",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "What exact coolant flow rate does the FAA require for every electric-aircraft battery pack?",
+        "retrieval_terminal_state": "grounded_refusal",
+        "rewritten_query": "What exact coolant flow rate does the FAA require for every electric-aircraft battery pack? NASA aerospace technical report",
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "rewrite_query",
+          "retrieve_recovery",
+          "assess_recovery",
+          "grounded_refusal"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.106,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_exact_001",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_ms": 1470.58,
+      "sufficiency_ms": 2.922,
+      "total_latency_ms": 1473.935,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.8333333333333334,
+                "query_terms": [
+                  "federal",
+                  "regulation",
+                  "sets",
+                  "single",
+                  "mandatory",
+                  "thermal",
+                  "management",
+                  "design",
+                  "all",
+                  "fuel",
+                  "cell",
+                  "aircraft"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.5833333333333334,
+                "sufficient": true,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "federal",
+                  "regulation",
+                  "single",
+                  "thermal",
+                  "management",
+                  "design",
+                  "all",
+                  "fuel",
+                  "cell",
+                  "aircraft"
+                ],
+                "unsupported_terms": [
+                  "sets",
+                  "mandatory"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20250010867:chunk:00008",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250010867",
+                "dense_rank": 6,
+                "dense_score": 0.50681639,
+                "document_id": 20250010867,
+                "document_sha256": "66f61a9bfc0545f3c3ce499482252e12ffdf8362084e625186216109c66b6859",
+                "hybrid_rank": 13,
+                "hybrid_score": 0.015151515152,
+                "page_end": 5,
+                "page_start": 4,
+                "reranker_rank": 1,
+                "reranker_score": -3.348867654800415,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250010867/downloads/AIAA2026_Lvovich.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20190004971:chunk:00011",
+                "citation_url": "https://ntrs.nasa.gov/citations/20190004971",
+                "dense_rank": 9,
+                "dense_score": 0.50081921,
+                "document_id": 20190004971,
+                "document_sha256": "a4e60a5b81753e0c2e14d4ffb0f0b04664d1ccbb28284bd104672a656e0021fc",
+                "hybrid_rank": 18,
+                "hybrid_score": 0.014492753623,
+                "page_end": 40,
+                "page_start": 35,
+                "reranker_rank": 2,
+                "reranker_score": -4.884958267211914,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20190004971/downloads/20190004971.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 1,
+                "bm25_score": 15.15978129,
+                "chunk_id": "20240008078:chunk:00021",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008078",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20240008078,
+                "document_sha256": "8b21a6f43d26c483e4ffdd4267a0cafc01996b2c4cf85e270cfca04ad34b0598",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.016393442623,
+                "page_end": 12,
+                "page_start": 12,
+                "reranker_rank": 3,
+                "reranker_score": -5.545466899871826,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008078/downloads/Hanlon_CP_ModelFuelCellAir_EATS2024_%2020240008078.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 10,
+                "bm25_score": 10.24991475,
+                "chunk_id": "20160010440:chunk:00015",
+                "citation_url": "https://ntrs.nasa.gov/citations/20160010440",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20160010440,
+                "document_sha256": "0cda1756f9be432c2969aa7a2e5cdbd61a3e33c6b9d23b0b78e7dd80cfbb8465",
+                "hybrid_rank": 20,
+                "hybrid_score": 0.014285714286,
+                "page_end": 13,
+                "page_start": 12,
+                "reranker_rank": 4,
+                "reranker_score": -5.992921352386475,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20160010440/downloads/TM-2016-219085_2022.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 11.49766591,
+                "chunk_id": "20190033416:chunk:00014",
+                "citation_url": "https://ntrs.nasa.gov/citations/20190033416",
+                "dense_rank": 26,
+                "dense_score": 0.48155689,
+                "document_id": 20190033416,
+                "document_sha256": "532d98873dbbfb6bdf601efc917a0cd35dd7dfe0898b5e8d88db5cb2b2749fd4",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.02750092285,
+                "page_end": 7,
+                "page_start": 7,
+                "reranker_rank": 5,
+                "reranker_score": -6.227137088775635,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20190033416/downloads/20190033416.pdf"
+              }
+            ],
+            "retrieval_query": "Which federal regulation sets a single mandatory thermal-management design for all fuel-cell aircraft?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Which federal regulation sets a single mandatory thermal-management design for all fuel-cell aircraft?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": null,
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.056,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_policy_001",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_ms": 707.691,
+      "sufficiency_ms": 1.546,
+      "total_latency_ms": 709.761,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.6666666666666666,
+                "query_terms": [
+                  "failure",
+                  "code",
+                  "assign",
+                  "fictional",
+                  "skycell",
+                  "42",
+                  "aircraft",
+                  "battery",
+                  "nasa"
+                ],
+                "reasons": [
+                  "missing_numeric_support",
+                  "missing_named_anchor_support"
+                ],
+                "required_claim_qualifiers": [
+                  "assign"
+                ],
+                "required_named_anchors": [
+                  "skycell",
+                  "42",
+                  "nasa"
+                ],
+                "required_numeric_terms": [
+                  "42"
+                ],
+                "single_evidence_coverage": 0.4444444444444444,
+                "sufficient": false,
+                "supported_claim_qualifiers": [
+                  "assign"
+                ],
+                "supported_named_anchors": [
+                  "nasa"
+                ],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "failure",
+                  "code",
+                  "assign",
+                  "aircraft",
+                  "battery",
+                  "nasa"
+                ],
+                "unsupported_terms": [
+                  "fictional",
+                  "skycell",
+                  "42"
+                ]
+              },
+              "reasons": [
+                "missing_numeric_support",
+                "missing_named_anchor_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 38,
+                "bm25_score": 9.42383942,
+                "chunk_id": "20210025384:chunk:00039",
+                "citation_url": "https://ntrs.nasa.gov/citations/20210025384",
+                "dense_rank": 33,
+                "dense_score": 0.40811914,
+                "document_id": 20210025384,
+                "document_sha256": "b781cedc771868ae9388f5ea83aeb8d978f6383fa7859fce712bdedf13050568",
+                "hybrid_rank": 3,
+                "hybrid_score": 0.020956769805,
+                "page_end": 53,
+                "page_start": 51,
+                "reranker_rank": 1,
+                "reranker_score": -4.07033109664917,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20210025384/downloads/Nelson%20Thesis%20draft-final.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 3,
+                "bm25_score": 13.52884618,
+                "chunk_id": "20260000697:chunk:00009",
+                "citation_url": "https://ntrs.nasa.gov/citations/20260000697",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20260000697,
+                "document_sha256": "c2b2a0b1c361cc3dfc6ee48352b103fe35da449343460fd90122b17b3bd6c3cc",
+                "hybrid_rank": 10,
+                "hybrid_score": 0.015873015873,
+                "page_end": 9,
+                "page_start": 8,
+                "reranker_rank": 2,
+                "reranker_score": -4.748557090759277,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20260000697/downloads/NASA-TM-20260000697.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 5,
+                "bm25_score": 11.82138838,
+                "chunk_id": "20050228985:chunk:00326",
+                "citation_url": "https://ntrs.nasa.gov/citations/20050228985",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20050228985,
+                "document_sha256": "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b",
+                "hybrid_rank": 12,
+                "hybrid_score": 0.015384615385,
+                "page_end": 178,
+                "page_start": 177,
+                "reranker_rank": 3,
+                "reranker_score": -4.800507545471191,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20050228985/downloads/20050228985.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 7,
+                "bm25_score": 11.32689685,
+                "chunk_id": "20220005753:chunk:00002",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220005753",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20220005753,
+                "document_sha256": "2718ff18dab07a34d18911fb21c25d14b0f9974ac9f7d7d27c26b090b1bf4c08",
+                "hybrid_rank": 17,
+                "hybrid_score": 0.014925373134,
+                "page_end": 8,
+                "page_start": 6,
+                "reranker_rank": 4,
+                "reranker_score": -4.810290336608887,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220005753/downloads/EAP_HealthMangementConsideration_FAA.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20205004497:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20205004497",
+                "dense_rank": 1,
+                "dense_score": 0.51746213,
+                "document_id": 20205004497,
+                "document_sha256": "93197c20ecfd69791c6d63597cfb5189c6f5a6fab9bca1ee01fe22235bc7aa57",
+                "hybrid_rank": 5,
+                "hybrid_score": 0.016393442623,
+                "page_end": 1,
+                "page_start": 1,
+                "reranker_rank": 5,
+                "reranker_score": -4.9516401290893555,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20205004497/downloads/Battery_Evaluation_EATS_07_15_20.pdf"
+              }
+            ],
+            "retrieval_query": "What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          },
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.4444444444444444,
+                "query_terms": [
+                  "failure",
+                  "code",
+                  "assign",
+                  "fictional",
+                  "skycell",
+                  "42",
+                  "aircraft",
+                  "battery",
+                  "nasa"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "low_single_evidence_coverage",
+                  "missing_numeric_support",
+                  "missing_named_anchor_support",
+                  "missing_claim_qualifier_support"
+                ],
+                "required_claim_qualifiers": [
+                  "assign"
+                ],
+                "required_named_anchors": [
+                  "skycell",
+                  "42",
+                  "nasa"
+                ],
+                "required_numeric_terms": [
+                  "42"
+                ],
+                "single_evidence_coverage": 0.2222222222222222,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [
+                  "nasa"
+                ],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "code",
+                  "aircraft",
+                  "battery",
+                  "nasa"
+                ],
+                "unsupported_terms": [
+                  "failure",
+                  "assign",
+                  "fictional",
+                  "skycell",
+                  "42"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "low_single_evidence_coverage",
+                "missing_numeric_support",
+                "missing_named_anchor_support",
+                "missing_claim_qualifier_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 2,
+            "evidence_provenance": [
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20060054003:chunk:00141",
+                "citation_url": "https://ntrs.nasa.gov/citations/20060054003",
+                "dense_rank": 3,
+                "dense_score": 0.47417641,
+                "document_id": 20060054003,
+                "document_sha256": "ff906c056f1ab02db3c154f6dd37dbd0de4818fd757bbb520d0a37294bc63f79",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.015873015873,
+                "page_end": 73,
+                "page_start": 72,
+                "reranker_rank": 1,
+                "reranker_score": -3.215223789215088,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20060054003/downloads/20060054003.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20090021990:chunk:00077",
+                "citation_url": "https://ntrs.nasa.gov/citations/20090021990",
+                "dense_rank": 8,
+                "dense_score": 0.45222491,
+                "document_id": 20090021990,
+                "document_sha256": "415df9654c78a88fce7ddc6f65e9655a11f6f031496855ce9d02780d442ac872",
+                "hybrid_rank": 16,
+                "hybrid_score": 0.014705882353,
+                "page_end": 46,
+                "page_start": 45,
+                "reranker_rank": 2,
+                "reranker_score": -3.50364351272583,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20090021990/downloads/20090021990.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 3,
+                "bm25_score": 18.34255648,
+                "chunk_id": "20050228985:chunk:00404",
+                "citation_url": "https://ntrs.nasa.gov/citations/20050228985",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20050228985,
+                "document_sha256": "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b",
+                "hybrid_rank": 7,
+                "hybrid_score": 0.015873015873,
+                "page_end": 226,
+                "page_start": 225,
+                "reranker_rank": 3,
+                "reranker_score": -3.5085201263427734,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20050228985/downloads/20050228985.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20090021990:chunk:00081",
+                "citation_url": "https://ntrs.nasa.gov/citations/20090021990",
+                "dense_rank": 10,
+                "dense_score": 0.45162669,
+                "document_id": 20090021990,
+                "document_sha256": "415df9654c78a88fce7ddc6f65e9655a11f6f031496855ce9d02780d442ac872",
+                "hybrid_rank": 20,
+                "hybrid_score": 0.014285714286,
+                "page_end": 48,
+                "page_start": 47,
+                "reranker_rank": 4,
+                "reranker_score": -4.161039352416992,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20090021990/downloads/20090021990.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 9,
+                "bm25_score": 16.14547049,
+                "chunk_id": "20210026284:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20210026284",
+                "dense_rank": null,
+                "dense_score": null,
+                "document_id": 20210026284,
+                "document_sha256": "fab19b504538749b23437a79c5796122940a5cf6c56d9b2be43c4f18e1323d76",
+                "hybrid_rank": 18,
+                "hybrid_score": 0.014492753623,
+                "page_end": 5,
+                "page_start": 2,
+                "reranker_rank": 5,
+                "reranker_score": -4.163535118103027,
+                "retrieved_by": [
+                  "bm25"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20210026284/downloads/TM-20210026284.pdf"
+              }
+            ],
+            "retrieval_query": "What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA? NASA aerospace technical report",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA?",
+        "retrieval_terminal_state": "grounded_refusal",
+        "rewritten_query": "What failure code was assigned to the fictional SkyCell-42 aircraft battery by NASA? NASA aerospace technical report",
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "rewrite_query",
+          "retrieve_recovery",
+          "assess_recovery",
+          "grounded_refusal"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.112,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_fiction_001",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_ms": 1363.589,
+      "sufficiency_ms": 3.203,
+      "total_latency_ms": 1367.207,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.5555555555555556,
+                "query_terms": [
+                  "airport",
+                  "first",
+                  "operat",
+                  "fictional",
+                  "aurorah2",
+                  "commercial",
+                  "hydrogen",
+                  "aircraft",
+                  "2043"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "missing_numeric_support",
+                  "missing_named_anchor_support"
+                ],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [
+                  "aurorah2"
+                ],
+                "required_numeric_terms": [
+                  "2043"
+                ],
+                "single_evidence_coverage": 0.5555555555555556,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "airport",
+                  "operat",
+                  "commercial",
+                  "hydrogen",
+                  "aircraft"
+                ],
+                "unsupported_terms": [
+                  "first",
+                  "fictional",
+                  "aurorah2",
+                  "2043"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "missing_numeric_support",
+                "missing_named_anchor_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240003885:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 3,
+                "dense_score": 0.50588256,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 19,
+                "hybrid_score": 0.015873015873,
+                "page_end": 5,
+                "page_start": 3,
+                "reranker_rank": 1,
+                "reranker_score": -3.7551021575927734,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 10,
+                "bm25_score": 12.61030354,
+                "chunk_id": "20250002550:chunk:00003",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250002550",
+                "dense_rank": 2,
+                "dense_score": 0.51261044,
+                "document_id": 20250002550,
+                "document_sha256": "5c242544b88247b27a027133df9db687c11d9475334999db7dd68c2a31202a7f",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.030414746544,
+                "page_end": 8,
+                "page_start": 5,
+                "reranker_rank": 2,
+                "reranker_score": -4.245657444000244,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250002550/downloads/AeroTech%20Cryogenic%20H2%20testing%20Mar%202025.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240008370:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008370",
+                "dense_rank": 1,
+                "dense_score": 0.54427254,
+                "document_id": 20240008370,
+                "document_sha256": "ec33f7afb2ee2d9a5a24626b3ffbf087d23cdd7efd7f910c770810a0ed136155",
+                "hybrid_rank": 18,
+                "hybrid_score": 0.016393442623,
+                "page_end": 4,
+                "page_start": 2,
+                "reranker_rank": 3,
+                "reranker_score": -4.634835243225098,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008370/downloads/ISABE2024%20September%202024.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 39,
+                "bm25_score": 10.29399042,
+                "chunk_id": "20250010867:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250010867",
+                "dense_rank": 13,
+                "dense_score": 0.44365403,
+                "document_id": 20250010867,
+                "document_sha256": "66f61a9bfc0545f3c3ce499482252e12ffdf8362084e625186216109c66b6859",
+                "hybrid_rank": 15,
+                "hybrid_score": 0.023799640238,
+                "page_end": 2,
+                "page_start": 1,
+                "reranker_rank": 4,
+                "reranker_score": -5.021625518798828,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250010867/downloads/AIAA2026_Lvovich.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 2,
+                "bm25_score": 14.0428041,
+                "chunk_id": "20240003885:chunk:00010",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 9,
+                "dense_score": 0.4568482,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.030621785881,
+                "page_end": 18,
+                "page_start": 16,
+                "reranker_rank": 5,
+                "reranker_score": -5.680612564086914,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              }
+            ],
+            "retrieval_query": "Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          },
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.5555555555555556,
+                "query_terms": [
+                  "airport",
+                  "first",
+                  "operat",
+                  "fictional",
+                  "aurorah2",
+                  "commercial",
+                  "hydrogen",
+                  "aircraft",
+                  "2043"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "missing_numeric_support",
+                  "missing_named_anchor_support"
+                ],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [
+                  "aurorah2"
+                ],
+                "required_numeric_terms": [
+                  "2043"
+                ],
+                "single_evidence_coverage": 0.4444444444444444,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "airport",
+                  "first",
+                  "commercial",
+                  "hydrogen",
+                  "aircraft"
+                ],
+                "unsupported_terms": [
+                  "operat",
+                  "fictional",
+                  "aurorah2",
+                  "2043"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "missing_numeric_support",
+                "missing_named_anchor_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 2,
+            "evidence_provenance": [
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240003885:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 5,
+                "dense_score": 0.52580452,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 15,
+                "hybrid_score": 0.015384615385,
+                "page_end": 4,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": -0.9996090531349182,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 16,
+                "bm25_score": 15.27465591,
+                "chunk_id": "20240008067:chunk:00032",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008067",
+                "dense_rank": 18,
+                "dense_score": 0.4487873,
+                "document_id": 20240008067,
+                "document_sha256": "80ea3241166a0af1a6332af32a86583524003d37800d5f874114e99c1a65deba",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.025978407557,
+                "page_end": 10,
+                "page_start": 9,
+                "reranker_rank": 2,
+                "reranker_score": -2.0922110080718994,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008067/downloads/43DASC%20Paper%20full%20paper%20final%20edits.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 43,
+                "bm25_score": 13.44829061,
+                "chunk_id": "20250002550:chunk:00003",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250002550",
+                "dense_rank": 2,
+                "dense_score": 0.54882073,
+                "document_id": 20250002550,
+                "document_sha256": "5c242544b88247b27a027133df9db687c11d9475334999db7dd68c2a31202a7f",
+                "hybrid_rank": 3,
+                "hybrid_score": 0.025837770122,
+                "page_end": 8,
+                "page_start": 5,
+                "reranker_rank": 3,
+                "reranker_score": -2.236675500869751,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250002550/downloads/AeroTech%20Cryogenic%20H2%20testing%20Mar%202025.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240003885:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240003885",
+                "dense_rank": 4,
+                "dense_score": 0.52711499,
+                "document_id": 20240003885,
+                "document_sha256": "03f90374cd19f4c142055e72c91ccd9a209a774a1598d4da9afa4c61c3236d42",
+                "hybrid_rank": 12,
+                "hybrid_score": 0.015625,
+                "page_end": 5,
+                "page_start": 3,
+                "reranker_rank": 4,
+                "reranker_score": -2.389760971069336,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240003885/downloads/HYSKY%20Vision%20for%20HA%20Tech%20Development%2004_2024.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240008370:chunk:00001",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008370",
+                "dense_rank": 1,
+                "dense_score": 0.5667696,
+                "document_id": 20240008370,
+                "document_sha256": "ec33f7afb2ee2d9a5a24626b3ffbf087d23cdd7efd7f910c770810a0ed136155",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.016393442623,
+                "page_end": 4,
+                "page_start": 2,
+                "reranker_rank": 5,
+                "reranker_score": -2.4162330627441406,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008370/downloads/ISABE2024%20September%202024.pdf"
+              }
+            ],
+            "retrieval_query": "Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043? NASA aerospace technical report",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043?",
+        "retrieval_terminal_state": "grounded_refusal",
+        "rewritten_query": "Which airport first operated the fictional AuroraH2 commercial hydrogen aircraft in 2043? NASA aerospace technical report",
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "rewrite_query",
+          "retrieve_recovery",
+          "assess_recovery",
+          "grounded_refusal"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.103,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_fiction_002",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_ms": 1389.351,
+      "sufficiency_ms": 3.197,
+      "total_latency_ms": 1392.949,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.8,
+                "query_terms": [
+                  "ticket",
+                  "price",
+                  "commercial",
+                  "electric",
+                  "aircraft",
+                  "flight",
+                  "atlanta",
+                  "new",
+                  "york",
+                  "2032"
+                ],
+                "reasons": [
+                  "missing_numeric_support"
+                ],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [
+                  "2032"
+                ],
+                "single_evidence_coverage": 0.5,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "price",
+                  "commercial",
+                  "electric",
+                  "aircraft",
+                  "flight",
+                  "atlanta",
+                  "new",
+                  "york"
+                ],
+                "unsupported_terms": [
+                  "ticket",
+                  "2032"
+                ]
+              },
+              "reasons": [
+                "missing_numeric_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 22,
+                "bm25_score": 10.01613564,
+                "chunk_id": "20190004971:chunk:00005",
+                "citation_url": "https://ntrs.nasa.gov/citations/20190004971",
+                "dense_rank": 2,
+                "dense_score": 0.4467442,
+                "document_id": 20190004971,
+                "document_sha256": "a4e60a5b81753e0c2e14d4ffb0f0b04664d1ccbb28284bd104672a656e0021fc",
+                "hybrid_rank": 3,
+                "hybrid_score": 0.028324154209,
+                "page_end": 18,
+                "page_start": 15,
+                "reranker_rank": 1,
+                "reranker_score": -5.305987358093262,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20190004971/downloads/20190004971.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 36,
+                "bm25_score": 9.14819975,
+                "chunk_id": "20230009959:chunk:00035",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230009959",
+                "dense_rank": 21,
+                "dense_score": 0.31950527,
+                "document_id": 20230009959,
+                "document_sha256": "7d3a9bd5456e220345f433b5d3ed888c05d183b667ca37e2072356bc77eff8cc",
+                "hybrid_rank": 8,
+                "hybrid_score": 0.022762345679,
+                "page_end": 26,
+                "page_start": 26,
+                "reranker_rank": 2,
+                "reranker_score": -6.7704362869262695,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230009959/downloads/TM-20230009959.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20250006187:chunk:00024",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250006187",
+                "dense_rank": 5,
+                "dense_score": 0.38001779,
+                "document_id": 20250006187,
+                "document_sha256": "b2442a8837beda19ddb7a5bcbfb327fd4bf3d26b35da784d77402c77679f9067",
+                "hybrid_rank": 16,
+                "hybrid_score": 0.015384615385,
+                "page_end": 19,
+                "page_start": 17,
+                "reranker_rank": 3,
+                "reranker_score": -6.900277137756348,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250006187/downloads/Johnson%20NASA-TP20250006187.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 6,
+                "bm25_score": 13.29628898,
+                "chunk_id": "20250006187:chunk:00023",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250006187",
+                "dense_rank": 13,
+                "dense_score": 0.34142369,
+                "document_id": 20250006187,
+                "document_sha256": "b2442a8837beda19ddb7a5bcbfb327fd4bf3d26b35da784d77402c77679f9067",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.028850145289,
+                "page_end": 17,
+                "page_start": 17,
+                "reranker_rank": 4,
+                "reranker_score": -7.03823184967041,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250006187/downloads/Johnson%20NASA-TP20250006187.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 4,
+                "bm25_score": 13.47458242,
+                "chunk_id": "20240008067:chunk:00032",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008067",
+                "dense_rank": 1,
+                "dense_score": 0.48176256,
+                "document_id": 20240008067,
+                "document_sha256": "80ea3241166a0af1a6332af32a86583524003d37800d5f874114e99c1a65deba",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.032018442623,
+                "page_end": 10,
+                "page_start": 9,
+                "reranker_rank": 5,
+                "reranker_score": -7.6921796798706055,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008067/downloads/43DASC%20Paper%20full%20paper%20final%20edits.pdf"
+              }
+            ],
+            "retrieval_query": "What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          },
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.7,
+                "query_terms": [
+                  "ticket",
+                  "price",
+                  "commercial",
+                  "electric",
+                  "aircraft",
+                  "flight",
+                  "atlanta",
+                  "new",
+                  "york",
+                  "2032"
+                ],
+                "reasons": [
+                  "missing_numeric_support"
+                ],
+                "required_claim_qualifiers": [],
+                "required_named_anchors": [],
+                "required_numeric_terms": [
+                  "2032"
+                ],
+                "single_evidence_coverage": 0.5,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "price",
+                  "commercial",
+                  "electric",
+                  "aircraft",
+                  "flight",
+                  "atlanta",
+                  "new"
+                ],
+                "unsupported_terms": [
+                  "ticket",
+                  "york",
+                  "2032"
+                ]
+              },
+              "reasons": [
+                "missing_numeric_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 2,
+            "evidence_provenance": [
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20220015806:chunk:00002",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220015806",
+                "dense_rank": 3,
+                "dense_score": 0.43209672,
+                "document_id": 20220015806,
+                "document_sha256": "be00fdd7ad513897aead5010b3fb1bf4b216131c01707085e288d0b0b21a7694",
+                "hybrid_rank": 12,
+                "hybrid_score": 0.015873015873,
+                "page_end": 9,
+                "page_start": 7,
+                "reranker_rank": 1,
+                "reranker_score": -3.061802387237549,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220015806/downloads/WVU_MEA-Nov-2022-Final.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 20,
+                "bm25_score": 16.10954661,
+                "chunk_id": "20230009959:chunk:00035",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230009959",
+                "dense_rank": 12,
+                "dense_score": 0.38974077,
+                "document_id": 20230009959,
+                "document_sha256": "7d3a9bd5456e220345f433b5d3ed888c05d183b667ca37e2072356bc77eff8cc",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.026388888889,
+                "page_end": 26,
+                "page_start": 26,
+                "reranker_rank": 2,
+                "reranker_score": -3.3217110633850098,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230009959/downloads/TM-20230009959.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20250006187:chunk:00024",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250006187",
+                "dense_rank": 6,
+                "dense_score": 0.4070937,
+                "document_id": 20250006187,
+                "document_sha256": "b2442a8837beda19ddb7a5bcbfb327fd4bf3d26b35da784d77402c77679f9067",
+                "hybrid_rank": 18,
+                "hybrid_score": 0.015151515152,
+                "page_end": 19,
+                "page_start": 17,
+                "reranker_rank": 3,
+                "reranker_score": -3.468336582183838,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250006187/downloads/Johnson%20NASA-TP20250006187.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 44,
+                "bm25_score": 13.75515593,
+                "chunk_id": "20250006187:chunk:00023",
+                "citation_url": "https://ntrs.nasa.gov/citations/20250006187",
+                "dense_rank": 19,
+                "dense_score": 0.35915607,
+                "document_id": 20250006187,
+                "document_sha256": "b2442a8837beda19ddb7a5bcbfb327fd4bf3d26b35da784d77402c77679f9067",
+                "hybrid_rank": 6,
+                "hybrid_score": 0.022273612463,
+                "page_end": 17,
+                "page_start": 17,
+                "reranker_rank": 4,
+                "reranker_score": -3.6894850730895996,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20250006187/downloads/Johnson%20NASA-TP20250006187.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 9,
+                "bm25_score": 17.05083523,
+                "chunk_id": "20240008067:chunk:00032",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008067",
+                "dense_rank": 1,
+                "dense_score": 0.51046687,
+                "document_id": 20240008067,
+                "document_sha256": "80ea3241166a0af1a6332af32a86583524003d37800d5f874114e99c1a65deba",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.030886196246,
+                "page_end": 10,
+                "page_start": 9,
+                "reranker_rank": 5,
+                "reranker_score": -3.740760564804077,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008067/downloads/43DASC%20Paper%20full%20paper%20final%20edits.pdf"
+              }
+            ],
+            "retrieval_query": "What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032? NASA aerospace technical report",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032?",
+        "retrieval_terminal_state": "grounded_refusal",
+        "rewritten_query": "What is the ticket price for a commercial electric-aircraft flight from Atlanta to New York in 2032? NASA aerospace technical report",
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "rewrite_query",
+          "retrieve_recovery",
+          "assess_recovery",
+          "grounded_refusal"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.108,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_scope_001",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_ms": 1410.506,
+      "sufficiency_ms": 3.366,
+      "total_latency_ms": 1414.287,
+      "trace_valid": true
+    },
+    {
+      "adaptive_trace": {
+        "attempts": [
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.5,
+                "query_terms": [
+                  "weather",
+                  "forecast",
+                  "cause",
+                  "every",
+                  "battery",
+                  "electric",
+                  "aircraft",
+                  "ground"
+                ],
+                "reasons": [
+                  "low_query_term_coverage",
+                  "missing_claim_qualifier_support"
+                ],
+                "required_claim_qualifiers": [
+                  "every"
+                ],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.5,
+                "sufficient": false,
+                "supported_claim_qualifiers": [],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "battery",
+                  "electric",
+                  "aircraft",
+                  "ground"
+                ],
+                "unsupported_terms": [
+                  "weather",
+                  "forecast",
+                  "cause",
+                  "every"
+                ]
+              },
+              "reasons": [
+                "low_query_term_coverage",
+                "missing_claim_qualifier_support"
+              ],
+              "sufficient": false
+            },
+            "attempt_number": 1,
+            "evidence_provenance": [
+              {
+                "attempt_number": 1,
+                "bm25_rank": 6,
+                "bm25_score": 10.10007504,
+                "chunk_id": "20220012921:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220012921",
+                "dense_rank": 2,
+                "dense_score": 0.38970059,
+                "document_id": 20220012921,
+                "document_sha256": "0441d6ece1a5a5d29875d1c8663c7df4931760d22c038a7d383e934134a84602",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.03128054741,
+                "page_end": 4,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": -3.603344440460205,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220012921/downloads/Solid-state%20Architecture%20Batteries%20for%20Enhanced%20Rechargeability%20and%20Safety%20(SABERS)%20for%20Electric%20Aircraft%20-%20Final.pptx.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240015505:chunk:00019",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240015505",
+                "dense_rank": 1,
+                "dense_score": 0.4043965,
+                "document_id": 20240015505,
+                "document_sha256": "75d9b79fef5134556dc27c8d4b4ac73f5f10f9e17790fe2b7c1f9d81e0354c83",
+                "hybrid_rank": 7,
+                "hybrid_score": 0.016393442623,
+                "page_end": 12,
+                "page_start": 12,
+                "reranker_rank": 2,
+                "reranker_score": -5.299993991851807,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240015505/downloads/Stalcup%20SUSAN%20SciTech%202025%20Manuscript.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 39,
+                "bm25_score": 7.00205772,
+                "chunk_id": "20140011913:chunk:00036",
+                "citation_url": "https://ntrs.nasa.gov/citations/20140011913",
+                "dense_rank": 36,
+                "dense_score": 0.29660973,
+                "document_id": 20140011913,
+                "document_sha256": "07838412f54d8e4f1eb7260eb12a11072ef1402d690b8aec91ce99b0304eb85f",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.020517676768,
+                "page_end": 14,
+                "page_start": 13,
+                "reranker_rank": 3,
+                "reranker_score": -5.902103424072266,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20140011913/downloads/20140011913.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20160010060:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20160010060",
+                "dense_rank": 5,
+                "dense_score": 0.36116463,
+                "document_id": 20160010060,
+                "document_sha256": "e8a49f22cd27e6c5f35f7f5e29784542c9e3451bc63a6d9f7cc97d2f73ba8513",
+                "hybrid_rank": 14,
+                "hybrid_score": 0.015384615385,
+                "page_end": 3,
+                "page_start": 1,
+                "reranker_rank": 4,
+                "reranker_score": -6.802089214324951,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20160010060/downloads/20160010060.pdf"
+              },
+              {
+                "attempt_number": 1,
+                "bm25_rank": 48,
+                "bm25_score": 6.77082483,
+                "chunk_id": "20140011913:chunk:00035",
+                "citation_url": "https://ntrs.nasa.gov/citations/20140011913",
+                "dense_rank": 21,
+                "dense_score": 0.31922069,
+                "document_id": 20140011913,
+                "document_sha256": "07838412f54d8e4f1eb7260eb12a11072ef1402d690b8aec91ce99b0304eb85f",
+                "hybrid_rank": 2,
+                "hybrid_score": 0.021604938272,
+                "page_end": 13,
+                "page_start": 13,
+                "reranker_rank": 5,
+                "reranker_score": -7.167509078979492,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20140011913/downloads/20140011913.pdf"
+              }
+            ],
+            "retrieval_query": "What weather forecast causes every battery-electric aircraft to be grounded?",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          },
+          {
+            "assessment": {
+              "evidence_sufficiency": {
+                "evidence_count": 5,
+                "query_term_coverage": 0.625,
+                "query_terms": [
+                  "weather",
+                  "forecast",
+                  "cause",
+                  "every",
+                  "battery",
+                  "electric",
+                  "aircraft",
+                  "ground"
+                ],
+                "reasons": [],
+                "required_claim_qualifiers": [
+                  "every"
+                ],
+                "required_named_anchors": [],
+                "required_numeric_terms": [],
+                "single_evidence_coverage": 0.5,
+                "sufficient": true,
+                "supported_claim_qualifiers": [
+                  "every"
+                ],
+                "supported_named_anchors": [],
+                "supported_numeric_terms": [],
+                "supported_terms": [
+                  "every",
+                  "battery",
+                  "electric",
+                  "aircraft",
+                  "ground"
+                ],
+                "unsupported_terms": [
+                  "weather",
+                  "forecast",
+                  "cause"
+                ]
+              },
+              "reasons": [],
+              "sufficient": true
+            },
+            "attempt_number": 2,
+            "evidence_provenance": [
+              {
+                "attempt_number": 2,
+                "bm25_rank": 27,
+                "bm25_score": 13.34090708,
+                "chunk_id": "20220012921:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20220012921",
+                "dense_rank": 1,
+                "dense_score": 0.42383695,
+                "document_id": 20220012921,
+                "document_sha256": "0441d6ece1a5a5d29875d1c8663c7df4931760d22c038a7d383e934134a84602",
+                "hybrid_rank": 1,
+                "hybrid_score": 0.027887695497,
+                "page_end": 4,
+                "page_start": 1,
+                "reranker_rank": 1,
+                "reranker_score": -0.6392728090286255,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20220012921/downloads/Solid-state%20Architecture%20Batteries%20for%20Enhanced%20Rechargeability%20and%20Safety%20(SABERS)%20for%20Electric%20Aircraft%20-%20Final.pptx.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20230009959:chunk:00035",
+                "citation_url": "https://ntrs.nasa.gov/citations/20230009959",
+                "dense_rank": 3,
+                "dense_score": 0.41071594,
+                "document_id": 20230009959,
+                "document_sha256": "7d3a9bd5456e220345f433b5d3ed888c05d183b667ca37e2072356bc77eff8cc",
+                "hybrid_rank": 9,
+                "hybrid_score": 0.015873015873,
+                "page_end": 26,
+                "page_start": 26,
+                "reranker_rank": 2,
+                "reranker_score": -2.1694679260253906,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20230009959/downloads/TM-20230009959.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20160010060:chunk:00000",
+                "citation_url": "https://ntrs.nasa.gov/citations/20160010060",
+                "dense_rank": 6,
+                "dense_score": 0.40117297,
+                "document_id": 20160010060,
+                "document_sha256": "e8a49f22cd27e6c5f35f7f5e29784542c9e3451bc63a6d9f7cc97d2f73ba8513",
+                "hybrid_rank": 13,
+                "hybrid_score": 0.015151515152,
+                "page_end": 3,
+                "page_start": 1,
+                "reranker_rank": 3,
+                "reranker_score": -2.379467487335205,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20160010060/downloads/20160010060.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": null,
+                "bm25_score": null,
+                "chunk_id": "20240008067:chunk:00032",
+                "citation_url": "https://ntrs.nasa.gov/citations/20240008067",
+                "dense_rank": 2,
+                "dense_score": 0.41864637,
+                "document_id": 20240008067,
+                "document_sha256": "80ea3241166a0af1a6332af32a86583524003d37800d5f874114e99c1a65deba",
+                "hybrid_rank": 7,
+                "hybrid_score": 0.016129032258,
+                "page_end": 10,
+                "page_start": 9,
+                "reranker_rank": 4,
+                "reranker_score": -2.583127975463867,
+                "retrieved_by": [
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20240008067/downloads/43DASC%20Paper%20full%20paper%20final%20edits.pdf"
+              },
+              {
+                "attempt_number": 2,
+                "bm25_rank": 32,
+                "bm25_score": 12.81424102,
+                "chunk_id": "20160010440:chunk:00002",
+                "citation_url": "https://ntrs.nasa.gov/citations/20160010440",
+                "dense_rank": 36,
+                "dense_score": 0.34055459,
+                "document_id": 20160010440,
+                "document_sha256": "0cda1756f9be432c2969aa7a2e5cdbd61a3e33c6b9d23b0b78e7dd80cfbb8465",
+                "hybrid_rank": 4,
+                "hybrid_score": 0.021286231884,
+                "page_end": 5,
+                "page_start": 4,
+                "reranker_rank": 5,
+                "reranker_score": -3.3338451385498047,
+                "retrieved_by": [
+                  "bm25",
+                  "dense"
+                ],
+                "source_url": "https://ntrs.nasa.gov/api/citations/20160010440/downloads/TM-2016-219085_2022.pdf"
+              }
+            ],
+            "retrieval_query": "What weather forecast causes every battery-electric aircraft to be grounded? NASA aerospace technical report",
+            "returned_evidence_count": 5,
+            "used_evidence_count": 5
+          }
+        ],
+        "mode": "bounded_adaptive",
+        "original_query": "What weather forecast causes every battery-electric aircraft to be grounded?",
+        "retrieval_terminal_state": "generate",
+        "rewritten_query": "What weather forecast causes every battery-electric aircraft to be grounded? NASA aerospace technical report",
+        "states": [
+          "retrieve_initial",
+          "assess_initial",
+          "rewrite_query",
+          "retrieve_recovery",
+          "assess_recovery",
+          "generate"
+        ]
+      },
+      "bounds_respected": true,
+      "evidence_build_ms": 0.105,
+      "generation_failed": false,
+      "provenance_valid": true,
+      "query_id": "heldout_scope_002",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": true,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_ms": 1358.603,
+      "sufficiency_ms": 3.01,
+      "total_latency_ms": 1362.306,
+      "trace_valid": true
+    }
+  ],
+  "recovery_grounded_refusal_count": 4,
+  "recovery_trigger_count": 5,
+  "successful_recovery_count": 1,
+  "total_query_rewrites": 5,
+  "total_retrieval_attempts": 17
+}
