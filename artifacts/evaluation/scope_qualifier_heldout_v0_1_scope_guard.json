@@ -1,0 +1,1228 @@
+{
+  "adaptive_diagnostics": [
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "low_query_term_coverage",
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land?",
+      "query_id": "scope_holdout_001",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion?",
+      "query_id": "scope_holdout_002",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery?",
+      "query_id": "scope_holdout_003",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "What battery chemistry universally prevents fires in all electric aircraft?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "What battery chemistry universally prevents fires in all electric aircraft? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "What battery chemistry universally prevents fires in all electric aircraft?",
+      "query_id": "scope_holdout_004",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "What battery chemistry universally prevents fires in all electric aircraft? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "When will every regional aircraft worldwide operate only with electric propulsion?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "When will every regional aircraft worldwide operate only with electric propulsion? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "When will every regional aircraft worldwide operate only with electric propulsion?",
+      "query_id": "scope_holdout_005",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "When will every regional aircraft worldwide operate only with electric propulsion? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which single cooling architecture must all hybrid-electric aircraft use?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Which single cooling architecture must all hybrid-electric aircraft use? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Which single cooling architecture must all hybrid-electric aircraft use?",
+      "query_id": "scope_holdout_006",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Which single cooling architecture must all hybrid-electric aircraft use? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying?",
+      "query_id": "scope_holdout_007",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture?",
+      "query_id": "scope_holdout_008",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions?",
+      "query_id": "scope_holdout_009",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which worldwide rule requires all electric aircraft to carry identical battery packs?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Which worldwide rule requires all electric aircraft to carry identical battery packs? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Which worldwide rule requires all electric aircraft to carry identical battery packs?",
+      "query_id": "scope_holdout_010",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Which worldwide rule requires all electric aircraft to carry identical battery packs? NASA aerospace technical report"
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [],
+          "assessment_sufficient": true,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Which NASA aircraft demonstrator is called X-57 Maxwell?",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": false,
+      "missing_trace": false,
+      "original_query": "Which NASA aircraft demonstrator is called X-57 Maxwell?",
+      "query_id": "scope_holdout_011",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_terminal_state": "generate",
+      "rewritten_query": null
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [],
+          "assessment_sufficient": true,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "How many high-lift propellers did the X-57 Maxwell use?",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": false,
+      "missing_trace": false,
+      "original_query": "How many high-lift propellers did the X-57 Maxwell use?",
+      "query_id": "scope_holdout_012",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_terminal_state": "generate",
+      "rewritten_query": null
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [],
+          "assessment_sufficient": true,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Does the X-57 Maxwell use distributed electric propulsion?",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": false,
+      "missing_trace": false,
+      "original_query": "Does the X-57 Maxwell use distributed electric propulsion?",
+      "query_id": "scope_holdout_013",
+      "query_rewrite_count": 0,
+      "recovery_grounded_refusal": false,
+      "recovery_succeeded": false,
+      "recovery_triggered": false,
+      "retrieval_attempt_count": 1,
+      "retrieval_terminal_state": "generate",
+      "rewritten_query": null
+    },
+    {
+      "attempts": [
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 1,
+          "provenance_count": 5,
+          "retrieval_query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor?",
+          "returned_evidence_count": 5
+        },
+        {
+          "assessment_reasons": [
+            "missing_claim_qualifier_support",
+            "missing_scope_qualifier_support"
+          ],
+          "assessment_sufficient": false,
+          "attempt_number": 2,
+          "provenance_count": 5,
+          "retrieval_query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor? NASA aerospace technical report",
+          "returned_evidence_count": 5
+        }
+      ],
+      "insufficient_evidence": true,
+      "missing_trace": false,
+      "original_query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor?",
+      "query_id": "scope_holdout_014",
+      "query_rewrite_count": 1,
+      "recovery_grounded_refusal": true,
+      "recovery_succeeded": false,
+      "recovery_triggered": true,
+      "retrieval_attempt_count": 2,
+      "retrieval_terminal_state": "grounded_refusal",
+      "rewritten_query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor? NASA aerospace technical report"
+    }
+  ],
+  "adaptive_retrieval_config": "configs/adaptive_retrieval_v0_1.yaml",
+  "bounded_adaptive": {
+    "answerability_accuracy": 0.9285714285714286,
+    "answerable_completion_rate": 0.75,
+    "answerable_query_count": 4,
+    "citation_count": 15,
+    "citation_reference_validity_rate": 1.0,
+    "cited_claim_count": 15,
+    "claim_citation_coverage_rate": 1.0,
+    "completed_answerable_count": 3,
+    "completed_query_count": 14,
+    "correct_answerability_count": 13,
+    "correctly_refused_unanswerable_count": 10,
+    "expected_term_count": 11,
+    "expected_term_recall": 0.45454545454545453,
+    "generation_failure_count": 0,
+    "generation_failure_rate": 0.0,
+    "generation_model": "deterministic-grounded-v0",
+    "generation_provider": "fake",
+    "matched_expected_term_count": 5,
+    "predicted_answerable_count": 3,
+    "query_count": 14,
+    "query_results": [
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land?",
+        "query_id": "scope_holdout_001",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion?",
+        "query_id": "scope_holdout_002",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery?",
+        "query_id": "scope_holdout_003",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What battery chemistry universally prevents fires in all electric aircraft?",
+        "query_id": "scope_holdout_004",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "When will every regional aircraft worldwide operate only with electric propulsion?",
+        "query_id": "scope_holdout_005",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which single cooling architecture must all hybrid-electric aircraft use?",
+        "query_id": "scope_holdout_006",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying?",
+        "query_id": "scope_holdout_007",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture?",
+        "query_id": "scope_holdout_008",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions?",
+        "query_id": "scope_holdout_009",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which worldwide rule requires all electric aircraft to carry identical battery packs?",
+        "query_id": "scope_holdout_010",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. perspectives on vehicle ground noise, cabin noise and on-board ride quality Related and coordinated with work in other areas \u2022 UAS traffic management \u2022 UAS integration into the Nat\u2019l Airspace \u2022 Revolutionary Vertical Lift Technologies \u2022 X-57 Flight Demonstrator 6 X-57 Maxwell Flight Demonstrator \u2022 Explore all-electric propulsion \u2013 Fully electric transmission \u2013 High aspect ratio wing enabled by high lift system \u2013\u2026 Rectifier Generator R1 Controller/ Rectifier Generator R2 Controller/ Rectifier Propulsor L1 Motor R1 Motor R1 Control/ Inverter Propulsor R1 Motor L8 Motor L8 Control/ Inverter Propulsor L8 Motor R8 Motor R8 Control/ Inverter Propulsor R8 Motor L3 Motor L3 Control/ Inverter Propulsor L3 Motor R3 Motor R3 Control/ Inverter Propulsor R3 Motor L6 Motor L6 Control/ Inverter Propulsor L6 Motor R6 Motor R6 Control/\u2026 1 FUELEAP Model-Based System Safety Analysis Kurt P. Woodham,1 Patrick J. Graydon,2 and Nicholas K. Borer3 NASA Langley Research Center, Hampton, VA, 23681, USA Kurt P. NASA Investments in Electrified Propulsion Presented to the International Forum for Aviation Research Electric-Hybrid Propulsion Working Group Workshop #2 Budapest, Hungary 27 November, 2019 Amy Jankovsky Manager, Electrified Aircraft Powertrain Technologies Advanced Air Transport Technologies Project NASA Glenn Research Center 2 NASA\u2019s Aeronautics Research Mission Directorate Primary Drivers for Electrification R&D\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 1.0,
+        "expected_terms": [
+          "x-57",
+          "maxwell"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "x-57",
+          "maxwell"
+        ],
+        "predicted_answerable": true,
+        "query": "Which NASA aircraft demonstrator is called X-57 Maxwell?",
+        "query_id": "scope_holdout_011",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "located at the aircraft wingtips for improved propulsive efficiency. Additionally, it has 12 high- lift propellers located at the leading edge of the wing (six on each side) to achieve high lift at low airspeeds. All power to drive the motor driven propulsors is supplied by two battery power supplies (labeled \u201cA\u201d and \u201cB\u201d). A block diagram of the X-57 electric propulsion system is shown in Figure 6. Rectifier Generator R1 Controller/ Rectifier Generator R2 Controller/ Rectifier Propulsor L1 Motor R1 Motor R1 Control/ Inverter Propulsor R1 Motor L8 Motor L8 Control/ Inverter Propulsor L8 Motor R8 Motor R8 Control/ Inverter Propulsor R8 Motor L3 Motor L3 Control/ Inverter Propulsor L3 Motor R3 Motor R3 Control/ Inverter Propulsor R3 Motor L6 Motor L6 Control/ Inverter Propulsor L6 Motor R6 Motor R6 Control/\u2026 maximizing speci\ufb01c torque. An overview of the development and a summary of the performance of these prototypes is provided here. For a detailed discussion and a complete list of lessons learned, refer to [15]. After the discussions about the prototypes, the development and capabilities of a new rotating test rig is discussed in detail. VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. perspectives on vehicle ground noise, cabin noise and on-board ride quality Related and coordinated with work in other areas \u2022 UAS traffic management \u2022 UAS integration into the Nat\u2019l Airspace \u2022 Revolutionary Vertical Lift Technologies \u2022 X-57 Flight Demonstrator 6 X-57 Maxwell Flight Demonstrator \u2022 Explore all-electric propulsion \u2013 Fully electric transmission \u2013 High aspect ratio wing enabled by high lift system \u2013\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.3333333333333333,
+        "expected_terms": [
+          "twelve",
+          "high-lift",
+          "propeller"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "propeller"
+        ],
+        "predicted_answerable": true,
+        "query": "How many high-lift propellers did the X-57 Maxwell use?",
+        "query_id": "scope_holdout_012",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "relocates the electric cruise motors in to the tips of this low-area wing and Mod IV integrates a set of six small boost motors along each leading edge to increase lift during takeoff and landing. These boost motors are equipped with folding- blade propellers that blend with the boost motor nacelles during cruise to provide a clean aerodynamic profile. Hybrid Fuel Turboshaft Generator Electric Bus Battery Distributed Fans Motor Motor Turboelectric Fuel Turboshaft Generator Electric Bus Distributed Fans Motor Motor Partial Turboelectric Fuel Generator Electric Bus Distributed Fans Motor Motor Turbofan Fan Series/Parallel Partial Hybrid Fuel Turbofan Generator Electric Bus Battery Distributed Fans Motor MotorFan Figure 1. at NASA AFRC neces sitated a testbed trailer setup, and allowed for testing flexibility while maintaining connectivity to the simulation laboratory. VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. 1 FUELEAP Model-Based System Safety Analysis Kurt P. Woodham,1 Patrick J. Graydon,2 and Nicholas K. Borer3 NASA Langley Research Center, Hampton, VA, 23681, USA Kurt P.",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.5,
+        "expected_terms": [
+          "x-57",
+          "distributed",
+          "electric",
+          "propulsion"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "distributed",
+          "electric"
+        ],
+        "predicted_answerable": true,
+        "query": "Does the X-57 Maxwell use distributed electric propulsion?",
+        "query_id": "scope_holdout_013",
+        "source_backed_citation_count": 5,
+        "source_document_count": 3,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": false,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": true,
+        "expected_term_recall": 0.0,
+        "expected_terms": [
+          "electric",
+          "motor"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor?",
+        "query_id": "scope_holdout_014",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      }
+    ],
+    "refusal_count": 11,
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "source_backed_citation_count": 15,
+    "source_document_coverage_rate": 1.0,
+    "structural_validity_rate": 1.0,
+    "structurally_valid_answer_count": 14,
+    "total_citation_reference_count": 15,
+    "total_claim_count": 15,
+    "unanswerable_query_count": 10,
+    "unsupported_refusal_rate": 1.0,
+    "valid_citation_reference_count": 15,
+    "version": "0.1"
+  },
+  "constraints": [
+    "The held-out benchmark was committed before this evaluation.",
+    "Phase 26 protected data and artifacts are not inputs to this run.",
+    "No sufficiency thresholds were tuned after observing this run.",
+    "The scope safeguard remains opt-in."
+  ],
+  "experiment": "scope_qualifier_heldout_evaluation",
+  "phase": 28,
+  "policy_name": "scope_guard_v0_3_0",
+  "queries_input": "data/evaluation/scope_qualifier_heldout_v0_1.jsonl",
+  "query_count": 14,
+  "single_pass": {
+    "answerability_accuracy": 0.9285714285714286,
+    "answerable_completion_rate": 0.75,
+    "answerable_query_count": 4,
+    "citation_count": 15,
+    "citation_reference_validity_rate": 1.0,
+    "cited_claim_count": 15,
+    "claim_citation_coverage_rate": 1.0,
+    "completed_answerable_count": 3,
+    "completed_query_count": 14,
+    "correct_answerability_count": 13,
+    "correctly_refused_unanswerable_count": 10,
+    "expected_term_count": 11,
+    "expected_term_recall": 0.45454545454545453,
+    "generation_failure_count": 0,
+    "generation_failure_rate": 0.0,
+    "generation_model": "deterministic-grounded-v0",
+    "generation_provider": "fake",
+    "matched_expected_term_count": 5,
+    "predicted_answerable_count": 3,
+    "query_count": 14,
+    "query_results": [
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which crosswind speed guarantees that every battery-electric aircraft can safely land?",
+        "query_id": "scope_holdout_001",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion?",
+        "query_id": "scope_holdout_002",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery?",
+        "query_id": "scope_holdout_003",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What battery chemistry universally prevents fires in all electric aircraft?",
+        "query_id": "scope_holdout_004",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "When will every regional aircraft worldwide operate only with electric propulsion?",
+        "query_id": "scope_holdout_005",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which single cooling architecture must all hybrid-electric aircraft use?",
+        "query_id": "scope_holdout_006",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which future weather event will always prevent every distributed-propulsion aircraft from flying?",
+        "query_id": "scope_holdout_007",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture?",
+        "query_id": "scope_holdout_008",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "At what altitude are all hydrogen-powered aircraft permanently free from emissions?",
+        "query_id": "scope_holdout_009",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": true,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": false,
+        "expected_term_recall": null,
+        "expected_terms": [],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Which worldwide rule requires all electric aircraft to carry identical battery packs?",
+        "query_id": "scope_holdout_010",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      },
+      {
+        "answer": "VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. perspectives on vehicle ground noise, cabin noise and on-board ride quality Related and coordinated with work in other areas \u2022 UAS traffic management \u2022 UAS integration into the Nat\u2019l Airspace \u2022 Revolutionary Vertical Lift Technologies \u2022 X-57 Flight Demonstrator 6 X-57 Maxwell Flight Demonstrator \u2022 Explore all-electric propulsion \u2013 Fully electric transmission \u2013 High aspect ratio wing enabled by high lift system \u2013\u2026 Rectifier Generator R1 Controller/ Rectifier Generator R2 Controller/ Rectifier Propulsor L1 Motor R1 Motor R1 Control/ Inverter Propulsor R1 Motor L8 Motor L8 Control/ Inverter Propulsor L8 Motor R8 Motor R8 Control/ Inverter Propulsor R8 Motor L3 Motor L3 Control/ Inverter Propulsor L3 Motor R3 Motor R3 Control/ Inverter Propulsor R3 Motor L6 Motor L6 Control/ Inverter Propulsor L6 Motor R6 Motor R6 Control/\u2026 1 FUELEAP Model-Based System Safety Analysis Kurt P. Woodham,1 Patrick J. Graydon,2 and Nicholas K. Borer3 NASA Langley Research Center, Hampton, VA, 23681, USA Kurt P. NASA Investments in Electrified Propulsion Presented to the International Forum for Aviation Research Electric-Hybrid Propulsion Working Group Workshop #2 Budapest, Hungary 27 November, 2019 Amy Jankovsky Manager, Electrified Aircraft Powertrain Technologies Advanced Air Transport Technologies Project NASA Glenn Research Center 2 NASA\u2019s Aeronautics Research Mission Directorate Primary Drivers for Electrification R&D\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 1.0,
+        "expected_terms": [
+          "x-57",
+          "maxwell"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "x-57",
+          "maxwell"
+        ],
+        "predicted_answerable": true,
+        "query": "Which NASA aircraft demonstrator is called X-57 Maxwell?",
+        "query_id": "scope_holdout_011",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "located at the aircraft wingtips for improved propulsive efficiency. Additionally, it has 12 high- lift propellers located at the leading edge of the wing (six on each side) to achieve high lift at low airspeeds. All power to drive the motor driven propulsors is supplied by two battery power supplies (labeled \u201cA\u201d and \u201cB\u201d). A block diagram of the X-57 electric propulsion system is shown in Figure 6. Rectifier Generator R1 Controller/ Rectifier Generator R2 Controller/ Rectifier Propulsor L1 Motor R1 Motor R1 Control/ Inverter Propulsor R1 Motor L8 Motor L8 Control/ Inverter Propulsor L8 Motor R8 Motor R8 Control/ Inverter Propulsor R8 Motor L3 Motor L3 Control/ Inverter Propulsor L3 Motor R3 Motor R3 Control/ Inverter Propulsor R3 Motor L6 Motor L6 Control/ Inverter Propulsor L6 Motor R6 Motor R6 Control/\u2026 maximizing speci\ufb01c torque. An overview of the development and a summary of the performance of these prototypes is provided here. For a detailed discussion and a complete list of lessons learned, refer to [15]. After the discussions about the prototypes, the development and capabilities of a new rotating test rig is discussed in detail. VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. perspectives on vehicle ground noise, cabin noise and on-board ride quality Related and coordinated with work in other areas \u2022 UAS traffic management \u2022 UAS integration into the Nat\u2019l Airspace \u2022 Revolutionary Vertical Lift Technologies \u2022 X-57 Flight Demonstrator 6 X-57 Maxwell Flight Demonstrator \u2022 Explore all-electric propulsion \u2013 Fully electric transmission \u2013 High aspect ratio wing enabled by high lift system \u2013\u2026",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.3333333333333333,
+        "expected_terms": [
+          "twelve",
+          "high-lift",
+          "propeller"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "propeller"
+        ],
+        "predicted_answerable": true,
+        "query": "How many high-lift propellers did the X-57 Maxwell use?",
+        "query_id": "scope_holdout_012",
+        "source_backed_citation_count": 5,
+        "source_document_count": 4,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "relocates the electric cruise motors in to the tips of this low-area wing and Mod IV integrates a set of six small boost motors along each leading edge to increase lift during takeoff and landing. These boost motors are equipped with folding- blade propellers that blend with the boost motor nacelles during cruise to provide a clean aerodynamic profile. Hybrid Fuel Turboshaft Generator Electric Bus Battery Distributed Fans Motor Motor Turboelectric Fuel Turboshaft Generator Electric Bus Distributed Fans Motor Motor Partial Turboelectric Fuel Generator Electric Bus Distributed Fans Motor Motor Turbofan Fan Series/Parallel Partial Hybrid Fuel Turbofan Generator Electric Bus Battery Distributed Fans Motor MotorFan Figure 1. at NASA AFRC neces sitated a testbed trailer setup, and allowed for testing flexibility while maintaining connectivity to the simulation laboratory. VDC = volts, direct current VFR = visual flight rules I. Introduction HE National Aeronautics and Space Administration (NASA) Aeronautics Research Mission Directorate (ARMD) has identified reducing energy consumption, emissions, and noise for future aircraft in their Strategic Implementation Plan. 1 FUELEAP Model-Based System Safety Analysis Kurt P. Woodham,1 Patrick J. Graydon,2 and Nicholas K. Borer3 NASA Langley Research Center, Hampton, VA, 23681, USA Kurt P.",
+        "answerability_correct": true,
+        "citation_count": 5,
+        "cited_claim_count": 5,
+        "claim_count": 5,
+        "expected_answerable": true,
+        "expected_term_recall": 0.5,
+        "expected_terms": [
+          "x-57",
+          "distributed",
+          "electric",
+          "propulsion"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": false,
+        "matched_terms": [
+          "distributed",
+          "electric"
+        ],
+        "predicted_answerable": true,
+        "query": "Does the X-57 Maxwell use distributed electric propulsion?",
+        "query_id": "scope_holdout_013",
+        "source_backed_citation_count": 5,
+        "source_document_count": 3,
+        "structurally_valid": true,
+        "total_citation_reference_count": 5,
+        "valid_citation_reference_count": 5
+      },
+      {
+        "answer": "The retrieved evidence is insufficient to answer this question reliably.",
+        "answerability_correct": false,
+        "citation_count": 0,
+        "cited_claim_count": 0,
+        "claim_count": 0,
+        "expected_answerable": true,
+        "expected_term_recall": 0.0,
+        "expected_terms": [
+          "electric",
+          "motor"
+        ],
+        "failure_type": null,
+        "generation_failed": false,
+        "insufficient_evidence": true,
+        "matched_terms": [],
+        "predicted_answerable": false,
+        "query": "Does every high-lift propeller on the X-57 Maxwell use an electric motor?",
+        "query_id": "scope_holdout_014",
+        "source_backed_citation_count": 0,
+        "source_document_count": 0,
+        "structurally_valid": true,
+        "total_citation_reference_count": 0,
+        "valid_citation_reference_count": 0
+      }
+    ],
+    "refusal_count": 11,
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "source_backed_citation_count": 15,
+    "source_document_coverage_rate": 1.0,
+    "structural_validity_rate": 1.0,
+    "structurally_valid_answer_count": 14,
+    "total_citation_reference_count": 15,
+    "total_claim_count": 15,
+    "unanswerable_query_count": 10,
+    "unsupported_refusal_rate": 1.0,
+    "valid_citation_reference_count": 15,
+    "version": "0.1"
+  },
+  "sufficiency_config": "configs/sufficiency_v0_3_0.yaml",
+  "summary": {
+    "adaptive_grounded_refusal_count": 11,
+    "adaptive_recovery_trigger_count": 11,
+    "adaptive_successful_recovery_count": 0,
+    "bounded_adaptive_false_refusal_count": 1,
+    "bounded_adaptive_unsupported_generation_count": 0,
+    "single_pass_false_refusal_count": 1,
+    "single_pass_unsupported_generation_count": 0
+  },
+  "version": "0.1"
+}
