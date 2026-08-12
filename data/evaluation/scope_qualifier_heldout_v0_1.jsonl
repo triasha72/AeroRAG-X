@@ -1,0 +1,14 @@
+{"query_id":"scope_holdout_001","query":"Which crosswind speed guarantees that every battery-electric aircraft can safely land?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_002","query":"What date will all commercial aircraft permanently replace turbine engines with hydrogen propulsion?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_003","query":"Which airworthiness standard guarantees zero thermal-runaway risk for every aviation battery?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_004","query":"What battery chemistry universally prevents fires in all electric aircraft?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_005","query":"When will every regional aircraft worldwide operate only with electric propulsion?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_006","query":"Which single cooling architecture must all hybrid-electric aircraft use?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_007","query":"Which future weather event will always prevent every distributed-propulsion aircraft from flying?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_008","query":"What FAA regulation guarantees that every electric aircraft uses the same propulsion architecture?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_009","query":"At what altitude are all hydrogen-powered aircraft permanently free from emissions?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_010","query":"Which worldwide rule requires all electric aircraft to carry identical battery packs?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"scope_holdout_011","query":"Which NASA aircraft demonstrator is called X-57 Maxwell?","expected_answerable":true,"expected_terms":["x-57","maxwell"]}
+{"query_id":"scope_holdout_012","query":"How many high-lift propellers did the X-57 Maxwell use?","expected_answerable":true,"expected_terms":["twelve","high-lift","propeller"]}
+{"query_id":"scope_holdout_013","query":"Does the X-57 Maxwell use distributed electric propulsion?","expected_answerable":true,"expected_terms":["x-57","distributed","electric","propulsion"]}
+{"query_id":"scope_holdout_014","query":"Does every high-lift propeller on the X-57 Maxwell use an electric motor?","expected_answerable":true,"expected_terms":["electric","motor"]}
