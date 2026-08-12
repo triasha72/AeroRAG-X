@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from scripts.run_scope_qualifier_heldout_v01 import render_markdown
+from pathlib import Path
+from runpy import run_path
+
+ROOT = Path(__file__).resolve().parents[1]
+RUNNER = run_path(ROOT / "scripts/run_scope_qualifier_heldout_v01.py")
+render_markdown = RUNNER["render_markdown"]
 
 
 def test_render_markdown_includes_all_policy_conditions() -> None:
