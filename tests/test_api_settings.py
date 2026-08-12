@@ -16,8 +16,10 @@ def test_default_runtime_is_local() -> None:
 
     assert settings.mode == "local"
     assert settings.dense_backend == "numpy"
+    assert settings.adaptive_retrieval_enabled is False
 
     assert config.dense_backend == "numpy"
+    assert config.adaptive_retrieval_config is None
 
     assert str(config.generation_config) == "configs/generation_v0_1.yaml"
 
@@ -111,6 +113,19 @@ def test_pgvector_backend_can_be_selected() -> None:
     assert config.dense_backend == "pgvector"
 
 
+def test_adaptive_retrieval_can_be_enabled() -> None:
+    settings = load_api_runtime_settings(
+        {
+            "AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL": "true",
+        }
+    )
+
+    config = settings.to_runtime_config()
+
+    assert settings.adaptive_retrieval_enabled is True
+    assert str(config.adaptive_retrieval_config) == "configs/adaptive_retrieval_v0_1.yaml"
+
+
 def test_unknown_dense_backend_is_rejected() -> None:
     with pytest.raises(
         ValueError,
@@ -157,5 +172,17 @@ def test_evidence_depth_cannot_exceed_candidates() -> None:
             {
                 "AERORAGX_CANDIDATE_TOP_K": ("4"),
                 "AERORAGX_EVIDENCE_TOP_K": ("5"),
+            }
+        )
+
+
+def test_invalid_adaptive_retrieval_switch_is_rejected() -> None:
+    with pytest.raises(
+        ValueError,
+        match="AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL",
+    ):
+        load_api_runtime_settings(
+            {
+                "AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL": "yes",
             }
         )

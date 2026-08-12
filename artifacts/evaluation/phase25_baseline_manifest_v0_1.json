@@ -1,0 +1,55 @@
+{
+  "phase": 25,
+  "version": "v0.1",
+  "purpose": "Freeze the Phase 24 quality baseline and held-out v0.4 contract before bounded adaptive-retrieval implementation.",
+  "frozen_inputs": [
+    {
+      "path": "artifacts/evaluation/phase24_quality_summary_v0_1.json",
+      "sha256": "37b155c46bd78e575ec1b201f2766a959e2a49e268b93d07bf3e1b0b6a86d62e"
+    },
+    {
+      "path": "artifacts/evaluation/phase24_quality_inputs_v0_1.sha256",
+      "sha256": "23d422ef498efbfb64ef18f75c0726e5abeb0b88e81d1350bf342061ec7f4b99"
+    },
+    {
+      "path": "artifacts/evaluation/phase24_quality_v0_1.sha256",
+      "sha256": "73c5ea5bd014de2de131aa2286b41394f675eca7fa25ed132b8570c642dcf41b"
+    },
+    {
+      "path": "reports/phase24_quality_v0_1.md",
+      "sha256": "36008b8df54e6059c9e3ba38bfe1758d856039d15986c2995af31a67e7d80538"
+    },
+    {
+      "path": "artifacts/evaluation/generation_deterministic_v0_4_heldout_baseline.json",
+      "sha256": "72e7b7ea752870e6a892724cf06a1de14f1adcbf5af09b3efffab21e38206bb6"
+    },
+    {
+      "path": "configs/generation_v0_1.yaml",
+      "sha256": "9531ec43298183ed563b7203e268a43c9e1e11e32b9feaa363a25cb70c616839"
+    },
+    {
+      "path": "configs/sufficiency_v0_2_1.yaml",
+      "sha256": "03eed16785cb1fb2157b2aef289d71e9f0524f37b936330d54a257da29b8cf2a"
+    },
+    {
+      "path": "configs/hybrid_v0_1.yaml",
+      "sha256": "91b0291b08ba6ce99bde5838c150ab44d7346414843453bd4507f228f2812fcf"
+    },
+    {
+      "path": "configs/reranker_v0_1.yaml",
+      "sha256": "167ef5eb3cf71794e6ab9d336ae3e37cb0e575ccefb45e96b167454beeaab093"
+    }
+  ],
+  "protected_held_out_contract": {
+    "status": "frozen",
+    "do_not_change": [
+      "model configuration",
+      "retrieval configuration",
+      "sufficiency configuration",
+      "queries",
+      "labels",
+      "CI thresholds"
+    ],
+    "constraint": "No protected held-out v0.4 setting may be changed in response to its evaluation result."
+  }
+}

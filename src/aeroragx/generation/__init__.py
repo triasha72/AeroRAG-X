@@ -1,5 +1,16 @@
 """Grounded answer generation for AeroRAG-X."""
 
+from aeroragx.generation.adaptive_retrieval import (
+    AdaptiveEvidenceAssessment,
+    AdaptiveEvidenceProvenance,
+    AdaptiveRetrievalAttempt,
+    AdaptiveRetrievalConfig,
+    AdaptiveRetrievalState,
+    AdaptiveRetrievalTrace,
+    BoundedAdaptiveRetrievalController,
+    DeterministicQueryRewriter,
+    load_adaptive_retrieval_config,
+)
 from aeroragx.generation.evaluation import (
     GenerationEvaluationQuery,
     GenerationEvaluationReport,
@@ -84,8 +95,16 @@ from aeroragx.generation.transformers_transport import (
 )
 
 __all__ = [
+    "AdaptiveEvidenceAssessment",
+    "AdaptiveEvidenceProvenance",
+    "AdaptiveRetrievalAttempt",
+    "AdaptiveRetrievalConfig",
+    "AdaptiveRetrievalState",
+    "AdaptiveRetrievalTrace",
     "AnswerCitation",
+    "BoundedAdaptiveRetrievalController",
     "DeterministicGenerationProvider",
+    "DeterministicQueryRewriter",
     "EvidenceSufficiencyAssessor",
     "EvidenceSufficiencyResult",
     "GenerationConfig",
@@ -132,6 +151,7 @@ __all__ = [
     "create_generation_provider",
     "enforce_prompt_injection_policy",
     "evaluate_grounded_generation",
+    "load_adaptive_retrieval_config",
     "load_generation_config",
     "load_generation_evaluation_queries",
     "load_http_transport_config",

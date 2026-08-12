@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -24,6 +25,8 @@ def test_runtime_defaults_to_local_generation() -> None:
     assert str(config.sufficiency_config) == ("configs/sufficiency_v0_2_1.yaml")
 
     assert str(config.facet_retrieval_config) == ("configs/facet_retrieval_v0_1.yaml")
+
+    assert config.adaptive_retrieval_config is None
 
 
 def test_runtime_defaults_to_numpy_dense_backend() -> None:
@@ -75,6 +78,70 @@ def test_runtime_rejects_evidence_depth_above_candidates(
                 facet_retrieval_config=None,
             )
         )
+
+
+def test_runtime_loads_the_opt_in_adaptive_retrieval_policy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake_reranker_settings = SimpleNamespace(
+        candidate_top_k=20,
+    )
+    fake_generation_settings = SimpleNamespace(
+        evidence_top_k=5,
+    )
+    fake_adaptive_settings = object()
+    captured: dict[str, object] = {}
+
+    monkeypatch.setattr(
+        runtime_module,
+        "load_reranker_index",
+        lambda config: (object(), fake_reranker_settings),
+    )
+    monkeypatch.setattr(
+        runtime_module,
+        "load_generation_config",
+        lambda path: object(),
+    )
+    monkeypatch.setattr(
+        runtime_module,
+        "with_evidence_top_k",
+        lambda config, top_k: fake_generation_settings,
+    )
+    monkeypatch.setattr(
+        runtime_module,
+        "create_configured_generation_provider",
+        lambda **kwargs: object(),
+    )
+    monkeypatch.setattr(
+        runtime_module,
+        "load_sufficiency_config",
+        lambda path: object(),
+    )
+    monkeypatch.setattr(
+        runtime_module,
+        "load_adaptive_retrieval_config",
+        lambda path: fake_adaptive_settings,
+    )
+
+    def fake_generator(**kwargs: object) -> object:
+        captured.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(
+        runtime_module,
+        "GroundedAnswerGenerator",
+        fake_generator,
+    )
+
+    runtime = load_grounded_runtime(
+        RuntimeConfig(
+            facet_retrieval_config=None,
+            adaptive_retrieval_config=Path("configs/adaptive_retrieval_v0_1.yaml"),
+        )
+    )
+
+    assert runtime.generator is not None
+    assert captured["adaptive_retrieval_config"] is fake_adaptive_settings
 
 
 def _stub_retrieval_runtime(
