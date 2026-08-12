@@ -1,0 +1,1546 @@
+# Claim-support review
+
+Allowed labels: `SUPPORTED`, `PARTIALLY_SUPPORTED`, `UNSUPPORTED`, `CONTRADICTED`.
+
+---
+
+## claimrev_001
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic fuel has a much higher gravimetric energy density than jet fuel, but its low volumetric density necessitates bulky storage systems, posing substantial integration challenges for long-range, large aircraft.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+- `C2` | `20250010867:chunk:00004`
+
+at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature, low density, low viscosity, low lubricity, small molecular size (harder to control leakage), wide ﬂammability range (between 4% and 75% in air), and potential for diﬀusion into or reaction with other materials increases the challenge of the design of systems that can simultaneously accommodate all these characteristics for a long (and highly cyclic) design life, in a lightweight, volumetrically eﬃcient form factor. While many of these attributes have been successfully dealt with in ground systems, where weight is not a primary driver, or in space ﬂight systems, where cryogenic systems are typically designed for short life (< 1 hour) and a low number of thermal and pressure cycles, there are several identiﬁed technology gaps with respect to the speciﬁc characteristics needed in an aviation application, including the requirement of suﬃcient durability for thousands of cycles and hours. Similar to the cryogenic systems, the state-of-the-art fuel cell technology is validated for automotive applications and is too heavy for aeronautics. Fuel cells for space applications operate on pure oxygen rather than air, are at low scale, and designed to operate over a limited number of cycles. The fuel cell technology for aeronautical applications requires extensive technology maturation and scale up that achieves high speciﬁc energy at the system level and will require signiﬁcant long-term investments to develop the technology and integrate it into cryogenic fuel aircraft architecture. Fuel cell material durability and performance under variable loads and operational stresses (e.g., takeoﬀ-shutdown cycling,
+
+- `C3` | `20250010867:chunk:00002`
+
+from commercial airports rather than isolated launch sites. Aviation systems will be required to safely operate in occupied vehicles that are used several times a day, yet not dissembled and manually inspected between each ﬂight. Safety and certiﬁcation requirements for airframes with large integrated cryogenic tanks need to be deﬁned in partnership with the Federal Aviation Administration (FAA) to increase the likelihood of passenger survival in the event of a crash. Systems for detecting and mitigating fuel leakage would have to be automated and redundant beyond current baseline operational procedures for space systems. Mean times between failure (MTBF) suitable for practical aviation propulsion life cycles will have to be demonstrated through actual testing of brassboard and production systems, and they will be required to meet FAA safety and certiﬁcation requirements no less stringent than those for current commercial aircraft. Safety standards for hydrogen systems remain fragmented and inconsistent across regions. High-pressure storage, such as 350- and 700-bar systems, is governed by varying standards (ISO, SAE, EU) that are not fully harmonized, creating interoperability challenges. Similarly, leak detection and mitigation are hindered by the lack of uniﬁed, validated performance standards for hydrogen sensors in diverse environments, including outdoor refueling stations and industrial facilities. Material compatibility also remains a concern, as current qualiﬁcation standards do not comprehensively address low temperature embrittlement or hydrogen embrittlement in metals or degradation in composite materials. Fire and explosion protection adds another layer of complexity, since testing methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation
+
+- `C4` | `20260003867:chunk:00000`
+
+Cryogenic Fuel Aviation – Challenges and Opportunities Vadim F. Lvovich, Wesley L. Johnson, Ian J. Jakupca, H. Douglas Perkins, Thomas M. Lavelle, Hashmatullah Hasseeb, Ezra O. McNichols, F. David Koci, Sandi G. Miller, Stephanie L. Vivod, Sadeq Malakooti, Joseph J. Pinakidis, Zhimin Zhong, Brett A. Bednarcyk, Evan J. Pineda, Brandon L. Hearley, Rula M. Coroneos, Joshua Stuckner NASA Glenn Research Center, Cleveland, Ohio Christopher L. Hartman Analytical Mechanics Associates, Hampton, Virginia Mahtab Fox HX5 LLC, Cleveland, Ohio June 10, 2026 AIAA 2026 Aviation Forum, San Diego, CA NASA Technology Development Focus in Aeronautics Fuel Production Fuel Transportation Airport Infrastructure - Ground Handling - Refueling Aircraft Overall Environmental Impact -Initial investment -Fuel cost/availability -Carbon Tax?, etc. -Nation, global energy policies Multiple Fuel Types? • Primary focus will be the aircraft • Single-aisle and larger is the ultimate long-term interest • Experience with smaller applications should be leveraged • Any propulsion systems using cryogenic fuels were within scope (gas-turbine, fuel cells, hybrid) Less focus will be devoted to non-aircraft considerations Not a direct part of NASA Scope External Perspective on NASA Research Investment Opportunities Results from September 2022 “Cryogenic Fuel Systems for Aircraft” Workshop at GRC • Materials • Additive manufacturing and composites for cryo temperatures, cycle fatigue, and hydrogen permeation • Seals, insulation, embrittlement, thermal expansion • Structures • Fuel tank, pressurized structure, conformal pressure vessels, impact absorbing structures • Testing Capabilities and Techniques • Hydrogen enabled facilities, crashworthiness, impact testing, icing • Operations • ConOps development, fuel system purging, fueling/defueling operations, tarmac hold, failure analysis, contingency scenarios unique to cryogenics • Systems Studies • Concept studies, fuel cell vs hydrogen combustion vs combination, fuel cell as secondary power (APU replacement), impact of current vs future grid, exploration of acceptable boil-off, tank design trades • Propulsion and Powertrain • Combustor design
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_002
+
+**Systems:** lora_rag
+
+**Claim:** Electrical systems do not always degrade gracefully and can make early diagnosis challenging to enable maintenance.
+
+**Cited evidence:**
+
+- `C1` | `20220005753:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 Presentation to FAA May 4, 2022 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging 4 EAP Subsystem Degradation, Faults, Failure Modes, and Effects (cont.) Gas Turbine
+
+- `C2` | `20220004260:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 SAE E32 Aerospace Propulsion Health Management Committee Meeting March 29-31, 2022 Hybrid meeting (in-person Madrid, Spain and virtual) 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_003
+
+**Systems:** lora_rag
+
+**Claim:** Scale independence is not a characteristic of reciprocating or turbine engines that suffer significant penalties as they are scaled down in size, with power-to-weight, efficiency, and reliability suffering dramatically.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00013`
+
+in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives) electric propulsion offers new latent benefits while relatively poor legacy metric characteristics, elec tric propulsion is considered to be a classic disruptive technology that has the potential to quickly displace conven tional propulsion technologies; but in ways that will likely be perceived as unexpected (but with comparison to other disruptive technologies, are actually quite predictable). II. Misconception 1: The Design of Electric Aircraft is No Different than Existing Aircraft Because electric propulsion is a relatively scale independent technology, the ability to distribute the propulsion system across the airframe to achieve integration advantages is penalty-free, or in many instances, offers substantial benefits. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp; their power to weight and efficiency are essentially the same. As electric propulsion is pushed into larg er and larger aircraft applications, th is trend may extend to far larger motor sizes as well. The desire to distribute the propulsion is also encouraged by the compactness of electric motors. Scale independence is not a characteristic of reciprocatin g or turbine engines which suffer significant penalties as they are scaled down in size, with the power to weight, efficiency, and reliability suffering dramatically. These are not merely a matter of engine development focusing research dollars on large engines, but fundamental physics including volume to surface area ratios, Reynolds numbers, and tolerances required and achievable in manufacturing.
+
+- `C2` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_004
+
+**Systems:** lora_rag
+
+**Claim:** CHT-based design optimization studies have improved battery pack performance, but this study used a gradient-free optimization algorithm.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C2` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_005
+
+**Systems:** lora_rag
+
+**Claim:** Waste-heat management reduces net propulsive power by decreasing drag, compressor bleed, turbine power extraction, and system mass from large heat exchangers, plumbing, and fluids.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_006
+
+**Systems:** lora_rag
+
+**Claim:** Active cooling reduces battery-pack weight but requires an efficient cooling system design to offset the added weight and power of the cooling pump.
+
+**Cited evidence:**
+
+- `C1` | `20205004497:chunk:00013`
+
+a result of increased thermal management system power draw. The wattage consumed by the coolant loop is considered an eﬃciency loss on the drive-train, and the lighter vehicle saves substantial weight on the battery at the cost of requiring higher power cooling. Additional proﬁles are included in the appendix for the six-passenger vehicle variant. Fig. 8 Drive-train Eﬃciency Proﬁle over Optimized Trajectories Across Multiple Energy Densities 9 V. Conclusions and Future Work This paper examined mission-dependent battery waste heat starting with a notional X-57 mission. Performance impacts from battery size and energy density were quantiﬁed for a statically sized, ﬁxed-wing vehicle. Next, a VTOL quadrotor was optimally sized for various ranges and achievable energy density. The variation in sensitivity between each of these missions highlights the need for openly available surrogate models to give battery system engineers more realistic benchmarks for designing batteries. Additional real-world constraints like volume and degradation are not evaluated explicitly but can be posed as additional weight penalty margins, if they exceed certain thresholds. This paper shows the energy and thermal sizing impacts for a speciﬁc Li-ion battery chemistry. Future work will attempt to create chemistry agnostic sensitivity functions with weight and thermal loads as the input and power proﬁles as the output. Follow-on studies are currently being conducted to better determine pack weight knockdowns based on the magnitude of the waste heat and the size of the thermal system. As new electric VTOL conﬁgurations are developed, understanding realistic energy density and eﬃciency values will be critical for creating optimally sized vehicles. Ideally, these results help assist in scoping the magnitude of the battery design challenge and can be used to help set productive benchmarks. Appendix Regressions on each swept design variable are provided in the following section: Energy Density is ﬁxed as 400 Wh/kg for
+
+- `C2` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_007
+
+**Systems:** base_rag
+
+**Claim:** The heat exchanger must be placed in the propulsor duct to close at zero flight speed and meet the heat rejection requirement.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_008
+
+**Systems:** base_rag
+
+**Claim:** Waste-heat management is important for fuel-cell aircraft propulsion because it helps manage the significant new low-grade heat loads introduced by each electrical component added to the aircraft.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_009
+
+**Systems:** lora_rag
+
+**Claim:** Electric aircraft can achieve significant improvements in cost, safety, community noise, propulsion-component-reliability, and efficiency, while also addressing the challenges of thermal management and controls-related operation.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_010
+
+**Systems:** base_rag
+
+**Claim:** The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells.
+
+**Cited evidence:**
+
+- `C3` | `20210025384:chunk:00006`
+
+as the solid electrolyte interface (SEI). In this layer, lithium plating can occur in which lithium ions are reduced to metallic lithium and build up at the interface. This lithium is no longer usable in standard battery operation and will thus result in an overall loss of charge capacity. This is a normal aging phenomenon in lithium-based batteries and is generally why these types of batteries have a limited lifetime. However, under various cycling conditions, such as low temperature or high charge/discharge rates, this plating can occur non-uniformly and form needle-like structures known as dendrites. Dendrites can penetrate the battery separator, short circuit the electrodes, and cause a thermal runaway reaction to occur [8]. This process is further emphasized in Figure 2. Figure 2: Conceptual sketch of how lithium plating can lead to dendrite growth Dendrites have received lots of attention due to their common occurrence, their potential for catastrophic failure, and their difficulty of detection. However, there are other important battery defects that can occur [2]. Gas generation from the decomposition of the electrolyte solvent can Lithium Anode Separator/Electrolyte Li+ Li+ Separator/Electrolyte Lithium Anode Li SEI SEI Dendrites Lithium Anode Separator/Electrolyte Li+ Li+ Li+ SEI e- 4 lead to increased cell temperatures and thus thermal runaway. Continued reduction of lithium ions can cause further thickening of the SEI layer and an overall loss in charge capacity and performance of the battery. From an ultrasonic NDE perspective, there are local changes in geometry and material properties associated with each of these defect mechanisms and thus the potential for detection based on the amount of influence they have on wave propagation and wave-defect interaction within the battery. Current Battery Monitoring Techniques 1.2.1 Battery Management Systems As mentioned before, the current solution to prevent dendrites from causing thermal runaway is to engineer
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_011
+
+**Systems:** base_rag
+
+**Claim:** Electric propulsion systems demonstrate opportunity for incredible advances, far more than in any other discipline.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00013`
+
+in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives) electric propulsion offers new latent benefits while relatively poor legacy metric characteristics, elec tric propulsion is considered to be a classic disruptive technology that has the potential to quickly displace conven tional propulsion technologies; but in ways that will likely be perceived as unexpected (but with comparison to other disruptive technologies, are actually quite predictable). II. Misconception 1: The Design of Electric Aircraft is No Different than Existing Aircraft Because electric propulsion is a relatively scale independent technology, the ability to distribute the propulsion system across the airframe to achieve integration advantages is penalty-free, or in many instances, offers substantial benefits. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp; their power to weight and efficiency are essentially the same. As electric propulsion is pushed into larg er and larger aircraft applications, th is trend may extend to far larger motor sizes as well. The desire to distribute the propulsion is also encouraged by the compactness of electric motors. Scale independence is not a characteristic of reciprocatin g or turbine engines which suffer significant penalties as they are scaled down in size, with the power to weight, efficiency, and reliability suffering dramatically. These are not merely a matter of engine development focusing research dollars on large engines, but fundamental physics including volume to surface area ratios, Reynolds numbers, and tolerances required and achievable in manufacturing.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_012
+
+**Systems:** lora_rag
+
+**Claim:** Dendrites can penetrate the separator, short circuit the electrodes, and cause a thermal runaway reaction. Dendrites can also cause gas generation from electrolyte decomposition, increase cell temperatures, and cause further thickening of the solid electrolyte interface (SEI) and an overall loss of charge capacity and performance.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00004`
+
+certain catastrophic defects that greatly increase the associated safety risks in using lithium metal batteries. In particular, these batteries are prone to defects in which lithium dendrites grow across the battery from one electrode to the other, causing an internal short circuit. This ultimately leads to a thermal runaway reaction in which the heating and ignition of one battery cell can cascade into the ignition of neighboring cells. In recent years, a large percentage of fires in electric vehicles has been due to this thermal runaway effect in lithium batteries [3]. The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells [4]. This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications. This issue has caused a large amount of research to go into minimizing parasitic mass and volume in battery component designs [5]. Nondestructive evaluation (NDE) techniques have the potential to detect precursors and development of critical defects prior to the occurrence of a catastrophic failure due to their ability to probe internal features of materials. For battery health monitoring, these techniques would need to be field-deployable and the physical mechanisms of the inspection would need to be understood 2 well to provide confidence in the inspection technique. This work seeks to accomplish this through physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects. In the next sections, the basic working principles and critical defects of lithium metal batteries are discussed, in addition to current battery health monitoring techniques. Lithium Metal Batteries Li-metal batteries are complex, multilayered structures comprised of solid, liquid, and porous layers. The fundamental unit cell of a Li-metal battery is
+
+- `C2` | `20210025384:chunk:00007`
+
+changes in geometry and material properties associated with each of these defect mechanisms and thus the potential for detection based on the amount of influence they have on wave propagation and wave-defect interaction within the battery. Current Battery Monitoring Techniques 1.2.1 Battery Management Systems As mentioned before, the current solution to prevent dendrites from causing thermal runaway is to engineer safe containment systems and constantly monitor the batteries. These tasks are accomplished with a battery management system (BMS) which is used to ensure maximum operating efficiency and mitigate battery failure. The most basic way in which a BMS does this is through the state of charge (SOC) and state of health (SOH) monitoring. The SOC of a battery is the ratio of the battery’s current charge to its maximum capacity and is the most important of these parameters as it is essentially the ‘fuel gauge’ that can determine how much energy is left in the battery. The battery’s SOH is representative of the battery’s deterioration from aging and is usually tracked by monitoring changes in maximum SOC over time. There are various different SOC and SOH estimation algorithms and models, but they mostly all involve using external cell parameters such as voltage, current, and temperature as inputs for lookup tables and computational models that then predict the overall SOC [9]. As these methods all lack information about internal battery changes, there is a degree of inaccuracy to their predictions that can accumulate in error over time. For this same reason, these methods are not 5 sensitive to the development of some critical battery defects [2]. Ultrasonic nondestructive evaluation (NDE) techniques, however, have the advantage of directly monitoring internal battery changes, thus making them effective at SOC/SOH monitoring and also sensitive to defects, and is why they have been of great
+
+- `C3` | `20050186580:chunk:00027`
+
+discharge/ charge cycles there is heat dissipated in the cell, and the battery heats up and its temperatUre increases. An increase in temperature can speed up any unwanted reactions in the cell. Exothermic reactions cause the temperature to increase; therefore increasing the reaction rate will cause the increase of the temperature inside the cell to occur at a faster rate. If the temperature gets too high thermal runaway will occur, and the cell can explode. The material that separates the electrode from the electrolyte is a non-conducting polymer. At high temperatures the separator will melt and the battery will be destroyed. The separator also contains small pores that allow lithium ions to diffuse through during charge and discharge. High temperatures can cause these pores to close up, permanently damaging the cell. My job at NASA Glenn research center this summer will be to perform thermal characterization tests on an 18650 type lithium-ion battery. High temperatures cause the chemicals inside lithium ion batteries to spontaneously react with each other. My task is to conduct experiments to determine the temperature that the reaction takes place at, what components in the cell are reacting and the mechanism of the reaction. The experiments will be conducted using an accelerating rate caJorimeter (ARC), which uses a heat-wait-search mode until an exothermic reaction is detected. After an exotherm is found the calorimeter maintains an adiabatic environment around a bomb which holds the test sample. The ARC will help identify important reactions and what temperature these exothermic reactions take place at. In order fully understand the battery, we are first going to take apart the battery and test the individual components of the battery using the ARC. I will first conduct a test on the electrolyte solution by itself. We will then test the electrolyte solution with
+
+- `C4` | `20210025384:chunk:00006`
+
+as the solid electrolyte interface (SEI). In this layer, lithium plating can occur in which lithium ions are reduced to metallic lithium and build up at the interface. This lithium is no longer usable in standard battery operation and will thus result in an overall loss of charge capacity. This is a normal aging phenomenon in lithium-based batteries and is generally why these types of batteries have a limited lifetime. However, under various cycling conditions, such as low temperature or high charge/discharge rates, this plating can occur non-uniformly and form needle-like structures known as dendrites. Dendrites can penetrate the battery separator, short circuit the electrodes, and cause a thermal runaway reaction to occur [8]. This process is further emphasized in Figure 2. Figure 2: Conceptual sketch of how lithium plating can lead to dendrite growth Dendrites have received lots of attention due to their common occurrence, their potential for catastrophic failure, and their difficulty of detection. However, there are other important battery defects that can occur [2]. Gas generation from the decomposition of the electrolyte solvent can Lithium Anode Separator/Electrolyte Li+ Li+ Separator/Electrolyte Lithium Anode Li SEI SEI Dendrites Lithium Anode Separator/Electrolyte Li+ Li+ Li+ SEI e- 4 lead to increased cell temperatures and thus thermal runaway. Continued reduction of lithium ions can cause further thickening of the SEI layer and an overall loss in charge capacity and performance of the battery. From an ultrasonic NDE perspective, there are local changes in geometry and material properties associated with each of these defect mechanisms and thus the potential for detection based on the amount of influence they have on wave propagation and wave-defect interaction within the battery. Current Battery Monitoring Techniques 1.2.1 Battery Management Systems As mentioned before, the current solution to prevent dendrites from causing thermal runaway is to engineer
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_013
+
+**Systems:** base_rag
+
+**Claim:** Cryogenic hydrogen storage systems require advanced materials, testing capabilities, and safety regulations to ensure the integration of cryogenic systems into commercial aviation propulsion.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+- `C2` | `20250010867:chunk:00004`
+
+at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature, low density, low viscosity, low lubricity, small molecular size (harder to control leakage), wide ﬂammability range (between 4% and 75% in air), and potential for diﬀusion into or reaction with other materials increases the challenge of the design of systems that can simultaneously accommodate all these characteristics for a long (and highly cyclic) design life, in a lightweight, volumetrically eﬃcient form factor. While many of these attributes have been successfully dealt with in ground systems, where weight is not a primary driver, or in space ﬂight systems, where cryogenic systems are typically designed for short life (< 1 hour) and a low number of thermal and pressure cycles, there are several identiﬁed technology gaps with respect to the speciﬁc characteristics needed in an aviation application, including the requirement of suﬃcient durability for thousands of cycles and hours. Similar to the cryogenic systems, the state-of-the-art fuel cell technology is validated for automotive applications and is too heavy for aeronautics. Fuel cells for space applications operate on pure oxygen rather than air, are at low scale, and designed to operate over a limited number of cycles. The fuel cell technology for aeronautical applications requires extensive technology maturation and scale up that achieves high speciﬁc energy at the system level and will require signiﬁcant long-term investments to develop the technology and integrate it into cryogenic fuel aircraft architecture. Fuel cell material durability and performance under variable loads and operational stresses (e.g., takeoﬀ-shutdown cycling,
+
+- `C3` | `20250010867:chunk:00002`
+
+from commercial airports rather than isolated launch sites. Aviation systems will be required to safely operate in occupied vehicles that are used several times a day, yet not dissembled and manually inspected between each ﬂight. Safety and certiﬁcation requirements for airframes with large integrated cryogenic tanks need to be deﬁned in partnership with the Federal Aviation Administration (FAA) to increase the likelihood of passenger survival in the event of a crash. Systems for detecting and mitigating fuel leakage would have to be automated and redundant beyond current baseline operational procedures for space systems. Mean times between failure (MTBF) suitable for practical aviation propulsion life cycles will have to be demonstrated through actual testing of brassboard and production systems, and they will be required to meet FAA safety and certiﬁcation requirements no less stringent than those for current commercial aircraft. Safety standards for hydrogen systems remain fragmented and inconsistent across regions. High-pressure storage, such as 350- and 700-bar systems, is governed by varying standards (ISO, SAE, EU) that are not fully harmonized, creating interoperability challenges. Similarly, leak detection and mitigation are hindered by the lack of uniﬁed, validated performance standards for hydrogen sensors in diverse environments, including outdoor refueling stations and industrial facilities. Material compatibility also remains a concern, as current qualiﬁcation standards do not comprehensively address low temperature embrittlement or hydrogen embrittlement in metals or degradation in composite materials. Fire and explosion protection adds another layer of complexity, since testing methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation
+
+- `C4` | `20260003867:chunk:00000`
+
+Cryogenic Fuel Aviation – Challenges and Opportunities Vadim F. Lvovich, Wesley L. Johnson, Ian J. Jakupca, H. Douglas Perkins, Thomas M. Lavelle, Hashmatullah Hasseeb, Ezra O. McNichols, F. David Koci, Sandi G. Miller, Stephanie L. Vivod, Sadeq Malakooti, Joseph J. Pinakidis, Zhimin Zhong, Brett A. Bednarcyk, Evan J. Pineda, Brandon L. Hearley, Rula M. Coroneos, Joshua Stuckner NASA Glenn Research Center, Cleveland, Ohio Christopher L. Hartman Analytical Mechanics Associates, Hampton, Virginia Mahtab Fox HX5 LLC, Cleveland, Ohio June 10, 2026 AIAA 2026 Aviation Forum, San Diego, CA NASA Technology Development Focus in Aeronautics Fuel Production Fuel Transportation Airport Infrastructure - Ground Handling - Refueling Aircraft Overall Environmental Impact -Initial investment -Fuel cost/availability -Carbon Tax?, etc. -Nation, global energy policies Multiple Fuel Types? • Primary focus will be the aircraft • Single-aisle and larger is the ultimate long-term interest • Experience with smaller applications should be leveraged • Any propulsion systems using cryogenic fuels were within scope (gas-turbine, fuel cells, hybrid) Less focus will be devoted to non-aircraft considerations Not a direct part of NASA Scope External Perspective on NASA Research Investment Opportunities Results from September 2022 “Cryogenic Fuel Systems for Aircraft” Workshop at GRC • Materials • Additive manufacturing and composites for cryo temperatures, cycle fatigue, and hydrogen permeation • Seals, insulation, embrittlement, thermal expansion • Structures • Fuel tank, pressurized structure, conformal pressure vessels, impact absorbing structures • Testing Capabilities and Techniques • Hydrogen enabled facilities, crashworthiness, impact testing, icing • Operations • ConOps development, fuel system purging, fueling/defueling operations, tarmac hold, failure analysis, contingency scenarios unique to cryogenics • Systems Studies • Concept studies, fuel cell vs hydrogen combustion vs combination, fuel cell as secondary power (APU replacement), impact of current vs future grid, exploration of acceptable boil-off, tank design trades • Propulsion and Powertrain • Combustor design
+
+- `C5` | `20250002550:chunk:00003`
+
+www.nasa.gov | 5 Strong desire for NASA leadership role in pulling community together on cryogenic fuels for aircraft “Commercially-viable Hydrogen Aircraft for Reduction of Greenhouse Emissions - and Remarkably Great Efficiency” (CH2ARGE) Scope and Direction The Opportunity: Hydrogen is the leading candidate fuel that can provide efficient and low-emissions aviation by 2050. How can we make Hydrogen Aircraft work in a commercially viable manner? How to use the hydrogen most effectively on the aircraft and turn it into energy? Determine the role of NASA in emerging hydrogen economy. The Strategy: Develop integrated conceptual and experimental methodology that enables industry-wide adoption of medium-range Hydrogen Aircraft. Mature the methodology and identify system level closure plans and technology development targets. Develop an integrated aircraft concept of operations. Develop critical roadmaps in aircraft architecture, thermal management, cryogenics and fuel cells. Study the concepts' efficiency at scale and relative environmental impact. Considerations: The MAIN PRACTICAL GOAL is to increase specific energy of the whole aircraft by 2-3X by synthesis of on-board lightweight, durable and safe cryogenic hydrogen system, thermal management, hydrogen-air fuel cells / turbines, and distributed electric propulsion. This requires a comprehensive system-specific studies and practical solutions in identifying advanced materials, modeling tools, & evaluation criteria. Capitalize on technology synergies and test facilities across multiple NASA centers. 7 Possible Test Considerations High Temperature PEM Fuel Cells Composite Tanks Pumps, Valves, and High Efficiency Transfer Lines LH2 GH2 Polymer Aerogel Infused Tanks Leak Detection Integrated Aircraft Airport Energy Hub Aircraft Refueling Ops Material Characterization Needs • All hydrogen test facilities will require advanced concepts and materials to enable new solutions for hydrogen storage, transport and transfer • Appropriate and efficient materials characterization in a relevant environment • Properties need to be measured as a function of temperature down toat least 20 K • Development of
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_014
+
+**Systems:** lora_rag
+
+**Claim:** Solid-state circuit breakers are used to manage the powertrain’s high-conduction losses, but a distributed thermal management recycling system is required to recycle the waste heat and mitigate both the reduction in powertrain efficiency and the release of low-grade heat throughout the aircraft.
+
+**Cited evidence:**
+
+- `C1` | `20240015017:chunk:00000`
+
+1 Thermoacoustic Thermal Management for Electric Aircraft Luis A. Rodriguez1, Rodger W. Dyson2, Mark P. Wernet3, Ronald J. Leibach4 NASA Glenn Research Center, Cleveland, OH, 44035, USA Electric aircraft research and development is on the rise, necessitating an avant-garde thermal management system to effectively dissipate and reuse the typically wasted low-grade thermal energy generated on electric aircraft . Hence, the Thermal Recovery Exergy Efficient System (TREES) was successfully modeled, designed, built, and tested at NASA Glenn Research Center (NASA GRC) to demonstrate a solution. TREES demonstrates the ability to transport and amplify acoustic energy over various distances, with minimal energy dissipation, while creating a ther moacoustic heat pump that can deliver and absorb thermal energy. The in - house rig is now being utilized as a diagnostics testbed to understand the underlying physics of traveling wave thermoacoustic s and to enhance future thermal management technology development. I. Nomenclature TREES = Thermal Recovery Exergy Efficient System TMS = Thermal Management TAHP = Thermoacoustic Heat Pump ACT = Advanced Cooling Technologies HX = Heat Exchanger SS = Stainless Steel ΔT = Temperature Difference LM = Linear Motor Th = Hot side temperature, K Tc = Cold side temperature, K II. Introduction Electrification research of air vehicles is a burgeoning field that is becoming increasingly complex as the need for megawatt power levels increases [1,2]. These high-power levels generate large heat loads which must be rejected to maintain an optimal operating temperature for all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. Current thermal management solutions have major disadvantages such as added weight, low
+
+- `C2` | `20210018359:chunk:00000`
+
+1 Electric Aircraft Thermal Management Using a Two-Phase Heat Transport System with Solid-State Thermal Switching Capability Jeffrey Diebold, Calin Tarau, Kuan-Lin Lee, and William G. Anderson Advanced Cooling Technologies, Inc., Lancaster, PA, 17601 Rodger W. Dyson NASA Glenn Research Center, Cleveland, OH, 44035 Advanced Cooling Technologies, Inc. (ACT) is collaborating with NASA Glenn Research Center (GRC) to develop a heat pipe-based thermal delivery system to efficiently manage the waste heat generated onboard an electric aircraft. The he at pipe system will interface with NASA GRC’s thermoacoustic heat pump in order to recycle waste heat by transporting thermal energy to various end users onboard the aircraft. This paper discusses the layout of theoretical heat pipe networks for a MW -class commercial electric aircraft. This is followed by a discussion of progress made on the development of a novel two-phase heat transport system with solid-state thermal switching and control capabilities. I. Introduction Electrified Aircraft Propulsion (EAP) systems utilize electrical motors to provide some or all the thrust for an aircraft. Potential benefits of EAP include (1) low carbon emission (2) low noise (3) reduced fuel c onsumption (4) low operating cost and (5) high performance. NASA is currently leading the development of EAP technology in U.S. The near-term goal is to realize a MW-class, commercial electric aircraft by 2035. To fulfill this vision, an advanced thermal management technology that can handle (i.e. , recycle, deliver and reject) all low -grade waste heat (~kW) generated within an aircraft is needed. Dyson1 at NASA Glenn Research Center (GRC) is developing a novel system called “Thermal Recovery Energy Efficient System” (TREES), which uses thermo -acoustic heat engines to generate acoustic mechanical energy, distributes the acoustic wave via multiple acoustic tubes to acoustic heat pumps, where the low-grade waste heat is recovered and elevated to a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_015
+
+**Systems:** base_rag
+
+**Claim:** TREES demonstrates the ability to transport and amplify acoustic energy over various distances, with minimal energy dissipation, while creating a thermoacoustic heat pump that can deliver and absorb thermal energy.
+
+**Cited evidence:**
+
+- `C1` | `20240015017:chunk:00000`
+
+1 Thermoacoustic Thermal Management for Electric Aircraft Luis A. Rodriguez1, Rodger W. Dyson2, Mark P. Wernet3, Ronald J. Leibach4 NASA Glenn Research Center, Cleveland, OH, 44035, USA Electric aircraft research and development is on the rise, necessitating an avant-garde thermal management system to effectively dissipate and reuse the typically wasted low-grade thermal energy generated on electric aircraft . Hence, the Thermal Recovery Exergy Efficient System (TREES) was successfully modeled, designed, built, and tested at NASA Glenn Research Center (NASA GRC) to demonstrate a solution. TREES demonstrates the ability to transport and amplify acoustic energy over various distances, with minimal energy dissipation, while creating a ther moacoustic heat pump that can deliver and absorb thermal energy. The in - house rig is now being utilized as a diagnostics testbed to understand the underlying physics of traveling wave thermoacoustic s and to enhance future thermal management technology development. I. Nomenclature TREES = Thermal Recovery Exergy Efficient System TMS = Thermal Management TAHP = Thermoacoustic Heat Pump ACT = Advanced Cooling Technologies HX = Heat Exchanger SS = Stainless Steel ΔT = Temperature Difference LM = Linear Motor Th = Hot side temperature, K Tc = Cold side temperature, K II. Introduction Electrification research of air vehicles is a burgeoning field that is becoming increasingly complex as the need for megawatt power levels increases [1,2]. These high-power levels generate large heat loads which must be rejected to maintain an optimal operating temperature for all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. Current thermal management solutions have major disadvantages such as added weight, low
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_016
+
+**Systems:** base_rag
+
+**Claim:** Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He, Christian Psenica, and Lean Fang
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_017
+
+**Systems:** lora_rag
+
+**Claim:** Conjugate heat transfer (CHT) optimization is used to analyze the aerodynamics and heat transfer of battery pack shapes and flow conditions, enabling more realistic aero-thermal coupling.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+- `C2` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C3` | `20260000381:chunk:00001`
+
+a 3-by-3 cell configuration is cooled by ambient airflow, with constant heat generation prescribed in the cells. The battery casing shape serves as the design variable, and the objective function is a weighted sum of pressure loss and pack weight, subject to a maximum temperature constraint. The optimized design achieves a 44.6% reduction in pressure loss and a 1.5% reduction in weight, while satisfying the thermal constraint. To ensure the reliability of the optimized designs, this study validates coarse-mesh, steady-state predictions against fine-mesh unsteady simulations, demonstrating consistency within accept- able errors. This work demonstrates the potential of the developed framework to enable rapid, high-fidelity design of thermal management systems for electric aircraft. Keywords: Conjugate Heat Transfer; Design Optimization; Discrete Adjoint; eVTOL Thermal Management ∗Corresponding author Email address: phe@iastate.edu (Ping He) Preprint accepted for publication in International Journal of Heat and Mass Transfer January 7, 2026 Nomenclature1 Symbols2 CP L Pressure loss coefficient Cp Specific heat at constant pressure f Objective function H Influence from neighboring cell velocities and source term N Number of nodes in interpolation Q Heat flux; volumetric flow rate R Residual vector Sf Face area vector w State variable vector W Battery weight ∆T Temperature difference κ Thermal conductivity µ Dynamic viscosity; mesh skewness parameter ϕ Face flux; heat flux Ψ Adjoint variable vector Subscripts and Superscripts3 (·)fluid Fluid domain quantity (·)solid Solid domain quantity (·)f Face quantity (·)N Neighboring cell quantity (·)P Control volume cell quantity (·)ref Reference value (·)w Wall quantity Acronyms and Abbreviations4 BC Boundary Condition CFD Computational Fluid Dynamics CHT Conjugate Heat Transfer FFD Free-Form Deformation XDSM Extended Design Structure Matrix 2 1. Introduction5 Effective thermal management is a critical design challenge in electric aircraft, which lack the natural6 heat dissipation mechanisms found in conventional air-breathing engines [1]. Excessive heat buildup can7 compromise
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_018
+
+**Systems:** lora_rag
+
+**Claim:** Hybrid-electric propulsion hazards include fuel system ignition from direct lightning strikes, corona or streamer at fuel vent outlets, and the hazards introduced by a hybrid power system.
+
+**Cited evidence:**
+
+- `C1` | `20190033416:chunk:00018`
+
+But many FUELEAP stakeholders —systems engineers, electrical and avionics engineers, pilots, safety specialists, and regulators—will be unfamiliar with both the safety and operational concerns surrounding hybrid electric propulsion and the relative merits of means of addressing these. Such stakeholders might benefit from a guide to how power system des ign fit into in the ‘big picture’ of aircraft safety. One way the safety argument augments our modeling and safety assessment activities is by explaining that story to readers. Fig. 4 The top-level of the FUELEAP safety argument in the Goal Structuring Notation (Ref 15) When means of addressing aircraft hazards or assessing aircraft safety are familiar, it may not be necessary to explain these to readers beyond, perhaps, referencing applicable standards. Safety-related standards and regulations often serve to define best practice, capturing judgments about which hazards require mitigation and sometimes what mitigations are advisable and how they should be assessed. But these judgments might not be universally applicable. For example, 14CFR §23.2430.a.2 requires that aircraft fuel systems be “designed and arranged to prevent ignition of the fuel within the system by direct lightning strikes … or by corona or streamering at fuel vent outlets,” thus implicitly presuming both a liquid fossil fuel energy source and an attendant fire hazard. But it makes no mention of the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid power 9 system. By capturing the hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a
+
+- `C2` | `20170006610:chunk:00000`
+
+1 American Institute of Aeronautics and Astronautics A NASA Approach to Safety Considerations for Electric Propulsion Aircraft Testbeds Kurt V. Papathakis1 and Alaric M. Sessions2 NASA Armstrong Flight Research Center, Edwards, CA, 93523 Phillip A. Burkhardt3 and David W. Ehmann4 Jacobs Technology, Edwards, CA, 93523 Electric, hybrid -electric, and turbo -electric distributed propulsion technologies and concepts are beginning to gain traction in the aircraft design community, as they can provide improvements in operating costs, noise, fuel consumption, and emissions compared to conventional internal combustion or B rayton-cycle powered vehicles. The National Aeronautics and Space Administration ( NASA) is building multiple demonstrators and testbeds to buy down airworthiness and flight safety risks for these new technologies, including X-57 Maxwell, Hybrid-Electric Integrated Systems Testbed (HEIST), Airvolt, and NASA Electric Aircraft Testbed (NEAT). This paper addresses the safety system design process used at NASA Armstrong Flight Research Center, speci fic ha zards associated with these new electric propulsion technologies, including an extensive investigation into the emergency -stop system for a HEIST, and other best practices. In general, the best course of action is to actively design out hazards assoc iated with these systems, but when removing these hazards is either impossible or impractical, other safety protocols including keep -out zones, lock -out/tag-out, and other practices should be implemented. Nomenclature A = amperage AC = alternating current AC/DC = alternating current to direct current (converter) AFRC = Armstrong Flight Research Center AFSRB = airworthiness and flight safety review board ARMD = Aeronautics Research Mission Directorate BMS = battery management system CANBus = controller area network bus Cat = category CIS = cockpit interface system CRM = continuous risk management CST = combined systems test E-stop = emergency stop EMI = electromagnetic interference FMEA = failure modes and effects analysis HAM = hazard action matrix
+
+- `C3` | `20170006610:chunk:00004`
+
+at NASA AFRC neces sitated a testbed trailer setup, and allowed for testing flexibility while maintaining connectivity to the simulation laboratory.3 Airvolt was the first AFRC all-electric demonstration project, designed to be a fully-instrumented, single propulsor test stand in order to better understand and analyze how current from the batteries ultimately produced thrust from the propeller, via the bus architecture, motor controllers, motor, and other equipment. Airvolt is currently being used as a method of acceptance testing for the X-57 Maxwell JM-X57 cruise motors. NASA is aggressively pursuing multipl e all-electric, hybrid-electric, and turbo -electric models, test stands, and flying demonstrators, while endeavoring to maintain high levels of safety throughout the design process and testing. In order for these systems to retire electric, hybrid-electric, and turbo-electric distributed propulsion architecture risks, numerous safety considerations must be implemented, as these system s require high voltage and current, especially for the new megawatt-scale systems being proposed. A safety design is the inco rporation of control methods and processes which begins early in the system design to either eliminate a hazard or mitigate risks to human health and safety throughout the lifespan of the platform. II. Electric, Hybrid-Electric, and Turbo-Electric Testbed Hazards and Mitigations To help assure mission success for these all -electric, hybrid -electric, and turbo -electric distributed propulsion projects, NASA is leveraging the hazard analysis process from the NASA Hazard Management Procedure4 to identify, eliminate, or control to an acceptable level the hazards associated with the projects that could affect human safety, damage or loss of assets, or loss of mission during the conduct of operations. NASA AFRC has a stringent hazard identification and mitigation system allowing the Center to self-certify experimental aircraft. This process starts with identifying hazards in preliminary hazard reports, complete with causes, effects, mitigations, and then categorizes the
+
+- `C4` | `20190033416:chunk:00019`
+
+hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a demonstrator project also poses challenges such as assessing the adequacy of operational constraints and tracking different short-term and long-term safety aims. The project’s goal is to assess the viability of the hybrid power system concept, not to develop an aircraft type that can be put into production. The power system concept is not viable if it will not be possible to (with further development) implement a sufficiently safe production version. Yet an aircraft built to assess a novel concept must, by nature, fly in order to accumulate the very experience that will provide a sound basis for assessing the reliability and other safety properties of the concept in question. Thus, adequate safety in flight test operations might be best achieved with a different set of mitigations than might be prudent in a production aircraft. For example, flight test operations might be conducted solely from runways long enough to permit landing straight ahead should the power system fail during takeoff. These considerations yield the safety aims embodied in the claims shown at the bottom of Fig. 9. In the argument supporting GDOCAAHEs —not shown here —we trace hazards in t he flight demonstrator aircraft to their mitigations and the related evidence to allow readers to understand how we have addressed the safety of flight test operations and to judge whether we have done so as well as reasonably practicable. At the same time, we must meet existing regulations for flight test.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_019
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic tanks and their associated manufacturing, insulation, and integration into airframes are challenging due to the lower cryogenic fuel density requiring larger tanks for equivalent field length metrics.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+- `C2` | `20250010867:chunk:00004`
+
+at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature, low density, low viscosity, low lubricity, small molecular size (harder to control leakage), wide ﬂammability range (between 4% and 75% in air), and potential for diﬀusion into or reaction with other materials increases the challenge of the design of systems that can simultaneously accommodate all these characteristics for a long (and highly cyclic) design life, in a lightweight, volumetrically eﬃcient form factor. While many of these attributes have been successfully dealt with in ground systems, where weight is not a primary driver, or in space ﬂight systems, where cryogenic systems are typically designed for short life (< 1 hour) and a low number of thermal and pressure cycles, there are several identiﬁed technology gaps with respect to the speciﬁc characteristics needed in an aviation application, including the requirement of suﬃcient durability for thousands of cycles and hours. Similar to the cryogenic systems, the state-of-the-art fuel cell technology is validated for automotive applications and is too heavy for aeronautics. Fuel cells for space applications operate on pure oxygen rather than air, are at low scale, and designed to operate over a limited number of cycles. The fuel cell technology for aeronautical applications requires extensive technology maturation and scale up that achieves high speciﬁc energy at the system level and will require signiﬁcant long-term investments to develop the technology and integrate it into cryogenic fuel aircraft architecture. Fuel cell material durability and performance under variable loads and operational stresses (e.g., takeoﬀ-shutdown cycling,
+
+- `C3` | `20250010867:chunk:00002`
+
+from commercial airports rather than isolated launch sites. Aviation systems will be required to safely operate in occupied vehicles that are used several times a day, yet not dissembled and manually inspected between each ﬂight. Safety and certiﬁcation requirements for airframes with large integrated cryogenic tanks need to be deﬁned in partnership with the Federal Aviation Administration (FAA) to increase the likelihood of passenger survival in the event of a crash. Systems for detecting and mitigating fuel leakage would have to be automated and redundant beyond current baseline operational procedures for space systems. Mean times between failure (MTBF) suitable for practical aviation propulsion life cycles will have to be demonstrated through actual testing of brassboard and production systems, and they will be required to meet FAA safety and certiﬁcation requirements no less stringent than those for current commercial aircraft. Safety standards for hydrogen systems remain fragmented and inconsistent across regions. High-pressure storage, such as 350- and 700-bar systems, is governed by varying standards (ISO, SAE, EU) that are not fully harmonized, creating interoperability challenges. Similarly, leak detection and mitigation are hindered by the lack of uniﬁed, validated performance standards for hydrogen sensors in diverse environments, including outdoor refueling stations and industrial facilities. Material compatibility also remains a concern, as current qualiﬁcation standards do not comprehensively address low temperature embrittlement or hydrogen embrittlement in metals or degradation in composite materials. Fire and explosion protection adds another layer of complexity, since testing methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation
+
+- `C4` | `20260003867:chunk:00000`
+
+Cryogenic Fuel Aviation – Challenges and Opportunities Vadim F. Lvovich, Wesley L. Johnson, Ian J. Jakupca, H. Douglas Perkins, Thomas M. Lavelle, Hashmatullah Hasseeb, Ezra O. McNichols, F. David Koci, Sandi G. Miller, Stephanie L. Vivod, Sadeq Malakooti, Joseph J. Pinakidis, Zhimin Zhong, Brett A. Bednarcyk, Evan J. Pineda, Brandon L. Hearley, Rula M. Coroneos, Joshua Stuckner NASA Glenn Research Center, Cleveland, Ohio Christopher L. Hartman Analytical Mechanics Associates, Hampton, Virginia Mahtab Fox HX5 LLC, Cleveland, Ohio June 10, 2026 AIAA 2026 Aviation Forum, San Diego, CA NASA Technology Development Focus in Aeronautics Fuel Production Fuel Transportation Airport Infrastructure - Ground Handling - Refueling Aircraft Overall Environmental Impact -Initial investment -Fuel cost/availability -Carbon Tax?, etc. -Nation, global energy policies Multiple Fuel Types? • Primary focus will be the aircraft • Single-aisle and larger is the ultimate long-term interest • Experience with smaller applications should be leveraged • Any propulsion systems using cryogenic fuels were within scope (gas-turbine, fuel cells, hybrid) Less focus will be devoted to non-aircraft considerations Not a direct part of NASA Scope External Perspective on NASA Research Investment Opportunities Results from September 2022 “Cryogenic Fuel Systems for Aircraft” Workshop at GRC • Materials • Additive manufacturing and composites for cryo temperatures, cycle fatigue, and hydrogen permeation • Seals, insulation, embrittlement, thermal expansion • Structures • Fuel tank, pressurized structure, conformal pressure vessels, impact absorbing structures • Testing Capabilities and Techniques • Hydrogen enabled facilities, crashworthiness, impact testing, icing • Operations • ConOps development, fuel system purging, fueling/defueling operations, tarmac hold, failure analysis, contingency scenarios unique to cryogenics • Systems Studies • Concept studies, fuel cell vs hydrogen combustion vs combination, fuel cell as secondary power (APU replacement), impact of current vs future grid, exploration of acceptable boil-off, tank design trades • Propulsion and Powertrain • Combustor design
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_020
+
+**Systems:** base_rag
+
+**Claim:** The transition from LT PEM to HT PEM is necessary to achieve large temperature differential between coolant and airstream during takeoff and climb.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_021
+
+**Systems:** lora_rag
+
+**Claim:** Power-electronics components require thermal management in electrified aircraft because they are often operated outside their peak performance zone, and this can result in a thermal runaway scenario unless active thermal control features are available to mitigate this response.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00009`
+
+of transport-class electrification can be nullified. Moreover, even an ideally 99%-efficient component will often be required to operate outside its peak performance zone, and this can result in a thermal runaway scenario unless active thermal control features are available to mitigate this response. It is therefore critically important to integrate an active thermal control system, such as TREES, with all the systems on the aircraft. Integrated Fault and Thermal Management Future electric aircraft propulsion systems will be based on the variety of configurations shown in Figure 16.6. Still, they all have in common the need to protect against electrical faults with DC breakers (indicated by the yellow dots) and to manage the waste heat produced by everything shown. Caption: Figure 16.6. Powertrain configurations require both thermal and fault management protection (yellow dots). (a) Parallel hybrid. (b) Turboelectric. (c) Series hybrid. (d) All electric. Credit: NASA Figure 16.7 depicts the TREES thermal management system (Dyson, 2019) integrated with a fault management system and applied to a Boeing 737 flight vehicle with parallel hybrid propulsion. The basic approach here is to extract high-exergy waste heat from the turbofan core using low–mass, SiC-coated graphite heat exchangers to thermoacoustically generate a ducted acoustic wave that is used to deliver mechanical energy throughout the aircraft. This acoustic energy can then operate a thermoacoustic heat pump to actively refrigerate the powertrain components while collecting the low- exergy waste heat from the powertrain and convert it to high-exergy useful heat, through which dynamically switchable heat pipes can then deliver throughout the aircraft for the beneficial applications shown in Table 16.3. Caption: Figure 16.7. TREES uses thermoacoustic and dynamically redirectable heat pipe tubes embedded in the aircraft to recycle both the turbofan and powertrain waste heat Credit: NASA Table 16.3. Beneficial Applications of Higher Exergy Waste Heat from
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_022
+
+**Systems:** lora_rag
+
+**Claim:** Fuel-cell thermal-management considerations include rejecting 40% to 60% of the fuel-cell heat energy, transitioning from LT PEM (80°C) to HT PEM (200°C) to achieve a large temperature differential between the coolant and airstream during takeoff and climb, placing the heat exchanger in the propulsor duct, and using battery power for takeoff and initial climb to reduce heat rejection requirements.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+- `C2` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_023
+
+**Systems:** lora_rag
+
+**Claim:** Physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects are practical extensions of local ultrasonic resonance spectroscopy (LURS).
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00039`
+
+and simulated results. So far, this work has assumed a constant SOC for the battery, so further experimental efforts can be made on tracking battery resonances through charge/discharge cycles. Furthermore, the embedded defects used in this work were coarse to test the efficacy of the technique, so testing more subtle defect conditions can help determine the sensitivity of the technique. Such defect cases could be with smaller embedded chips or lab-grown dendrites and lithium plating. This work 45 focused on single-point measurements, so extending this technique into full battery scans could give insight into resonance changes across the entire battery. In addition, this work was done as a part of the NASA Convergent Aeronautics Solutions (CAS) project entitled Sensors based Prognostics to Avoid Runaway Reactions and Catastrophic Ignition (SPARRCI), which seeks to apply these types of inspection techniques to battery health monitoring with embedded sensors, machine learning, and prognostics tools. The multiphysics simulations have also laid the groundwork to support further inspection approaches of interest to the team, such as with bonded structural health monitoring (SHM) sensors or with guided wave approaches. This work will be continued through the end of 2022 by other NASA researchers working on the SPARRCI project. 46 References [1] B. Liu, J. G. Zhang, and W. Xu, “Advancing Lithium Metal Batteries,” Joule, vol. 2, no. 5, pp. 833–845, 2018, doi: 10.1016/j.joule.2018.03.008. [2] C. Hendricks, N. Williard, S. Mathew, and M. Pecht, “A failure modes, mechanisms, and effects analysis (FMMEA) of lithium-ion batteries,” J. Power Sources, vol. 297, pp. 113–120, 2015, doi: 10.1016/j.jpowsour.2015.07.100. [3] P. Sun, R. Bisschop, H. Niu, and X. Huang, A Review of Battery Fires in Electric Vehicles, no. May. 2020. [4] S. Sripad, A. Bills, and V. Viswanathan, “A review of safety considerations for batteries in aircraft with electric propulsion,” MRS Bull.,
+
+- `C2` | `20210025384:chunk:00001`
+
+team and for his constant advice and support throughout my time at LaRC. Also, Pat Johnston has been essential for providing feedback on my work with his vast expertise. Many thanks to Peter Juarez for training me on the lab equipment I needed to perform my work as well. In addition, I would like to thank the rest of the members of the NASA LaRC Nondestructive Evaluation Sciences Branch (NESB). While the mandatory teleworking made interacting with everybody a little unusual, I really enjoyed their joyous attitude and kindness every day. I would also like to extend my thanks to the rest of the SPARRCI team with whom I performed this work. Abstract As next-generation aircraft and vehicles continue to develop, so do their associated energy demands. Lithium metal batteries are a leading candidate to fulfill this energy requirement, but these batteries are prone to internal dendrite defects that can lead to catastrophic thermal runaway events. Current battery management systems are capable of mitigating such risks, but are unable to detect such defects until thermal runaway has already begun. Various nondestructive evaluation (NDE) techniques, particularly ultrasonic NDE, can directly monitor internal battery parameters giving them the potential to detect critical defects prior to catastrophic failure. However, most of the current battery NDE research has focused on improved battery state-of-charge (SOC) and state-of-health (SOH) monitoring with little emphasis on critical defect detection. Thus, a measurement technique sensitive to subtle battery defects is needed. In addition, the complex mechanics of ultrasound in porous, thin, multilayered batteries prompt the use of physics-based simulation to guide inspections. In this work, an ultrasonic NDE technique has been developed utilizing frequency domain analysis of local battery resonances to detect the presence of battery defects. This technique is a practical extension of local ultrasonic resonance spectroscopy (LURS)
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_024
+
+**Systems:** base_rag
+
+**Claim:** Thermoacoustic Heat Pump Systems
+
+**Cited evidence:**
+
+- `C2` | `20240015017:chunk:00001`
+
+all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. Current thermal management solutions have major disadvantages such as added weight, low thermal capacity, and no increase of exergy [3]. Table 1 contains the current approaches to managing dissipated thermal energy and their disadvantages. Inefficient TMS can lead to overheating of components, reduce system efficiency, and potential safety hazards. Therefore, developing innovative and effective thermal management architecture/infrastructure is crucial for the successful implementation of TMS systems within an electric aircraft. 1 Space and Aeronautics Research Engineer, Thermal Energy Conversion Branch, and AIAA Member. 2 Hybrid Gas Electric Propulsion Technical Lead, Thermal Energy Conversion Branch, and AIAA Member. 3Senior Research Engineer, Optics and Photonics Branch, AIAA Associate Fellow 4Research Engineer, Thermal Energy Conversion Branch, AIAA Membe r 2025 AIAA SciTech Forum, Orlando, Florida January 6-10, 2025 2 TREES was developed as a novel approach that may solve the disadvantages of the current TMS technologies [3]. A full-scale sized aircraft TREES system can harness the high-grade waste heat, that is wasted by fully electric or hybrid electric aircraft, and convert it to acoustic energy via entry stages called thermal amplifiers [4]. Sources of high and low-grade heat are shown in Figure 1. This system will operate by first converting the incoming thermal energy into acoustic energy. Subsequently, the acoustic energy is channeled through a network of tubes leading to acoustic heat pumps. Within the heat pumps, the acoustic energy converts back to low-grade thermal energy. Finally, the low- grade heat from the acoustic pump can be distributed and reused throughout the aircraft via a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_025
+
+**Systems:** base_rag
+
+**Claim:** This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications.
+
+**Cited evidence:**
+
+- `C2` | `20170007959:chunk:00014`
+
+amount of power lost to heat is closely dependent on battery discharge rate and state of charge. Improving this model is the subject of additional work. 8 With a well-characterized cell, a sample X-57 Mod II mission proﬁle was applied in Figure 10. From an initial temperature of 35 C (a “hot day” ground condition for Armstrong Flight Research Center), the isolated cell experiences a total adiabatic temperature rise of 30 C. The most stressful phases are the full-power ground roll (takeo ↵) and climb segments. Battery thermal runaway is a risk above 60 C, and propagation between cells can result in a cascading failure of an entire battery module. At least for the “hot day” conditions, it is useful to deﬁne a required minimum cooler to stabilize the battery temperature. As a thermal sizing model, it is ﬂexible enough to accept a generic cooling load of the form, Tn+1 = Tn + Pcruise ⌘ (Tn T0)h Nconf igcpm (10) where the expression ( Tn T0) ⇤ h describes a generic cooler, with a rate proportional to the temperature 9o f 13 American Institute of Aeronautics and Astronautics di↵erence between the cell and the environment. An overall heat transfer coe cient, h, can be chosen such that the simulated cell temperature never exceeds a predetermined safe operating limit. For the Mod II ﬂight proﬁle, h = 25 W m2 K is su cient: Figure 10. T emperature transients with various hypothetical cooling rates The simplicity and ﬂexibility of the lumped capacitance thermal script makes it a powerful tool for testing combinations of cooling schemes and ﬂight proﬁles. Future work will incorporate dynamic polarization models, to better capture transients and state e ↵ects of the battery. This will better quantify non-linear thermal and voltage e↵ects due to state of charge, temperature,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_026
+
+**Systems:** lora_rag
+
+**Claim:** Nondestructive evaluation techniques can detect geometry and material properties associated with each of these defect mechanisms and are sensitive to wave propagation and wave-defect interaction within the battery.
+
+**Cited evidence:**
+
+- `C2` | `20210025384:chunk:00007`
+
+changes in geometry and material properties associated with each of these defect mechanisms and thus the potential for detection based on the amount of influence they have on wave propagation and wave-defect interaction within the battery. Current Battery Monitoring Techniques 1.2.1 Battery Management Systems As mentioned before, the current solution to prevent dendrites from causing thermal runaway is to engineer safe containment systems and constantly monitor the batteries. These tasks are accomplished with a battery management system (BMS) which is used to ensure maximum operating efficiency and mitigate battery failure. The most basic way in which a BMS does this is through the state of charge (SOC) and state of health (SOH) monitoring. The SOC of a battery is the ratio of the battery’s current charge to its maximum capacity and is the most important of these parameters as it is essentially the ‘fuel gauge’ that can determine how much energy is left in the battery. The battery’s SOH is representative of the battery’s deterioration from aging and is usually tracked by monitoring changes in maximum SOC over time. There are various different SOC and SOH estimation algorithms and models, but they mostly all involve using external cell parameters such as voltage, current, and temperature as inputs for lookup tables and computational models that then predict the overall SOC [9]. As these methods all lack information about internal battery changes, there is a degree of inaccuracy to their predictions that can accumulate in error over time. For this same reason, these methods are not 5 sensitive to the development of some critical battery defects [2]. Ultrasonic nondestructive evaluation (NDE) techniques, however, have the advantage of directly monitoring internal battery changes, thus making them effective at SOC/SOH monitoring and also sensitive to defects, and is why they have been of great
+
+- `C4` | `20210025384:chunk:00006`
+
+as the solid electrolyte interface (SEI). In this layer, lithium plating can occur in which lithium ions are reduced to metallic lithium and build up at the interface. This lithium is no longer usable in standard battery operation and will thus result in an overall loss of charge capacity. This is a normal aging phenomenon in lithium-based batteries and is generally why these types of batteries have a limited lifetime. However, under various cycling conditions, such as low temperature or high charge/discharge rates, this plating can occur non-uniformly and form needle-like structures known as dendrites. Dendrites can penetrate the battery separator, short circuit the electrodes, and cause a thermal runaway reaction to occur [8]. This process is further emphasized in Figure 2. Figure 2: Conceptual sketch of how lithium plating can lead to dendrite growth Dendrites have received lots of attention due to their common occurrence, their potential for catastrophic failure, and their difficulty of detection. However, there are other important battery defects that can occur [2]. Gas generation from the decomposition of the electrolyte solvent can Lithium Anode Separator/Electrolyte Li+ Li+ Separator/Electrolyte Lithium Anode Li SEI SEI Dendrites Lithium Anode Separator/Electrolyte Li+ Li+ Li+ SEI e- 4 lead to increased cell temperatures and thus thermal runaway. Continued reduction of lithium ions can cause further thickening of the SEI layer and an overall loss in charge capacity and performance of the battery. From an ultrasonic NDE perspective, there are local changes in geometry and material properties associated with each of these defect mechanisms and thus the potential for detection based on the amount of influence they have on wave propagation and wave-defect interaction within the battery. Current Battery Monitoring Techniques 1.2.1 Battery Management Systems As mentioned before, the current solution to prevent dendrites from causing thermal runaway is to engineer
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_027
+
+**Systems:** base_rag
+
+**Claim:** E1
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00009`
+
+of transport-class electrification can be nullified. Moreover, even an ideally 99%-efficient component will often be required to operate outside its peak performance zone, and this can result in a thermal runaway scenario unless active thermal control features are available to mitigate this response. It is therefore critically important to integrate an active thermal control system, such as TREES, with all the systems on the aircraft. Integrated Fault and Thermal Management Future electric aircraft propulsion systems will be based on the variety of configurations shown in Figure 16.6. Still, they all have in common the need to protect against electrical faults with DC breakers (indicated by the yellow dots) and to manage the waste heat produced by everything shown. Caption: Figure 16.6. Powertrain configurations require both thermal and fault management protection (yellow dots). (a) Parallel hybrid. (b) Turboelectric. (c) Series hybrid. (d) All electric. Credit: NASA Figure 16.7 depicts the TREES thermal management system (Dyson, 2019) integrated with a fault management system and applied to a Boeing 737 flight vehicle with parallel hybrid propulsion. The basic approach here is to extract high-exergy waste heat from the turbofan core using low–mass, SiC-coated graphite heat exchangers to thermoacoustically generate a ducted acoustic wave that is used to deliver mechanical energy throughout the aircraft. This acoustic energy can then operate a thermoacoustic heat pump to actively refrigerate the powertrain components while collecting the low- exergy waste heat from the powertrain and convert it to high-exergy useful heat, through which dynamically switchable heat pipes can then deliver throughout the aircraft for the beneficial applications shown in Table 16.3. Caption: Figure 16.7. TREES uses thermoacoustic and dynamically redirectable heat pipe tubes embedded in the aircraft to recycle both the turbofan and powertrain waste heat Credit: NASA Table 16.3. Beneficial Applications of Higher Exergy Waste Heat from
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_028
+
+**Systems:** lora_rag
+
+**Claim:** Active cooling can reduce the battery pack's weight by using an efficient cooling system, but it requires an additional cooling pump and power.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C2` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_029
+
+**Systems:** lora_rag
+
+**Claim:** Ultrasonic NDE can directly monitor internal battery parameters and detect critical defects prior to catastrophic failure.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00039`
+
+and simulated results. So far, this work has assumed a constant SOC for the battery, so further experimental efforts can be made on tracking battery resonances through charge/discharge cycles. Furthermore, the embedded defects used in this work were coarse to test the efficacy of the technique, so testing more subtle defect conditions can help determine the sensitivity of the technique. Such defect cases could be with smaller embedded chips or lab-grown dendrites and lithium plating. This work 45 focused on single-point measurements, so extending this technique into full battery scans could give insight into resonance changes across the entire battery. In addition, this work was done as a part of the NASA Convergent Aeronautics Solutions (CAS) project entitled Sensors based Prognostics to Avoid Runaway Reactions and Catastrophic Ignition (SPARRCI), which seeks to apply these types of inspection techniques to battery health monitoring with embedded sensors, machine learning, and prognostics tools. The multiphysics simulations have also laid the groundwork to support further inspection approaches of interest to the team, such as with bonded structural health monitoring (SHM) sensors or with guided wave approaches. This work will be continued through the end of 2022 by other NASA researchers working on the SPARRCI project. 46 References [1] B. Liu, J. G. Zhang, and W. Xu, “Advancing Lithium Metal Batteries,” Joule, vol. 2, no. 5, pp. 833–845, 2018, doi: 10.1016/j.joule.2018.03.008. [2] C. Hendricks, N. Williard, S. Mathew, and M. Pecht, “A failure modes, mechanisms, and effects analysis (FMMEA) of lithium-ion batteries,” J. Power Sources, vol. 297, pp. 113–120, 2015, doi: 10.1016/j.jpowsour.2015.07.100. [3] P. Sun, R. Bisschop, H. Niu, and X. Huang, A Review of Battery Fires in Electric Vehicles, no. May. 2020. [4] S. Sripad, A. Bills, and V. Viswanathan, “A review of safety considerations for batteries in aircraft with electric propulsion,” MRS Bull.,
+
+- `C2` | `20210025384:chunk:00001`
+
+team and for his constant advice and support throughout my time at LaRC. Also, Pat Johnston has been essential for providing feedback on my work with his vast expertise. Many thanks to Peter Juarez for training me on the lab equipment I needed to perform my work as well. In addition, I would like to thank the rest of the members of the NASA LaRC Nondestructive Evaluation Sciences Branch (NESB). While the mandatory teleworking made interacting with everybody a little unusual, I really enjoyed their joyous attitude and kindness every day. I would also like to extend my thanks to the rest of the SPARRCI team with whom I performed this work. Abstract As next-generation aircraft and vehicles continue to develop, so do their associated energy demands. Lithium metal batteries are a leading candidate to fulfill this energy requirement, but these batteries are prone to internal dendrite defects that can lead to catastrophic thermal runaway events. Current battery management systems are capable of mitigating such risks, but are unable to detect such defects until thermal runaway has already begun. Various nondestructive evaluation (NDE) techniques, particularly ultrasonic NDE, can directly monitor internal battery parameters giving them the potential to detect critical defects prior to catastrophic failure. However, most of the current battery NDE research has focused on improved battery state-of-charge (SOC) and state-of-health (SOH) monitoring with little emphasis on critical defect detection. Thus, a measurement technique sensitive to subtle battery defects is needed. In addition, the complex mechanics of ultrasound in porous, thin, multilayered batteries prompt the use of physics-based simulation to guide inspections. In this work, an ultrasonic NDE technique has been developed utilizing frequency domain analysis of local battery resonances to detect the presence of battery defects. This technique is a practical extension of local ultrasonic resonance spectroscopy (LURS)
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_030
+
+**Systems:** lora_rag
+
+**Claim:** Safety-related standards and regulations may implicitly assume both a liquid fossil fuel energy source and an attendant fire hazard, but they do not address the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid-electric propulsion system.
+
+**Cited evidence:**
+
+- `C1` | `20190033416:chunk:00018`
+
+But many FUELEAP stakeholders —systems engineers, electrical and avionics engineers, pilots, safety specialists, and regulators—will be unfamiliar with both the safety and operational concerns surrounding hybrid electric propulsion and the relative merits of means of addressing these. Such stakeholders might benefit from a guide to how power system des ign fit into in the ‘big picture’ of aircraft safety. One way the safety argument augments our modeling and safety assessment activities is by explaining that story to readers. Fig. 4 The top-level of the FUELEAP safety argument in the Goal Structuring Notation (Ref 15) When means of addressing aircraft hazards or assessing aircraft safety are familiar, it may not be necessary to explain these to readers beyond, perhaps, referencing applicable standards. Safety-related standards and regulations often serve to define best practice, capturing judgments about which hazards require mitigation and sometimes what mitigations are advisable and how they should be assessed. But these judgments might not be universally applicable. For example, 14CFR §23.2430.a.2 requires that aircraft fuel systems be “designed and arranged to prevent ignition of the fuel within the system by direct lightning strikes … or by corona or streamering at fuel vent outlets,” thus implicitly presuming both a liquid fossil fuel energy source and an attendant fire hazard. But it makes no mention of the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid power 9 system. By capturing the hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_031
+
+**Systems:** base_rag
+
+**Claim:** This work focuses on detecting hazardous lithium-ion battery thermal events through nondestructive evaluation techniques, particularly ultrasonic resonance spectroscopy, to identify embedded defects.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00001`
+
+team and for his constant advice and support throughout my time at LaRC. Also, Pat Johnston has been essential for providing feedback on my work with his vast expertise. Many thanks to Peter Juarez for training me on the lab equipment I needed to perform my work as well. In addition, I would like to thank the rest of the members of the NASA LaRC Nondestructive Evaluation Sciences Branch (NESB). While the mandatory teleworking made interacting with everybody a little unusual, I really enjoyed their joyous attitude and kindness every day. I would also like to extend my thanks to the rest of the SPARRCI team with whom I performed this work. Abstract As next-generation aircraft and vehicles continue to develop, so do their associated energy demands. Lithium metal batteries are a leading candidate to fulfill this energy requirement, but these batteries are prone to internal dendrite defects that can lead to catastrophic thermal runaway events. Current battery management systems are capable of mitigating such risks, but are unable to detect such defects until thermal runaway has already begun. Various nondestructive evaluation (NDE) techniques, particularly ultrasonic NDE, can directly monitor internal battery parameters giving them the potential to detect critical defects prior to catastrophic failure. However, most of the current battery NDE research has focused on improved battery state-of-charge (SOC) and state-of-health (SOH) monitoring with little emphasis on critical defect detection. Thus, a measurement technique sensitive to subtle battery defects is needed. In addition, the complex mechanics of ultrasound in porous, thin, multilayered batteries prompt the use of physics-based simulation to guide inspections. In this work, an ultrasonic NDE technique has been developed utilizing frequency domain analysis of local battery resonances to detect the presence of battery defects. This technique is a practical extension of local ultrasonic resonance spectroscopy (LURS)
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_032
+
+**Systems:** base_rag
+
+**Claim:** Solid-State Heat Pipe Networks
+
+**Cited evidence:**
+
+- `C3` | `20240015017:chunk:00002`
+
+will operate by first converting the incoming thermal energy into acoustic energy. Subsequently, the acoustic energy is channeled through a network of tubes leading to acoustic heat pumps. Within the heat pumps, the acoustic energy converts back to low-grade thermal energy. Finally, the low- grade heat from the acoustic pump can be distributed and reused throughout the aircraft via a solid-state heat pipe network [5,6]. The solid-state waste heat delivery system will be used to manage the thermal energy transfer to critical applications such as de -icing, local skin heating, thrust a ugmentation, fuel preheating, and aircraft environment control. Mass estimates for an aircraft sized TMS have not been determined, but ideas of embedding TREES into an aircraft structure may be possible. A TAHP system has been developed between ACT and NASA GRC for an aircraft sized TMS and cooling of a 1 MW solid-state DC circuit breaker [6] . This system contains 6 stages to simulate locations w here heat sources can discharge their thermal energy and a heat pump stage for cooling of the circuit breaker. Initial, models show that the ACT TAHP can handle up to 7.5 kW of waste heat input. The purpose of this work is to show and describe how the GRC proof-of-concept demonstration contributed to the larger scale ACT TREES build and test. Therefore, this paper describes the initial modeling, design, fabrication, and testing of an in-house traveling wave thermoacoustic testbed. Current GRC testbed designs are meant to handle up to 800 Ws of high-grade waste heat, demonstrate acoustic energy amplification, and be utilized as a diagnostic t oolset for new TAHP designs that required higher loads of high-grade waste heat. Table 1. Present Thermal Management Solutions Thermal Management Technology Disadvantage Ram air HX Adds weight, aircraft drag, displaces fuel capacity Convective skin
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_033
+
+**Systems:** lora_rag
+
+**Claim:** Heat pumps are primarily needed for battery module cooling on hot days when outside air temperatures exceed battery temperature limits.
+
+**Cited evidence:**
+
+- `C1` | `20240015505:chunk:00019`
+
+diagram As was menti oned previously, h eat pumps are primarily needed for battery module cooling on hot days on the ground where outside air temperatures are near or exceed battery temperature limits. The batteries will likely be located in unpressurized compartments in the wings or fuselage where conditioned air is not available. Typical battery temperature limits range from 40 °C to 60 °C, while outside air temperatures can be up to 49 °C, for example, on a 1% Hot Day at sea level [56]. Additionally, many current aircraft are certified to take off in outside air temperature s ranging from 50 °C to 60 °C [57]. Other solutions may be considered in future trade studies, such as pre -cooling the batteries, adding additional heat sinks like phase change material s, or using evaporative coolers. However, these solutions are dependent on the available thermal mass and would need to be sized based on the time duration between disconnection from ground cooling and arrival at an altitude where the outside air is cooler. According to the FAA’s Aviation System Performance Metrics database, for over 10 million US flights recorded in 2023, the average taxi out time was about 17 minutes and the average taxi in time was about 8 minutes. In 2.6% of those flights the taxi out time was greater than 40 minutes, and in 0.56% of those flights (over 60,000 flights) the taxi out time was greater than an hour. A heat pump is expected to trade better on mass for longer duration cooling requirements. For heat rejection, each coolant loop rejects to one or more liquid -air heat exchangers. The wing loops utilize a ducted ram-air heat exchanger, notionally located local to each electric engine on the wing. Additionally, OML heat exchangers are positioned in the fan duct,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_034
+
+**Systems:** lora_rag
+
+**Claim:** Bulky containment systems passively prevent thermal runaway and add significant weight to the batteries, which is undesirable in aerospace applications.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00004`
+
+certain catastrophic defects that greatly increase the associated safety risks in using lithium metal batteries. In particular, these batteries are prone to defects in which lithium dendrites grow across the battery from one electrode to the other, causing an internal short circuit. This ultimately leads to a thermal runaway reaction in which the heating and ignition of one battery cell can cascade into the ignition of neighboring cells. In recent years, a large percentage of fires in electric vehicles has been due to this thermal runaway effect in lithium batteries [3]. The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells [4]. This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications. This issue has caused a large amount of research to go into minimizing parasitic mass and volume in battery component designs [5]. Nondestructive evaluation (NDE) techniques have the potential to detect precursors and development of critical defects prior to the occurrence of a catastrophic failure due to their ability to probe internal features of materials. For battery health monitoring, these techniques would need to be field-deployable and the physical mechanisms of the inspection would need to be understood 2 well to provide confidence in the inspection technique. This work seeks to accomplish this through physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects. In the next sections, the basic working principles and critical defects of lithium metal batteries are discussed, in addition to current battery health monitoring techniques. Lithium Metal Batteries Li-metal batteries are complex, multilayered structures comprised of solid, liquid, and porous layers. The fundamental unit cell of a Li-metal battery is
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_035
+
+**Systems:** lora_rag
+
+**Claim:** Electrified aircraft concepts produce large amounts of low-grade waste heat, requiring large, heavy thermal management systems that cause drag.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00009`
+
+of transport-class electrification can be nullified. Moreover, even an ideally 99%-efficient component will often be required to operate outside its peak performance zone, and this can result in a thermal runaway scenario unless active thermal control features are available to mitigate this response. It is therefore critically important to integrate an active thermal control system, such as TREES, with all the systems on the aircraft. Integrated Fault and Thermal Management Future electric aircraft propulsion systems will be based on the variety of configurations shown in Figure 16.6. Still, they all have in common the need to protect against electrical faults with DC breakers (indicated by the yellow dots) and to manage the waste heat produced by everything shown. Caption: Figure 16.6. Powertrain configurations require both thermal and fault management protection (yellow dots). (a) Parallel hybrid. (b) Turboelectric. (c) Series hybrid. (d) All electric. Credit: NASA Figure 16.7 depicts the TREES thermal management system (Dyson, 2019) integrated with a fault management system and applied to a Boeing 737 flight vehicle with parallel hybrid propulsion. The basic approach here is to extract high-exergy waste heat from the turbofan core using low–mass, SiC-coated graphite heat exchangers to thermoacoustically generate a ducted acoustic wave that is used to deliver mechanical energy throughout the aircraft. This acoustic energy can then operate a thermoacoustic heat pump to actively refrigerate the powertrain components while collecting the low- exergy waste heat from the powertrain and convert it to high-exergy useful heat, through which dynamically switchable heat pipes can then deliver throughout the aircraft for the beneficial applications shown in Table 16.3. Caption: Figure 16.7. TREES uses thermoacoustic and dynamically redirectable heat pipe tubes embedded in the aircraft to recycle both the turbofan and powertrain waste heat Credit: NASA Table 16.3. Beneficial Applications of Higher Exergy Waste Heat from
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_036
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic tanks are significantly smaller than the required tanks for full-range aircraft, and hydrogen has a volumetric energy density that is ¼ of jet fuel, requiring large storage systems for a single-aisle aircraft to reach its maximum range of 3500 nm.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+- `C2` | `20260003867:chunk:00004`
+
+of burning both cryogenic and jet fuel can smooth out this transition by operating out of airports that do not offer cryogenic fuels. • But when an airport has cryogenic fuel service, the aircraft can use that fuel to take advantage of the benefits of the cryogenic fuel. • As more dual-fuel aircraft enter service, more airports will install cryogenic fueling services. • Dual-fuel also addresses the low volumetric energy density, especially of H2, which has a volumetric energy density that is ¼ of jet fuel. • Hydrogen tanks large enough to power a single-aisle aircraft to its maximum range of 3500 nm would need to be 4 times the volume of the wing tanks resulting in larger aircraft volume and weight • However, roughly 70% of all flights are shorter than a 1000 nm for a single-aisle aircraft, and cryogenic tanks ~¼ the size of those required for the full range could provide all the fuel required. • Amount of SAF greatly reduced • Use of cryogenic fuels for flights less than 1000 nm means that the amount of SAF to replace jet fuel would be 80% less than it would be if jet fuel provided all the fuel. • This mean that a given supply of SAF could meet the fuel needs for a liquid storable fuel in 5 times as many aircraft than possible if SAF would have to be the only fuel used. • BUT: safe handling of TWO fuels with very different safety standards becomes a great challenge. These considerations underpin a need for continuous investigation of cryogenic fuels and relevant aircraft architecture, components, subsystems and technologies to develop a comprehensive approach to optimization of future aviation concepts. Trade of Aircraft Architecture Concepts Baseline 150 PAX Aircraft Internal LH2 Carriage 150 PAX Aircraft – “HWB”
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_037
+
+**Systems:** lora_rag
+
+**Claim:** The fuselage and wings can accommodate much of the energy by coupling the batteries with the wings, and the X-57 aircraft has a total energy of 55.3 kWh, with 225 Wh/kg at cell level.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00004`
+
+certain catastrophic defects that greatly increase the associated safety risks in using lithium metal batteries. In particular, these batteries are prone to defects in which lithium dendrites grow across the battery from one electrode to the other, causing an internal short circuit. This ultimately leads to a thermal runaway reaction in which the heating and ignition of one battery cell can cascade into the ignition of neighboring cells. In recent years, a large percentage of fires in electric vehicles has been due to this thermal runaway effect in lithium batteries [3]. The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells [4]. This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications. This issue has caused a large amount of research to go into minimizing parasitic mass and volume in battery component designs [5]. Nondestructive evaluation (NDE) techniques have the potential to detect precursors and development of critical defects prior to the occurrence of a catastrophic failure due to their ability to probe internal features of materials. For battery health monitoring, these techniques would need to be field-deployable and the physical mechanisms of the inspection would need to be understood 2 well to provide confidence in the inspection technique. This work seeks to accomplish this through physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects. In the next sections, the basic working principles and critical defects of lithium metal batteries are discussed, in addition to current battery health monitoring techniques. Lithium Metal Batteries Li-metal batteries are complex, multilayered structures comprised of solid, liquid, and porous layers. The fundamental unit cell of a Li-metal battery is
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_038
+
+**Systems:** base_rag
+
+**Claim:** The safety argument in hybrid-electric propulsion systems includes identifying unique hazards and relating them to mitigations, as outlined in the FUELEAP safety argument.
+
+**Cited evidence:**
+
+- `C1` | `20190033416:chunk:00018`
+
+But many FUELEAP stakeholders —systems engineers, electrical and avionics engineers, pilots, safety specialists, and regulators—will be unfamiliar with both the safety and operational concerns surrounding hybrid electric propulsion and the relative merits of means of addressing these. Such stakeholders might benefit from a guide to how power system des ign fit into in the ‘big picture’ of aircraft safety. One way the safety argument augments our modeling and safety assessment activities is by explaining that story to readers. Fig. 4 The top-level of the FUELEAP safety argument in the Goal Structuring Notation (Ref 15) When means of addressing aircraft hazards or assessing aircraft safety are familiar, it may not be necessary to explain these to readers beyond, perhaps, referencing applicable standards. Safety-related standards and regulations often serve to define best practice, capturing judgments about which hazards require mitigation and sometimes what mitigations are advisable and how they should be assessed. But these judgments might not be universally applicable. For example, 14CFR §23.2430.a.2 requires that aircraft fuel systems be “designed and arranged to prevent ignition of the fuel within the system by direct lightning strikes … or by corona or streamering at fuel vent outlets,” thus implicitly presuming both a liquid fossil fuel energy source and an attendant fire hazard. But it makes no mention of the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid power 9 system. By capturing the hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_039
+
+**Systems:** lora_rag
+
+**Claim:** Conjugate heat transfer (CHT) optimization is used to analyze aerodynamics and heat transfer for various battery pack shapes and flow conditions.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C2` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_040
+
+**Systems:** lora_rag
+
+**Claim:** Nondestructive evaluation techniques can detect precursors and development of critical defects prior to catastrophic failure.
+
+**Cited evidence:**
+
+- `C2` | `20210025384:chunk:00001`
+
+team and for his constant advice and support throughout my time at LaRC. Also, Pat Johnston has been essential for providing feedback on my work with his vast expertise. Many thanks to Peter Juarez for training me on the lab equipment I needed to perform my work as well. In addition, I would like to thank the rest of the members of the NASA LaRC Nondestructive Evaluation Sciences Branch (NESB). While the mandatory teleworking made interacting with everybody a little unusual, I really enjoyed their joyous attitude and kindness every day. I would also like to extend my thanks to the rest of the SPARRCI team with whom I performed this work. Abstract As next-generation aircraft and vehicles continue to develop, so do their associated energy demands. Lithium metal batteries are a leading candidate to fulfill this energy requirement, but these batteries are prone to internal dendrite defects that can lead to catastrophic thermal runaway events. Current battery management systems are capable of mitigating such risks, but are unable to detect such defects until thermal runaway has already begun. Various nondestructive evaluation (NDE) techniques, particularly ultrasonic NDE, can directly monitor internal battery parameters giving them the potential to detect critical defects prior to catastrophic failure. However, most of the current battery NDE research has focused on improved battery state-of-charge (SOC) and state-of-health (SOH) monitoring with little emphasis on critical defect detection. Thus, a measurement technique sensitive to subtle battery defects is needed. In addition, the complex mechanics of ultrasound in porous, thin, multilayered batteries prompt the use of physics-based simulation to guide inspections. In this work, an ultrasonic NDE technique has been developed utilizing frequency domain analysis of local battery resonances to detect the presence of battery defects. This technique is a practical extension of local ultrasonic resonance spectroscopy (LURS)
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_041
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic hydrogen has a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), but its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_042
+
+**Systems:** base_rag
+
+**Claim:** The developed aircraft architecture is being optimized by total speciﬁc energy density, speciﬁc power, size and mission proﬁles.
+
+**Cited evidence:**
+
+- `C1` | `20205004497:chunk:00013`
+
+a result of increased thermal management system power draw. The wattage consumed by the coolant loop is considered an eﬃciency loss on the drive-train, and the lighter vehicle saves substantial weight on the battery at the cost of requiring higher power cooling. Additional proﬁles are included in the appendix for the six-passenger vehicle variant. Fig. 8 Drive-train Eﬃciency Proﬁle over Optimized Trajectories Across Multiple Energy Densities 9 V. Conclusions and Future Work This paper examined mission-dependent battery waste heat starting with a notional X-57 mission. Performance impacts from battery size and energy density were quantiﬁed for a statically sized, ﬁxed-wing vehicle. Next, a VTOL quadrotor was optimally sized for various ranges and achievable energy density. The variation in sensitivity between each of these missions highlights the need for openly available surrogate models to give battery system engineers more realistic benchmarks for designing batteries. Additional real-world constraints like volume and degradation are not evaluated explicitly but can be posed as additional weight penalty margins, if they exceed certain thresholds. This paper shows the energy and thermal sizing impacts for a speciﬁc Li-ion battery chemistry. Future work will attempt to create chemistry agnostic sensitivity functions with weight and thermal loads as the input and power proﬁles as the output. Follow-on studies are currently being conducted to better determine pack weight knockdowns based on the magnitude of the waste heat and the size of the thermal system. As new electric VTOL conﬁgurations are developed, understanding realistic energy density and eﬃciency values will be critical for creating optimally sized vehicles. Ideally, these results help assist in scoping the magnitude of the battery design challenge and can be used to help set productive benchmarks. Appendix Regressions on each swept design variable are provided in the following section: Energy Density is ﬁxed as 400 Wh/kg for
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_043
+
+**Systems:** lora_rag
+
+**Claim:** The optimized design achieves a 44.6% reduction in pressure loss and a 1.5% reduction in battery pack weight, while satisfying the thermal constraint.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+- `C2` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C3` | `20260000381:chunk:00001`
+
+a 3-by-3 cell configuration is cooled by ambient airflow, with constant heat generation prescribed in the cells. The battery casing shape serves as the design variable, and the objective function is a weighted sum of pressure loss and pack weight, subject to a maximum temperature constraint. The optimized design achieves a 44.6% reduction in pressure loss and a 1.5% reduction in weight, while satisfying the thermal constraint. To ensure the reliability of the optimized designs, this study validates coarse-mesh, steady-state predictions against fine-mesh unsteady simulations, demonstrating consistency within accept- able errors. This work demonstrates the potential of the developed framework to enable rapid, high-fidelity design of thermal management systems for electric aircraft. Keywords: Conjugate Heat Transfer; Design Optimization; Discrete Adjoint; eVTOL Thermal Management ∗Corresponding author Email address: phe@iastate.edu (Ping He) Preprint accepted for publication in International Journal of Heat and Mass Transfer January 7, 2026 Nomenclature1 Symbols2 CP L Pressure loss coefficient Cp Specific heat at constant pressure f Objective function H Influence from neighboring cell velocities and source term N Number of nodes in interpolation Q Heat flux; volumetric flow rate R Residual vector Sf Face area vector w State variable vector W Battery weight ∆T Temperature difference κ Thermal conductivity µ Dynamic viscosity; mesh skewness parameter ϕ Face flux; heat flux Ψ Adjoint variable vector Subscripts and Superscripts3 (·)fluid Fluid domain quantity (·)solid Solid domain quantity (·)f Face quantity (·)N Neighboring cell quantity (·)P Control volume cell quantity (·)ref Reference value (·)w Wall quantity Acronyms and Abbreviations4 BC Boundary Condition CFD Computational Fluid Dynamics CHT Conjugate Heat Transfer FFD Free-Form Deformation XDSM Extended Design Structure Matrix 2 1. Introduction5 Effective thermal management is a critical design challenge in electric aircraft, which lack the natural6 heat dissipation mechanisms found in conventional air-breathing engines [1]. Excessive heat buildup can7 compromise
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_044
+
+**Systems:** lora_rag
+
+**Claim:** It mitigates the thermal capacity limitation due to sink temperature or surface availability, increases maintenance due to thermal management system complexity or structural integration challenges, and helps recycle low-exergy waste heat to high-exergy useful heat.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_045
+
+**Systems:** lora_rag
+
+**Claim:** The paper considers an active cooling concept with forced convection of ambient air through the battery pack.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C2` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_046
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower cryogenic fuel density, requiring larger tanks for equivalent field length metrics.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_047
+
+**Systems:** lora_rag
+
+**Claim:** The heat exchanger must close at zero flight speed, and at takeoff, the air is relatively hot, making heat transfer difficult.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+- `C2` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_048
+
+**Systems:** base_rag
+
+**Claim:** Battery power is used for takeoff and initial climb to reduce heat rejection requirements.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_049
+
+**Systems:** lora_rag
+
+**Claim:** Thermal management systems should provide system cooling and heat dissipation, and the thermal management system should be designed to cool the EAP electrical components only.
+
+**Cited evidence:**
+
+- `C1` | `20220005753:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 Presentation to FAA May 4, 2022 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging 4 EAP Subsystem Degradation, Faults, Failure Modes, and Effects (cont.) Gas Turbine
+
+- `C2` | `20220004260:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 SAE E32 Aerospace Propulsion Health Management Committee Meeting March 29-31, 2022 Hybrid meeting (in-person Madrid, Spain and virtual) 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_050
+
+**Systems:** base_rag
+
+**Claim:** The low volumetric density of cryogenic hydrogen requires larger tanks for equivalent field length metrics, posing significant integration challenges.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_051
+
+**Systems:** base_rag
+
+**Claim:** Aircraft battery systems are cooled using active cooling methods such as forced convection of ambient air through the battery pack, which is optimized using conjugate heat transfer (CHT) techniques.
+
+**Cited evidence:**
+
+- `C1` | `20180004867:chunk:00003`
+
+management would likely be required, the battery p acks and most power electronics were placed in the main body of the aircraft . This could make battery replacement easier, as well as facilitate design and substitution of the all -battery system with a hybrid system using genset (fueled engine + generator) using energy-dense hydrocarbon fuels. This would also facilitate employing more-highly integrated cryogenic cooled systems that offer other benefits. The added weight of the hybrid system could be offset by reducing the battery size and capability. Figure 2. Notional VTOL vehicle layout. Figure 3 shows the simple mission profile used to size the baseline all -electric, battery aircraft wit h range set to 150 nautical miles, flying at best range velocity V br. To simulate shorter UAM operations, we assumed repeated mission profiles flying V br at 20 or 50 nautical mile range, which would minimize total energy used. Figure 3. Mission Profile for sizing, maximum range or UAM missions. PROPULSION AND ENERGY CONCEPTS Propulsion and energy characteristics used to develop the vehicle characteristics reported here are shown in Table 1, further details can be found in References 1 and 4. Performance levels believed achievable in 15 years were used for this effort. Impressive improvements in electric motor efficiency and power to weight offer an opportunity for new and more capable aviation vehicles. However, widespread adoption of all electric systems is still hampered by the much lower electrical energy density for batteries versus hydrocarbon fuels. This is true even when including the much lower efficiencies of the heat engines employing hydrocarbon fuels. Table 1. Motive engine and energy storage characteristics (15 year technologies). Engine type Power / weight, hp/lb. (kW/kg) η, % Fuel energy density, MJ/kg (Wh/kg) Net energy density, MJ/kg (Wh/kg) all-electric, battery* 3.4 (5.6) 93 1.75 (486) 1.63
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_052
+
+**Systems:** lora_rag
+
+**Claim:** Active cooling approaches include passive and active methods. Passive cooling requires additional pumps or power and increases the battery pack's weight by using a larger surface area for heat rejection.
+
+**Cited evidence:**
+
+- `C1` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+- `C2` | `20240014672:chunk:00000`
+
+Aerothermal Shape Optimization of Actively-Cooled Battery Packs using Conjugate Heat Transfer Ping He∗, Christian A. Psenica†, and Lean Fang‡ Iowa State University, Ames, IA 50011 Mark K. Leader§ NASA Glenn Research Center, Cleveland, OH 44135 Thermal management for batteries is important for electric aircraft because battery temperature is critically important to vehicle safety, and it also has a direct impact on the efficiency of the battery system. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer analysis is used to solve the coupled aero-thermal problem, which consists of a finite-volume computational fluid dynamics solver for the fluid domain, and a conduction heat transfer solver for the solid domain. A mixed Neumann and Dirichlet boundary condition is developed for the fluid-solid interface, which allows the solid domain to completely submerge in the fluid domain. A gradient-based optimization method is adopted, and the discrete adjoint approach implemented in DAFoam is used to efficiently compute the gradients. The aero-thermal coupling for primal analysis and gradient computation is handled using the OpenMDAO-based MPhys framework. A constant heat source is prescribed for the battery cells, and the battery shape (design variable) is optimized to minimize cooling pump power and battery weight (composite objective function) while keeping the battery temperature below a threshold (constraint). The optimized design achieves a 44.6% and 1.5% reduction in the cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_053
+
+**Systems:** lora_rag
+
+**Claim:** Electric propulsion is capable of achieving equivalent system-weight-to-performance ratios, and its latent value includes dramatic reductions in total energy used because of the high conversion efficiency from electricity to shaft power, which translates to dramatic reductions in emissions, as well as many other fundamentally new and improved characteristics.
+
+**Cited evidence:**
+
+- `C2` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_054
+
+**Systems:** lora_rag
+
+**Claim:** The desire to distribute propulsion is also encouraged by the compactness of electric motors.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00013`
+
+in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives) electric propulsion offers new latent benefits while relatively poor legacy metric characteristics, elec tric propulsion is considered to be a classic disruptive technology that has the potential to quickly displace conven tional propulsion technologies; but in ways that will likely be perceived as unexpected (but with comparison to other disruptive technologies, are actually quite predictable). II. Misconception 1: The Design of Electric Aircraft is No Different than Existing Aircraft Because electric propulsion is a relatively scale independent technology, the ability to distribute the propulsion system across the airframe to achieve integration advantages is penalty-free, or in many instances, offers substantial benefits. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp; their power to weight and efficiency are essentially the same. As electric propulsion is pushed into larg er and larger aircraft applications, th is trend may extend to far larger motor sizes as well. The desire to distribute the propulsion is also encouraged by the compactness of electric motors. Scale independence is not a characteristic of reciprocatin g or turbine engines which suffer significant penalties as they are scaled down in size, with the power to weight, efficiency, and reliability suffering dramatically. These are not merely a matter of engine development focusing research dollars on large engines, but fundamental physics including volume to surface area ratios, Reynolds numbers, and tolerances required and achievable in manufacturing.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_055
+
+**Systems:** lora_rag
+
+**Claim:** Integrated Fault and Thermal Management systems will be based on the variety of configurations shown in Figure 16.6, but they all have in common the need to protect against electrical faults with DC breakers and manage the waste heat produced by everything shown.
+
+**Cited evidence:**
+
+- `C1` | `20205005005:chunk:00009`
+
+of transport-class electrification can be nullified. Moreover, even an ideally 99%-efficient component will often be required to operate outside its peak performance zone, and this can result in a thermal runaway scenario unless active thermal control features are available to mitigate this response. It is therefore critically important to integrate an active thermal control system, such as TREES, with all the systems on the aircraft. Integrated Fault and Thermal Management Future electric aircraft propulsion systems will be based on the variety of configurations shown in Figure 16.6. Still, they all have in common the need to protect against electrical faults with DC breakers (indicated by the yellow dots) and to manage the waste heat produced by everything shown. Caption: Figure 16.6. Powertrain configurations require both thermal and fault management protection (yellow dots). (a) Parallel hybrid. (b) Turboelectric. (c) Series hybrid. (d) All electric. Credit: NASA Figure 16.7 depicts the TREES thermal management system (Dyson, 2019) integrated with a fault management system and applied to a Boeing 737 flight vehicle with parallel hybrid propulsion. The basic approach here is to extract high-exergy waste heat from the turbofan core using low–mass, SiC-coated graphite heat exchangers to thermoacoustically generate a ducted acoustic wave that is used to deliver mechanical energy throughout the aircraft. This acoustic energy can then operate a thermoacoustic heat pump to actively refrigerate the powertrain components while collecting the low- exergy waste heat from the powertrain and convert it to high-exergy useful heat, through which dynamically switchable heat pipes can then deliver throughout the aircraft for the beneficial applications shown in Table 16.3. Caption: Figure 16.7. TREES uses thermoacoustic and dynamically redirectable heat pipe tubes embedded in the aircraft to recycle both the turbofan and powertrain waste heat Credit: NASA Table 16.3. Beneficial Applications of Higher Exergy Waste Heat from
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_056
+
+**Systems:** lora_rag
+
+**Claim:** Electric propulsion can be scaled to larger motor sizes as well.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00013`
+
+in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives) electric propulsion offers new latent benefits while relatively poor legacy metric characteristics, elec tric propulsion is considered to be a classic disruptive technology that has the potential to quickly displace conven tional propulsion technologies; but in ways that will likely be perceived as unexpected (but with comparison to other disruptive technologies, are actually quite predictable). II. Misconception 1: The Design of Electric Aircraft is No Different than Existing Aircraft Because electric propulsion is a relatively scale independent technology, the ability to distribute the propulsion system across the airframe to achieve integration advantages is penalty-free, or in many instances, offers substantial benefits. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp; their power to weight and efficiency are essentially the same. As electric propulsion is pushed into larg er and larger aircraft applications, th is trend may extend to far larger motor sizes as well. The desire to distribute the propulsion is also encouraged by the compactness of electric motors. Scale independence is not a characteristic of reciprocatin g or turbine engines which suffer significant penalties as they are scaled down in size, with the power to weight, efficiency, and reliability suffering dramatically. These are not merely a matter of engine development focusing research dollars on large engines, but fundamental physics including volume to surface area ratios, Reynolds numbers, and tolerances required and achievable in manufacturing.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_057
+
+**Systems:** lora_rag
+
+**Claim:** Battery-electric aircraft produce large amounts of low-grade waste heat and require large, heavy thermal-management systems that cause drag.
+
+**Cited evidence:**
+
+- `C1` | `20205004497:chunk:00013`
+
+a result of increased thermal management system power draw. The wattage consumed by the coolant loop is considered an eﬃciency loss on the drive-train, and the lighter vehicle saves substantial weight on the battery at the cost of requiring higher power cooling. Additional proﬁles are included in the appendix for the six-passenger vehicle variant. Fig. 8 Drive-train Eﬃciency Proﬁle over Optimized Trajectories Across Multiple Energy Densities 9 V. Conclusions and Future Work This paper examined mission-dependent battery waste heat starting with a notional X-57 mission. Performance impacts from battery size and energy density were quantiﬁed for a statically sized, ﬁxed-wing vehicle. Next, a VTOL quadrotor was optimally sized for various ranges and achievable energy density. The variation in sensitivity between each of these missions highlights the need for openly available surrogate models to give battery system engineers more realistic benchmarks for designing batteries. Additional real-world constraints like volume and degradation are not evaluated explicitly but can be posed as additional weight penalty margins, if they exceed certain thresholds. This paper shows the energy and thermal sizing impacts for a speciﬁc Li-ion battery chemistry. Future work will attempt to create chemistry agnostic sensitivity functions with weight and thermal loads as the input and power proﬁles as the output. Follow-on studies are currently being conducted to better determine pack weight knockdowns based on the magnitude of the waste heat and the size of the thermal system. As new electric VTOL conﬁgurations are developed, understanding realistic energy density and eﬃciency values will be critical for creating optimally sized vehicles. Ideally, these results help assist in scoping the magnitude of the battery design challenge and can be used to help set productive benchmarks. Appendix Regressions on each swept design variable are provided in the following section: Energy Density is ﬁxed as 400 Wh/kg for
+
+- `C2` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_058
+
+**Systems:** base_rag
+
+**Claim:** E1
+
+**Cited evidence:**
+
+- `C1` | `20220005753:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 Presentation to FAA May 4, 2022 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging 4 EAP Subsystem Degradation, Faults, Failure Modes, and Effects (cont.) Gas Turbine
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_059
+
+**Systems:** lora_rag
+
+**Claim:** Electric propulsion is distinguished by its ability to distribute propulsion systems across the airframe, enabling integration advantages and compactness. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp, their power-to-weight and efficiency are essentially the same.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00013`
+
+in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives) electric propulsion offers new latent benefits while relatively poor legacy metric characteristics, elec tric propulsion is considered to be a classic disruptive technology that has the potential to quickly displace conven tional propulsion technologies; but in ways that will likely be perceived as unexpected (but with comparison to other disruptive technologies, are actually quite predictable). II. Misconception 1: The Design of Electric Aircraft is No Different than Existing Aircraft Because electric propulsion is a relatively scale independent technology, the ability to distribute the propulsion system across the airframe to achieve integration advantages is penalty-free, or in many instances, offers substantial benefits. Scale independence is considered to mean that whether electric motors and controllers are distributed to motors of 1 hp, 10 hp, or 100 hp; their power to weight and efficiency are essentially the same. As electric propulsion is pushed into larg er and larger aircraft applications, th is trend may extend to far larger motor sizes as well. The desire to distribute the propulsion is also encouraged by the compactness of electric motors. Scale independence is not a characteristic of reciprocatin g or turbine engines which suffer significant penalties as they are scaled down in size, with the power to weight, efficiency, and reliability suffering dramatically. These are not merely a matter of engine development focusing research dollars on large engines, but fundamental physics including volume to surface area ratios, Reynolds numbers, and tolerances required and achievable in manufacturing.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_060
+
+**Systems:** base_rag
+
+**Claim:** Electric propulsion systems can achieve significant improvements in performance metrics such as cost, safety, and emissions.
+
+**Cited evidence:**
+
+- `C2` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_061
+
+**Systems:** lora_rag
+
+**Claim:** TREES uses thermoacoustic heat engines to generate acoustic mechanical energy, distributes the acoustic wave via multiple acoustic tubes to acoustic heat pumps, and recycles low-grade waste heat by transporting thermal energy to various end users.
+
+**Cited evidence:**
+
+- `C1` | `20240015017:chunk:00000`
+
+1 Thermoacoustic Thermal Management for Electric Aircraft Luis A. Rodriguez1, Rodger W. Dyson2, Mark P. Wernet3, Ronald J. Leibach4 NASA Glenn Research Center, Cleveland, OH, 44035, USA Electric aircraft research and development is on the rise, necessitating an avant-garde thermal management system to effectively dissipate and reuse the typically wasted low-grade thermal energy generated on electric aircraft . Hence, the Thermal Recovery Exergy Efficient System (TREES) was successfully modeled, designed, built, and tested at NASA Glenn Research Center (NASA GRC) to demonstrate a solution. TREES demonstrates the ability to transport and amplify acoustic energy over various distances, with minimal energy dissipation, while creating a ther moacoustic heat pump that can deliver and absorb thermal energy. The in - house rig is now being utilized as a diagnostics testbed to understand the underlying physics of traveling wave thermoacoustic s and to enhance future thermal management technology development. I. Nomenclature TREES = Thermal Recovery Exergy Efficient System TMS = Thermal Management TAHP = Thermoacoustic Heat Pump ACT = Advanced Cooling Technologies HX = Heat Exchanger SS = Stainless Steel ΔT = Temperature Difference LM = Linear Motor Th = Hot side temperature, K Tc = Cold side temperature, K II. Introduction Electrification research of air vehicles is a burgeoning field that is becoming increasingly complex as the need for megawatt power levels increases [1,2]. These high-power levels generate large heat loads which must be rejected to maintain an optimal operating temperature for all components. The challenge s posed to stable TMS operation are dependent on several factors, such as high heat loads from electrical components and limited surface area of the aircraft for heat dissipation. Additionally, weight minimization of the thermal management system is needed to prevent further energetic losses. Current thermal management solutions have major disadvantages such as added weight, low
+
+- `C2` | `20210018359:chunk:00000`
+
+1 Electric Aircraft Thermal Management Using a Two-Phase Heat Transport System with Solid-State Thermal Switching Capability Jeffrey Diebold, Calin Tarau, Kuan-Lin Lee, and William G. Anderson Advanced Cooling Technologies, Inc., Lancaster, PA, 17601 Rodger W. Dyson NASA Glenn Research Center, Cleveland, OH, 44035 Advanced Cooling Technologies, Inc. (ACT) is collaborating with NASA Glenn Research Center (GRC) to develop a heat pipe-based thermal delivery system to efficiently manage the waste heat generated onboard an electric aircraft. The he at pipe system will interface with NASA GRC’s thermoacoustic heat pump in order to recycle waste heat by transporting thermal energy to various end users onboard the aircraft. This paper discusses the layout of theoretical heat pipe networks for a MW -class commercial electric aircraft. This is followed by a discussion of progress made on the development of a novel two-phase heat transport system with solid-state thermal switching and control capabilities. I. Introduction Electrified Aircraft Propulsion (EAP) systems utilize electrical motors to provide some or all the thrust for an aircraft. Potential benefits of EAP include (1) low carbon emission (2) low noise (3) reduced fuel c onsumption (4) low operating cost and (5) high performance. NASA is currently leading the development of EAP technology in U.S. The near-term goal is to realize a MW-class, commercial electric aircraft by 2035. To fulfill this vision, an advanced thermal management technology that can handle (i.e. , recycle, deliver and reject) all low -grade waste heat (~kW) generated within an aircraft is needed. Dyson1 at NASA Glenn Research Center (GRC) is developing a novel system called “Thermal Recovery Energy Efficient System” (TREES), which uses thermo -acoustic heat engines to generate acoustic mechanical energy, distributes the acoustic wave via multiple acoustic tubes to acoustic heat pumps, where the low-grade waste heat is recovered and elevated to a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_062
+
+**Systems:** lora_rag
+
+**Claim:** Hybrid-electric propulsion systems introduce hazards such as fuel ignition, battery pack hazards, and the need to address both short-term and long-term safety concerns. The FUELEAP project team may envision hazards introduced by the use of a hybrid power system, including a liquid fossil fuel energy source and an attendant fire hazard.
+
+**Cited evidence:**
+
+- `C1` | `20190033416:chunk:00018`
+
+But many FUELEAP stakeholders —systems engineers, electrical and avionics engineers, pilots, safety specialists, and regulators—will be unfamiliar with both the safety and operational concerns surrounding hybrid electric propulsion and the relative merits of means of addressing these. Such stakeholders might benefit from a guide to how power system des ign fit into in the ‘big picture’ of aircraft safety. One way the safety argument augments our modeling and safety assessment activities is by explaining that story to readers. Fig. 4 The top-level of the FUELEAP safety argument in the Goal Structuring Notation (Ref 15) When means of addressing aircraft hazards or assessing aircraft safety are familiar, it may not be necessary to explain these to readers beyond, perhaps, referencing applicable standards. Safety-related standards and regulations often serve to define best practice, capturing judgments about which hazards require mitigation and sometimes what mitigations are advisable and how they should be assessed. But these judgments might not be universally applicable. For example, 14CFR §23.2430.a.2 requires that aircraft fuel systems be “designed and arranged to prevent ignition of the fuel within the system by direct lightning strikes … or by corona or streamering at fuel vent outlets,” thus implicitly presuming both a liquid fossil fuel energy source and an attendant fire hazard. But it makes no mention of the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid power 9 system. By capturing the hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_063
+
+**Systems:** base_rag
+
+**Claim:** hybrid-electric propulsion aircraft must consider hazards such as fuel system ignition risks, battery pack hazards, and potential operational constraints during testing.
+
+**Cited evidence:**
+
+- `C1` | `20190033416:chunk:00018`
+
+But many FUELEAP stakeholders —systems engineers, electrical and avionics engineers, pilots, safety specialists, and regulators—will be unfamiliar with both the safety and operational concerns surrounding hybrid electric propulsion and the relative merits of means of addressing these. Such stakeholders might benefit from a guide to how power system des ign fit into in the ‘big picture’ of aircraft safety. One way the safety argument augments our modeling and safety assessment activities is by explaining that story to readers. Fig. 4 The top-level of the FUELEAP safety argument in the Goal Structuring Notation (Ref 15) When means of addressing aircraft hazards or assessing aircraft safety are familiar, it may not be necessary to explain these to readers beyond, perhaps, referencing applicable standards. Safety-related standards and regulations often serve to define best practice, capturing judgments about which hazards require mitigation and sometimes what mitigations are advisable and how they should be assessed. But these judgments might not be universally applicable. For example, 14CFR §23.2430.a.2 requires that aircraft fuel systems be “designed and arranged to prevent ignition of the fuel within the system by direct lightning strikes … or by corona or streamering at fuel vent outlets,” thus implicitly presuming both a liquid fossil fuel energy source and an attendant fire hazard. But it makes no mention of the hazards introduced by the use of a battery pack of the construction and capacity required by a hybrid power 9 system. By capturing the hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a
+
+- `C2` | `20170006610:chunk:00004`
+
+at NASA AFRC neces sitated a testbed trailer setup, and allowed for testing flexibility while maintaining connectivity to the simulation laboratory.3 Airvolt was the first AFRC all-electric demonstration project, designed to be a fully-instrumented, single propulsor test stand in order to better understand and analyze how current from the batteries ultimately produced thrust from the propeller, via the bus architecture, motor controllers, motor, and other equipment. Airvolt is currently being used as a method of acceptance testing for the X-57 Maxwell JM-X57 cruise motors. NASA is aggressively pursuing multipl e all-electric, hybrid-electric, and turbo -electric models, test stands, and flying demonstrators, while endeavoring to maintain high levels of safety throughout the design process and testing. In order for these systems to retire electric, hybrid-electric, and turbo-electric distributed propulsion architecture risks, numerous safety considerations must be implemented, as these system s require high voltage and current, especially for the new megawatt-scale systems being proposed. A safety design is the inco rporation of control methods and processes which begins early in the system design to either eliminate a hazard or mitigate risks to human health and safety throughout the lifespan of the platform. II. Electric, Hybrid-Electric, and Turbo-Electric Testbed Hazards and Mitigations To help assure mission success for these all -electric, hybrid -electric, and turbo -electric distributed propulsion projects, NASA is leveraging the hazard analysis process from the NASA Hazard Management Procedure4 to identify, eliminate, or control to an acceptable level the hazards associated with the projects that could affect human safety, damage or loss of assets, or loss of mission during the conduct of operations. NASA AFRC has a stringent hazard identification and mitigation system allowing the Center to self-certify experimental aircraft. This process starts with identifying hazards in preliminary hazard reports, complete with causes, effects, mitigations, and then categorizes the
+
+- `C3` | `20190033416:chunk:00019`
+
+hazards that FUELEAP’s project team envision and relating these hazards to mitigations, the safety argument records the team’s contention as to which unique hazards require mitigation and what means of mitigation should be considered sufficient. The argument will thus serve as the starting poi nt for discussing these matters with relevant regulators, including the NASA ASRB. FUELEAP’s nature as a demonstrator project also poses challenges such as assessing the adequacy of operational constraints and tracking different short-term and long-term safety aims. The project’s goal is to assess the viability of the hybrid power system concept, not to develop an aircraft type that can be put into production. The power system concept is not viable if it will not be possible to (with further development) implement a sufficiently safe production version. Yet an aircraft built to assess a novel concept must, by nature, fly in order to accumulate the very experience that will provide a sound basis for assessing the reliability and other safety properties of the concept in question. Thus, adequate safety in flight test operations might be best achieved with a different set of mitigations than might be prudent in a production aircraft. For example, flight test operations might be conducted solely from runways long enough to permit landing straight ahead should the power system fail during takeoff. These considerations yield the safety aims embodied in the claims shown at the bottom of Fig. 9. In the argument supporting GDOCAAHEs —not shown here —we trace hazards in t he flight demonstrator aircraft to their mitigations and the related evidence to allow readers to understand how we have addressed the safety of flight test operations and to judge whether we have done so as well as reasonably practicable. At the same time, we must meet existing regulations for flight test.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_064
+
+**Systems:** lora_rag
+
+**Claim:** Ambient-air-based forced-convection cooling is considered, and conjugate heat-transfer optimization is used to improve aerodynamic and heat-transfer performance.
+
+**Cited evidence:**
+
+- `C1` | `20205004497:chunk:00013`
+
+a result of increased thermal management system power draw. The wattage consumed by the coolant loop is considered an eﬃciency loss on the drive-train, and the lighter vehicle saves substantial weight on the battery at the cost of requiring higher power cooling. Additional proﬁles are included in the appendix for the six-passenger vehicle variant. Fig. 8 Drive-train Eﬃciency Proﬁle over Optimized Trajectories Across Multiple Energy Densities 9 V. Conclusions and Future Work This paper examined mission-dependent battery waste heat starting with a notional X-57 mission. Performance impacts from battery size and energy density were quantiﬁed for a statically sized, ﬁxed-wing vehicle. Next, a VTOL quadrotor was optimally sized for various ranges and achievable energy density. The variation in sensitivity between each of these missions highlights the need for openly available surrogate models to give battery system engineers more realistic benchmarks for designing batteries. Additional real-world constraints like volume and degradation are not evaluated explicitly but can be posed as additional weight penalty margins, if they exceed certain thresholds. This paper shows the energy and thermal sizing impacts for a speciﬁc Li-ion battery chemistry. Future work will attempt to create chemistry agnostic sensitivity functions with weight and thermal loads as the input and power proﬁles as the output. Follow-on studies are currently being conducted to better determine pack weight knockdowns based on the magnitude of the waste heat and the size of the thermal system. As new electric VTOL conﬁgurations are developed, understanding realistic energy density and eﬃciency values will be critical for creating optimally sized vehicles. Ideally, these results help assist in scoping the magnitude of the battery design challenge and can be used to help set productive benchmarks. Appendix Regressions on each swept design variable are provided in the following section: Energy Density is ﬁxed as 400 Wh/kg for
+
+- `C2` | `20240014672:chunk:00001`
+
+cooling pump power and battery weight, respectively, and the maximal temperature constraint is satisfied. This work has the potential to reduce battery-pack weight, improve performance, and reduce the weight of thermal management systems for electric vertical take-off and landing aircraft. I. Introduction Thermal management is essential for battery packs in electric aircraft, which lack the natural heat dissipation of conventional air-breathing engines [1]. Accumulated heat can damage batteries and other components, compromising the safety and performance of the aircraft. There are two primary methods for cooling the battery: passive and active. Passive cooling has the advantage of not requiring additional pumps or power, but it typically requires a greater surface area dedicated to heat rejection to the external environment, thereby increasing the overall weight of the battery pack. In contrast, active cooling can significantly reduce the battery pack weight, but it requires an efficient cooling system design to offset the added weight and power of the cooling pump [2]. Because ambient air is a readily available resource for aircraft, this paper considers an active cooling concept with forced convection of ambient air through the battery pack. Conjugate heat transfer (CHT) optimization is a powerful approach to designing high-performance active cooling battery packs. It enables more realistic aero-thermal coupling by integrating computational fluid dynamics (CFD) to simulate fluid domains and conduction heat transfer solvers for the solid domains. The CHT optimization method has been used to analyze the aerodynamics and heat transfer of various battery pack shapes and flow conditions [3, 4]. CHT-based design optimization studies have also been conducted to improve ∗Assistant Professor, Department of Aerospace Engineering, AIAA Senior Member. Email: phe@iastate.edu †PhD Student, Department of Aerospace Engineering, AIAA Student Member. ‡PhD Student, Department of Aerospace Engineering, AIAA Student Member. §Research Engineer, Propulsion Systems Analysis Branch, AIAA Member. 1 performance[5];however,inthisstudy,agradient-freeoptimizationalgorithmwasused.
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_065
+
+**Systems:** base_rag
+
+**Claim:** The thermal management system (TMS) for electrified aircraft propulsion components must account for the heat generated by electrical losses in components like motors, power electronics, and batteries, which are not as efficiently coupled to the freestream air as in traditional jet engines.
+
+**Cited evidence:**
+
+- `C1` | `20205004080:chunk:00000`
+
+1 American Institute of Aeronautics and Astronautics Thermal Management System Design for Electrified Aircraft Propulsion Concepts Jeffryes W. Chapman*, Hashmatullah Hasseeb†, and Sydney Schnulo‡ NASA Glenn Research Center, Cleveland, OH, 44135, USA This paper describes the development of thermal management systems (TMS) for three electrified aircraft propulsion (EAP) vehicle concepts released by NASA that span the UAM, regional, and single-aisle markets. For each EAP concept, a conventional TMS is designed for two electric component technology levels : state of the art and advanced. The goals for the paper are to compare the TMS designs for the above EAP concepts, to study how changes in requirements affect the TMS subcomponents, and to develop generalized TMS sizing relations. Each conventional TMS concept utilizes a liquid-based cooling methodology and is designed to cool the EAP electrical components only. The design parameters considered in this study include TMS architecture variation due to differing vehicle cooling requirements , electrical component efficiencies, vehicle total fuel burn or energy consumption, and electrical component operating temperatures. Results show that cooling components with low temperature limits increases TMS weight and demonstrate that efficiency gains of the specific technologies can net a lower weight TMS system despite more stringent temperature limits. Nomenclature BLI Boundary Layer Ingestion CTOL Conventional TakeOff and Landing EAP Electrified Aircraft Propulsion FOC Fuel Oil Cooler GBX Gearbox HEMM High Efficiency Megawatt Motor MN Mach Number pax Passenger PEGASUS Parallel Electric-Gas Architecture with Synergistic Utilization Scheme PGW30 Propylene Glycol Water 30% PSF-5 Pure Silicone Fluid with a viscosity of 5cSt RTO Rolling TakeOff RVLT Revolutionary Vertical Lift Technology project SNOPT Sparse Nonlinear OPTimizer SOA State Of the Art STARC-ABL Single-aisle Turboelectric AiRCraft with an Aft Boundary-Layer propulsor TMS Thermal Management System TOGW TakeOff Gross Weight UAM Urban Air Mobility VTOL Vertical TakeOff and Landing I. Introduction n
+
+- `C2` | `20240015505:chunk:00001`
+
+magnitude more waste heat than electrical power systems on traditional fuel -burning aircraft. Furthermore, the heat is more difficu lt to reject than compared to the combustion process for jet engine propulsion , wherein most of the heat is discharged through the exhaust gas. For electrified propulsion, the heat is typically generated by electrical losses in motor windings, power electronic devices, battery cells, and other components that are not as intrinsically coupled to the freestream air as a turbine engine. Therefore, it is a significant challenge to design a TMS that can reject this heat without negating the benefits of electrification through additional TMS weight, drag, and power consumption. Many previous studies have sized and modeled electrified aircraft TMSs, but few have given consideration to the failure modes of the system and the required redundancy of components. Furthe rmore, many studies do not size the TMS or evaluate performance in the full range of environments in which current aircraft are certified to fly. This study aims to quantify the weight, 1 Aerospace Engineer, Thermal Systems and Transport Processes Branch, non -AIAA member. 2 Electrical Engineer, Diagnostics and Electromagnetics Branch, AIAA member. 3 Control Systems Engineer, Intelligent Control and Autonomy Branch, AIAA member. 2 drag, and power consumption of a realistically sized and redundant TMS architecture using the SUbsonic Single Aft eNgine (SUSAN) aircraft concept. SUSAN is a 180-passenger regional aircraft concept designed by National Aeronautics and Space Administration (NASA) with the intent of reducing emissions within the 2035 –2040 time frame through several advanced aircraft technologies made possible in large part by Electrified Aircraft Propulsion (EAP) [4]. Although the SUSAN aircraft is the size of a large single -aisle aircraft, it is categ orized as a regional jet since its range is comparable to current regional jets. The current design
+
+- `C3` | `20205011477:chunk:00037`
+
+& Energy Forum Short Course, Cincinnati, OH, July 8-11, 2018. [9] Chapman, J., Schnulo, S., Nitzche, M., “Development of a Thermal Management System for Electrified Aircraft,” AIAA Science and Technology Forum, AIAA 2020-0545, Orlando, FL, Jan. 6-10, 2020. [10] Jans en, R., Avanesian, D., Schnulo, S., Antcliff, K., “HEATheR: High -Efficiency Aircraft Thermal Research,” EnergyTech2019 Conference and Exposition, Cleveland, Oh, Oct. 21-25, 2019. [11] Jansen, R., Kascak, P., Dyson, R., Woodworth, A., Scheidler, J., Smith, A., Stalcup, E., Tallerico, T., De Jesus -Arce, Y., Avanesian, D., “High Efficiency Megawatt Motor Preliminary Design,” AIAA/IEEE Electric Aircraft Technologies Symposium, AIAA 2019-4513, Indianapolis, IN, August 22-24, 2019. [12] Sadey, D., Csank, J., Hanlon, P., Jansen, R., “A Ge neralized Power System Architecture Sizing and Analysis Framework,” AIAA Propulsion and Energy Forum, AIAA 2018-4616, Cincinnati, OH, July 9-11, 2018. [13] Azurza, J., Hanak, E., Schrittwieser, L., Johann, K., Deboy, G., “Towards a 99.5% Efficient All-Silicone Three-Phase Seven- Level Hybrid Active Neutral Point Clamped Inve rter,” 2018 IEEE International Power Electronics and Application Conference and Exposition (PEAC), 2018.8590488, November, 2018. [14] Lithium-ion rechargeable cell for power tools, Spec No. INR18650-25R, Rev. 1, Samsung SDI, Mar. 2014. [15] Schnulo, S., Chapman, J., Hanlon, P., Sadey, D., Sozer, E., Bhamidapati, K., Kirk, J., “Assessment of the Impact of an Optimal Power System on a Turboelectric Single Aisle Concept Aircraft,” to be presented at the AIAA/IEEE Electric Aircraft Technologies Symposium (EATS), August 26-28, 2020. [16] Kays, W.M., London, A.L., Compact Heat Exchangers, 3rd Ed., Krieger Publishing Co., Malabar, Florida, 1984. [17] Gray, J., Hwang, J., Martins, J., Moore, K., Naylor, B., “OpenMDAO: An Open -Source Framework for Multidisciplinary Design, Analysis, and Optimization,” Structural and Multidisciplinary Optimization, 2019. [18] Gill, P., Murray, W., Saunders, M., Wong, E., “SNOPT 7.7 User's Manual,” CCoM Technical Report 18-1, Center for Computational Mathematics,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_066
+
+**Systems:** lora_rag
+
+**Claim:** Nondestructive evaluation techniques, such as ultrasonic frequency domain methods, can probe embedded battery defects and detect precursors and development of critical defects before a catastrophic failure.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00004`
+
+certain catastrophic defects that greatly increase the associated safety risks in using lithium metal batteries. In particular, these batteries are prone to defects in which lithium dendrites grow across the battery from one electrode to the other, causing an internal short circuit. This ultimately leads to a thermal runaway reaction in which the heating and ignition of one battery cell can cascade into the ignition of neighboring cells. In recent years, a large percentage of fires in electric vehicles has been due to this thermal runaway effect in lithium batteries [3]. The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells [4]. This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications. This issue has caused a large amount of research to go into minimizing parasitic mass and volume in battery component designs [5]. Nondestructive evaluation (NDE) techniques have the potential to detect precursors and development of critical defects prior to the occurrence of a catastrophic failure due to their ability to probe internal features of materials. For battery health monitoring, these techniques would need to be field-deployable and the physical mechanisms of the inspection would need to be understood 2 well to provide confidence in the inspection technique. This work seeks to accomplish this through physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects. In the next sections, the basic working principles and critical defects of lithium metal batteries are discussed, in addition to current battery health monitoring techniques. Lithium Metal Batteries Li-metal batteries are complex, multilayered structures comprised of solid, liquid, and porous layers. The fundamental unit cell of a Li-metal battery is
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_067
+
+**Systems:** lora_rag
+
+**Claim:** The batteries are located in unpressurized compartments in the wings or fuselage, and conditioned air is not available.
+
+**Cited evidence:**
+
+- `C1` | `20240015505:chunk:00019`
+
+diagram As was menti oned previously, h eat pumps are primarily needed for battery module cooling on hot days on the ground where outside air temperatures are near or exceed battery temperature limits. The batteries will likely be located in unpressurized compartments in the wings or fuselage where conditioned air is not available. Typical battery temperature limits range from 40 °C to 60 °C, while outside air temperatures can be up to 49 °C, for example, on a 1% Hot Day at sea level [56]. Additionally, many current aircraft are certified to take off in outside air temperature s ranging from 50 °C to 60 °C [57]. Other solutions may be considered in future trade studies, such as pre -cooling the batteries, adding additional heat sinks like phase change material s, or using evaporative coolers. However, these solutions are dependent on the available thermal mass and would need to be sized based on the time duration between disconnection from ground cooling and arrival at an altitude where the outside air is cooler. According to the FAA’s Aviation System Performance Metrics database, for over 10 million US flights recorded in 2023, the average taxi out time was about 17 minutes and the average taxi in time was about 8 minutes. In 2.6% of those flights the taxi out time was greater than 40 minutes, and in 0.56% of those flights (over 60,000 flights) the taxi out time was greater than an hour. A heat pump is expected to trade better on mass for longer duration cooling requirements. For heat rejection, each coolant loop rejects to one or more liquid -air heat exchangers. The wing loops utilize a ducted ram-air heat exchanger, notionally located local to each electric engine on the wing. Additionally, OML heat exchangers are positioned in the fan duct,
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_068
+
+**Systems:** lora_rag
+
+**Claim:** A potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirements.
+
+**Cited evidence:**
+
+- `C1` | `20260003867:chunk:00010`
+
+approaches for MW fuel cell stacks – Lightweight BOP , water and thermal management • Systems Analysis to assess new vehicle configurations Thermal Management System Considerations • Need to reject 40% to 60% of the fuel cell heat energy (~10 MWt) • Need to transition from LT PEM (80C) to HT PEM (200C) to achieve large temperature differential between coolant and airstream during takeoff and climb • Heat rejection must close at zero flight speed, necessitating the placement of the heat exchanger in the propulsor duct • At takeoff, the air is relatively hot, making heat transfer difficult • Potential solution is to include battery power for takeoff and initial climb to reduce heat rejection requirement • Currently working on heat exchanger conceptual design to get initial size and weight Development of cryogenic materials and components evaluation 1. Multiscale model of laminate and ply microstructure – Cool to cryo and evaluate residual stresses per material system 2. NASTRAN/HyperX model of tank – Use HyperX with realistic thermo-mechanical load cases to evaluate optimized designs per material system 3. Progressive damage modeling to model microcracking and permeability – Laminate level or full multiscale FEM – Possibly beyond current resources Use multiscale progressive damage modeling to evaluate novel tank matrix material candidates (i.e. thermoplastics) under realistic thermo- mechanical loading with molecular dynamics data for the neat resin. Manufacturing demonstration of thermoplastic composite tank with new insulation materials. Tank Layup Micro Nano (MD) Commercial Aviation Propulsion Cycles and Utilization: The primary issues unique to aviation propulsion not directly addressed by current commercial transport technologies or NASA space propulsion revolve around the challenging transition of cryo-fuel handling and power/propulsion systems, from space propulsion applications having short lives, very low occupancy to commercial transport applications requiring much longer service lives, much higher occupancy and using high
+
+- `C2` | `20205005005:chunk:00007`
+
+voltage, power, and current. It is also just as important to manage the significant new low-grade heat loads that are introduced each time an electrical component is added to the aircraft (Dooley, 2016); this was a primary consideration in the development of TREES. The challenges with low-grade waste heat in aircraft is five-fold because it  is not useful for work and difficult to reject  adds system mass from large heat exchangers, plumbing, and fluids  reduces net propulsive power from increased drag, compressor bleed, and turbine power extraction  has a limited thermal capacity due to sink temperature or surface availability  increases maintenance due to thermal management system complexity or structural integration challenges Caption: Figure 16.4 Heat sources distributed throughout the aircraft. (a) High-exergy (>20 MW). (b) Low-exergy (<1 MW). Credit: NASA As shown in Figure 16.4, aircraft have a range of heat sources distributed throughout the aircraft. High-exergy waste heat is emitted from the turbofan core, and low-exergy waste heat is distributed nearly everywhere else on the aircraft. The current approaches for managing this heat (Dooley, 2016), along with its drawbacks, are listed in Table 16.2. Table 16.2. Thermal Management Technology Options Thermal management technology Drawback Ram air heat exchanger Adds weight, aircraft drag, displaces fuel capacity Convective skin cooling heat exchanger Adds weight and drag, and requires liquid pumping losses Sinking heat into fuel Limited thermal capacity due to coking and volume Sinking heat into lubricating oil Limited thermal capacity; low T adds heat exchanger mass Active cooling Reduces propulsive efficiency; adds weight and maintenance Phase change cooling Limited thermal capacity; adds weight Heat pipe Does not increase exergy, which impacts mass and efficiency The heat pipe technology is shown as a drawback in Table 16.2 when used in isolation because it does not increase
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_069
+
+**Systems:** lora_rag
+
+**Claim:** Cryogenic hydrogen storage and handling are challenging due to cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, next-generation scalable engines and fuel cells, and integration of cryogenic fuel storage with aircraft architectures and systems.
+
+**Cited evidence:**
+
+- `C1` | `20250010867:chunk:00003`
+
+methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation standards for the aircraft and its major components [8]. These studies are focusing on hydrogen turbine engines, fuel cells, electric motors, and hybrid-electric cycles integrated with cryo-fuels using consistent metrics of aircraft eﬃciency and emission improvements. It is important to mature the technologies required in parallel to the aircraft architectures so that the two can feed each other improving the probability of integrated system success. There are numerous technology challenges for aviation with cryogenic fuel storage systems and propulsion including development of cryo-fuel storage and handling, thermal management systems, cryogenic fuel combustion in turbine engines, and next generation scalable engines and fuel cells. Initial challenge includes variabilities in turbine engines and fuel cells considered for integration into commercial aviation propulsion, each with expansive unknowns [9]. Cryogenic tank design, manufacturing, insulation, and integration into airframes will be challenging because of the lower density of the fuel requiring larger tanks for equivalent ﬁeld length metrics [8]. Liquid cryogenic fuels’ maximum handling maximum temperature and density signiﬁcantly diverge from baseline Jet A fuel (kerosene) at 182 °C and 807 kg/m3 with LNH 3 at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature,
+
+- `C2` | `20250010867:chunk:00004`
+
+at -36.3 °C and 675 kg/m3, LNG at -160 °C and 424 kg/m3, and LH2 at -253 °C and 71 kg/m3. Although hydrogen oﬀers a much higher gravimetric energy density (LHV ≈ 120 MJ/kg) than jet fuel (LHV ≈ 43 MJ/kg), its low volumetric density requires bulky storage systems, posing substantial integration challenges for long-range, large aircraft. LH2 low temperature, low density, low viscosity, low lubricity, small molecular size (harder to control leakage), wide ﬂammability range (between 4% and 75% in air), and potential for diﬀusion into or reaction with other materials increases the challenge of the design of systems that can simultaneously accommodate all these characteristics for a long (and highly cyclic) design life, in a lightweight, volumetrically eﬃcient form factor. While many of these attributes have been successfully dealt with in ground systems, where weight is not a primary driver, or in space ﬂight systems, where cryogenic systems are typically designed for short life (< 1 hour) and a low number of thermal and pressure cycles, there are several identiﬁed technology gaps with respect to the speciﬁc characteristics needed in an aviation application, including the requirement of suﬃcient durability for thousands of cycles and hours. Similar to the cryogenic systems, the state-of-the-art fuel cell technology is validated for automotive applications and is too heavy for aeronautics. Fuel cells for space applications operate on pure oxygen rather than air, are at low scale, and designed to operate over a limited number of cycles. The fuel cell technology for aeronautical applications requires extensive technology maturation and scale up that achieves high speciﬁc energy at the system level and will require signiﬁcant long-term investments to develop the technology and integrate it into cryogenic fuel aircraft architecture. Fuel cell material durability and performance under variable loads and operational stresses (e.g., takeoﬀ-shutdown cycling,
+
+- `C3` | `20250010867:chunk:00002`
+
+from commercial airports rather than isolated launch sites. Aviation systems will be required to safely operate in occupied vehicles that are used several times a day, yet not dissembled and manually inspected between each ﬂight. Safety and certiﬁcation requirements for airframes with large integrated cryogenic tanks need to be deﬁned in partnership with the Federal Aviation Administration (FAA) to increase the likelihood of passenger survival in the event of a crash. Systems for detecting and mitigating fuel leakage would have to be automated and redundant beyond current baseline operational procedures for space systems. Mean times between failure (MTBF) suitable for practical aviation propulsion life cycles will have to be demonstrated through actual testing of brassboard and production systems, and they will be required to meet FAA safety and certiﬁcation requirements no less stringent than those for current commercial aircraft. Safety standards for hydrogen systems remain fragmented and inconsistent across regions. High-pressure storage, such as 350- and 700-bar systems, is governed by varying standards (ISO, SAE, EU) that are not fully harmonized, creating interoperability challenges. Similarly, leak detection and mitigation are hindered by the lack of uniﬁed, validated performance standards for hydrogen sensors in diverse environments, including outdoor refueling stations and industrial facilities. Material compatibility also remains a concern, as current qualiﬁcation standards do not comprehensively address low temperature embrittlement or hydrogen embrittlement in metals or degradation in composite materials. Fire and explosion protection adds another layer of complexity, since testing methods for ignition sources, ﬂame propagation, and deﬂagration risks diﬀer signiﬁcantly across applications. Other subjects that need to be addressed in combination with the above regulatory challenges are the development of an encompassing aircraft architecture and optimal system integration making the commercial exploitation of a novel aircraft concept viable, as well as the development of relevant safety regulations and certiﬁcation
+
+- `C4` | `20260003867:chunk:00000`
+
+Cryogenic Fuel Aviation – Challenges and Opportunities Vadim F. Lvovich, Wesley L. Johnson, Ian J. Jakupca, H. Douglas Perkins, Thomas M. Lavelle, Hashmatullah Hasseeb, Ezra O. McNichols, F. David Koci, Sandi G. Miller, Stephanie L. Vivod, Sadeq Malakooti, Joseph J. Pinakidis, Zhimin Zhong, Brett A. Bednarcyk, Evan J. Pineda, Brandon L. Hearley, Rula M. Coroneos, Joshua Stuckner NASA Glenn Research Center, Cleveland, Ohio Christopher L. Hartman Analytical Mechanics Associates, Hampton, Virginia Mahtab Fox HX5 LLC, Cleveland, Ohio June 10, 2026 AIAA 2026 Aviation Forum, San Diego, CA NASA Technology Development Focus in Aeronautics Fuel Production Fuel Transportation Airport Infrastructure - Ground Handling - Refueling Aircraft Overall Environmental Impact -Initial investment -Fuel cost/availability -Carbon Tax?, etc. -Nation, global energy policies Multiple Fuel Types? • Primary focus will be the aircraft • Single-aisle and larger is the ultimate long-term interest • Experience with smaller applications should be leveraged • Any propulsion systems using cryogenic fuels were within scope (gas-turbine, fuel cells, hybrid) Less focus will be devoted to non-aircraft considerations Not a direct part of NASA Scope External Perspective on NASA Research Investment Opportunities Results from September 2022 “Cryogenic Fuel Systems for Aircraft” Workshop at GRC • Materials • Additive manufacturing and composites for cryo temperatures, cycle fatigue, and hydrogen permeation • Seals, insulation, embrittlement, thermal expansion • Structures • Fuel tank, pressurized structure, conformal pressure vessels, impact absorbing structures • Testing Capabilities and Techniques • Hydrogen enabled facilities, crashworthiness, impact testing, icing • Operations • ConOps development, fuel system purging, fueling/defueling operations, tarmac hold, failure analysis, contingency scenarios unique to cryogenics • Systems Studies • Concept studies, fuel cell vs hydrogen combustion vs combination, fuel cell as secondary power (APU replacement), impact of current vs future grid, exploration of acceptable boil-off, tank design trades • Propulsion and Powertrain • Combustor design
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_070
+
+**Systems:** base_rag
+
+**Claim:** distributed electric propulsion aircraft enable significant improvements in performance, cost, safety, and environmental impact compared to traditional propulsion methods.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_071
+
+**Systems:** lora_rag
+
+**Claim:** Distributed electric propulsion aircraft are characterized by their ability to operate on a system-weight-to-performance basis, use high conversion efficiency from electricity, achieve higher battery-specific-energy, and operate at higher voltage levels at altitude.
+
+**Cited evidence:**
+
+- `C1` | `20140011913:chunk:00011`
+
+energy constrained, what new aircraft types and architectures do the different characteristics enable, what evaluation metrics should be used in their comparisons, and how could electric aircraft evolve to eventually replace reciprocating and even turbine aircraft?” These are the questions that were asked in the NASA Zip Aviation studies that investigated the enabling characteristics of autonomy and distributed electric propulsion technologies towards the On-Demand Aviation emergent market needs. The results of that study indicated that even at a mere 400 Whr/kg advanced electric GA aircraft are not only competitive to reciprocating aircraft, but that they achieve 2 to 8 time factor improvements across metrics of comparison including cost, safety, community noise, propulsion component reliability, and efficiency. The Zip study indicates that research investment can yield far better products than State Of the Art (SOA) GA aircraft in less than 10 years across key future societal metrics of interest, and predicts the rapid implementation of electric propulsion to the GA market (as well as newly enabled markets). Figure 1: Comparative characteristics of electric propulsion to reciprocating or turbine engines for use in initial Unmanned Aerial System (UAS) or GA market small aircraft mission applications. American Institute of Aeronautics and Astronautics 5 If the criteria of achieving equivalent comparable propulsi on system weight to performance is used for electric propulsion, and batteries continue to improve their energy density at ~8% per year, it’ll take 30 years before they achieve a 10x improvement and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_072
+
+**Systems:** lora_rag
+
+**Claim:** Electrified aircraft propulsion (EAP) relies on electrical generation, storage, and transmission for aircraft propulsion. EAP subsystem degradation, faults, and failure modes present new health management challenges, requiring background understanding of electrical engineering, electrical system control and concept of operations (motor control, generator control, battery management systems), and new sensor measurement types (current, voltage).
+
+**Cited evidence:**
+
+- `C1` | `20220005753:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 Presentation to FAA May 4, 2022 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging 4 EAP Subsystem Degradation, Faults, Failure Modes, and Effects (cont.) Gas Turbine
+
+- `C2` | `20220004260:chunk:00000`
+
+Health Management Considerations for Electrified Aircraft Propulsion Systems Donald L. Simon NASA Glenn Research Center 21000 Brookpark Road Cleveland, OH, 44135 SAE E32 Aerospace Propulsion Health Management Committee Meeting March 29-31, 2022 Hybrid meeting (in-person Madrid, Spain and virtual) 1 Electrified Aircraft Propulsion (EAP) EAP Architecture Options • Electrified Aircraft Propulsion relies on the generation, storage, and transmission of electrical power for aircraft propulsion 2 Overview of EAP System Components Generic Hybrid Electric Propulsion System EAP System Components • Supervisory Control: Interface between vehicle and propulsion system. • Gas Turbine Engines: Turbomachinery that converts fuel into thrust and mechanical power. • Gearboxes and Mechanical Drives: Used for transferring mechanical power throughout EAP system. • Electric Machines: Generators and motors. Used for converting mechanical power into electricity or vice versa. • Power Electronics and Power Distribution Systems: Handles switching, power conversion, and transmission of electrical power throughout system. • Energy Storage Systems: Systems for the storage of electrical energy such as batteries and supercapacitors. • Propulsors: Motor driven propellers or fans used to generate thrust. • Thermal Management Systems: Provide system cooling and heat dissipation X Turboshaft Engine Electric Generator Electronic Engine Control Thrust Demand, Phase of FlightIntegrated Supervisory Control System Thermal Management System Motor Control Unit Inverter DC Power Bus Electric Motor Propulsor Battery System BMS + Battery - “Electric Engine” Generator Control Unit Rectifier X Gearbox Gearbox Supervisory Control 3 EAP Subsystem Degradation, Faults, Failure Modes, and Effects • EAP degradation, faults, and failure modes present new health management challenges … • Requires background understanding of: ▪ Electrical engineering ▪ Electrical system control and concept of operations (motor control, generator control, battery management systems) • Requires new sensor measurement types ▪ Current, voltage • Electrical systems don’t always degrade/fail gracefully ▪ Makes early (timely) diagnosis to enable maintenance challenging
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_073
+
+**Systems:** base_rag
+
+**Claim:** Electric propulsion systems offer new latent benefits, including dramatic reductions in emissions and improved efficiency.
+
+**Cited evidence:**
+
+- `C3` | `20140011913:chunk:00012`
+
+and parity for this metric. Electric propulsion versus reciprocating or turbine propulsion systems shouldn’t be compared merely through legacy metrics that don’t include other important characteristics of future interest, which could provide impor tant latent value. Latent value in terms of electric propulsion system includes dramatic reductions in the total energy used because of the high conversion efficiency from electricity to shaft power, which translates to dramatic reductions in emissions, as well as many other fundamentally new and improved characteristics. A compar ison across all the potential metrics of interest is shown in Figure 1. Only the specific energy and cost of the energy storage are penalties compared to existing propulsion characteristics for the initial markets involving small aircraft, with many of the characteristics superior to even large commercial aircraft propulsion system s (which have benefited from 50+ years of dedicated aerospace investments of hundreds of billions of dollars to achieve this highly optimized state). Detailed explanation of how these characteristics translate to aircraft system improvem ents is discussed in the subsequent portions of this paper. The remainder of this paper attempts to dispel many of the misconceptions that currently exist among even the brightest propulsion and discipline specific aerospace rese archers, and asks them to ‘open their apertures’ to the possibilities that this new technology frontier offers them. Because these four events have repeated so frequently, there is the desire to create a common foundation of unders tanding. Clearly in the past propulsion technologies have been responsible for the most spectacular aviation advances, because propulsion technology sensitivities are so high in comparison to other disciplines. Likewise, electric propulsion sensitivities demonstrate opportunity for incredible advances, far more than in any other discipline. Because of this potential to achieve such breakthrough changes, and because (like flash drives compared to magnetic drives)
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_074
+
+**Systems:** lora_rag
+
+**Claim:** Battery thermal runaway can cascade from one cell to another, with the heating and ignition of one cell igniting neighboring cells.
+
+**Cited evidence:**
+
+- `C1` | `20210025384:chunk:00004`
+
+certain catastrophic defects that greatly increase the associated safety risks in using lithium metal batteries. In particular, these batteries are prone to defects in which lithium dendrites grow across the battery from one electrode to the other, causing an internal short circuit. This ultimately leads to a thermal runaway reaction in which the heating and ignition of one battery cell can cascade into the ignition of neighboring cells. In recent years, a large percentage of fires in electric vehicles has been due to this thermal runaway effect in lithium batteries [3]. The current solution to this has been to engineer around such reactions and place the batteries in bulky containment systems to isolate them from other cells [4]. This only passively prevents thermal runaway from occurring and adds significant weight to the batteries, which is very undesirable in aerospace applications. This issue has caused a large amount of research to go into minimizing parasitic mass and volume in battery component designs [5]. Nondestructive evaluation (NDE) techniques have the potential to detect precursors and development of critical defects prior to the occurrence of a catastrophic failure due to their ability to probe internal features of materials. For battery health monitoring, these techniques would need to be field-deployable and the physical mechanisms of the inspection would need to be understood 2 well to provide confidence in the inspection technique. This work seeks to accomplish this through physics-based modeling and the development of an ultrasonic frequency domain technique sensitive to embedded battery defects. In the next sections, the basic working principles and critical defects of lithium metal batteries are discussed, in addition to current battery health monitoring techniques. Lithium Metal Batteries Li-metal batteries are complex, multilayered structures comprised of solid, liquid, and porous layers. The fundamental unit cell of a Li-metal battery is
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+
+---
+
+## claimrev_075
+
+**Systems:** lora_rag
+
+**Claim:** Electrified propulsion components generate electrical losses in motor windings, power electronic devices, battery cells, and other components. These losses produce waste heat that is difficult to reject compared to jet engine exhaust, which discharges most of the heat through the exhaust gas.
+
+**Cited evidence:**
+
+- `C1` | `20205004080:chunk:00000`
+
+1 American Institute of Aeronautics and Astronautics Thermal Management System Design for Electrified Aircraft Propulsion Concepts Jeffryes W. Chapman*, Hashmatullah Hasseeb†, and Sydney Schnulo‡ NASA Glenn Research Center, Cleveland, OH, 44135, USA This paper describes the development of thermal management systems (TMS) for three electrified aircraft propulsion (EAP) vehicle concepts released by NASA that span the UAM, regional, and single-aisle markets. For each EAP concept, a conventional TMS is designed for two electric component technology levels : state of the art and advanced. The goals for the paper are to compare the TMS designs for the above EAP concepts, to study how changes in requirements affect the TMS subcomponents, and to develop generalized TMS sizing relations. Each conventional TMS concept utilizes a liquid-based cooling methodology and is designed to cool the EAP electrical components only. The design parameters considered in this study include TMS architecture variation due to differing vehicle cooling requirements , electrical component efficiencies, vehicle total fuel burn or energy consumption, and electrical component operating temperatures. Results show that cooling components with low temperature limits increases TMS weight and demonstrate that efficiency gains of the specific technologies can net a lower weight TMS system despite more stringent temperature limits. Nomenclature BLI Boundary Layer Ingestion CTOL Conventional TakeOff and Landing EAP Electrified Aircraft Propulsion FOC Fuel Oil Cooler GBX Gearbox HEMM High Efficiency Megawatt Motor MN Mach Number pax Passenger PEGASUS Parallel Electric-Gas Architecture with Synergistic Utilization Scheme PGW30 Propylene Glycol Water 30% PSF-5 Pure Silicone Fluid with a viscosity of 5cSt RTO Rolling TakeOff RVLT Revolutionary Vertical Lift Technology project SNOPT Sparse Nonlinear OPTimizer SOA State Of the Art STARC-ABL Single-aisle Turboelectric AiRCraft with an Aft Boundary-Layer propulsor TMS Thermal Management System TOGW TakeOff Gross Weight UAM Urban Air Mobility VTOL Vertical TakeOff and Landing I. Introduction n
+
+**Decision:** `SUPPORTED / PARTIALLY_SUPPORTED / UNSUPPORTED / CONTRADICTED`
+
+**Note:**
+

@@ -4,7 +4,7 @@
 
 Four frozen systems were evaluated over 20 answerable queries and 76 expected concept instances per system.
 
-Ten concept instances were accepted through deterministic canonical/alias matching. The remaining 294 were human-reviewed.
+Ten concept instances were accepted through deterministic canonical/alias matching. The remaining 294 were adjudicated using the frozen review protocol.
 
 PRESENT counts toward conservative coverage. AMBIGUOUS is retained and included only in the upper bound.
 

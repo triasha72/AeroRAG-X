@@ -983,34 +983,37 @@ The project does not currently claim production-scale local-LLM GPU deployment p
 
 # Current research direction
 
-The controlled four-way Base / LoRA system study is complete.
+Phase 24 semantic and claim-level evaluation is complete.
 
-The next research question is:
+The completed evaluation asks:
 
-> **Does increased formal claim decomposition correspond to genuinely better supported technical content?**
+> **Does increased formal claim decomposition correspond to better supported technical content?**
 
-## 1. Semantic and claim-level evaluation
+The answer is qualified rather than binary.
 
-The next evaluation layer will measure:
+On the protected grounded benchmark:
+
+- LoRA + RAG increased conservative expected-concept coverage from **38.16%** to **51.32%**;
+- strict claim-to-evidence support remained broadly similar (**65.62%** Base + RAG vs **67.92%** LoRA + RAG);
+- full answer-to-claim capture increased from **10.00%** to **45.00%**;
+- full-or-partial answer-to-claim capture increased from **60.00%** to **95.00%**;
+- full redundancy remained low (**0.00%** vs **1.89%**), while partial semantic overlap increased (**12.50%** vs **39.62%**);
+- both grounded conditions achieved **100% safe non-assertion** on the 12 protected unsupported queries;
+- the LoRA condition retained **3 contradicted claims** under the frozen claim-support policy, versus **0** for Base + RAG.
+
+The result is not treated as universal model superiority. It shows that, on this protected benchmark, LoRA produced richer and more complete formal technical decomposition while preserving broadly similar evidence-support rates, at the cost of substantially more partial overlap and a small number of contradicted claims.
+
+The frozen consolidated report is:
 
 ```text
-semantic expected-concept coverage
-claim-evidence entailment
-answer-to-claim completeness
-unsupported-response taxonomy
-redundancy
-targeted human assessment
+reports/phase24_quality_v0_1.md
 ```
 
-The existing citation metrics establish valid provenance and evidence-reference validity.
+## Next: bounded adaptive retrieval
 
-They do not yet prove that every cited passage semantically entails every formal claim.
+The next experiment asks:
 
-The strict refusal metric is also retained but is not treated as a complete hallucination metric.
-
-## 2. Bounded adaptive retrieval
-
-Bounded adaptive retrieval follows the semantic-evaluation baseline.
+> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, deterministic termination, or citation integrity?**
 
 Proposed workflow:
 
@@ -1040,15 +1043,7 @@ Hard limit:
 maximum retrieval passes = 2
 ```
 
-The objective is not a generic autonomous agent.
-
-The objective is to measure whether one bounded recovery step improves difficult-query recovery without sacrificing:
-
-- termination guarantees
-- grounding
-- citation validity
-- observability
-- reproducibility
+The objective is not unrestricted autonomous behavior. The recovery path remains bounded, observable, and testable.
 
 ---
 
@@ -1078,8 +1073,14 @@ closed-book Base / LoRA evaluation        DONE
 canonical-refusal normalization           DONE
 four-way Base / LoRA system study         DONE
 
-semantic and claim-level evaluation       NEXT
-bounded adaptive retrieval                PLANNED
+semantic expected-concept evaluation      DONE
+claim-evidence support                    DONE
+answer-to-claim completeness              DONE
+within-answer claim redundancy            DONE
+unsupported-response taxonomy             DONE
+Phase 24 consolidated quality report      DONE
+
+bounded adaptive retrieval                NEXT
 adaptive-retrieval evaluation             PLANNED
 efficient local inference                 LATER
 multimodal technical-report retrieval     FUTURE

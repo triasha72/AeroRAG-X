@@ -1,0 +1,36 @@
+{
+  "evaluation": "answer_to_claim_completeness",
+  "lora_minus_base": {
+    "full_capture_rate": 0.35,
+    "full_or_partial_capture_rate": 0.35
+  },
+  "methodology": "Single structured adjudication pass under a frozen answer-to-claim completeness policy; not an independent multi-assessor human annotation study.",
+  "overall": {
+    "full_capture_rate": 0.275,
+    "full_or_partial_capture_rate": 0.775,
+    "fully_captured": 11,
+    "material_omission": 9,
+    "partially_captured": 20,
+    "total_answers": 40
+  },
+  "systems": {
+    "base_rag": {
+      "full_capture_rate": 0.1,
+      "full_or_partial_capture_rate": 0.6,
+      "fully_captured": 2,
+      "material_omission": 8,
+      "partially_captured": 10,
+      "total_answers": 20
+    },
+    "lora_rag": {
+      "full_capture_rate": 0.45,
+      "full_or_partial_capture_rate": 0.95,
+      "fully_captured": 9,
+      "material_omission": 1,
+      "partially_captured": 10,
+      "total_answers": 20
+    }
+  },
+  "total_answers": 40,
+  "version": "v0.1"
+}

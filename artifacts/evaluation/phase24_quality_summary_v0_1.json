@@ -1,0 +1,72 @@
+{
+  "closed_book_unsupported_behavior": {
+    "base_safe_non_assertion_rate": 0.583333,
+    "base_unsupported_assertion_rate": 0.416667,
+    "lora_safe_non_assertion_rate": 0.75,
+    "lora_unsupported_assertion_rate": 0.25
+  },
+  "evaluation": "consolidated_quality",
+  "grounded_systems": {
+    "base_rag": {
+      "claim_count": 32,
+      "claim_support_broad": 0.875,
+      "claim_support_strict": 0.65625,
+      "completeness_broad": 0.6,
+      "completeness_full": 0.1,
+      "contradicted_claims": 0,
+      "nonredundant_rate": 1.0,
+      "overlap_rate": 0.125,
+      "redundancy_rate": 0.0,
+      "semantic_lower": 0.3815789473684211,
+      "semantic_upper": 0.5394736842105263,
+      "unsupported_assertion_rate": 0.0,
+      "unsupported_safe": 1.0
+    },
+    "lora_rag": {
+      "claim_count": 53,
+      "claim_support_broad": 0.90566,
+      "claim_support_strict": 0.679245,
+      "completeness_broad": 0.95,
+      "completeness_full": 0.45,
+      "contradicted_claims": 3,
+      "nonredundant_rate": 0.981132,
+      "overlap_rate": 0.396226,
+      "redundancy_rate": 0.018868,
+      "semantic_lower": 0.5131578947368421,
+      "semantic_upper": 0.6578947368421053,
+      "unsupported_assertion_rate": 0.0,
+      "unsupported_safe": 1.0
+    }
+  },
+  "guardrails": [
+    "Metrics measure different properties and must not be collapsed into a single accuracy score.",
+    "Expected-concept coverage is a protected benchmark result, not universal factual correctness.",
+    "Claim support measures support from cited evidence, not universal truth.",
+    "Completeness measures representation of prose content in formal claims, not evidence support.",
+    "OVERLAPPING claims are not counted as fully redundant.",
+    "UNSUPPORTED_ASSERTION is defined relative to the frozen benchmark contract.",
+    "The adjudication stages are single structured passes, not independent multi-assessor studies.",
+    "No generation, retrieval, training, or model-selection run is repeated by this consolidation."
+  ],
+  "lora_minus_base_grounded": {
+    "claim_support_broad": 0.03066,
+    "claim_support_strict": 0.022995,
+    "completeness_broad": 0.35,
+    "completeness_full": 0.35,
+    "overlap_rate": 0.271226,
+    "redundancy_rate": 0.018868,
+    "semantic_lower": 0.131579,
+    "semantic_upper": 0.118421,
+    "unsupported_safe": 0.0
+  },
+  "phase": 24,
+  "scope": "Consolidation of frozen semantic concept coverage, claim-evidence support, answer-to-claim completeness, within-answer claim redundancy, and unsupported-response taxonomy evaluations.",
+  "source_files": [
+    "artifacts/evaluation/semantic_four_way_coverage_v0_1.json",
+    "artifacts/evaluation/claim_support_summary_v0_1.json",
+    "artifacts/evaluation/answer_claim_completeness_summary_v0_1.json",
+    "artifacts/evaluation/claim_redundancy_summary_v0_1.json",
+    "artifacts/evaluation/unsupported_response_taxonomy_summary_v0_1.json"
+  ],
+  "version": "v0.1"
+}

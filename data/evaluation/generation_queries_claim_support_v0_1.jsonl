@@ -1,0 +1,20 @@
+{"expected_answerable": true, "expected_terms": ["battery", "thermal", "runaway"], "query": "How can battery thermal runaway propagate in electric aircraft?", "query_id": "core_001"}
+{"expected_answerable": true, "expected_terms": ["fuel", "cell", "thermal"], "query": "What thermal-management considerations apply to fuel-cell aircraft?", "query_id": "core_002"}
+{"expected_answerable": true, "expected_terms": ["hybrid", "electric", "safety"], "query": "What safety concerns arise in hybrid-electric aircraft propulsion systems?", "query_id": "core_003"}
+{"expected_answerable": true, "expected_terms": ["distributed", "electric", "propulsion"], "query": "What characterizes distributed electric propulsion aircraft?", "query_id": "core_004"}
+{"expected_answerable": true, "expected_terms": ["hydrogen", "cryogenic", "storage"], "query": "What challenges affect cryogenic hydrogen storage in aircraft?", "query_id": "core_005"}
+{"expected_answerable": true, "expected_terms": ["battery", "cooling"], "query": "How are aircraft battery systems cooled?", "query_id": "core_006"}
+{"expected_answerable": true, "expected_terms": ["power", "thermal", "electric"], "query": "How is power-electronics thermal management handled in electric aircraft?", "query_id": "core_007"}
+{"expected_answerable": true, "expected_terms": ["battery", "fire", "detection"], "query": "How can lithium-ion battery fires be detected in aviation applications?", "query_id": "core_008"}
+{"expected_answerable": true, "expected_terms": ["thermal", "runaway", "cell"], "query": "What physical mechanisms can allow battery thermal runaway to spread from one cell to another?", "query_id": "para_001"}
+{"expected_answerable": true, "expected_terms": ["heat", "battery", "thermal"], "query": "What role does heat transfer play in propagation of battery thermal events in aircraft?", "query_id": "para_002"}
+{"expected_answerable": true, "expected_terms": ["fuel", "cell", "heat"], "query": "Why is waste-heat management important for fuel-cell aircraft propulsion?", "query_id": "para_003"}
+{"expected_answerable": true, "expected_terms": ["hybrid", "electric", "propulsion"], "query": "What hazards should be considered when designing hybrid-electric aircraft propulsion?", "query_id": "para_004"}
+{"expected_answerable": true, "expected_terms": ["distributed", "electric", "propulsion"], "query": "What engineering characteristics distinguish distributed electric propulsion from conventional propulsion layouts?", "query_id": "para_005"}
+{"expected_answerable": true, "expected_terms": ["hydrogen", "cryogenic", "storage"], "query": "Why is storing cryogenic hydrogen aboard aircraft technically challenging?", "query_id": "para_006"}
+{"expected_answerable": true, "expected_terms": ["battery", "heat"], "query": "What approaches are used to manage heat in aircraft battery systems?", "query_id": "para_007"}
+{"expected_answerable": true, "expected_terms": ["power", "thermal", "aircraft"], "query": "Why do power-electronics components require thermal management in electrified aircraft?", "query_id": "para_008"}
+{"expected_answerable": true, "expected_terms": ["battery", "detection", "thermal"], "query": "What methods can help detect hazardous lithium-ion battery thermal events in aviation?", "query_id": "para_009"}
+{"expected_answerable": true, "expected_terms": ["thermal", "battery", "fuel"], "query": "What thermal-management challenges are shared by battery-electric and fuel-cell aircraft?", "query_id": "synth_001"}
+{"expected_answerable": true, "expected_terms": ["power", "electric", "thermal"], "query": "How do high-power electrified propulsion components create thermal-management demands in aircraft?", "query_id": "synth_002"}
+{"expected_answerable": true, "expected_terms": ["safety", "thermal", "electric"], "query": "What safety and thermal-management issues should designers consider across electrified aircraft propulsion systems?", "query_id": "synth_003"}

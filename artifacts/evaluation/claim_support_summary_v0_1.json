@@ -1,0 +1,41 @@
+{
+  "adjudicated_count": 75,
+  "automatic_exact_supported_count": 10,
+  "evaluation": "claim_evidence_support",
+  "lora_minus_base": {
+    "strict_support_rate": 0.022995,
+    "support_or_partial_rate": 0.03066
+  },
+  "methodology": "Single structured adjudication pass under a frozen claim-support policy; not an independent multi-assessor human annotation study.",
+  "overall": {
+    "contradicted": 3,
+    "partially_supported": 19,
+    "strict_support_rate": 0.670588,
+    "support_or_partial_rate": 0.894118,
+    "supported": 57,
+    "total_claims": 85,
+    "unsupported": 6
+  },
+  "systems": {
+    "base_rag": {
+      "contradicted": 0,
+      "partially_supported": 7,
+      "strict_support_rate": 0.65625,
+      "support_or_partial_rate": 0.875,
+      "supported": 21,
+      "total_claims": 32,
+      "unsupported": 4
+    },
+    "lora_rag": {
+      "contradicted": 3,
+      "partially_supported": 12,
+      "strict_support_rate": 0.679245,
+      "support_or_partial_rate": 0.90566,
+      "supported": 36,
+      "total_claims": 53,
+      "unsupported": 2
+    }
+  },
+  "total_claims": 85,
+  "version": "v0.1"
+}

@@ -123,10 +123,11 @@ Completed:
 - [x] canonical-refusal normalization
 - [x] normalized closed-book v0.2 benchmark
 - [x] corrected four-way Base / LoRA system study
+- [x] semantic expected-concept baseline
 
 Current:
 
-- [ ] semantic and claim-level evaluation
+- [ ] claim-level and unsupported-response evaluation
 
 Next:
 
@@ -840,87 +841,80 @@ Primary conclusions:
 
 ---
 
-# Phase 24 — Semantic and claim-level evaluation — CURRENT
+# Phase 24 — Semantic and claim-level evaluation — COMPLETE
 
 Primary question:
 
 > **Does increased formal claim decomposition correspond to genuinely better supported technical content?**
 
-Planned metrics:
+Completed evaluation layers:
 
-- [ ] semantic expected-concept coverage
-- [ ] claim-evidence entailment
-- [ ] claim support
-- [ ] answer-to-claim completeness
-- [ ] unsupported-response semantic taxonomy
-- [ ] redundancy
-- [ ] answer relevance
-- [ ] targeted human review
+- [x] semantic expected-concept coverage
+- [x] claim-to-evidence support
+- [x] answer-to-claim completeness
+- [x] unsupported-response semantic taxonomy
+- [x] within-answer claim redundancy
+- [x] consolidated Phase 24 quality report
 
-## Semantic expected-concept coverage
+The adjudication stages use frozen policies and single structured review passes. They are not presented as independent multi-assessor human studies.
 
-Requirements:
+## Consolidated grounded-system result
 
-- [ ] preserve lexical expected-term recall as a baseline
-- [ ] define semantic expected concepts
-- [ ] define and calibrate semantic matching
-- [ ] inspect lexical / semantic disagreements
-- [ ] record versioned evaluation artifacts
+| Dimension | Base + RAG | LoRA + RAG | LoRA - Base |
+|---|---:|---:|---:|
+| Semantic concept coverage, conservative micro | 38.16% | 51.32% | +13.16 pp |
+| Semantic concept coverage, upper-bound micro | 53.95% | 65.79% | +11.84 pp |
+| Strict claim-evidence support | 65.62% | 67.92% | +2.30 pp |
+| Support-or-partial claim-evidence support | 87.50% | 90.57% | +3.07 pp |
+| Full answer-to-claim capture | 10.00% | 45.00% | +35.00 pp |
+| Full-or-partial answer-to-claim capture | 60.00% | 95.00% | +35.00 pp |
+| Full redundancy rate | 0.00% | 1.89% | +1.89 pp |
+| Partial-overlap rate | 12.50% | 39.62% | +27.12 pp |
+| Unsupported-query safe non-assertion | 100.00% | 100.00% | +0.00 pp |
 
-## Claim-evidence entailment
-
-Applicable to grounded-RAG responses.
-
-For each formal claim:
-
-```text
-claim
-   +
-cited evidence
-   ↓
-support assessment
-```
-
-Candidate labels:
+Claim counts:
 
 ```text
-SUPPORTED
-PARTIALLY_SUPPORTED
-UNSUPPORTED
-CONTRADICTED
+Base + RAG     32 formal claims
+LoRA + RAG     53 formal claims
 ```
 
-The current citation metrics establish valid provenance and known evidence references.
-
-They do not yet prove semantic entailment.
-
-## Answer-to-claim completeness
-
-Measure whether material technical statements in the prose answer are represented in the formal claim structure.
-
-## Unsupported-response taxonomy
-
-Use:
+Claim-support adjudication also found:
 
 ```text
-EXPLICIT_REFUSAL
-CORRECTIVE_DENIAL
-UNSUPPORTED_ASSERTION
-STRUCTURAL_FAILURE
+Base + RAG     0 contradicted claims
+LoRA + RAG     3 contradicted claims
 ```
 
-The strict refusal metric remains useful but is not treated as a complete hallucination metric.
+## Unsupported-query taxonomy
 
-## Targeted human audit
+| Condition | Safe non-assertion | Unsupported-assertion rate |
+|---|---:|---:|
+| Base closed-book | 58.33% | 41.67% |
+| LoRA closed-book | 75.00% | 25.00% |
+| Base + RAG | 100.00% | 0.00% |
+| LoRA + RAG | 100.00% | 0.00% |
 
-Use a bounded review subset to assess:
+The taxonomy distinguishes explicit refusals from corrective denials, so a failed strict-refusal metric is not automatically treated as a hallucination.
 
-- technical correctness
-- completeness
-- relevance
-- groundedness
-- useful decomposition
-- redundancy
+## Phase 24 conclusion
+
+On this protected grounded benchmark, LoRA increased structured technical decomposition and answer-to-claim completeness, and it produced higher expected-concept coverage while maintaining broadly similar claim-to-evidence support rates.
+
+The additional claims were rarely fully redundant, although partial semantic overlap increased substantially and a small number of contradicted LoRA claims remained.
+
+Retrieval-grounded execution provided the strongest unsupported-query boundary in both grounded conditions.
+
+These results do not establish universal factual accuracy or universal model superiority.
+
+Frozen consolidated artifacts:
+
+```text
+artifacts/evaluation/phase24_quality_summary_v0_1.json
+artifacts/evaluation/phase24_quality_inputs_v0_1.sha256
+artifacts/evaluation/phase24_quality_v0_1.sha256
+reports/phase24_quality_v0_1.md
+```
 
 ---
 
@@ -1071,13 +1065,19 @@ Completed:
 - [x] four-way Base / LoRA system study
 - [x] raw versus normalized contract analysis
 
+Additional completed evaluation milestones:
+
+- [x] semantic expected-concept evaluation
+- [x] claim-evidence support adjudication
+- [x] unsupported-response taxonomy
+- [x] answer-to-claim completeness
+- [x] within-answer claim redundancy
+- [x] Phase 24 consolidated quality report
+
 Current:
 
-- [ ] semantic expected-concept evaluation
-- [ ] claim-evidence entailment
-- [ ] unsupported-response taxonomy
-- [ ] answer-to-claim completeness
-- [ ] targeted human assessment
+- [ ] bounded adaptive retrieval implementation
+- [ ] adaptive-retrieval evaluation design
 
 Future:
 
@@ -1151,32 +1151,39 @@ New infrastructure should follow a measured engineering requirement.
 
 # Immediate next milestone
 
-The four-way Base / LoRA experiment is complete.
+Phase 24 semantic and claim-level evaluation is complete.
 
 The next question is:
 
-> **Does LoRA's increase in formal technical claims correspond to better semantic coverage and stronger evidence support?**
+> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, deterministic termination, or citation integrity?**
 
 Sequence:
 
 ```text
-freeze corrected four-way results
+freeze Phase 24 consolidated quality baseline
         ↓
-semantic expected-concept evaluation
+implement bounded retrieval state machine
         ↓
-claim-evidence entailment
+define deterministic evidence-recovery trigger
         ↓
-answer-to-claim completeness
+allow at most one query rewrite
         ↓
-unsupported-response taxonomy
+allow at most one second retrieval pass
         ↓
-targeted human audit
+preserve provenance and grounded refusal
         ↓
-freeze semantic evaluation baseline
-        ↓
-begin bounded adaptive retrieval
+evaluate single-pass vs bounded adaptive retrieval
 ```
 
-Only after that should AeroRAG-X ask:
+Hard constraints:
 
-> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, termination, or citation integrity?**
+```text
+maximum retrieval passes = 2
+bounded state transitions
+deterministic termination
+validated inputs
+evidence provenance preserved
+grounded refusal preserved
+```
+
+Only after the bounded adaptive-retrieval study should AeroRAG-X move to efficient local inference or broader retrieval modalities.

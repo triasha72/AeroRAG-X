@@ -1,0 +1,8 @@
+{
+  "claim_citation_mapping_preserved": false,
+  "decision": "create a separate claim-capture run; do not reinterpret v0.3 summary counts as claim-evidence entailment",
+  "formal_claim_payloads_preserved": false,
+  "original_semantic_benchmark_modified": false,
+  "source_benchmark": "grounded Transformers v0.3",
+  "version": "v0.1"
+}
