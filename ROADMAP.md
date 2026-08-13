@@ -59,26 +59,26 @@ LoRA failure analysis
         ↓
 structured-generation hardening
         ↓
-final Base+RAG vs LoRA+RAG evaluation
-        ↓
-closed-book Base / LoRA evaluation
-        ↓
-canonical-refusal normalization
-        ↓
-corrected four-way model/system study
+four-way model/system study
         ↓
 semantic and claim-level evaluation
         ↓
 bounded adaptive retrieval
         ↓
-adaptive-retrieval evaluation
+protected adaptive-retrieval evaluation
         ↓
-efficient inference
+scope-qualifier safeguard and held-out evaluation
+        ↓
+adaptive-retrieval interoperability and observability
+        ↓
+edge-runtime benchmark
+        ↓
+MLX structured-transport foundation
+        ↓
+controlled MLX 4-bit versus MPS float16 comparison
         ↓
 multimodal technical reports
 ```
-
----
 
 # Current status
 
@@ -86,61 +86,34 @@ Completed:
 
 - [x] NASA NTRS corpus
 - [x] 3,233 citation-preserving chunks
-- [x] BM25 retrieval
-- [x] Sentence Transformer embeddings
-- [x] NumPy exact dense retrieval
-- [x] PostgreSQL + pgvector
-- [x] Hybrid Reciprocal Rank Fusion
-- [x] cross-encoder reranking
-- [x] evidence-sufficiency gating
-- [x] facet-aware retrieval
-- [x] deterministic grounded generation
-- [x] OpenAI structured generation
-- [x] Hugging Face Transformers generation
-- [x] application-side citation resolution
-- [x] FastAPI
-- [x] Docker
-- [x] Prometheus
-- [x] OpenTelemetry
-- [x] private Cloud Run validation
-- [x] protected evaluation
+- [x] BM25, dense, Hybrid RRF, and cross-encoder reranking
+- [x] evidence-sufficiency gating and facet-aware retrieval
+- [x] deterministic, OpenAI, and Transformers grounded generation
+- [x] FastAPI, Docker, Prometheus, OpenTelemetry, and private Cloud Run validation
+- [x] PostgreSQL + pgvector equivalence validation
 - [x] frozen local Qwen baseline
-- [x] PEFT / LoRA training
-- [x] assistant-only loss masking
-- [x] MPS-compatible training
-- [x] best-checkpoint selection
-- [x] adapter reload verification
-- [x] LoRA structured-generation failure analysis
-- [x] structured-generation prompt hardening
-- [x] bounded output-budget hardening
-- [x] duplicate evidence-ID normalization
-- [x] final Base+RAG benchmark
-- [x] final LoRA+RAG benchmark
-- [x] closed-book Base evaluator
-- [x] closed-book LoRA evaluator
-- [x] raw closed-book v0.1 benchmark
-- [x] raw refusal-payload diagnosis
-- [x] canonical-refusal normalization
-- [x] normalized closed-book v0.2 benchmark
-- [x] corrected four-way Base / LoRA system study
-- [x] semantic expected-concept baseline
-
-Current:
-
-- [ ] claim-level and unsupported-response evaluation
+- [x] PEFT / LoRA training, checkpointing, reload verification, and failure analysis
+- [x] final Base+RAG / LoRA+RAG and corrected four-way studies
+- [x] Phase 24 semantic expected-concept, claim-support, completeness, redundancy, and unsupported-response evaluation
+- [x] bounded adaptive retrieval with one deterministic rewrite and at most two passes
+- [x] protected Phase 26 adaptive-retrieval evaluation, including its negative result
+- [x] opt-in scope-qualifier safeguard and separately authored held-out evaluation
+- [x] opt-in LangGraph controller, LangChain reranked retriever adapter, and adaptive-retrieval observability
+- [x] Phase 32 edge-runtime benchmark schema, runner, JSON/Markdown artifacts, and measured MPS results
+- [x] Apple-Silicon MLX structured-generation transport with strict JSON validation and live smoke coverage
 
 Next:
 
-- [ ] unsupported-response semantic taxonomy
-- [ ] claim-evidence entailment
-- [ ] answer-to-claim completeness
-- [ ] targeted human audit
-- [ ] bounded adaptive retrieval
-- [ ] adaptive-retrieval evaluation
-- [ ] efficient inference
-- [ ] multimodal technical-report retrieval
+- [ ] controlled Transformers MPS float16 versus MLX 4-bit runtime comparison
+- [ ] measured artifact size, JSON-validity, latency, P50/P95, token, and throughput comparison
+- [ ] broader MLX API/CLI provider integration only if the controlled comparison supports it
 
----
+Future:
+
+- [ ] larger protected evaluation set
+- [ ] conflicting and partial evidence studies
+- [ ] multiple human assessors and inter-annotator agreement
+- [ ] multimodal technical-report retrieval
 
 # Phase 1 — Repository foundation — COMPLETE
 
@@ -918,133 +891,59 @@ reports/phase24_quality_v0_1.md
 
 ---
 
-# Phase 25 — Bounded adaptive retrieval — PLANNED
+# Phase 25 — Bounded adaptive retrieval — COMPLETE
 
-Goal:
+Implemented:
 
-> Determine whether one bounded recovery step can improve questions where initial evidence is weak.
+- [x] at most two retrieval passes
+- [x] one deterministic query rewrite
+- [x] preserved retrieval and evidence provenance
+- [x] grounded refusal after a second insufficient pass
+- [x] CLI and API opt-in controls
+- [x] frozen Phase 24 baseline protection
 
-Proposed state machine:
-
-```text
-QUESTION
-   ↓
-RETRIEVE
-   ↓
-ASSESS
-   │
-   ├── sufficient ─────────────→ GENERATE
-   │
-   └── insufficient
-             ↓
-        REWRITE QUERY
-             ↓
-        RETRIEVE AGAIN
-             ↓
-           ASSESS
-             │
-             ├── sufficient → GENERATE
-             │
-             └── insufficient
-                     ↓
-               GROUNDED REFUSAL
-```
-
-Hard constraints:
-
-```text
-maximum retrieval passes = 2
-bounded state transitions
-deterministic termination
-validated inputs
-evidence provenance preserved
-grounded refusal preserved
-```
-
-The objective is a measured comparison between:
-
-```text
-single-pass retrieval
-vs
-bounded adaptive retrieval
-```
-
-not unrestricted autonomous behavior.
+The native bounded controller remains the default. The project does not treat this as unrestricted autonomous behavior.
 
 ---
 
-# Phase 26 — Adaptive-retrieval evaluation — PLANNED
+# Phase 26 — Adaptive-retrieval evaluation — COMPLETE
 
-Metrics:
+The protected paired evaluation reproduced the frozen single-pass baseline, then compared it with the opt-in bounded-adaptive policy.
 
-- [ ] difficult-query recovery
-- [ ] answerability
-- [ ] unsupported refusal
-- [ ] semantic claim support
-- [ ] citation validity
-- [ ] unnecessary second retrievals
-- [ ] retrieval attempts / query
-- [ ] invalid transitions
-- [ ] termination failures
-- [ ] latency overhead
-- [ ] token overhead
+| Metric | Single pass | Bounded adaptive |
+|---|---:|---:|
+| Answerability accuracy | 91.67% | 83.33% |
+| Unsupported refusal | 83.33% | 66.67% |
 
-Failure categories:
-
-```text
-routing failure
-rewrite failure
-retrieval failure
-evidence-assessment failure
-unnecessary recovery
-termination failure
-unsupported synthesis
-citation failure
-```
+The result is preserved as a negative result. No protected thresholds, policy settings, data, or artifacts were tuned after observing it. The adaptive policy remains opt-in.
 
 ---
 
-# Phase 27 — Efficient local inference — PLANNED
+# Phase 27 — Scope-qualifier safeguard — COMPLETE / OPT-IN
 
-Only after the model-quality and adaptive-retrieval studies are complete.
+The Phase 26 diagnosis showed that topically related evidence could be treated as support for overly broad claims, such as universal coverage, permanent replacement, or zero risk.
 
-Measure:
+Implemented:
 
-- [ ] model-load time
-- [ ] peak memory
-- [ ] generation latency
-- [ ] P50
-- [ ] P95
-- [ ] tokens / second
-- [ ] structured-output validity
-- [ ] grounding preservation
+- [x] separately authored unsupported-scope development challenge
+- [x] opt-in v0.3.0 scope-qualifier checking
+- [x] regression coverage
+- [x] no modification of protected Phase 26 data, settings, or artifacts
 
-Candidates:
-
-```text
-FP16
-BF16 where supported
-INT8 where supported
-```
-
-Hardware-specific performance claims require measurements on the hardware being discussed.
+The safeguard is not treated as a general claim of universal correctness; it is a bounded, measured response to a specific observed failure mode.
 
 ---
 
-# Phase 28 — Multimodal technical reports — FUTURE
+# Phase 28 — Scope-qualifier held-out evaluation — COMPLETE
 
-Potential work:
+A separately versioned held-out benchmark evaluated the opt-in Phase 27 safeguard without reusing the Phase 26 protected evaluation.
 
-- [ ] figure detection
-- [ ] figure captions
-- [ ] page linkage
-- [ ] table extraction
-- [ ] structured tables
-- [ ] image retrieval
-- [ ] image citations
-- [ ] table citations
-- [ ] multimodal evaluation
-- [ ] OCR fallback
+| Metric | Bounded adaptive | Bounded adaptive + scope safeguard |
+|---|---:|---:|
+| Answerability accuracy | 50.00% | 92.86% |
+| Unsupported-query refusal | 40.00% | 100.00% |
+
+No thresholds or policy settings were tuned after observing the held-out result.
 
 ---
 
@@ -1052,39 +951,23 @@ Potential work:
 
 Completed:
 
-- [x] retrieval evaluation
-- [x] generation evaluation
-- [x] protected benchmark
-- [x] local-model baseline
-- [x] LoRA benchmark
+- [x] retrieval and generation evaluation
+- [x] protected local-model baseline
+- [x] Base / LoRA and four-way system studies
 - [x] negative-result preservation
-- [x] failure categorization
 - [x] structured-generation regression tests
-- [x] provider telemetry
-- [x] backend comparison
-- [x] four-way Base / LoRA system study
-- [x] raw versus normalized contract analysis
-
-Additional completed evaluation milestones:
-
 - [x] semantic expected-concept evaluation
 - [x] claim-evidence support adjudication
-- [x] unsupported-response taxonomy
 - [x] answer-to-claim completeness
+- [x] unsupported-response taxonomy
 - [x] within-answer claim redundancy
-- [x] Phase 24 consolidated quality report
-
-Current:
-
-- [ ] bounded adaptive retrieval implementation
-- [ ] adaptive-retrieval evaluation design
+- [x] bounded-adaptive and scope-qualifier evaluation
+- [x] edge-runtime measurement artifacts
 
 Future:
 
 - [ ] larger protected set
-- [ ] conflicting evidence
-- [ ] partial evidence
-- [ ] broader adversarial unsupported controls
+- [ ] conflicting and partial evidence
 - [ ] multiple human assessors
 - [ ] inter-annotator agreement
 - [ ] confidence intervals
@@ -1093,40 +976,119 @@ Future:
 
 # Phase 30 — Releases and reproducibility — ONGOING
 
-The repository history records:
+The repository preserves both successful and negative experiments, including:
 
 ```text
 retrieval baseline
 generation baseline
-OpenAI reference
 local Qwen baseline
-pgvector comparison
-LoRA training
-failed LoRA evaluation
-failure diagnosis
-structured-output hardening
-final Base+RAG / LoRA+RAG evaluation
-raw closed-book v0.1
-closed-book failure diagnosis
-canonical-refusal normalization
-normalized closed-book v0.2
-corrected four-way model/system study
+LoRA training and failure analysis
+corrected four-way system study
+Phase 24 consolidated quality report
+adaptive-retrieval regression
+scope-qualifier development and held-out results
+edge-runtime benchmark schema and measurements
+MLX structured-transport smoke validation
 ```
 
-Candidate future experiment milestones:
-
-```text
-semantic evaluation
-claim/evidence faithfulness
-bounded adaptive retrieval
-adaptive-retrieval evaluation
-efficient inference
-multimodal retrieval
-```
-
-Release labels should follow completed experiments rather than a fixed schedule.
+Release labels follow completed, reproducible evidence rather than a fixed schedule.
 
 ---
+
+# Phase 31 — Adaptive-retrieval interoperability and observability — COMPLETE
+
+Implemented:
+
+- [x] opt-in LangGraph controller with native-controller parity
+- [x] LangChain `BaseRetriever` adapter for reranked hits
+- [x] preserved source and retrieval provenance at the framework boundary
+- [x] selected adaptive-retrieval orchestrator in answer metadata
+- [x] bounded-retrieval safety invariants and recovery tests
+
+The native bounded controller remains the default. Framework integrations are optional and do not replace the project’s bounded retrieval policy.
+
+---
+
+# Phase 32 — Edge-runtime benchmarking — COMPLETE
+
+The benchmark compares fixed structured-generation workloads on one Apple-Silicon host. Each case uses one warm-up iteration and three measured iterations; model loading is excluded from per-request latency, and accelerator work is synchronized at timing boundaries.
+
+| Case | Mean latency | Output throughput |
+|---|---:|---:|
+| Base CPU float32 | 1189.29 ms | 23.54 tok/s |
+| Base MPS float32 | 1015.00 ms | 27.59 tok/s |
+| Base MPS float16 | **695.43 ms** | **40.26 tok/s** |
+| LoRA MPS float16 | 1146.71 ms | 34.01 tok/s |
+
+The LoRA condition generated more output tokens than the Base conditions, so raw latency is not treated as an identical-workload comparison.
+
+Tracked artifacts:
+
+```text
+configs/edge_runtime_benchmark_v0_1.yaml
+docs/edge-runtime-benchmark-v0_1.md
+reports/edge_runtime_benchmark_v0_1.json
+reports/edge_runtime_benchmark_v0_1.md
+scripts/run_edge_runtime_benchmark_v0_1.py
+```
+
+---
+
+# Phase 33 — MLX structured-generation transport — COMPLETE
+
+Implemented:
+
+- [x] optional `mlx` dependency extra for macOS arm64
+- [x] versioned MLX runtime configuration
+- [x] Qwen-compatible chat templating with thinking disabled by default
+- [x] deterministic sampling and prompt-budget checks
+- [x] strict JSON-object parsing and token-usage reporting
+- [x] unit tests for plain/fenced JSON, configuration, token budgets, and stdout hygiene
+- [x] live Apple-Silicon structured-generation smoke test
+- [x] local model artifacts ignored by Git
+
+The transport is intentionally provider-neutral and benchmark-oriented. It is not yet an API or CLI runtime mode.
+
+---
+
+# Phase 34 — Controlled MLX 4-bit versus MPS float16 evaluation — NEXT
+
+Question:
+
+> **On the same Apple-Silicon host and fixed structured-generation workload, what trade-offs does a genuine MLX 4-bit Qwen runtime make relative to the measured Transformers MPS float16 baseline?**
+
+Required controls:
+
+- [ ] same question, system prompt, response schema, and output budget
+- [ ] fixed warm-up and measured-iteration protocol
+- [ ] recorded model, artifact, runtime, Python, PyTorch, and MLX versions
+- [ ] explicit device/backend evidence
+- [ ] no claim beyond the measured host
+
+Required measurements:
+
+- [ ] artifact size
+- [ ] structured-JSON validity rate
+- [ ] input and output token counts
+- [ ] mean, P50, and P95 latency
+- [ ] output tokens per second
+- [ ] concise qualitative output review
+
+The comparison must not infer quality from speed alone or silently repair malformed model output.
+
+---
+
+# Phase 35 — Multimodal technical reports — FUTURE
+
+Potential work:
+
+- [ ] figure detection and captions
+- [ ] page linkage
+- [ ] table extraction and structured tables
+- [ ] image retrieval and citations
+- [ ] table citations
+- [ ] multimodal evaluation
+- [ ] OCR fallback
 
 # Explicit non-priorities
 
@@ -1151,39 +1113,34 @@ New infrastructure should follow a measured engineering requirement.
 
 # Immediate next milestone
 
-Phase 24 semantic and claim-level evaluation is complete.
+Phase 32 established the measured Transformers MPS float16 baseline. Phase 33 added a genuine local MLX 4-bit structured-generation transport and validated it with a live smoke test.
 
 The next question is:
 
-> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, deterministic termination, or citation integrity?**
+> **How does MLX 4-bit inference compare with the existing MPS float16 baseline when the model, structured request, generation budget, and host are controlled?**
 
 Sequence:
 
 ```text
-freeze Phase 24 consolidated quality baseline
+freeze the existing Phase 32 MPS float16 result
         ↓
-implement bounded retrieval state machine
+define a provider-neutral fixed structured request
         ↓
-define deterministic evidence-recovery trigger
+run the same warm-up and measured-iteration protocol
         ↓
-allow at most one query rewrite
+record artifact size, versions, backend/device evidence, and token counts
         ↓
-allow at most one second retrieval pass
+measure JSON validity, latency, P50/P95, and output throughput
         ↓
-preserve provenance and grounded refusal
-        ↓
-evaluate single-pass vs bounded adaptive retrieval
+publish JSON and Markdown result artifacts with limitations
 ```
 
 Hard constraints:
 
 ```text
-maximum retrieval passes = 2
-bounded state transitions
-deterministic termination
-validated inputs
-evidence provenance preserved
-grounded refusal preserved
+no model-weight commits
+no changes to protected retrieval or generation evaluation data
+no parser weakening or arbitrary-text repair
+no device-general performance claims
+no quality claim based only on latency
 ```
-
-Only after the bounded adaptive-retrieval study should AeroRAG-X move to efficient local inference or broader retrieval modalities.
