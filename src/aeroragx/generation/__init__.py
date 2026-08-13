@@ -60,6 +60,11 @@ from aeroragx.generation.http_transport import (
     HttpTransportConfig,
     load_http_transport_config,
 )
+from aeroragx.generation.mlx_transport import (
+    MLXRuntimeConfig,
+    MLXStructuredModelTransport,
+    load_mlx_runtime_config,
+)
 from aeroragx.generation.model_adapter import (
     GenericStructuredModelAdapter,
     OpenAIResponsesAdapter,
@@ -142,6 +147,8 @@ __all__ = [
     "GroundedPrompt",
     "HttpStructuredModelTransport",
     "HttpTransportConfig",
+    "MLXRuntimeConfig",
+    "MLXStructuredModelTransport",
     "OpenAIResponsesAdapter",
     "PromptInjectionAssessment",
     "PromptInjectionFinding",
@@ -181,6 +188,7 @@ __all__ = [
     "load_generation_config",
     "load_generation_evaluation_queries",
     "load_http_transport_config",
+    "load_mlx_runtime_config",
     "load_provider_hardening_config",
     "load_provider_runtime_config",
     "load_sufficiency_config",

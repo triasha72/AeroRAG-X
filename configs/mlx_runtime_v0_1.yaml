@@ -1,0 +1,14 @@
+version: "0.1"
+
+context_window_tokens: 32768
+max_input_tokens: 16000
+max_new_tokens: 512
+
+temperature: 0.0
+top_p: 0.0
+min_p: 0.0
+top_k: 0
+
+enable_thinking: false
+trust_remote_code: false
+revision: null
