@@ -1,0 +1,23 @@
+version: "0.1"
+
+source_model_name: "Qwen/Qwen3-0.6B"
+transformers_model_name: "Qwen/Qwen3-0.6B"
+transformers_runtime_config: "configs/transformers_runtime_base_v0_2.yaml"
+
+mlx_model_path: "artifacts/models/qwen3_0_6b_mlx_4bit"
+mlx_runtime_config: "configs/mlx_runtime_v0_1.yaml"
+
+warmup_iterations: 1
+measured_iterations: 3
+timeout_seconds: 120.0
+
+max_input_tokens: 2048
+max_new_tokens: 96
+
+system_prompt: >-
+  Return only a valid JSON object with one required string field named
+  "answer". Do not include Markdown or explanatory text outside the JSON.
+
+user_prompt: >-
+  In one concise sentence, explain why evidence-grounded technical generation
+  benefits from retrieval and citation validation.

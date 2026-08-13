@@ -1,0 +1,110 @@
+{
+  "version": "0.1",
+  "source_model_name": "Qwen/Qwen3-0.6B",
+  "platform": "macOS-26.6.1-arm64-arm-64bit",
+  "python_version": "3.12.13",
+  "package_versions": {
+    "mlx": "0.32.0",
+    "mlx-lm": "0.31.3",
+    "PyTorch": "2.13.0",
+    "Transformers": "5.14.1"
+  },
+  "warmup_iterations": 1,
+  "measured_iterations": 3,
+  "max_input_tokens": 2048,
+  "max_new_tokens": 96,
+  "artifacts": [
+    {
+      "runtime": "transformers_mps_float16",
+      "model_identifier": "Qwen/Qwen3-0.6B",
+      "local_path": "/Users/triashasarkar/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca",
+      "artifact_size_mib": 1448.8308362960815,
+      "quantization": null
+    },
+    {
+      "runtime": "mlx_4bit_affine_g128",
+      "model_identifier": "artifacts/models/qwen3_0_6b_mlx_4bit",
+      "local_path": "artifacts/models/qwen3_0_6b_mlx_4bit",
+      "artifact_size_mib": 313.0950536727905,
+      "quantization": {
+        "group_size": 128,
+        "bits": 4,
+        "mode": "affine"
+      }
+    }
+  ],
+  "summaries": [
+    {
+      "runtime": "transformers_mps_float16",
+      "sample_count": 3,
+      "valid_json_count": 3,
+      "mean_latency_ms": 715.1110556733329,
+      "p50_latency_ms": 699.4151670078281,
+      "p95_latency_ms": 742.579729508725,
+      "total_input_tokens": 186,
+      "total_output_tokens": 84,
+      "output_tokens_per_second": 39.15475754131058
+    },
+    {
+      "runtime": "mlx_4bit_affine_g128",
+      "sample_count": 3,
+      "valid_json_count": 3,
+      "mean_latency_ms": 278.431472669278,
+      "p50_latency_ms": 277.85204199608415,
+      "p95_latency_ms": 280.46916731400415,
+      "total_input_tokens": 423,
+      "total_output_tokens": 102,
+      "output_tokens_per_second": 122.11263214624209
+    }
+  ],
+  "samples": [
+    {
+      "runtime": "transformers_mps_float16",
+      "iteration": 1,
+      "latency_ms": 747.3757920088246,
+      "input_tokens": 62,
+      "output_tokens": 28,
+      "json_valid": true
+    },
+    {
+      "runtime": "transformers_mps_float16",
+      "iteration": 2,
+      "latency_ms": 698.5422080033459,
+      "input_tokens": 62,
+      "output_tokens": 28,
+      "json_valid": true
+    },
+    {
+      "runtime": "transformers_mps_float16",
+      "iteration": 3,
+      "latency_ms": 699.4151670078281,
+      "input_tokens": 62,
+      "output_tokens": 28,
+      "json_valid": true
+    },
+    {
+      "runtime": "mlx_4bit_affine_g128",
+      "iteration": 1,
+      "latency_ms": 280.75995901599526,
+      "input_tokens": 141,
+      "output_tokens": 34,
+      "json_valid": true
+    },
+    {
+      "runtime": "mlx_4bit_affine_g128",
+      "iteration": 2,
+      "latency_ms": 277.85204199608415,
+      "input_tokens": 141,
+      "output_tokens": 34,
+      "json_valid": true
+    },
+    {
+      "runtime": "mlx_4bit_affine_g128",
+      "iteration": 3,
+      "latency_ms": 276.68241699575447,
+      "input_tokens": 141,
+      "output_tokens": 34,
+      "json_valid": true
+    }
+  ]
+}
