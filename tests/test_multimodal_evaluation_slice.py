@@ -9,14 +9,9 @@ from aeroragx.processing.multimodal_provenance import (
 from aeroragx.processing.pdf import PDFPageRecord
 
 DOCUMENT_ID = 20050228985
-DOCUMENT_SHA256 = (
-    "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b"
-)
+DOCUMENT_SHA256 = "38ffad19c7c2d61858a97ccc8c225d35254b63808140365b213382d2af3c5d6b"
 SOURCE_PATH = "data/raw/ntrs/v0_1/20050228985.pdf"
-SOURCE_URL = (
-    "https://ntrs.nasa.gov/api/citations/20050228985/"
-    "downloads/20050228985.pdf"
-)
+SOURCE_URL = "https://ntrs.nasa.gov/api/citations/20050228985/downloads/20050228985.pdf"
 CITATION_URL = "https://ntrs.nasa.gov/citations/20050228985"
 SLICE_PATH = Path("data/evaluation/multimodal_report_slice_v0_1.jsonl")
 
