@@ -101,14 +101,15 @@ Completed:
 - [x] opt-in LangGraph controller, LangChain reranked retriever adapter, and adaptive-retrieval observability
 - [x] Phase 32 edge-runtime benchmark schema, runner, JSON/Markdown artifacts, and measured MPS results
 - [x] Apple-Silicon MLX structured-generation transport with strict JSON validation and live smoke coverage
+- [x] Phase 34 controlled MLX affine 4-bit versus Transformers MPS float16 comparison, including versioned JSON/Markdown artifacts and explicit interpretation limits
 
 Next:
 
-- [ ] controlled Transformers MPS float16 versus MLX 4-bit runtime comparison
-- [ ] measured artifact size, JSON-validity, latency, P50/P95, token, and throughput comparison
-- [ ] broader MLX API/CLI provider integration only if the controlled comparison supports it
+- [ ] Phase 35 multimodal technical-report retrieval design and baseline evaluation
 
 Future:
+
+- [ ] broader MLX API/CLI provider integration only if a separately scoped evaluation justifies it
 
 - [ ] larger protected evaluation set
 - [ ] conflicting and partial evidence studies
@@ -1051,34 +1052,52 @@ The transport is intentionally provider-neutral and benchmark-oriented. It is no
 
 ---
 
-# Phase 34 — Controlled MLX 4-bit versus MPS float16 evaluation — NEXT
+# Phase 34 — Controlled MLX 4-bit versus MPS float16 evaluation — COMPLETE
 
 Question:
 
 > **On the same Apple-Silicon host and fixed structured-generation workload, what trade-offs does a genuine MLX 4-bit Qwen runtime make relative to the measured Transformers MPS float16 baseline?**
 
-Required controls:
+Implemented controls:
 
-- [ ] same question, system prompt, response schema, and output budget
-- [ ] fixed warm-up and measured-iteration protocol
-- [ ] recorded model, artifact, runtime, Python, PyTorch, and MLX versions
-- [ ] explicit device/backend evidence
-- [ ] no claim beyond the measured host
+- [x] same structured prompt and JSON schema
+- [x] 2,048-token input cap and 96-token output cap
+- [x] one warm-up and three measured iterations per runtime
+- [x] deterministic Transformers MPS float16 greedy decoding and deterministic MLX affine 4-bit sampling
+- [x] recorded model, artifact, runtime, Python, PyTorch, and MLX versions
+- [x] explicit MPS and MLX synchronization at timing boundaries
+- [x] model construction and loading excluded from per-request latency
 
-Required measurements:
+Results:
 
-- [ ] artifact size
-- [ ] structured-JSON validity rate
-- [ ] input and output token counts
-- [ ] mean, P50, and P95 latency
-- [ ] output tokens per second
-- [ ] concise qualitative output review
+| Runtime | Valid JSON | Mean latency | P50 latency | P95 latency | Output tok/s | Artifact size |
+|---|---:|---:|---:|---:|---:|---:|
+| Transformers MPS float16 | 3/3 | 715.11 ms | 699.42 ms | 742.58 ms | 39.15 | 1448.83 MiB |
+| MLX affine 4-bit, group size 128 | 3/3 | 278.43 ms | 277.85 ms | 280.47 ms | 122.11 | 313.10 MiB |
 
-The comparison must not infer quality from speed alone or silently repair malformed model output.
+The report records total token counts across the three measured runs: 186 input and 84 output tokens for Transformers, and 423 input and 102 output tokens for MLX. The differing totals are reported rather than normalized away.
+
+Tracked artifacts:
+
+```text
+configs/mlx_mps_runtime_comparison_v0_1.yaml
+reports/mlx_mps_runtime_comparison_v0_1.json
+reports/mlx_mps_runtime_comparison_v0_1.md
+scripts/run_mlx_mps_runtime_comparison_v0_1.py
+src/aeroragx/generation/mlx_mps_runtime_comparison.py
+tests/test_mlx_mps_runtime_comparison.py
+```
+
+Interpretation limits:
+
+- The result is limited to this one Apple-Silicon host and measured software environment.
+- It is not a Qualcomm QNN, Hexagon, or device-deployment measurement.
+- Latency and throughput do not establish output-quality equivalence.
+- The evaluation does not silently repair malformed output or weaken the structured JSON contract.
 
 ---
 
-# Phase 35 — Multimodal technical reports — FUTURE
+# Phase 35 — Multimodal technical reports — NEXT
 
 Potential work:
 
@@ -1113,26 +1132,28 @@ New infrastructure should follow a measured engineering requirement.
 
 # Immediate next milestone
 
-Phase 32 established the measured Transformers MPS float16 baseline. Phase 33 added a genuine local MLX 4-bit structured-generation transport and validated it with a live smoke test.
+Phase 34 completed the controlled local comparison between the established Transformers MPS float16 baseline and a genuine MLX affine 4-bit Qwen artifact. It recorded valid structured JSON in every measured run, timing, throughput, artifact size, token totals, runtime versions, and explicit interpretation limits.
 
 The next question is:
 
-> **How does MLX 4-bit inference compare with the existing MPS float16 baseline when the model, structured request, generation budget, and host are controlled?**
+> **How can AeroRAG-X retrieve and cite figures and tables from aerospace technical reports while preserving page-level provenance and measurable evaluation?**
+
+Phase 35 begins with a scoped multimodal technical-report design and a text-only baseline that remains protected.
 
 Sequence:
 
 ```text
-freeze the existing Phase 32 MPS float16 result
+freeze the current text-only corpus and retrieval baseline
         ↓
-define a provider-neutral fixed structured request
+define page-linked figure and table provenance requirements
         ↓
-run the same warm-up and measured-iteration protocol
+create a small, versioned multimodal evaluation slice
         ↓
-record artifact size, versions, backend/device evidence, and token counts
+implement figure/table extraction with explicit source-page linkage
         ↓
-measure JSON validity, latency, P50/P95, and output throughput
+evaluate text, figure, and table retrieval separately
         ↓
-publish JSON and Markdown result artifacts with limitations
+add OCR fallback only for measured extraction gaps
 ```
 
 Hard constraints:
@@ -1140,7 +1161,7 @@ Hard constraints:
 ```text
 no model-weight commits
 no changes to protected retrieval or generation evaluation data
-no parser weakening or arbitrary-text repair
-no device-general performance claims
-no quality claim based only on latency
+no citation without a source page and document identifier
+no claim of multimodal quality without a separately versioned evaluation
+no speculative hardware or provider-integration work without a measured need
 ```
