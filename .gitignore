@@ -45,3 +45,6 @@ data/training/work/
 
 # Local LoRA adapter checkpoints
 artifacts/training/adapters/
+
+# Locally generated model artifacts
+artifacts/models/

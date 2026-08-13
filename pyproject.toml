@@ -43,6 +43,10 @@ llm = [
   "transformers>=5.14,<6.0",
 ]
 
+mlx = [
+  "mlx-lm>=0.31.3,<0.32; platform_system == 'Darwin' and platform_machine == 'arm64'",
+]
+
 training = [
   "peft>=0.19.1,<0.20",
 ]
@@ -98,5 +102,9 @@ module = [
   "accelerate.*",
   "peft",
   "peft.*",
+  "mlx",
+  "mlx.*",
+  "mlx_lm",
+  "mlx_lm.*",
 ]
 ignore_missing_imports = true
