@@ -413,7 +413,20 @@ AeroRAG-X also includes an opt-in `MLXStructuredModelTransport` for Apple-Silico
 
 The live smoke test used a local affine 4-bit Qwen3-0.6B MLX artifact with group size 128 and returned valid structured JSON plus usage telemetry.
 
-This transport is a provider-neutral benchmark foundation. It is not yet exposed as an API or CLI runtime mode; that wider integration should follow a controlled comparison against the existing Transformers MPS float16 path.
+The transport remains a provider-neutral benchmark foundation. It is not exposed as an application API or CLI runtime mode.
+
+## Controlled MLX 4-bit versus Transformers MPS float16 comparison
+
+Phase 34 compared the local MLX affine 4-bit, group-size-128 Qwen artifact with the established Transformers MPS float16 baseline on the same Apple-Silicon host. Both conditions used the same structured prompt and JSON schema, a 2,048-token input cap, a 96-token output cap, one warm-up iteration, and three measured iterations. Model construction and loading were excluded from per-request timing, and each backend was synchronized at timing boundaries.
+
+| Runtime | Valid JSON | Mean latency | P50 latency | P95 latency | Output tok/s | Artifact size |
+|---|---:|---:|---:|---:|---:|---:|
+| Transformers MPS float16 | 3/3 | 715.11 ms | 699.42 ms | 742.58 ms | 39.15 | 1448.83 MiB |
+| MLX affine 4-bit, group size 128 | 3/3 | 278.43 ms | 277.85 ms | 280.47 ms | 122.11 | 313.10 MiB |
+
+The report records total token counts across measured iterations: 186 input and 84 output tokens for Transformers, and 423 input and 102 output tokens for MLX. Those totals reflect runtime-specific tokenization and returned lengths; they do not establish output-quality equivalence.
+
+These are one-host local measurements, not Qualcomm QNN, Hexagon, or device-deployment measurements. Latency and throughput are not used as a quality claim. The full configuration, per-iteration samples, environment metadata, and interpretation limits are recorded in [the MLX/MPS comparison report](reports/mlx_mps_runtime_comparison_v0_1.md).
 
 ## Edge runtime benchmark
 
@@ -430,7 +443,7 @@ On this host, Base MPS float16 reduced mean latency by approximately 41.5% and r
 
 The complete methodology, samples, and limitations are recorded in [the edge-runtime benchmark report](docs/edge-runtime-benchmark-v0_1.md).
 
-The next experiment will compare the measured MPS float16 baseline with the local MLX 4-bit runtime using the same request, bounded generation budget, and explicit structured-output validity checks.
+The controlled follow-on MLX comparison is complete and is documented in [the MLX/MPS comparison report](reports/mlx_mps_runtime_comparison_v0_1.md).
 
 # PEFT / LoRA adaptation
 
