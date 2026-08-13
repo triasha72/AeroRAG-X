@@ -211,6 +211,21 @@ def test_complete_returns_plain_json_payload_and_usage() -> None:
     assert stream_generate.calls[0]["sampler"] is sampler_factory.sampler
 
 
+def test_complete_does_not_write_generated_output(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    transport, _tokenizer, _stream_generate, _sampler_factory = make_transport(
+        '{"answer":"Supported."}'
+    )
+
+    transport.complete(
+        request=make_request(),
+        timeout_seconds=30.0,
+    )
+
+    assert capsys.readouterr().out == ""
+
+
 def test_complete_accepts_fenced_json() -> None:
     transport, _tokenizer, _stream_generate, _sampler_factory = make_transport(
         '```json\n{"answer":"Supported."}\n```'
