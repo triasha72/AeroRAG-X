@@ -1,0 +1,149 @@
+{
+  "version": "0.1",
+  "model_name": "Qwen/Qwen3-0.6B",
+  "platform": "macOS-26.6.1-arm64-arm-64bit",
+  "python_version": "3.12.13",
+  "torch_version": "2.13.0",
+  "warmup_iterations": 1,
+  "measured_iterations": 3,
+  "case_summaries": [
+    {
+      "case_name": "base_cpu_float32",
+      "device": "cpu",
+      "dtype": "float32",
+      "adapter_path": null,
+      "sample_count": 3,
+      "mean_latency_ms": 1189.2872083214268,
+      "p50_latency_ms": 1187.6472499861848,
+      "p95_latency_ms": 1194.3339871853823,
+      "total_input_tokens": 186,
+      "total_output_tokens": 84,
+      "output_tokens_per_second": 23.543513967092537
+    },
+    {
+      "case_name": "base_mps_float32",
+      "device": "mps",
+      "dtype": "float32",
+      "adapter_path": null,
+      "sample_count": 3,
+      "mean_latency_ms": 1015.0011666701175,
+      "p50_latency_ms": 1017.4094579997472,
+      "p95_latency_ms": 1017.9003711120458,
+      "total_input_tokens": 186,
+      "total_output_tokens": 84,
+      "output_tokens_per_second": 27.586175188210593
+    },
+    {
+      "case_name": "base_mps_float16",
+      "device": "mps",
+      "dtype": "float16",
+      "adapter_path": null,
+      "sample_count": 3,
+      "mean_latency_ms": 695.425041669902,
+      "p50_latency_ms": 694.6167499991134,
+      "p95_latency_ms": 700.4736871924251,
+      "total_input_tokens": 186,
+      "total_output_tokens": 84,
+      "output_tokens_per_second": 40.26314602184081
+    },
+    {
+      "case_name": "lora_mps_float16",
+      "device": "mps",
+      "dtype": "float16",
+      "adapter_path": "artifacts/training/adapters/aeroragx_lora_v0_1_best",
+      "sample_count": 3,
+      "mean_latency_ms": 1146.7060140081837,
+      "p50_latency_ms": 1146.7486660112627,
+      "p95_latency_ms": 1149.642429704545,
+      "total_input_tokens": 186,
+      "total_output_tokens": 117,
+      "output_tokens_per_second": 34.01046085358864
+    }
+  ],
+  "samples": [
+    {
+      "case_name": "base_cpu_float32",
+      "iteration": 1,
+      "latency_ms": 1195.0769579852931,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_cpu_float32",
+      "iteration": 2,
+      "latency_ms": 1185.1374169928022,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_cpu_float32",
+      "iteration": 3,
+      "latency_ms": 1187.6472499861848,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float32",
+      "iteration": 1,
+      "latency_ms": 1017.9549170134123,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float32",
+      "iteration": 2,
+      "latency_ms": 1017.4094579997472,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float32",
+      "iteration": 3,
+      "latency_ms": 1009.639124997193,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float16",
+      "iteration": 1,
+      "latency_ms": 694.6167499991134,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float16",
+      "iteration": 2,
+      "latency_ms": 690.5339170189109,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "base_mps_float16",
+      "iteration": 3,
+      "latency_ms": 701.124457991682,
+      "input_tokens": 62,
+      "output_tokens": 28
+    },
+    {
+      "case_name": "lora_mps_float16",
+      "iteration": 1,
+      "latency_ms": 1146.7486660112627,
+      "input_tokens": 62,
+      "output_tokens": 39
+    },
+    {
+      "case_name": "lora_mps_float16",
+      "iteration": 2,
+      "latency_ms": 1149.9639590037987,
+      "input_tokens": 62,
+      "output_tokens": 39
+    },
+    {
+      "case_name": "lora_mps_float16",
+      "iteration": 3,
+      "latency_ms": 1143.4054170094896,
+      "input_tokens": 62,
+      "output_tokens": 39
+    }
+  ]
+}
