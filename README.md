@@ -92,6 +92,8 @@ Closed-book Base and LoRA evaluation is implemented separately from the grounded
 - Reciprocal Rank Fusion
 - `cross-encoder/ms-marco-MiniLM-L6-v2`
 - deterministic facet-aware evidence retrieval
+- bounded adaptive retrieval with preserved provenance
+- opt-in LangGraph control and a LangChain retriever adapter
 
 ## Grounding
 
@@ -104,10 +106,11 @@ Closed-book Base and LoRA evaluation is implemented separately from the grounded
 - unknown evidence-ID rejection
 - application-side citation resolution
 - source-document provenance
+- scope-qualifier safeguard evaluated on a separately versioned held-out set
 
 ## Generation
 
-Supported runtime modes:
+Supported application runtime modes:
 
 ```text
 local
@@ -125,13 +128,10 @@ Transformers generation can run as:
 
 ```text
 Base Qwen
-```
-
-or:
-
-```text
 Qwen + PEFT / LoRA adapter
 ```
+
+An additional Apple-Silicon MLX-LM structured transport is available for controlled local low-bit experiments. It is intentionally separate from the application runtime selector until it has been compared against the established Transformers MPS baseline.
 
 ## Serving and operations
 
@@ -145,9 +145,8 @@ Qwen + PEFT / LoRA adapter
 - provider latency telemetry
 - token telemetry
 - provider call/bypass telemetry
+- adaptive-retrieval orchestrator metadata
 - GitHub Actions CI
-
----
 
 # Engineering principles
 
@@ -379,13 +378,9 @@ This keeps citation authority on the application side.
 
 # Local language-model generation
 
-Current local model:
+The primary local generation path uses `Qwen/Qwen3-0.6B` through Hugging Face Transformers.
 
-```text
-Qwen/Qwen3-0.6B
-```
-
-The Hugging Face runtime supports:
+The Transformers runtime supports:
 
 - `AutoTokenizer`
 - `AutoModelForCausalLM`
@@ -402,9 +397,40 @@ The Hugging Face runtime supports:
 - token telemetry
 - latency telemetry
 
-The same Transformers transport is reused for Base and LoRA conditions.
+The same Transformers transport is reused for the Base and LoRA conditions.
 
----
+## Experimental Apple Silicon MLX transport
+
+AeroRAG-X also includes an opt-in `MLXStructuredModelTransport` for Apple-Silicon local inference with MLX-LM.
+
+- The optional `mlx` dependency extra is limited to macOS arm64.
+- Qwen chat prompts are built with the model tokenizer and `enable_thinking: false`.
+- Prompt and output budgets are validated before generation.
+- Sampling is deterministic by default.
+- The transport accepts only a JSON object (plain or fenced) and reports token usage.
+- Generated content is not printed to stdout.
+- Local MLX model artifacts remain untracked and ignored by Git.
+
+The live smoke test used a local affine 4-bit Qwen3-0.6B MLX artifact with group size 128 and returned valid structured JSON plus usage telemetry.
+
+This transport is a provider-neutral benchmark foundation. It is not yet exposed as an API or CLI runtime mode; that wider integration should follow a controlled comparison against the existing Transformers MPS float16 path.
+
+## Edge runtime benchmark
+
+The completed Apple-Silicon benchmark uses a fixed structured-generation request with one warm-up iteration and three measured iterations per case. Model loading is excluded from per-request latency, and MPS work is synchronized at timing boundaries.
+
+| Configuration | Mean latency | Output throughput |
+|---|---:|---:|
+| CPU float32 | 1189.29 ms | 23.54 tok/s |
+| MPS float32 | 1015.00 ms | 27.59 tok/s |
+| MPS float16 | **695.43 ms** | **40.26 tok/s** |
+| LoRA MPS float16 | 1146.71 ms | 34.01 tok/s |
+
+On this host, Base MPS float16 reduced mean latency by approximately 41.5% and raised output throughput by approximately 71.0% relative to Base CPU float32. The LoRA case produced more output tokens, so its raw latency is not an identical-workload comparison.
+
+The complete methodology, samples, and limitations are recorded in [the edge-runtime benchmark report](docs/edge-runtime-benchmark-v0_1.md).
+
+The next experiment will compare the measured MPS float16 baseline with the local MLX 4-bit runtime using the same request, bounded generation budget, and explicit structured-output validity checks.
 
 # PEFT / LoRA adaptation
 
@@ -920,7 +946,7 @@ Core development:
 python -m pip install -e ".[dev]"
 ```
 
-Local language-model support:
+Local Transformers language-model support:
 
 ```bash
 python -m pip install -e ".[dev,llm]"
@@ -938,13 +964,19 @@ Training support:
 python -m pip install -e ".[dev,llm,training]"
 ```
 
-Complete local development environment:
+Apple-Silicon MLX structured-transport support (macOS arm64 only):
 
 ```bash
-python -m pip install -e ".[dev,vector,llm,training]"
+python -m pip install -e ".[dev,mlx]"
 ```
 
----
+Complete local development environment on Apple Silicon:
+
+```bash
+python -m pip install -e ".[dev,vector,llm,training,agentic,mlx]"
+```
+
+The MLX extra does not download model weights. Real-model evaluations require a separately available local model artifact and remain opt-in.
 
 # Validation
 
@@ -983,25 +1015,7 @@ The project does not currently claim production-scale local-LLM GPU deployment p
 
 # Current research direction
 
-Phase 24 semantic and claim-level evaluation is complete.
-
-The completed evaluation asks:
-
-> **Does increased formal claim decomposition correspond to better supported technical content?**
-
-The answer is qualified rather than binary.
-
-On the protected grounded benchmark:
-
-- LoRA + RAG increased conservative expected-concept coverage from **38.16%** to **51.32%**;
-- strict claim-to-evidence support remained broadly similar (**65.62%** Base + RAG vs **67.92%** LoRA + RAG);
-- full answer-to-claim capture increased from **10.00%** to **45.00%**;
-- full-or-partial answer-to-claim capture increased from **60.00%** to **95.00%**;
-- full redundancy remained low (**0.00%** vs **1.89%**), while partial semantic overlap increased (**12.50%** vs **39.62%**);
-- both grounded conditions achieved **100% safe non-assertion** on the 12 protected unsupported queries;
-- the LoRA condition retained **3 contradicted claims** under the frozen claim-support policy, versus **0** for Base + RAG.
-
-The result is not treated as universal model superiority. It shows that, on this protected benchmark, LoRA produced richer and more complete formal technical decomposition while preserving broadly similar evidence-support rates, at the cost of substantially more partial overlap and a small number of contradicted claims.
+Phase 24 semantic and claim-level evaluation is complete. On the protected grounded benchmark, LoRA + RAG increased conservative expected-concept coverage from **38.16%** to **51.32%** and full answer-to-claim capture from **10.00%** to **45.00%**, while strict claim-to-evidence support remained broadly similar (**65.62%** Base + RAG versus **67.92%** LoRA + RAG). The result remains qualified: LoRA also increased partial overlap and retained three contradicted claims under the frozen policy.
 
 The frozen consolidated report is:
 
@@ -1009,84 +1023,42 @@ The frozen consolidated report is:
 reports/phase24_quality_v0_1.md
 ```
 
-## Next: bounded adaptive retrieval
+The bounded adaptive-retrieval implementation and protected paired evaluation are also complete. The evaluation recorded a negative result: the opt-in adaptive policy reduced answerability from **91.67%** to **83.33%** and unsupported refusal from **83.33%** to **66.67%** on the frozen Phase 26 comparison. That result is preserved rather than tuned away.
 
-The next experiment asks:
+A separate opt-in scope-qualifier safeguard was then evaluated on its own held-out set. It improved answerability from **50.00%** to **92.86%** and unsupported-query refusal from **40.00%** to **100.00%**, without changing the protected Phase 26 data or policy.
 
-> **Can one bounded retrieval-recovery step improve weak-evidence questions without sacrificing grounding, deterministic termination, or citation integrity?**
+The current engineering focus is a controlled local-runtime comparison:
 
-Proposed workflow:
+> **How does the established Transformers MPS float16 baseline compare with a genuine MLX 4-bit Qwen runtime on the same Apple-Silicon host and structured-generation workload?**
 
-```text
-question
-   ↓
-retrieve
-   ↓
-assess evidence
-   ↓
-sufficient? ───── yes ───→ generate
-   │
-   no
-   ↓
-rewrite query
-   ↓
-retrieve once more
-   ↓
-assess again
-   ↓
-generate or grounded refusal
-```
-
-Hard limit:
-
-```text
-maximum retrieval passes = 2
-```
-
-The objective is not unrestricted autonomous behavior. The recovery path remains bounded, observable, and testable.
-
----
+The comparison will record artifact size, runtime and model versions, prompt/output token counts, structured-JSON validity, latency, P50/P95, and output throughput. It will not make device-general performance claims or infer quality from latency alone.
 
 # Current status
 
 ```text
-NASA corpus                               DONE
-citation-preserving processing            DONE
-BM25                                      DONE
-dense retrieval                           DONE
-Hybrid RRF                                DONE
-cross-encoder reranking                   DONE
-evidence sufficiency                      DONE
-grounded generation                       DONE
-OpenAI provider                           DONE
-local Qwen provider                       DONE
-FastAPI                                   DONE
-Docker                                    DONE
-observability                             DONE
-private Cloud Run validation              DONE
-pgvector                                  DONE
-PEFT / LoRA training                      DONE
-LoRA failure analysis                     DONE
-structured-generation hardening           DONE
-Base+RAG vs LoRA+RAG evaluation           DONE
-closed-book Base / LoRA evaluation        DONE
-canonical-refusal normalization           DONE
-four-way Base / LoRA system study         DONE
+NASA corpus                                      DONE
+citation-preserving processing                   DONE
+BM25 / dense / hybrid / reranked retrieval      DONE
+evidence sufficiency and grounded generation    DONE
+OpenAI and Transformers providers               DONE
+FastAPI, Docker, observability, Cloud Run       DONE
+pgvector validation                              DONE
+PEFT / LoRA training and failure analysis       DONE
+four-way Base / LoRA system study                DONE
+Phase 24 semantic and claim-level evaluation    DONE
 
-semantic expected-concept evaluation      DONE
-claim-evidence support                    DONE
-answer-to-claim completeness              DONE
-within-answer claim redundancy            DONE
-unsupported-response taxonomy             DONE
-Phase 24 consolidated quality report      DONE
+bounded adaptive retrieval                       DONE
+protected adaptive-retrieval evaluation          DONE (negative result preserved)
+scope-qualifier safeguard + held-out evaluation  DONE (opt-in)
+LangGraph / LangChain integration boundaries     DONE
+adaptive-retrieval observability                 DONE
 
-bounded adaptive retrieval                NEXT
-adaptive-retrieval evaluation             PLANNED
-efficient local inference                 LATER
-multimodal technical-report retrieval     FUTURE
+edge-runtime benchmark schema and runner         DONE
+Apple-Silicon MPS float16 benchmark              DONE
+MLX structured-transport foundation              DONE
+MLX 4-bit versus MPS float16 comparison          NEXT
+multimodal technical-report retrieval            FUTURE
 ```
-
----
 
 # What AeroRAG-X is not
 
