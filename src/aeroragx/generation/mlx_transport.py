@@ -350,9 +350,7 @@ class MLXStructuredModelTransport:
             if isinstance(reported_input_tokens, int) and reported_input_tokens >= 0
             else len(prompt_tokens)
         )
-        print(
-            f"DEBUG: generated_text length={len(generated_text)}; value={generated_text[:1500]!r}"
-        )
+
         return StructuredModelResult(
             payload=_parse_json_object(generated_text),
             request_id=None,
