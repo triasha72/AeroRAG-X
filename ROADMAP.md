@@ -1105,9 +1105,13 @@ Completed foundation:
 - [x] versioned manually verified evaluation slice with five visual assets
 - [x] checksum-verified whole-page PNG rendering for linked source pages
 - [x] deterministic `PageRenderRecord` JSONL manifest and local runner
+- [x] deterministic independent-review task and response contracts
+- [x] versioned five-task multimodal annotation-task set
 
 Next:
 
+- [ ] obtain two independently completed, versioned review response sets
+- [ ] report agreement and disagreements without overstating reliability
 - [ ] larger versioned multimodal corpus with independent annotation review
 - [ ] automatic figure/table detection and caption association
 - [ ] table extraction and structured tables
@@ -1145,7 +1149,9 @@ The next question is:
 
 > **How can AeroRAG-X retrieve and cite figures and tables from aerospace technical reports while preserving page-level provenance and measurable evaluation?**
 
-Phase 35 begins with a scoped multimodal technical-report design and a text-only baseline that remains protected.
+Phase 35 has established page-linked provenance, a manually verified five-asset
+slice, checksum-verified rendering, a deterministic render manifest, and a
+deterministic independent-review task set. The text-only baseline remains protected.
 
 Sequence:
 
@@ -1156,7 +1162,13 @@ define page-linked figure and table provenance requirements
         ↓
 create a small, versioned multimodal evaluation slice
         ↓
-implement figure/table extraction with explicit source-page linkage
+render linked pages and write a deterministic provenance manifest
+        ↓
+define and independently complete versioned annotation tasks
+        ↓
+expand the candidate corpus and measure reviewer agreement
+        ↓
+implement figure/table detection with explicit source-page linkage
         ↓
 evaluate text, figure, and table retrieval separately
         ↓

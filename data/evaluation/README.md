@@ -54,6 +54,29 @@ data/derived/multimodal/page_renders/
 
 Those derived files are ignored by Git and can be regenerated locally.
 
+### Multimodal annotation tasks v0.1
+
+```text
+multimodal_annotation_tasks_v0_1.jsonl
+```
+
+The deterministic task set is built from the five validated visual-asset
+records in `multimodal_report_slice_v0_1.jsonl`. Each task preserves the same
+page and source provenance and asks an independent reviewer to verify the
+figure/table record and its caption relationship.
+
+Task rows contain no reviewer decision. This repository does not yet contain
+two independently completed response sets or report an agreement value. The
+included agreement helper reports raw exact decision agreement only after real,
+versioned responses are available; it is not a chance-corrected reliability
+claim.
+
+Rebuild the tasks with:
+
+```bash
+python scripts/build_multimodal_annotation_tasks_v0_1.py
+```
+
 ---
 
 # Part I — Retrieval evaluation
