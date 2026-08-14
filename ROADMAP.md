@@ -1308,3 +1308,17 @@ Next: Phase 42 distributed runtime.
 - [ ] distributed tracing and retry/degradation instrumentation
 
 Next: Phase 43 distributed reliability.
+
+<!-- phase43-distributed-reliability-v0_1 -->
+# Phase 43 — Distributed reliability
+
+- [x] bounded async service retries
+- [x] retry classification for timeout/server errors
+- [x] OpenTelemetry propagation helpers
+- [x] Prometheus service metrics
+- [x] safe no-answer degradation contract
+- [x] reliability regression tests
+- [ ] measured concurrent-load benchmark
+- [ ] measured fault-injection benchmark
+
+Next: Phase 44 distributed reliability benchmark.

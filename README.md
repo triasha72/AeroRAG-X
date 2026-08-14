@@ -1167,3 +1167,10 @@ AeroRAG-X now has separately containerizable Agent API, Retrieval, and
 Inference service boundaries with Docker Compose wiring, health endpoints,
 typed async clients, and citation-preserving cross-service orchestration.
 Unconfigured backends report not-ready rather than pretending to succeed.
+
+<!-- phase43-distributed-reliability-v0_1 -->
+## Distributed reliability
+
+Cross-service operations now have bounded async retries, OpenTelemetry context
+propagation, Prometheus service-call metrics, and explicit safe degradation.
+Required dependency failure returns no generated answer and no citations.
