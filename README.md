@@ -1182,3 +1182,11 @@ AeroRAG-X now has a reproducible concurrent-request harness and deterministic
 metrics for latency, timeout, recovery, safe-refusal, and unsafe-answer behavior.
 The checked-in report is intentionally a measurement template; results must
 come from actual scenario runs.
+
+<!-- phase45-grpo-reward-harness-v0_1 -->
+## GRPO reward harness
+
+AeroRAG-X now has transparent multi-objective reward contracts for grounded
+post-training, anti-reward-hacking regression tests, and a hard disjoint-case
+guard between training and frozen evaluation. This phase establishes the
+experiment harness only; no RL result is claimed yet.

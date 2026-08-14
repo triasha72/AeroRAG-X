@@ -55,6 +55,12 @@ training = [
 agentic = [
   "langgraph>=1.0,<2.0",
 ]
+rl = [
+  "trl>=1.6,<2.0",
+  "datasets>=4.7,<5.0",
+  "jmespath>=1.0,<2.0",
+]
+
 dev = [
   "click>=8.1,<9.0",
   "mypy>=1.11,<2.0",

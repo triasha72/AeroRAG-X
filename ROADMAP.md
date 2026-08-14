@@ -1339,3 +1339,17 @@ Next: Phase 44 distributed reliability benchmark.
 - [ ] freeze measured report
 
 No SLO or reliability claim is complete until measured runs are frozen.
+
+<!-- phase45-grpo-reward-harness-v0_1 -->
+# Phase 45 — GRPO reward harness
+
+- [x] grounded training-case contract
+- [x] multi-objective reward weights
+- [x] refusal/citation/evidence/tool-efficiency rewards
+- [x] reward-hacking regression tests
+- [x] training/evaluation leakage guard
+- [x] reproducible experiment config
+- [ ] execute GRPO training
+- [ ] evaluate trained policy on frozen held-out set
+
+Next: Phase 46 bounded grounded-agent GRPO experiment.
