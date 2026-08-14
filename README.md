@@ -1159,3 +1159,11 @@ AeroRAG-X now defines typed Agent, Retrieval, and Inference service boundaries
 with propagated request/trace/thread IDs and provenance-preserving evidence
 records. Async clients validate network responses before they enter agent
 state.
+
+<!-- phase42-distributed-runtime-v0_1 -->
+## Distributed runtime
+
+AeroRAG-X now has separately containerizable Agent API, Retrieval, and
+Inference service boundaries with Docker Compose wiring, health endpoints,
+typed async clients, and citation-preserving cross-service orchestration.
+Unconfigured backends report not-ready rather than pretending to succeed.

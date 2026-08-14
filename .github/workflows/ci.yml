@@ -51,6 +51,8 @@ jobs:
         run: ruff check .
 
       - name: Tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: pytest --cov=aeroragx --cov-report=term-missing
 
       - name: Type check package
