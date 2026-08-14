@@ -1097,12 +1097,19 @@ Interpretation limits:
 
 ---
 
-# Phase 35 — Multimodal technical reports — NEXT
+# Phase 35 — Multimodal technical reports — IN PROGRESS
 
-Potential work:
+Completed foundation:
 
-- [ ] figure detection and captions
-- [ ] page linkage
+- [x] page-linked figure/table provenance contract and validation
+- [x] versioned manually verified evaluation slice with five visual assets
+- [x] checksum-verified whole-page PNG rendering for linked source pages
+- [x] deterministic `PageRenderRecord` JSONL manifest and local runner
+
+Next:
+
+- [ ] larger versioned multimodal corpus with independent annotation review
+- [ ] automatic figure/table detection and caption association
 - [ ] table extraction and structured tables
 - [ ] image retrieval and citations
 - [ ] table citations
