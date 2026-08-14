@@ -1,0 +1,2 @@
+{"case_id":"synthetic-train-supported-001","query":"SYNTHETIC TRAINING CASE: report the supplied value with evidence.","answerable":true,"evidence":[{"evidence_id":"train-e1","document_id":1,"text":"The synthetic test value is 42.","citation_url":"https://example.invalid/train/1"}],"reference_answer":"42","expected_citation_ids":["train-e1"]}
+{"case_id":"synthetic-train-unsupported-001","query":"SYNTHETIC TRAINING CASE: no supporting evidence exists.","answerable":false,"evidence":[],"reference_answer":null,"expected_citation_ids":[]}

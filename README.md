@@ -1190,3 +1190,12 @@ AeroRAG-X now has transparent multi-objective reward contracts for grounded
 post-training, anti-reward-hacking regression tests, and a hard disjoint-case
 guard between training and frozen evaluation. This phase establishes the
 experiment harness only; no RL result is claimed yet.
+
+<!-- phase46-grpo-grounded-agent-v0_1 -->
+## Grounded tool-using GRPO experiment
+
+AeroRAG-X now has a stateful TRL-compatible environment exposing bounded
+retrieve, sufficiency, submit, and refusal tools plus an explicit
+validation-only training command. The checked-in training rows are synthetic
+format fixtures; no model-improvement claim is made without a real executed
+training run and held-out evaluation.

@@ -1353,3 +1353,19 @@ No SLO or reliability claim is complete until measured runs are frozen.
 - [ ] evaluate trained policy on frozen held-out set
 
 Next: Phase 46 bounded grounded-agent GRPO experiment.
+
+<!-- phase46-grpo-grounded-agent-v0_1 -->
+# Phase 46 — Grounded-agent GRPO experiment
+
+- [x] stateful tool-use training environment
+- [x] bounded tool surface
+- [x] environment-owned reward integration
+- [x] lazy TRL trainer integration
+- [x] validation-only/default-safe training CLI
+- [x] synthetic format fixtures
+- [ ] prepare real versioned training set
+- [ ] verify disjoint protected evaluation IDs
+- [ ] execute training on suitable hardware
+- [ ] freeze model/config/data hashes
+
+Next: Phase 47 held-out Base vs LoRA vs GRPO ablation.
