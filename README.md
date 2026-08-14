@@ -1127,3 +1127,11 @@ LangGraph agent. Planner decisions are schema-constrained, tools remain
 explicitly registered, graph/tool budgets are enforced, and every run terminates
 with an inspectable reason. Checkpoint persistence and human-review resumption
 remain Phase 38.
+
+<!-- phase38-checkpointing-hitl-v0_1 -->
+## Agent checkpointing and human review
+
+Agent state can now be persisted as immutable checkpoints and resumed after a
+bounded human-review interruption. Review decisions are explicit and the
+pre-review state remains unchanged. The initial checkpoint store is a local
+development implementation; distributed persistence is deferred.
