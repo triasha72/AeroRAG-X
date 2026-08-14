@@ -48,3 +48,6 @@ artifacts/training/adapters/
 
 # Locally generated model artifacts
 artifacts/models/
+
+# Locally rendered multimodal page images
+data/derived/multimodal/page_renders/
