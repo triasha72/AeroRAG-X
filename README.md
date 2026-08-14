@@ -1096,3 +1096,14 @@ It is an experiment in building and measuring **evidence-grounded technical know
 # License
 
 MIT
+
+<!-- phase35-review-evidence-v0_1 -->
+## Phase 35 review-evidence gate
+
+The Phase 35 multimodal foundation now includes a strict complete-review
+evidence gate. The existing raw agreement helper remains available for
+shared-task analysis, but final review evidence requires both independent
+reviewers to cover every frozen task exactly once before an agreement artifact
+can be generated. The next evidence is two genuine, independently completed
+review-response sets; automatic figure/table detection remains downstream of
+that evidence gate.

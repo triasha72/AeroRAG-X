@@ -62,6 +62,7 @@ jobs:
           mypy scripts/benchmark_vector_backends.py
           mypy scripts/render_multimodal_report_slice_v0_1.py
           mypy scripts/build_multimodal_annotation_tasks_v0_1.py
+          mypy scripts/finalize_multimodal_annotation_v0_1.py
 
       - name: Frozen generation regression policy
         run: |
