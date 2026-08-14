@@ -1151,3 +1151,11 @@ metrics for terminal correctness, required/forbidden tool behavior, budget
 compliance, safe refusal, tool-call efficiency, and latency. The checked-in
 cases are synthetic contract fixtures only; domain benchmark claims require a
 separately curated frozen evaluation set and recorded runs.
+
+<!-- phase41-service-contracts-v0_1 -->
+## Distributed service contracts
+
+AeroRAG-X now defines typed Agent, Retrieval, and Inference service boundaries
+with propagated request/trace/thread IDs and provenance-preserving evidence
+records. Async clients validate network responses before they enter agent
+state.
