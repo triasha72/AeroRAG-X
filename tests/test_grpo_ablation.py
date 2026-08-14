@@ -37,8 +37,6 @@ def test_ablation_requires_same_case_ids() -> None:
 
 
 def test_ablation_reports_all_variants() -> None:
-    result = build_ablation(
-        [row("base"), row("lora_sft"), row("grpo")]
-    )
+    result = build_ablation([row("base"), row("lora_sft"), row("grpo")])
     assert result.base.task_success_rate == 1.0
     assert result.grpo.case_count == 1

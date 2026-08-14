@@ -62,7 +62,7 @@ def summarize_variant(
 
     count = len(observations)
     latencies = sorted(item.latency_ms for item in observations)
-    p95_index = max(int(round(0.95 * (count - 1))), 0)
+    p95_index = max(round(0.95 * (count - 1)), 0)
 
     return PolicyEvaluationMetrics(
         case_count=count,
@@ -70,12 +70,8 @@ def summarize_variant(
         refusal_accuracy=sum(item.refusal_correct for item in observations) / count,
         citation_validity_rate=sum(item.citation_valid for item in observations) / count,
         evidence_support_rate=sum(item.evidence_supported for item in observations) / count,
-        tool_selection_accuracy=(
-            sum(item.tool_selection_correct for item in observations) / count
-        ),
-        structured_output_rate=(
-            sum(item.structured_output_valid for item in observations) / count
-        ),
+        tool_selection_accuracy=(sum(item.tool_selection_correct for item in observations) / count),
+        structured_output_rate=(sum(item.structured_output_valid for item in observations) / count),
         mean_tool_calls=sum(item.tool_calls for item in observations) / count,
         p50_latency_ms=float(median(latencies)),
         p95_latency_ms=latencies[p95_index],
@@ -103,14 +99,8 @@ def build_ablation(
     if not all(by_variant.values()):
         raise ValueError("Ablation requires base, lora_sft, and grpo observations.")
 
-    if not (
-        case_sets["base"]
-        == case_sets["lora_sft"]
-        == case_sets["grpo"]
-    ):
-        raise ValueError(
-            "All ablation variants must evaluate exactly the same held-out case IDs."
-        )
+    if not (case_sets["base"] == case_sets["lora_sft"] == case_sets["grpo"]):
+        raise ValueError("All ablation variants must evaluate exactly the same held-out case IDs.")
 
     return PolicyAblationResult(
         base=summarize_variant(by_variant["base"]),
