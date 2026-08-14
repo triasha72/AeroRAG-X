@@ -1174,3 +1174,11 @@ Unconfigured backends report not-ready rather than pretending to succeed.
 Cross-service operations now have bounded async retries, OpenTelemetry context
 propagation, Prometheus service-call metrics, and explicit safe degradation.
 Required dependency failure returns no generated answer and no citations.
+
+<!-- phase44-distributed-reliability-benchmark-v0_1 -->
+## Distributed reliability benchmark
+
+AeroRAG-X now has a reproducible concurrent-request harness and deterministic
+metrics for latency, timeout, recovery, safe-refusal, and unsafe-answer behavior.
+The checked-in report is intentionally a measurement template; results must
+come from actual scenario runs.

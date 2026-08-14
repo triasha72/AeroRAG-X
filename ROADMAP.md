@@ -1322,3 +1322,20 @@ Next: Phase 43 distributed reliability.
 - [ ] measured fault-injection benchmark
 
 Next: Phase 44 distributed reliability benchmark.
+
+<!-- phase44-distributed-reliability-benchmark-v0_1 -->
+# Phase 44 — Distributed reliability benchmark
+
+- [x] concurrent request harness
+- [x] per-request observation schema
+- [x] success/timeout/recovery metrics
+- [x] safe-refusal and unsafe-answer metrics
+- [x] p50/p95 latency metrics
+- [x] scenario configuration
+- [ ] run healthy baseline
+- [ ] run retrieval fault scenarios
+- [ ] run inference fault scenarios
+- [ ] run vector-store fault scenario
+- [ ] freeze measured report
+
+No SLO or reliability claim is complete until measured runs are frozen.

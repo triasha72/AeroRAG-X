@@ -1,0 +1,20 @@
+version: v0_1
+scenarios:
+  - healthy
+  - retrieval_slow
+  - retrieval_unavailable
+  - inference_slow
+  - inference_unavailable
+  - vector_store_unavailable
+  - malformed_service_response
+recommended_local_run:
+  requests: 50
+  concurrency: 5
+metrics:
+  - success_rate
+  - timeout_rate
+  - recovery_rate
+  - safe_refusal_rate
+  - unsafe_answer_rate
+  - p50_latency_ms
+  - p95_latency_ms
