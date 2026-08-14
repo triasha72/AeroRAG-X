@@ -21,6 +21,8 @@ dependencies = [
   "opentelemetry-sdk>=1.44,<2.0",
   "pydantic>=2.8,<3.0",
   "pypdf>=5.0,<7.0",
+  "pypdfium2>=5.7,<6.0",
+  "Pillow>=10.0,<12.0",
   "prometheus-client>=0.25,<1.0",
   "pyyaml>=6.0,<7.0",
   "rich>=13.7,<15.0",
@@ -106,5 +108,7 @@ module = [
   "mlx.*",
   "mlx_lm",
   "mlx_lm.*",
+  "pypdfium2",
+  "pypdfium2.*",
 ]
 ignore_missing_imports = true
