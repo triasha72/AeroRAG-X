@@ -1200,3 +1200,21 @@ no speculative hardware or provider-integration work without a measured need
 
 Automatic figure/table detection, OCR, visual indexing, and multimodal
 retrieval remain downstream of the completed review-evidence gate.
+
+<!-- phase36-agent-tool-contracts-v0_1 -->
+# Phase 36 — Bounded agent tool contracts
+
+- [x] typed tool input/output contracts
+- [x] provenance-preserving hybrid retrieval boundary
+- [x] authoritative source-context boundary
+- [x] evidence-sufficiency tool boundary
+- [x] deterministic citation-validation tool
+- [x] structured multi-source comparison boundary
+- [x] explicit allowed-tool registry
+- [x] bounded agent state contract
+- [x] tool/step/retrieval budgets
+- [x] structured backend-failure records
+- [x] focused contract/state/tool tests
+
+Next: Phase 37 implements dynamic stateful LangGraph routing over these bounded
+tools. Phase 36 alone is not an autonomous-agent claim.
