@@ -66,8 +66,7 @@ def evaluate_agent_trajectories(
 
         if case.answerable:
             completion_hits += int(
-                run.state.termination_reason == "answer_completed"
-                and run.answer is not None
+                run.state.termination_reason == "answer_completed" and run.answer is not None
             )
         else:
             completion_hits += int(
@@ -82,8 +81,7 @@ def evaluate_agent_trajectories(
             )
 
         selection_hits += int(
-            required_set.issubset(used_tool_set)
-            and not (forbidden_set & used_tool_set)
+            required_set.issubset(used_tool_set) and not (forbidden_set & used_tool_set)
         )
         required_total += len(required_set)
         required_hits += sum(tool in used_tool_set for tool in required_set)
@@ -112,26 +110,20 @@ def evaluate_agent_trajectories(
         latencies.append(observation.latency_ms)
 
     ordered = sorted(latencies)
-    p95_index = max(int(round(0.95 * (len(ordered) - 1))), 0)
+    p95_index = max(round(0.95 * (len(ordered) - 1)), 0)
 
     return AgentTrajectoryMetrics(
         case_count=len(observations),
         task_completion_rate=completion_hits / len(observations),
         termination_accuracy=termination_hits / len(observations),
         tool_selection_accuracy=selection_hits / len(observations),
-        required_tool_recall=(
-            1.0 if required_total == 0 else required_hits / required_total
-        ),
+        required_tool_recall=(1.0 if required_total == 0 else required_hits / required_total),
         forbidden_tool_avoidance=forbidden_clean / len(observations),
         tool_budget_compliance=budget_hits / len(observations),
-        safe_refusal_accuracy=(
-            1.0 if refusal_total == 0 else refusal_hits / refusal_total
-        ),
+        safe_refusal_accuracy=(1.0 if refusal_total == 0 else refusal_hits / refusal_total),
         retry_case_rate=retry_cases / len(observations),
         recovery_success_rate=(
-            1.0
-            if recovery_attempt_cases == 0
-            else recovery_successes / recovery_attempt_cases
+            1.0 if recovery_attempt_cases == 0 else recovery_successes / recovery_attempt_cases
         ),
         human_review_trigger_rate=human_review_cases / len(observations),
         mean_tool_calls=sum(tool_calls) / len(tool_calls),
