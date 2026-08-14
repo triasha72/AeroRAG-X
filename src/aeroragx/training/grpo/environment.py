@@ -115,23 +115,15 @@ class GroundedAgentEnvironment:
             answered
             and self._case.reference_answer is not None
             and self._submitted_answer is not None
-            and self._case.reference_answer.casefold()
-            in self._submitted_answer.casefold()
+            and self._case.reference_answer.casefold() in self._submitted_answer.casefold()
         )
         citation_valid = cited_ids.issubset(
             {item.evidence_id for item in self._case.evidence}
-        ) and (
-            not expected_ids or expected_ids.issubset(cited_ids)
-        )
+        ) and (not expected_ids or expected_ids.issubset(cited_ids))
         evidence_supported = (
-            answered
-            and self._retrieved
-            and citation_valid
-            and bool(self._case.evidence)
+            answered and self._retrieved and citation_valid and bool(self._case.evidence)
         )
-        necessary_tool_calls = (
-            1 if not self._case.answerable else 3
-        )
+        necessary_tool_calls = 1 if not self._case.answerable else 3
 
         score = score_grounded_rollout(
             GroundedRewardInput(
@@ -143,11 +135,7 @@ class GroundedAgentEnvironment:
                 evidence_supported=bool(evidence_supported),
                 structured_output_valid=answered or self._refused,
                 required_tool_selected=(
-                    self._retrieved
-                    and (
-                        self._sufficiency_checked
-                        or not self._case.answerable
-                    )
+                    self._retrieved and (self._sufficiency_checked or not self._case.answerable)
                 ),
                 tool_call_count=self._tool_calls,
                 necessary_tool_calls=necessary_tool_calls,
