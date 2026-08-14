@@ -1107,3 +1107,14 @@ reviewers to cover every frozen task exactly once before an agreement artifact
 can be generated. The next evidence is two genuine, independently completed
 review-response sets; automatic figure/table detection remains downstream of
 that evidence gate.
+
+<!-- phase36-agent-tool-contracts-v0_1 -->
+## Bounded agent-tool foundation
+
+AeroRAG-X now has a typed tool boundary for the next agentic stage. The Phase 36
+registry exposes hybrid retrieval, authoritative source-context lookup,
+evidence-sufficiency assessment, deterministic citation validation, and
+structured multi-source comparison. Explicit agent state budgets track graph
+steps, tool calls, retrieval attempts, evidence identity, failures, and terminal
+reasons. Dynamic tool selection and stateful LangGraph routing remain a later
+phase rather than being claimed by the contracts alone.
