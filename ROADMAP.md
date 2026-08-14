@@ -1277,3 +1277,18 @@ Next: Phase 40 evaluates agent trajectories and recovery behavior.
 - [ ] publish measured comparison
 
 The harness is complete; performance claims remain blocked on real frozen data.
+
+<!-- phase41-service-contracts-v0_1 -->
+# Phase 41 — Microservice contracts
+
+- [x] cross-service request context
+- [x] retrieval request/response contracts
+- [x] inference request/response contracts
+- [x] Agent API contracts
+- [x] structured service errors
+- [x] health contract
+- [x] typed async HTTP clients
+- [ ] independent containers
+- [ ] Docker Compose orchestration
+
+Next: Phase 42 distributed runtime.
