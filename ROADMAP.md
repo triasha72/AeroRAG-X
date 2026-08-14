@@ -1292,3 +1292,19 @@ The harness is complete; performance claims remain blocked on real frozen data.
 - [ ] Docker Compose orchestration
 
 Next: Phase 42 distributed runtime.
+
+<!-- phase42-distributed-runtime-v0_1 -->
+# Phase 42 — Distributed runtime
+
+- [x] Agent API process
+- [x] Retrieval Service process
+- [x] Inference Service process
+- [x] separate Dockerfiles
+- [x] Docker Compose topology
+- [x] liveness/readiness endpoints
+- [x] cross-service async contracts
+- [x] citation identity check at Agent API boundary
+- [ ] real backend adapters in deployment environment
+- [ ] distributed tracing and retry/degradation instrumentation
+
+Next: Phase 43 distributed reliability.
