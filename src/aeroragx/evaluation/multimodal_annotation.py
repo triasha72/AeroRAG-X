@@ -1,4 +1,4 @@
-"""Deterministic task and response contracts for multimodal annotation review."""
+"""Deterministic task, response, and evidence contracts for multimodal review."""
 
 import json
 from collections.abc import Sequence
@@ -16,6 +16,7 @@ from aeroragx.processing.multimodal_provenance import (
 AnnotationDecision = Literal["confirmed", "rejected", "uncertain"]
 AnnotationTaskKind = Literal["asset_record_verification"]
 AnnotationTaskVersion = Literal["v0_1"]
+AnnotationEvaluationName = Literal["multimodal_asset_record_verification"]
 
 
 def build_multimodal_annotation_task_id(
@@ -55,7 +56,6 @@ class MultimodalAnnotationTask(BaseModel):
         """Ensure every task preserves its deterministic page and asset identity."""
 
         expected_page_id = f"{self.document_id}:page:{self.page_number}"
-
         if self.page_id != expected_page_id:
             raise ValueError(
                 f"page_id must equal '{expected_page_id}' for document_id and page_number."
@@ -66,7 +66,6 @@ class MultimodalAnnotationTask(BaseModel):
             self.asset_type,
             self.asset_index,
         )
-
         if self.asset_id != expected_asset_id:
             raise ValueError(
                 "asset_id must equal "
@@ -77,7 +76,6 @@ class MultimodalAnnotationTask(BaseModel):
             self.asset_id,
             self.task_version,
         )
-
         if self.task_id != expected_task_id:
             raise ValueError(
                 f"task_id must equal '{expected_task_id}' for asset_id and task_version."
@@ -126,7 +124,6 @@ class MultimodalAnnotationAgreementSummary(BaseModel):
             raise ValueError("exact_match_count cannot exceed comparable_task_count.")
 
         expected_disagreement_count = self.comparable_task_count - self.exact_match_count
-
         if len(self.disagreement_task_ids) != expected_disagreement_count:
             raise ValueError("disagreement_task_ids must account for every non-matching task.")
 
@@ -134,9 +131,92 @@ class MultimodalAnnotationAgreementSummary(BaseModel):
             raise ValueError("disagreement_task_ids must not contain duplicates.")
 
         expected_rate = self.exact_match_count / self.comparable_task_count
-
         if abs(self.exact_match_rate - expected_rate) > 1e-12:
             raise ValueError("exact_match_rate must match the recorded exact-match counts.")
+
+        return self
+
+
+class MultimodalAnnotationEvidenceSummary(BaseModel):
+    """Strict evidence summary for a complete two-reviewer annotation pass."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        str_strip_whitespace=True,
+    )
+
+    task_version: AnnotationTaskVersion = "v0_1"
+    evaluation_name: AnnotationEvaluationName = "multimodal_asset_record_verification"
+    task_count: int = Field(ge=1)
+    annotator_ids: tuple[str, str]
+    response_count: int = Field(ge=2)
+    complete_review: Literal[True] = True
+    comparable_task_count: int = Field(ge=1)
+    exact_match_count: int = Field(ge=0)
+    exact_match_rate: float = Field(ge=0.0, le=1.0)
+    decision_counts_by_annotator: dict[str, dict[AnnotationDecision, int]]
+    disagreement_task_ids: list[str]
+    adjudication_required: bool
+
+    @model_validator(mode="after")
+    def validate_evidence_summary(self) -> Self:
+        """Ensure final evidence represents complete independent review."""
+
+        first_annotator_id, second_annotator_id = self.annotator_ids
+        if first_annotator_id == second_annotator_id:
+            raise ValueError("Complete review requires two distinct annotator IDs.")
+
+        expected_response_count = self.task_count * 2
+        if self.response_count != expected_response_count:
+            raise ValueError("response_count must equal two complete responses per task.")
+
+        if self.comparable_task_count != self.task_count:
+            raise ValueError("comparable_task_count must equal task_count for complete review.")
+
+        if self.exact_match_count > self.task_count:
+            raise ValueError("exact_match_count cannot exceed task_count.")
+
+        expected_disagreement_count = self.task_count - self.exact_match_count
+        if len(self.disagreement_task_ids) != expected_disagreement_count:
+            raise ValueError(
+                "disagreement_task_ids must account for every non-matching complete-review task."
+            )
+
+        if len(set(self.disagreement_task_ids)) != len(self.disagreement_task_ids):
+            raise ValueError("disagreement_task_ids must not contain duplicates.")
+
+        expected_rate = self.exact_match_count / self.task_count
+        if abs(self.exact_match_rate - expected_rate) > 1e-12:
+            raise ValueError("exact_match_rate must match the complete-review counts.")
+
+        expected_annotator_ids = {
+            first_annotator_id,
+            second_annotator_id,
+        }
+        if set(self.decision_counts_by_annotator) != expected_annotator_ids:
+            raise ValueError(
+                "decision_counts_by_annotator must contain exactly the two selected annotators."
+            )
+
+        expected_decisions: set[AnnotationDecision] = {
+            "confirmed",
+            "rejected",
+            "uncertain",
+        }
+        for annotator_id, counts in self.decision_counts_by_annotator.items():
+            if set(counts) != expected_decisions:
+                raise ValueError(
+                    f"{annotator_id}: decision counts must contain "
+                    "confirmed, rejected, and uncertain."
+                )
+            if any(count < 0 for count in counts.values()):
+                raise ValueError(f"{annotator_id}: decision counts cannot be negative.")
+            if sum(counts.values()) != self.task_count:
+                raise ValueError(f"{annotator_id}: decision counts must sum to task_count.")
+
+        expected_adjudication_required = bool(self.disagreement_task_ids)
+        if self.adjudication_required != expected_adjudication_required:
+            raise ValueError("adjudication_required must match whether disagreements exist.")
 
         return self
 
@@ -173,7 +253,7 @@ def build_multimodal_annotation_tasks(
     assets: Sequence[VisualAssetRecord],
     task_version: AnnotationTaskVersion = "v0_1",
 ) -> list[MultimodalAnnotationTask]:
-    """Build deterministically ordered review tasks from page-linked visual assets."""
+    """Build deterministically ordered review tasks from page-linked assets."""
 
     validated_assets = _revalidate_visual_asset_records(assets)
     ordered_assets = sorted(
@@ -192,14 +272,13 @@ def build_multimodal_annotation_tasks(
         )
         for asset in ordered_assets
     ]
-
     return _revalidate_annotation_tasks(tasks)
 
 
 def load_multimodal_annotation_tasks(
     path: Path,
 ) -> list[MultimodalAnnotationTask]:
-    """Load page-linked multimodal annotation tasks from a JSONL file."""
+    """Load page-linked multimodal annotation tasks from JSONL."""
 
     tasks: list[MultimodalAnnotationTask] = []
 
@@ -208,7 +287,6 @@ def load_multimodal_annotation_tasks(
         start=1,
     ):
         stripped_line = line.strip()
-
         if not stripped_line:
             continue
 
@@ -249,7 +327,7 @@ def write_multimodal_annotation_tasks(
 def load_multimodal_annotation_responses(
     path: Path,
 ) -> list[MultimodalAnnotationResponse]:
-    """Load independent multimodal annotation responses from a JSONL file."""
+    """Load independent multimodal annotation responses from JSONL."""
 
     responses: list[MultimodalAnnotationResponse] = []
 
@@ -258,7 +336,6 @@ def load_multimodal_annotation_responses(
         start=1,
     ):
         stripped_line = line.strip()
-
         if not stripped_line:
             continue
 
@@ -353,6 +430,128 @@ def summarize_multimodal_annotation_agreement(
         exact_match_rate=exact_match_count / len(comparable_task_ids),
         disagreement_task_ids=disagreement_task_ids,
     )
+
+
+def validate_complete_multimodal_annotation_review(
+    tasks: Sequence[MultimodalAnnotationTask],
+    responses: Sequence[MultimodalAnnotationResponse],
+    first_annotator_id: str,
+    second_annotator_id: str,
+) -> MultimodalAnnotationEvidenceSummary:
+    """Validate and summarize a complete two-reviewer annotation pass.
+
+    Unlike ``summarize_multimodal_annotation_agreement``, this function
+    requires both selected reviewers to have exactly one response for every
+    frozen task before any final evidence summary can be produced.
+    """
+
+    first_annotator_id = first_annotator_id.strip()
+    second_annotator_id = second_annotator_id.strip()
+
+    if not first_annotator_id or not second_annotator_id:
+        raise ValueError("Complete review requires non-empty annotator IDs.")
+
+    if first_annotator_id == second_annotator_id:
+        raise ValueError("Complete review requires two distinct annotator IDs.")
+
+    validated_tasks = _revalidate_annotation_tasks(tasks)
+    if not validated_tasks:
+        raise ValueError("Complete review requires at least one frozen task.")
+
+    validated_responses = _revalidate_annotation_responses(responses)
+    frozen_task_ids = {task.task_id for task in validated_tasks}
+
+    for response in validated_responses:
+        if response.task_id not in frozen_task_ids:
+            raise ValueError(f"Unknown annotation task ID for response: {response.task_id}.")
+
+    selected_annotator_ids = {
+        first_annotator_id,
+        second_annotator_id,
+    }
+    observed_annotator_ids = {response.annotator_id for response in validated_responses}
+    unexpected_annotator_ids = sorted(observed_annotator_ids - selected_annotator_ids)
+    if unexpected_annotator_ids:
+        raise ValueError(
+            f"Unexpected annotator IDs in complete-review responses: {unexpected_annotator_ids}."
+        )
+
+    responses_by_annotator = {
+        first_annotator_id: {
+            response.task_id: response
+            for response in validated_responses
+            if response.annotator_id == first_annotator_id
+        },
+        second_annotator_id: {
+            response.task_id: response
+            for response in validated_responses
+            if response.annotator_id == second_annotator_id
+        },
+    }
+
+    for annotator_id, annotator_responses in responses_by_annotator.items():
+        observed_task_ids = set(annotator_responses)
+        missing_task_ids = sorted(frozen_task_ids - observed_task_ids)
+        extra_task_ids = sorted(observed_task_ids - frozen_task_ids)
+
+        if missing_task_ids or extra_task_ids:
+            raise ValueError(
+                "Incomplete multimodal annotation review for "
+                f"{annotator_id}: "
+                f"missing_task_ids={missing_task_ids}, "
+                f"extra_task_ids={extra_task_ids}."
+            )
+
+    agreement = summarize_multimodal_annotation_agreement(
+        validated_tasks,
+        validated_responses,
+        first_annotator_id,
+        second_annotator_id,
+    )
+
+    first_decision_counts = _annotation_decision_counts(
+        validated_responses,
+        first_annotator_id,
+    )
+    second_decision_counts = _annotation_decision_counts(
+        validated_responses,
+        second_annotator_id,
+    )
+
+    return MultimodalAnnotationEvidenceSummary(
+        task_count=len(validated_tasks),
+        annotator_ids=(first_annotator_id, second_annotator_id),
+        response_count=len(validated_responses),
+        comparable_task_count=agreement.comparable_task_count,
+        exact_match_count=agreement.exact_match_count,
+        exact_match_rate=agreement.exact_match_rate,
+        decision_counts_by_annotator={
+            first_annotator_id: first_decision_counts,
+            second_annotator_id: second_decision_counts,
+        },
+        disagreement_task_ids=agreement.disagreement_task_ids,
+        adjudication_required=bool(agreement.disagreement_task_ids),
+    )
+
+
+def _annotation_decision_counts(
+    responses: Sequence[MultimodalAnnotationResponse],
+    annotator_id: str,
+) -> dict[AnnotationDecision, int]:
+    """Return deterministic decision counts for one annotator."""
+
+    counts: dict[AnnotationDecision, int] = {
+        "confirmed": 0,
+        "rejected": 0,
+        "uncertain": 0,
+    }
+
+    for response in responses:
+        if response.annotator_id != annotator_id:
+            continue
+        counts[response.decision] += 1
+
+    return counts
 
 
 def _revalidate_visual_asset_records(

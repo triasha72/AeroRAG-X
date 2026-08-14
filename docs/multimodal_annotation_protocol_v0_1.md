@@ -105,11 +105,18 @@ decision
 notes
 ```
 
-There may be at most one response per `(task_id, annotator_id)` pair. Responses
-must be stored in a separately versioned JSONL file when real review begins;
-this v0.1 pull request intentionally adds no invented response data.
+There may be at most one response per `(task_id, annotator_id)` pair.
 
-## Agreement summary
+Real v0.1 review responses are expected at:
+
+```text
+artifacts/evaluation/multimodal_annotation_responses_v0_1/reviewer_a.jsonl
+artifacts/evaluation/multimodal_annotation_responses_v0_1/reviewer_b.jsonl
+```
+
+Do not fabricate response files to make the finalizer pass.
+
+## Raw agreement helper
 
 `summarize_multimodal_annotation_agreement` accepts known tasks, responses, and
 two distinct annotator IDs. It rejects unknown task IDs and duplicate reviewer
@@ -122,9 +129,122 @@ exact_match_rate
 disagreement_task_ids
 ```
 
-This is a raw exact-decision agreement summary only. It is not a
-chance-corrected inter-annotator reliability statistic, and no agreement value
-is claimed until two independent response files exist.
+This helper intentionally summarizes only tasks shared by the two selected
+reviewers. It is useful for intermediate analysis, but it does not establish
+that the entire frozen review set has been independently completed.
+
+For example:
+
+```text
+Frozen tasks: 5
+Reviewer A completed: 5
+Reviewer B completed: 1
+Shared tasks: 1
+Shared-task exact agreement: 1 / 1
+```
+
+That is not a complete independent review.
+
+## Complete-review evidence gate
+
+Final Phase 35 review evidence must use:
+
+```text
+validate_complete_multimodal_annotation_review
+```
+
+The complete-review validator requires:
+
+```text
+two distinct reviewer IDs
+        ↓
+every response references a known frozen task
+        ↓
+no unselected reviewer IDs
+        ↓
+Reviewer A covers every frozen task exactly once
+        ↓
+Reviewer B covers every frozen task exactly once
+        ↓
+raw exact agreement may be finalized
+```
+
+For the current five-task slice, successful finalization therefore requires:
+
+```text
+5 reviewer_a responses
++
+5 reviewer_b responses
+=
+10 validated responses
+```
+
+Partial overlap cannot produce final evidence.
+
+Successful validation produces a `MultimodalAnnotationEvidenceSummary` with:
+
+```text
+task_version
+evaluation_name
+task_count
+annotator_ids
+response_count
+complete_review
+comparable_task_count
+exact_match_count
+exact_match_rate
+decision_counts_by_annotator
+disagreement_task_ids
+adjudication_required
+```
+
+The summary is raw exact-decision agreement only. It is not a chance-corrected
+inter-annotator reliability statistic.
+
+## Independent-review and adjudication policy
+
+1. Reviewer A and Reviewer B complete their initial passes independently.
+2. Neither reviewer inspects the other reviewer's decisions before both passes
+   are complete.
+3. Original reviewer response files remain unchanged after submission.
+4. Any unequal decisions constitute a disagreement.
+5. `uncertain` is a valid decision and is not forced into a binary label.
+6. Disagreements are examined only after both independent passes are frozen.
+7. Any adjudicated result is stored in a separate versioned artifact.
+8. The adjudication record preserves both original decisions and a written
+   rationale.
+9. Raw independent agreement and adjudicated consensus are reported separately.
+
+If real disagreements exist, a later adjudication artifact may include:
+
+```text
+task_id
+reviewer_a_decision
+reviewer_b_decision
+final_decision
+adjudication_rationale
+```
+
+The exact adjudication schema should be implemented only when there are real
+disagreements to record.
+
+## Finalization
+
+After both genuine independent review files exist:
+
+```bash
+python scripts/finalize_multimodal_annotation_v0_1.py
+```
+
+The finalizer refuses to produce evidence when either reviewer has incomplete
+coverage.
+
+Expected outputs after successful finalization are:
+
+```text
+artifacts/evaluation/multimodal_annotation_agreement_v0_1.json
+reports/multimodal_annotation_agreement_v0_1.md
+```
 
 ## Reproducibility
 
@@ -141,13 +261,42 @@ python -m ruff format --check .
 python -m ruff check .
 python -m mypy src/aeroragx
 python -m mypy scripts/build_multimodal_annotation_tasks_v0_1.py
-python -m pytest -q tests/test_multimodal_annotation.py
+python -m mypy scripts/finalize_multimodal_annotation_v0_1.py
+python -m pytest -q \
+  tests/test_multimodal_annotation.py \
+  tests/test_multimodal_annotation_finalization.py
 git diff --check
 ```
 
+## Interpretation limits
+
+The current v0.1 slice contains only five positive visual-asset records from
+one source document.
+
+Therefore:
+
+```text
+raw reviewer agreement
+!=
+general multimodal retrieval quality
+```
+
+and:
+
+```text
+verified positive assets
+!=
+figure/table detection benchmark
+```
+
+No OCR, detection, extraction, visual embedding, multimodal retrieval, or
+multimodal generation quality claim should be made from the v0.1 review slice
+alone.
+
 ## Next evidence needed
 
-Before the project claims multimodal evaluation results, it needs a larger
-versioned candidate set, independently completed response files, a documented
-adjudication policy, and an agreement analysis appropriate to the expanded
-label distribution.
+Before broader multimodal claims, the project needs genuine independent review
+of the frozen v0.1 tasks, then a larger separately versioned multimodal
+candidate set with independent annotation. Automatic figure/table detection,
+caption association, structured table extraction, visual retrieval, and OCR
+remain downstream capabilities.

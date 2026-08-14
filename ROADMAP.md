@@ -1184,3 +1184,19 @@ no citation without a source page and document identifier
 no claim of multimodal quality without a separately versioned evaluation
 no speculative hardware or provider-integration work without a measured need
 ```
+
+<!-- phase35-review-evidence-v0_1 -->
+## Phase 35 review-evidence gate status
+
+- [x] strict complete-review validation contract
+- [x] deterministic finalization script
+- [x] regression tests preventing partial-overlap evidence claims
+- [x] documented pre-review adjudication policy
+- [ ] reviewer A completes every frozen v0.1 task
+- [ ] reviewer B independently completes every frozen v0.1 task
+- [ ] raw exact agreement is finalized
+- [ ] real disagreements, if any, are adjudicated separately
+- [ ] reviewed v0.1 evidence package is frozen
+
+Automatic figure/table detection, OCR, visual indexing, and multimodal
+retrieval remain downstream of the completed review-evidence gate.
