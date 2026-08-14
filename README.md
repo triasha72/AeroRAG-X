@@ -1142,3 +1142,12 @@ development implementation; distributed persistence is deferred.
 AeroRAG-X now has explicit per-tool retry rules, deterministic fault injection,
 and safe degradation for unrecoverable dependency failures. Retries are bounded;
 dependency failure cannot be promoted into unsupported generation.
+
+<!-- phase40-agent-trajectory-benchmark-v0_1 -->
+## Agent trajectory evaluation
+
+AeroRAG-X now has typed frozen-case and observation contracts plus deterministic
+metrics for terminal correctness, required/forbidden tool behavior, budget
+compliance, safe refusal, tool-call efficiency, and latency. The checked-in
+cases are synthetic contract fixtures only; domain benchmark claims require a
+separately curated frozen evaluation set and recorded runs.

@@ -1260,3 +1260,20 @@ Next: Phase 39 failure recovery and fault injection.
 - [ ] frozen trajectory benchmark
 
 Next: Phase 40 evaluates agent trajectories and recovery behavior.
+
+<!-- phase40-agent-trajectory-benchmark-v0_1 -->
+# Phase 40 — Agent trajectory benchmark
+
+- [x] frozen-case schema
+- [x] observation schema
+- [x] termination/tool/budget/refusal metrics
+- [x] latency metrics
+- [x] orchestrator-comparison contract
+- [x] synthetic contract fixtures
+- [ ] curate 40–60 real frozen domain cases
+- [ ] record deterministic baseline
+- [ ] record bounded-adaptive baseline
+- [ ] record stateful-agent baseline
+- [ ] publish measured comparison
+
+The harness is complete; performance claims remain blocked on real frozen data.
