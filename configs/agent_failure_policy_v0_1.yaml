@@ -1,0 +1,23 @@
+version: v0_1
+rules:
+  hybrid_retrieve:
+    - failure_class: timeout
+      maximum_retries: 1
+    - failure_class: dependency_unavailable
+      maximum_retries: 1
+    - failure_class: malformed_response
+      maximum_retries: 0
+  fetch_source_context:
+    - failure_class: timeout
+      maximum_retries: 1
+    - failure_class: unknown_evidence
+      maximum_retries: 0
+  check_evidence_sufficiency:
+    - failure_class: service_error
+      maximum_retries: 1
+  validate_citations:
+    - failure_class: malformed_response
+      maximum_retries: 0
+  compare_sources:
+    - failure_class: timeout
+      maximum_retries: 1

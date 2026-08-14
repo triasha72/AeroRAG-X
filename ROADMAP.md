@@ -1247,3 +1247,16 @@ Next: Phase 38 checkpointing and human-in-the-loop resumption.
 - [ ] recovery benchmark
 
 Next: Phase 39 failure recovery and fault injection.
+
+<!-- phase39-agent-failure-recovery-v0_1 -->
+# Phase 39 — Failure recovery and fault injection
+
+- [x] typed failure classes
+- [x] per-tool bounded retry policy
+- [x] deterministic fault injection
+- [x] structured retry classification
+- [x] unrecoverable-failure safe termination
+- [x] regression tests for no-evidence degradation
+- [ ] frozen trajectory benchmark
+
+Next: Phase 40 evaluates agent trajectories and recovery behavior.

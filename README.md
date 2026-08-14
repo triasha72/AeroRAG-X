@@ -1135,3 +1135,10 @@ Agent state can now be persisted as immutable checkpoints and resumed after a
 bounded human-review interruption. Review decisions are explicit and the
 pre-review state remains unchanged. The initial checkpoint store is a local
 development implementation; distributed persistence is deferred.
+
+<!-- phase39-agent-failure-recovery-v0_1 -->
+## Agent failure recovery
+
+AeroRAG-X now has explicit per-tool retry rules, deterministic fault injection,
+and safe degradation for unrecoverable dependency failures. Retries are bounded;
+dependency failure cannot be promoted into unsupported generation.
