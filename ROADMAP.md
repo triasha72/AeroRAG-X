@@ -1233,3 +1233,17 @@ tools. Phase 36 alone is not an autonomous-agent claim.
 - [ ] human-review decision persistence
 
 Next: Phase 38 checkpointing and human-in-the-loop resumption.
+
+<!-- phase38-checkpointing-hitl-v0_1 -->
+# Phase 38 — Checkpointing and HITL
+
+- [x] immutable versioned state checkpoints
+- [x] latest-checkpoint recovery
+- [x] graph-state checkpoint observer
+- [x] human-review request/response contracts
+- [x] approve/reject/edit resume semantics
+- [x] original paused state preserved
+- [ ] injected dependency failure policy
+- [ ] recovery benchmark
+
+Next: Phase 39 failure recovery and fault injection.
