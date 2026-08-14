@@ -45,21 +45,15 @@ def summarize_distributed_reliability(
 
     count = len(observations)
     latencies = sorted(item.latency_ms for item in observations)
-    p95_index = max(int(round(0.95 * (count - 1))), 0)
+    p95_index = max(round(0.95 * (count - 1)), 0)
     recovery_attempts = sum(item.recovery_attempted for item in observations)
-    recovery_successes = sum(
-        item.recovered for item in observations if item.recovery_attempted
-    )
+    recovery_successes = sum(item.recovered for item in observations if item.recovery_attempted)
 
     return DistributedReliabilityMetrics(
         request_count=count,
         success_rate=sum(item.success for item in observations) / count,
         timeout_rate=sum(item.timed_out for item in observations) / count,
-        recovery_rate=(
-            1.0
-            if recovery_attempts == 0
-            else recovery_successes / recovery_attempts
-        ),
+        recovery_rate=(1.0 if recovery_attempts == 0 else recovery_successes / recovery_attempts),
         safe_refusal_rate=sum(item.safe_refusal for item in observations) / count,
         unsafe_answer_rate=sum(item.unsafe_answer for item in observations) / count,
         p50_latency_ms=float(median(latencies)),

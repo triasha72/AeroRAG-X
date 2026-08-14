@@ -86,9 +86,7 @@ async def run(args: argparse.Namespace) -> None:
                     query=args.query,
                 )
 
-        observations = await asyncio.gather(
-            *(bounded() for _ in range(args.requests))
-        )
+        observations = await asyncio.gather(*(bounded() for _ in range(args.requests)))
 
     metrics = summarize_distributed_reliability(observations)
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -96,9 +94,7 @@ async def run(args: argparse.Namespace) -> None:
         json.dumps(
             {
                 "metrics": metrics.model_dump(mode="json"),
-                "observations": [
-                    item.model_dump(mode="json") for item in observations
-                ],
+                "observations": [item.model_dump(mode="json") for item in observations],
             },
             indent=2,
             sort_keys=True,
