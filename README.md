@@ -1199,3 +1199,11 @@ retrieve, sufficiency, submit, and refusal tools plus an explicit
 validation-only training command. The checked-in training rows are synthetic
 format fixtures; no model-improvement claim is made without a real executed
 training run and held-out evaluation.
+
+<!-- phase47-grpo-agent-ablation-v0_1 -->
+## Base vs LoRA/SFT vs GRPO evaluation
+
+AeroRAG-X now has a controlled held-out ablation contract requiring identical
+case IDs across Base, LoRA/SFT, and GRPO variants. The report template tracks
+task success, refusal, citations, evidence support, tool selection, efficiency,
+and latency without assuming GRPO wins.

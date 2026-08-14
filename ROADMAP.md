@@ -1369,3 +1369,20 @@ Next: Phase 46 bounded grounded-agent GRPO experiment.
 - [ ] freeze model/config/data hashes
 
 Next: Phase 47 held-out Base vs LoRA vs GRPO ablation.
+
+<!-- phase47-grpo-agent-ablation-v0_1 -->
+# Phase 47 — Base vs LoRA/SFT vs GRPO ablation
+
+- [x] common held-out observation schema
+- [x] identical-case-set enforcement
+- [x] task/refusal/citation/evidence metrics
+- [x] tool-selection and efficiency metrics
+- [x] latency metrics
+- [x] non-prescriptive report template
+- [ ] record Base results
+- [ ] record LoRA/SFT results
+- [ ] record GRPO results
+- [ ] freeze final measured ablation
+
+The applied-RL gap is closed only after a genuine GRPO run and held-out
+comparison are recorded; the harness alone is not an RL performance result.
