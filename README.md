@@ -1118,3 +1118,12 @@ structured multi-source comparison. Explicit agent state budgets track graph
 steps, tool calls, retrieval attempts, evidence identity, failures, and terminal
 reasons. Dynamic tool selection and stateful LangGraph routing remain a later
 phase rather than being claimed by the contracts alone.
+
+<!-- phase37-stateful-agent-graph-v0_1 -->
+## Stateful tool-using agent graph
+
+AeroRAG-X now composes its bounded tool contracts through a dynamically routed
+LangGraph agent. Planner decisions are schema-constrained, tools remain
+explicitly registered, graph/tool budgets are enforced, and every run terminates
+with an inspectable reason. Checkpoint persistence and human-review resumption
+remain Phase 38.
