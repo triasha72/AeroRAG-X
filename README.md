@@ -1040,11 +1040,15 @@ The bounded adaptive-retrieval implementation and protected paired evaluation ar
 
 A separate opt-in scope-qualifier safeguard was then evaluated on its own held-out set. It improved answerability from **50.00%** to **92.86%** and unsupported-query refusal from **40.00%** to **100.00%**, without changing the protected Phase 26 data or policy.
 
-The current engineering focus is a controlled local-runtime comparison:
+The controlled MLX 4-bit versus Transformers MPS float16 comparison is complete.
+Phase 35 now establishes a bounded multimodal-report foundation: page-linked
+visual-asset provenance, checksum-verified whole-page rendering, a deterministic
+render manifest, and deterministic independent-review tasks for the five-record
+v0.1 slice.
 
-> **How does the established Transformers MPS float16 baseline compare with a genuine MLX 4-bit Qwen runtime on the same Apple-Silicon host and structured-generation workload?**
-
-The comparison will record artifact size, runtime and model versions, prompt/output token counts, structured-JSON validity, latency, P50/P95, and output throughput. It will not make device-general performance claims or infer quality from latency alone.
+The next evidence is two independently completed, versioned review response
+sets. No OCR, detection, crops, table extraction, visual embeddings, retrieval,
+API, or model-quality claim is implied by this foundation.
 
 # Current status
 
@@ -1069,8 +1073,9 @@ adaptive-retrieval observability                 DONE
 edge-runtime benchmark schema and runner         DONE
 Apple-Silicon MPS float16 benchmark              DONE
 MLX structured-transport foundation              DONE
-MLX 4-bit versus MPS float16 comparison          NEXT
-multimodal technical-report retrieval            FUTURE
+MLX 4-bit versus MPS float16 comparison          DONE
+Phase 35 provenance, rendering, and task contract DONE
+independent multimodal annotation review          NEXT
 ```
 
 # What AeroRAG-X is not
