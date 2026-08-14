@@ -56,10 +56,11 @@ jobs:
       - name: Type check package
         run: mypy src/aeroragx
 
-      - name: Type check vector scripts
+      - name: Type check selected scripts
         run: |
           mypy scripts/load_pgvector.py
           mypy scripts/benchmark_vector_backends.py
+          mypy scripts/render_multimodal_report_slice_v0_1.py
 
       - name: Frozen generation regression policy
         run: |

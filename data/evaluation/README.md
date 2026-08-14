@@ -33,6 +33,27 @@ artifacts/evaluation/generation_v0_1.json
 artifacts/evaluation/generation_v0_2.json
 ```
 
+### Multimodal report evaluation slice
+
+```text
+multimodal_report_slice_v0_1.jsonl
+```
+
+This small, manually verified slice identifies page-linked figure and table
+assets in an existing NASA NTRS report. It preserves source provenance only; it
+does not contain rendered images, OCR output, visual embeddings, or retrieval
+judgments.
+
+The local render-manifest runner renders only the source pages linked by these
+records after verifying the recorded source-PDF checksum. It writes
+`PageRenderRecord` JSONL and PNG outputs below:
+
+```text
+data/derived/multimodal/page_renders/
+```
+
+Those derived files are ignored by Git and can be regenerated locally.
+
 ---
 
 # Part I — Retrieval evaluation
