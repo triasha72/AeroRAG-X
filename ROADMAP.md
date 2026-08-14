@@ -1218,3 +1218,18 @@ retrieval remain downstream of the completed review-evidence gate.
 
 Next: Phase 37 implements dynamic stateful LangGraph routing over these bounded
 tools. Phase 36 alone is not an autonomous-agent claim.
+
+<!-- phase37-stateful-agent-graph-v0_1 -->
+# Phase 37 — Stateful tool-using agent graph
+
+- [x] schema-constrained planner decisions
+- [x] dynamic tool routing
+- [x] registered-tool execution only
+- [x] bounded graph steps and tool calls
+- [x] grounded generation and citation-validation route
+- [x] explicit terminal reasons
+- [x] inspectable trajectory records
+- [ ] persistent checkpoint/resume
+- [ ] human-review decision persistence
+
+Next: Phase 38 checkpointing and human-in-the-loop resumption.
