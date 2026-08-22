@@ -89,7 +89,7 @@ Closed-book Base and LoRA evaluation is implemented separately from the grounded
 
 ---
 
-# Current system
+# How the system works
 
 ## Corpus and provenance
 
@@ -763,7 +763,7 @@ It is not a complete hallucination metric.
 
 Some unsupported closed-book responses reject a false premise while still being represented as ordinary answers.
 
-The next semantic-evaluation phase separates unsupported-query behavior into:
+The semantic evaluation separates unsupported-query behavior into:
 
 ```text
 EXPLICIT_REFUSAL
@@ -871,7 +871,7 @@ The completed semantic extension now includes:
 - frozen four-way expected-concept adjudication
 - lower/upper semantic-coverage bounds
 
-The next evaluation layer focuses on:
+Claim-level evaluation also measures:
 
 - claim-evidence entailment
 - answer-to-claim completeness
@@ -1033,7 +1033,7 @@ Real-model evaluations remain opt-in because they require local model weights an
 
 ---
 
-# Deployment status
+# How the system was deployed
 
 Validated path:
 
@@ -1053,7 +1053,7 @@ The project does not currently claim production-scale local-LLM GPU deployment p
 
 ---
 
-# Current research direction
+# What the experiments showed
 
 Phase 24 semantic and claim-level evaluation is complete. On the protected grounded benchmark, LoRA + RAG increased conservative expected-concept coverage from **38.16%** to **51.32%** and full answer-to-claim capture from **10.00%** to **45.00%**, while strict claim-to-evidence support remained broadly similar (**65.62%** Base + RAG versus **67.92%** LoRA + RAG). The result remains qualified: LoRA also increased partial overlap and retained three contradicted claims under the frozen policy.
 
@@ -1073,38 +1073,9 @@ visual-asset provenance, checksum-verified whole-page rendering, a deterministic
 render manifest, and deterministic independent-review tasks for the five-record
 v0.1 slice.
 
-The next evidence is two independently completed, versioned review response
-sets. No OCR, detection, crops, table extraction, visual embeddings, retrieval,
-API, or model-quality claim is implied by this foundation.
-
-# Current status
-
-```text
-NASA corpus                                      DONE
-citation-preserving processing                   DONE
-BM25 / dense / hybrid / reranked retrieval      DONE
-evidence sufficiency and grounded generation    DONE
-OpenAI and Transformers providers               DONE
-FastAPI, Docker, observability, Cloud Run       DONE
-pgvector validation                              DONE
-PEFT / LoRA training and failure analysis       DONE
-four-way Base / LoRA system study                DONE
-Phase 24 semantic and claim-level evaluation    DONE
-
-bounded adaptive retrieval                       DONE
-protected adaptive-retrieval evaluation          DONE (negative result preserved)
-scope-qualifier safeguard + held-out evaluation  DONE (opt-in)
-LangGraph / LangChain integration boundaries     DONE
-adaptive-retrieval observability                 DONE
-
-edge-runtime benchmark schema and runner         DONE
-Apple-Silicon MPS float16 benchmark              DONE
-MLX structured-transport foundation              DONE
-MLX 4-bit versus MPS float16 comparison          DONE
-Phase 35 provenance, rendering, and task contract DONE
-API request guardrails + release checks           DONE
-independent multimodal annotation review          NEXT
-```
+The multimodal-report work stops at a provenance, rendering, and review-task
+contract. It contains no independent review responses and therefore supports no
+OCR, detection, retrieval, or model-quality conclusion.
 
 # What AeroRAG-X is not
 
@@ -1121,117 +1092,117 @@ It is an experiment in building and measuring **evidence-grounded technical know
 
 ---
 
-# License
-
-MIT
-
 <!-- phase35-review-evidence-v0_1 -->
-## Phase 35 review-evidence gate
+# Bounded agent and distributed runtime
 
-The Phase 35 multimodal foundation now includes a strict complete-review
+## Review-evidence gate
+
+The multimodal foundation includes a strict complete-review
 evidence gate. The existing raw agreement helper remains available for
 shared-task analysis, but final review evidence requires both independent
 reviewers to cover every frozen task exactly once before an agreement artifact
-can be generated. The next evidence is two genuine, independently completed
-review-response sets; automatic figure/table detection remains downstream of
-that evidence gate.
+can be generated. No genuine independent review-response sets are included, so
+the project makes no automatic figure or table detection claim.
 
 <!-- phase36-agent-tool-contracts-v0_1 -->
-## Bounded agent-tool foundation
+## Agent-tool foundation
 
-AeroRAG-X now has a typed tool boundary for the next agentic stage. The Phase 36
+AeroRAG-X uses a typed tool boundary for agent execution. The
 registry exposes hybrid retrieval, authoritative source-context lookup,
 evidence-sufficiency assessment, deterministic citation validation, and
 structured multi-source comparison. Explicit agent state budgets track graph
 steps, tool calls, retrieval attempts, evidence identity, failures, and terminal
-reasons. Dynamic tool selection and stateful LangGraph routing remain a later
-phase rather than being claimed by the contracts alone.
+reasons. This keeps tool access auditable without treating the agent as
+unrestricted automation.
 
 <!-- phase37-stateful-agent-graph-v0_1 -->
-## Stateful tool-using agent graph
+## Stateful tool-using graph
 
-AeroRAG-X now composes its bounded tool contracts through a dynamically routed
-LangGraph agent. Planner decisions are schema-constrained, tools remain
+A dynamically routed
+LangGraph agent composes the bounded tool contracts. Planner decisions are schema-constrained, tools remain
 explicitly registered, graph/tool budgets are enforced, and every run terminates
-with an inspectable reason. Checkpoint persistence and human-review resumption
-remain Phase 38.
+with an inspectable reason.
 
 <!-- phase38-checkpointing-hitl-v0_1 -->
 ## Agent checkpointing and human review
 
-Agent state can now be persisted as immutable checkpoints and resumed after a
+Agent state is persisted as immutable checkpoints and can be resumed after a
 bounded human-review interruption. Review decisions are explicit and the
-pre-review state remains unchanged. The initial checkpoint store is a local
-development implementation; distributed persistence is deferred.
+pre-review state remains unchanged. The checkpoint store is a local development
+implementation, not a distributed persistence system.
 
 <!-- phase39-agent-failure-recovery-v0_1 -->
-## Agent failure recovery
+## Failure recovery
 
-AeroRAG-X now has explicit per-tool retry rules, deterministic fault injection,
+Explicit per-tool retry rules, deterministic fault injection,
 and safe degradation for unrecoverable dependency failures. Retries are bounded;
 dependency failure cannot be promoted into unsupported generation.
 
 <!-- phase40-agent-trajectory-benchmark-v0_1 -->
-## Agent trajectory evaluation
+## Trajectory evaluation
 
-AeroRAG-X now has typed frozen-case and observation contracts plus deterministic
+Typed frozen-case and observation contracts support deterministic
 metrics for terminal correctness, required/forbidden tool behavior, budget
 compliance, safe refusal, tool-call efficiency, and latency. The checked-in
 cases are synthetic contract fixtures only; domain benchmark claims require a
 separately curated frozen evaluation set and recorded runs.
 
 <!-- phase41-service-contracts-v0_1 -->
-## Distributed service contracts
+## Service contracts
 
-AeroRAG-X now defines typed Agent, Retrieval, and Inference service boundaries
-with propagated request/trace/thread IDs and provenance-preserving evidence
+Typed Agent, Retrieval, and Inference service boundaries carry propagated
+request, trace, and thread IDs with provenance-preserving evidence
 records. Async clients validate network responses before they enter agent
 state.
 
 <!-- phase42-distributed-runtime-v0_1 -->
 ## Distributed runtime
 
-AeroRAG-X now has separately containerizable Agent API, Retrieval, and
-Inference service boundaries with Docker Compose wiring, health endpoints,
+The Agent API, Retrieval, and Inference services are separately containerized
+with Docker Compose wiring, health endpoints,
 typed async clients, and citation-preserving cross-service orchestration.
 Unconfigured backends report not-ready rather than pretending to succeed.
 
 <!-- phase43-distributed-reliability-v0_1 -->
 ## Distributed reliability
 
-Cross-service operations now have bounded async retries, OpenTelemetry context
+Cross-service operations use bounded async retries, OpenTelemetry context
 propagation, Prometheus service-call metrics, and explicit safe degradation.
 Required dependency failure returns no generated answer and no citations.
 
 <!-- phase44-distributed-reliability-benchmark-v0_1 -->
-## Distributed reliability benchmark
+## Reliability benchmark
 
-AeroRAG-X now has a reproducible concurrent-request harness and deterministic
+A reproducible concurrent-request harness reports deterministic
 metrics for latency, timeout, recovery, safe-refusal, and unsafe-answer behavior.
 The checked-in report is intentionally a measurement template; results must
 come from actual scenario runs.
 
 <!-- phase45-grpo-reward-harness-v0_1 -->
-## GRPO reward harness
+## Grounded post-training contracts
 
-AeroRAG-X now has transparent multi-objective reward contracts for grounded
+Transparent multi-objective reward contracts cover grounded
 post-training, anti-reward-hacking regression tests, and a hard disjoint-case
-guard between training and frozen evaluation. This phase establishes the
-experiment harness only; no RL result is claimed yet.
+guard between training and frozen evaluation. The repository contains the
+experiment harness only; no executed RL improvement result is claimed.
 
 <!-- phase46-grpo-grounded-agent-v0_1 -->
-## Grounded tool-using GRPO experiment
+## Tool-using GRPO environment
 
-AeroRAG-X now has a stateful TRL-compatible environment exposing bounded
+A stateful TRL-compatible environment exposes bounded
 retrieve, sufficiency, submit, and refusal tools plus an explicit
 validation-only training command. The checked-in training rows are synthetic
 format fixtures; no model-improvement claim is made without a real executed
 training run and held-out evaluation.
 
 <!-- phase47-grpo-agent-ablation-v0_1 -->
-## Base vs LoRA/SFT vs GRPO evaluation
+## Base, LoRA/SFT, and GRPO comparison contract
 
-AeroRAG-X now has a controlled held-out ablation contract requiring identical
+A controlled held-out ablation contract requires identical
 case IDs across Base, LoRA/SFT, and GRPO variants. The report template tracks
 task success, refusal, citations, evidence support, tool selection, efficiency,
 and latency without assuming GRPO wins.
+
+# License
+
+MIT
