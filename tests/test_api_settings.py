@@ -17,6 +17,9 @@ def test_default_runtime_is_local() -> None:
     assert settings.mode == "local"
     assert settings.dense_backend == "numpy"
     assert settings.adaptive_retrieval_enabled is False
+    assert settings.guardrails.max_request_bytes == 16_384
+    assert settings.guardrails.rate_limit_requests == 60
+    assert settings.guardrails.rate_limit_window_seconds == 60
 
     assert config.dense_backend == "numpy"
     assert config.adaptive_retrieval_config is None
@@ -186,3 +189,32 @@ def test_invalid_adaptive_retrieval_switch_is_rejected() -> None:
                 "AERORAGX_ENABLE_ADAPTIVE_RETRIEVAL": "yes",
             }
         )
+
+
+def test_request_guardrails_are_loaded_from_environment() -> None:
+    settings = load_api_runtime_settings(
+        {
+            "AERORAGX_MAX_REQUEST_BYTES": "4096",
+            "AERORAGX_RATE_LIMIT_REQUESTS": "12",
+            "AERORAGX_RATE_LIMIT_WINDOW_SECONDS": "30",
+        }
+    )
+
+    assert settings.guardrails.max_request_bytes == 4096
+    assert settings.guardrails.rate_limit_requests == 12
+    assert settings.guardrails.rate_limit_window_seconds == 30
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "AERORAGX_MAX_REQUEST_BYTES",
+        "AERORAGX_RATE_LIMIT_REQUESTS",
+        "AERORAGX_RATE_LIMIT_WINDOW_SECONDS",
+    ],
+)
+def test_request_guardrails_reject_non_positive_values(
+    name: str,
+) -> None:
+    with pytest.raises(ValueError, match=name):
+        load_api_runtime_settings({name: "0"})

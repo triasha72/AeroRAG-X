@@ -1,0 +1,26 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: Ruff format check
+        entry: ruff format --check .
+        language: system
+        pass_filenames: false
+
+      - id: ruff-lint
+        name: Ruff lint
+        entry: ruff check .
+        language: system
+        pass_filenames: false
+
+      - id: frozen-evaluation-regression
+        name: Frozen evaluation regression
+        entry: python scripts/check_evaluation_regression.py
+        language: system
+        pass_filenames: false
+
+      - id: release-readiness
+        name: Release readiness
+        entry: python scripts/check_release_readiness.py
+        language: system
+        pass_filenames: false

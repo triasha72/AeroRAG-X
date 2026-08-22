@@ -133,8 +133,8 @@ Future:
 
 Future:
 
-- [ ] formal coverage threshold
-- [ ] pre-commit hooks
+- [x] formal 80% coverage threshold
+- [x] pre-commit quality and frozen-evidence hooks
 
 ---
 
@@ -432,6 +432,7 @@ Future:
 
 - [ ] infrastructure as code
 - [ ] deployment CI
+- [x] rollback runbook and measurable triggers
 - [ ] rollback automation
 
 ---
@@ -463,7 +464,7 @@ Future:
 
 - [ ] metadata filtering
 - [ ] deletion workflow
-- [ ] backup / restore
+- [x] backup / restore runbook with staging verification
 - [ ] ANN only at a larger corpus scale
 
 ---

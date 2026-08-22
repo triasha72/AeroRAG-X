@@ -35,6 +35,10 @@ from aeroragx.api.errors import (
     ApiErrorResponse,
     RuntimeUnavailableError,
 )
+from aeroragx.api.guardrails import (
+    ApiGuardrailSettings,
+    SlidingWindowRateLimiter,
+)
 from aeroragx.api.schemas import (
     HealthResponse,
     QueryRequest,
@@ -263,6 +267,7 @@ def create_app(
     event_logger: logging.Logger | None = None,
     service_metrics: ServiceMetrics | None = None,
     tracing_runtime: TracingRuntime | None = None,
+    guardrail_settings: ApiGuardrailSettings | None = None,
 ) -> FastAPI:
     """Create the AeroRAG-X HTTP application."""
 
@@ -274,6 +279,11 @@ def create_app(
     owns_tracing_runtime = tracing_runtime is None
     trace_runtime = (
         create_configured_tracing_runtime() if tracing_runtime is None else tracing_runtime
+    )
+    guardrails = ApiGuardrailSettings() if guardrail_settings is None else guardrail_settings
+    rate_limiter = SlidingWindowRateLimiter(
+        limit=guardrails.rate_limit_requests,
+        window_seconds=guardrails.rate_limit_window_seconds,
     )
 
     @asynccontextmanager
@@ -496,8 +506,55 @@ def create_app(
             )
 
         with use_tracer(trace_runtime.tracer):
+            response: Response
             try:
-                response = await call_next(request)
+                if request.url.path == "/v1/query":
+                    guardrail_response: Response | None = None
+                    raw_content_length = request.headers.get("content-length")
+
+                    if raw_content_length is not None:
+                        try:
+                            content_length = int(raw_content_length)
+
+                        except ValueError:
+                            content_length = guardrails.max_request_bytes + 1
+
+                        if content_length > guardrails.max_request_bytes:
+                            guardrail_response = error_response(
+                                request=request,
+                                status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+                                code="request_too_large",
+                                message="The request body exceeds the configured size limit.",
+                            )
+
+                    if guardrail_response is None:
+                        client_key = (
+                            request.client.host if request.client is not None else "unknown"
+                        )
+                        decision = rate_limiter.check(key=client_key)
+
+                        if not decision.allowed:
+                            response = error_response(
+                                request=request,
+                                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                                code="rate_limit_exceeded",
+                                message="The query rate limit has been exceeded.",
+                            )
+                            response.headers["Retry-After"] = str(
+                                decision.retry_after_seconds,
+                            )
+
+                        else:
+                            response = await call_next(request)
+
+                        response.headers["X-RateLimit-Limit"] = str(decision.limit)
+                        response.headers["X-RateLimit-Remaining"] = str(decision.remaining)
+
+                    else:
+                        response = guardrail_response
+
+                else:
+                    response = await call_next(request)
 
             except Exception:
                 elapsed_seconds = perf_counter() - started_at
@@ -752,4 +809,9 @@ def create_app(
     return app
 
 
-app = create_app(runtime_config=(load_api_runtime_settings().to_runtime_config()))
+_api_settings = load_api_runtime_settings()
+
+app = create_app(
+    runtime_config=_api_settings.to_runtime_config(),
+    guardrail_settings=_api_settings.guardrails,
+)

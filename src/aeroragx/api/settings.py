@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import os
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from aeroragx.api.guardrails import ApiGuardrailSettings
 from aeroragx.generation.grounded import (
     AdaptiveRetrievalOrchestrator,
 )
@@ -36,6 +37,10 @@ class ApiRuntimeSettings:
 
     adaptive_retrieval_enabled: bool = False
     adaptive_retrieval_orchestrator: AdaptiveRetrievalOrchestrator = "native"
+
+    guardrails: ApiGuardrailSettings = field(
+        default_factory=ApiGuardrailSettings,
+    )
 
     def to_runtime_config(
         self,
@@ -225,6 +230,30 @@ def load_api_runtime_settings(
             "AERORAGX_ADAPTIVE_RETRIEVAL_ORCHESTRATOR must be 'native' or 'langgraph'."
         )
 
+    guardrails = ApiGuardrailSettings(
+        max_request_bytes=_positive_integer(
+            value=env.get(
+                "AERORAGX_MAX_REQUEST_BYTES",
+                "16384",
+            ),
+            name="AERORAGX_MAX_REQUEST_BYTES",
+        ),
+        rate_limit_requests=_positive_integer(
+            value=env.get(
+                "AERORAGX_RATE_LIMIT_REQUESTS",
+                "60",
+            ),
+            name="AERORAGX_RATE_LIMIT_REQUESTS",
+        ),
+        rate_limit_window_seconds=_positive_integer(
+            value=env.get(
+                "AERORAGX_RATE_LIMIT_WINDOW_SECONDS",
+                "60",
+            ),
+            name="AERORAGX_RATE_LIMIT_WINDOW_SECONDS",
+        ),
+    )
+
     return ApiRuntimeSettings(
         mode=mode,
         dense_backend=dense_backend,
@@ -232,4 +261,5 @@ def load_api_runtime_settings(
         evidence_top_k=evidence_top_k,
         adaptive_retrieval_enabled=adaptive_retrieval_enabled,
         adaptive_retrieval_orchestrator=adaptive_retrieval_orchestrator,
+        guardrails=guardrails,
     )

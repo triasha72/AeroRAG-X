@@ -53,7 +53,7 @@ jobs:
       - name: Tests
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: pytest --cov=aeroragx --cov-report=term-missing
+        run: pytest --cov=aeroragx --cov-report=term-missing --cov-fail-under=80
 
       - name: Type check package
         run: mypy src/aeroragx
@@ -71,6 +71,21 @@ jobs:
         run: |
           python scripts/check_evaluation_regression.py \
             --policy configs/evaluation_regression_v0_1.yaml
+
+      - name: Release readiness
+        run: |
+          python scripts/check_release_readiness.py \
+            --policy configs/release_readiness_v0_1.yaml \
+            --json-output reports/release_readiness_v0_1.json \
+            --markdown-output reports/release_readiness_v0_1.md
+
+      - name: Upload release-readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-readiness
+          path: |
+            reports/release_readiness_v0_1.json
+            reports/release_readiness_v0_1.md
 
   docker-build:
     runs-on: ubuntu-latest

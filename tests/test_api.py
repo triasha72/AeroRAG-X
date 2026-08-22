@@ -14,6 +14,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
 from opentelemetry.trace import SpanKind
 
 from aeroragx.api import create_app
+from aeroragx.api.guardrails import ApiGuardrailSettings
 from aeroragx.generation.grounded import (
     GroundedAnswer,
     GroundedClaim,
@@ -139,6 +140,58 @@ def test_query_returns_service_answer() -> None:
     assert data["answer"] == ("A deterministic grounded test answer.")
 
     assert service.queries == [("Why is aircraft thermal management important?")]
+
+
+def test_query_request_body_limit_is_enforced_before_service_call() -> None:
+    service = FakeQueryService()
+    client = TestClient(
+        create_app(
+            query_service=service,
+            guardrail_settings=ApiGuardrailSettings(
+                max_request_bytes=32,
+            ),
+        )
+    )
+
+    response = client.post(
+        "/v1/query",
+        json={"query": "A query body that exceeds thirty-two bytes."},
+    )
+
+    assert response.status_code == 413
+    assert response.json()["error"]["code"] == "request_too_large"
+    assert response.headers["x-request-id"]
+    assert service.queries == []
+
+
+def test_query_rate_limit_is_enforced_per_client() -> None:
+    service = FakeQueryService()
+    client = TestClient(
+        create_app(
+            query_service=service,
+            guardrail_settings=ApiGuardrailSettings(
+                rate_limit_requests=1,
+                rate_limit_window_seconds=60,
+            ),
+        )
+    )
+
+    first = client.post(
+        "/v1/query",
+        json={"query": "first query"},
+    )
+    second = client.post(
+        "/v1/query",
+        json={"query": "second query"},
+    )
+
+    assert first.status_code == 200
+    assert first.headers["x-ratelimit-limit"] == "1"
+    assert first.headers["x-ratelimit-remaining"] == "0"
+    assert second.status_code == 429
+    assert second.json()["error"]["code"] == "rate_limit_exceeded"
+    assert int(second.headers["retry-after"]) >= 1
+    assert service.queries == ["first query"]
 
 
 def test_query_is_unavailable_without_service() -> None:
