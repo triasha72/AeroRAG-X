@@ -1,0 +1,13 @@
+version: "0.1"
+
+baseline_manifest: "artifacts/evaluation/phase25_baseline_manifest_v0_1.json"
+
+required_files:
+  - "artifacts/evaluation/generation_deterministic_v0_3_phase17_baseline.json"
+  - "artifacts/evaluation/adaptive_retrieval_v0_1_comparison.json"
+  - "reports/phase24_quality_v0_1.md"
+  - "reports/unsupported_response_taxonomy_v0_1.md"
+  - "reports/grpo_agent_ablation_v0_1.md"
+  - "reports/distributed_reliability_v0_1.md"
+  - "reports/edge_runtime_benchmark_v0_1.json"
+  - "docs/release-readiness.md"

@@ -140,6 +140,7 @@ An additional Apple-Silicon MLX-LM structured transport is available for control
 - private Google Cloud Run Gen2 validation
 - structured logging
 - request IDs
+- configurable request-size and process-local query-rate limits
 - Prometheus
 - OpenTelemetry
 - provider latency telemetry
@@ -147,6 +148,10 @@ An additional Apple-Silicon MLX-LM structured transport is available for control
 - provider call/bypass telemetry
 - adaptive-retrieval orchestrator metadata
 - GitHub Actions CI
+- frozen-evidence release-readiness checks
+
+Deployment boundaries, rollback triggers, and pgvector backup/restore are documented in
+[the release-readiness runbook](docs/release-readiness.md).
 
 # Engineering principles
 
@@ -1075,6 +1080,7 @@ Apple-Silicon MPS float16 benchmark              DONE
 MLX structured-transport foundation              DONE
 MLX 4-bit versus MPS float16 comparison          DONE
 Phase 35 provenance, rendering, and task contract DONE
+API request guardrails + release checks           DONE
 independent multimodal annotation review          NEXT
 ```
 
