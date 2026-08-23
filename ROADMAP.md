@@ -1364,6 +1364,8 @@ Next: Phase 46 bounded grounded-agent GRPO experiment.
 - [x] lazy TRL trainer integration
 - [x] validation-only/default-safe training CLI
 - [x] synthetic format fixtures
+- [x] free Kaggle P100 4-bit LoRA configuration and notebook
+- [x] resumable checkpoints and hashed run receipt
 - [ ] prepare real versioned training set
 - [ ] verify disjoint protected evaluation IDs
 - [ ] execute training on suitable hardware

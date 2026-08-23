@@ -56,6 +56,7 @@ agentic = [
   "langgraph>=1.0,<2.0",
 ]
 rl = [
+  "bitsandbytes>=0.49,<1.0; platform_system == 'Linux'",
   "trl>=1.6,<2.0",
   "datasets>=4.7,<5.0",
   "jmespath>=1.0,<2.0",
