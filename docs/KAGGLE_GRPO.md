@@ -1,8 +1,14 @@
 # Run the grounded-agent GRPO experiment on Kaggle
 
-This path uses a free Kaggle P100 and 4-bit LoRA so the run fits within a
+This path uses a free Kaggle P100 and fp16 LoRA so the 0.6B run fits within a
 single 16 GB GPU. It creates resumable checkpoints and a receipt containing
 the exact configuration and case-file hashes.
+
+Kaggle's newer default PyTorch builds no longer include the P100's Pascal
+`sm_60` kernels. The notebook installs the compatible PyTorch 2.7.1 CUDA 12.6
+stack and aligns torchvision/torchaudio before installing AeroRAG-X. It also
+removes Kaggle's old optional `torchao`, which current PEFT rejects. The P100
+configs avoid bitsandbytes kernels and use ordinary fp16 LoRA.
 
 ## Before the real run
 
@@ -18,6 +24,8 @@ with no case IDs shared by the protected evaluation set.
 2. Import `notebooks/kaggle_grpo_p100.ipynb` and run every cell.
 3. First run the five-step smoke configuration. Confirm that `checkpoint-*`,
    `final_adapter`, and `run_receipt.json` appear under `/kaggle/working`.
+   Also inspect reward and tool-call logs. A completed run with zero reward,
+   zero gradient, and no tool calls proves execution only—not RL learning.
 4. Set `CASES_PATH` to the attached real JSONL and switch `CONFIG_PATH` to
    `configs/grpo_kaggle_p100_v0_1.yaml`. Run the training cell again.
 5. If Kaggle stops the session, rerun the command with `--resume`. The script

@@ -14,8 +14,8 @@ save_total_limit: 2
 fp16: true
 bf16: false
 gradient_checkpointing: true
-optim: paged_adamw_8bit
-quantization_4bit: true
+optim: adamw_torch
+quantization_4bit: false
 lora_r: 16
 lora_alpha: 32
 lora_dropout: 0.05
