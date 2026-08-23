@@ -11,3 +11,9 @@ required_files:
   - "reports/distributed_reliability_v0_1.md"
   - "reports/edge_runtime_benchmark_v0_1.json"
   - "docs/release-readiness.md"
+
+forbidden_markers:
+  "reports/grpo_agent_ablation_v0_1.md":
+    - "pending"
+    - "measurement template"
+    - "no fabricated results"

@@ -1,7 +1,7 @@
 # AeroRAG-X release readiness
 
 **Policy:** 0.1  
-**Result:** PASS
+**Result:** FAIL
 
 ## Checks
 
@@ -13,4 +13,5 @@
 - [x] **required:reports/distributed_reliability_v0_1.md** — present and non-empty
 - [x] **required:reports/edge_runtime_benchmark_v0_1.json** — present and non-empty
 - [x] **required:docs/release-readiness.md** — present and non-empty
+- [ ] **finalized:reports/grpo_agent_ablation_v0_1.md** — placeholder markers found: measurement template, no fabricated results, pending
 - [x] **frozen-baseline-checksums** — verified 9 frozen inputs
