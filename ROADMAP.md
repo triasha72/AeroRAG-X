@@ -1366,6 +1366,8 @@ Next: Phase 46 bounded grounded-agent GRPO experiment.
 - [x] synthetic format fixtures
 - [x] free Kaggle P100 4-bit LoRA configuration and notebook
 - [x] resumable checkpoints and hashed run receipt
+- [x] real-case quality and near-duplicate leakage validation
+- [x] hashed train/protected-evaluation dataset manifest
 - [ ] prepare real versioned training set
 - [ ] verify disjoint protected evaluation IDs
 - [ ] execute training on suitable hardware
@@ -1382,6 +1384,7 @@ Next: Phase 47 held-out Base vs LoRA vs GRPO ablation.
 - [x] tool-selection and efficiency metrics
 - [x] latency metrics
 - [x] non-prescriptive report template
+- [x] reproducibility metadata contract and measured-report freezer
 - [ ] record Base results
 - [ ] record LoRA/SFT results
 - [ ] record GRPO results

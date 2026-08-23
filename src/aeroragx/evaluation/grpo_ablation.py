@@ -25,6 +25,11 @@ class PolicyEvaluationObservation(BaseModel):
     tool_calls: int = Field(ge=0)
     structured_output_valid: bool
     latency_ms: float = Field(ge=0.0)
+    model_id: str | None = None
+    model_revision: str | None = None
+    adapter_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    seed: int | None = None
+    reward_total: float | None = None
 
 
 class PolicyEvaluationMetrics(BaseModel):
