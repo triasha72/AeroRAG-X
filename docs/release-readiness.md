@@ -2,6 +2,12 @@
 
 This runbook turns the existing evaluation artifacts into an explicit ship/no-ship decision. It does not claim that AeroRAG-X is a public multi-tenant service. The current deployment evidence covers private validation, bounded request handling, deterministic regression checks, and failure-aware service behavior.
 
+Required evidence must be both present and finalized. The versioned readiness
+policy rejects configured placeholder markers, so an ablation template with
+`pending` values cannot satisfy the release gate merely because the file is
+nonempty. The current GRPO gate remains open until measured Base, LoRA/SFT, and
+GRPO results replace the template.
+
 ## What is measured
 
 - Frozen deterministic generation regression over the committed evaluation set.
@@ -28,6 +34,10 @@ This runbook turns the existing evaluation artifacts into an explicit ship/no-sh
    python scripts/check_release_readiness.py
    pytest --cov=aeroragx --cov-fail-under=80
    ```
+
+   The command exits nonzero while a release gate is open. CI uses
+   `--allow-unready` only to publish the truthful report as a build artifact;
+   that flag must not be used for an actual ship/no-ship decision.
 
 3. Build the container from the target commit.
 4. Record the image digest, commit SHA, model/config versions, corpus manifest checksum, and protected-evaluation manifest checksum.

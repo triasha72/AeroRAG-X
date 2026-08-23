@@ -1,6 +1,6 @@
 {
   "policy_version": "0.1",
-  "passed": true,
+  "passed": false,
   "checks": [
     {
       "name": "required:artifacts/evaluation/generation_deterministic_v0_3_phase17_baseline.json",
@@ -41,6 +41,11 @@
       "name": "required:docs/release-readiness.md",
       "passed": true,
       "detail": "present and non-empty"
+    },
+    {
+      "name": "finalized:reports/grpo_agent_ablation_v0_1.md",
+      "passed": false,
+      "detail": "placeholder markers found: measurement template, no fabricated results, pending"
     },
     {
       "name": "frozen-baseline-checksums",

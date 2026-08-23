@@ -77,7 +77,8 @@ jobs:
           python scripts/check_release_readiness.py \
             --policy configs/release_readiness_v0_1.yaml \
             --json-output reports/release_readiness_v0_1.json \
-            --markdown-output reports/release_readiness_v0_1.md
+            --markdown-output reports/release_readiness_v0_1.md \
+            --allow-unready
 
       - name: Upload release-readiness report
         uses: actions/upload-artifact@v4
