@@ -8,7 +8,6 @@ import math
 import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import Any
 
 import httpx
 from pydantic import BaseModel, ConfigDict, Field
@@ -171,6 +170,7 @@ async def run_vllm_benchmark(
         raise ValueError("At least one prompt is required.")
     semaphore = asyncio.Semaphore(concurrency)
     async with httpx.AsyncClient(timeout=None) as client:
+
         async def execute(prompt: BenchmarkPrompt) -> VLLMRequestMetric:
             async with semaphore:
                 return await _stream_request(

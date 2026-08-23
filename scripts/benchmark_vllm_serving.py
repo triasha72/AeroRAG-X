@@ -38,9 +38,7 @@ class NvidiaMemoryMonitor:
                 return
             if result.returncode == 0:
                 values = [
-                    int(value.strip())
-                    for value in result.stdout.splitlines()
-                    if value.strip()
+                    int(value.strip()) for value in result.stdout.splitlines() if value.strip()
                 ]
                 if values:
                     used_bytes = sum(values) * 1024 * 1024
@@ -66,9 +64,7 @@ def main() -> None:
     parser.add_argument("--max-tokens", type=int, default=256)
     args = parser.parse_args()
     rows = [
-        json.loads(line)
-        for line in args.input.read_text(encoding="utf-8").splitlines()
-        if line
+        json.loads(line) for line in args.input.read_text(encoding="utf-8").splitlines() if line
     ]
     rows = (rows * ((args.requests + len(rows) - 1) // len(rows)))[: args.requests]
     shared_policy = str(rows[0]["policy"])

@@ -59,7 +59,9 @@ class OpenAICompatibleStructuredTransport:
         self, *, request: StructuredModelRequest, timeout_seconds: float
     ) -> StructuredModelResult:
         if request.model_name != self._model_name:
-            raise ProviderTransportError("Served model does not match request model.", retryable=False)
+            raise ProviderTransportError(
+                "Served model does not match request model.", retryable=False
+            )
         payload = {
             "model": self._model_name,
             "messages": [
@@ -76,7 +78,10 @@ class OpenAICompatibleStructuredTransport:
             headers["Authorization"] = f"Bearer {self._config.api_key}"
         try:
             response = self._client.post(
-                str(self._config.endpoint_url), json=payload, headers=headers, timeout=timeout_seconds
+                str(self._config.endpoint_url),
+                json=payload,
+                headers=headers,
+                timeout=timeout_seconds,
             )
             response.raise_for_status()
             body = response.json()
@@ -97,7 +102,9 @@ class OpenAICompatibleStructuredTransport:
                 f"{self._config.engine} returned an invalid completion.", retryable=False
             ) from exc
         if not isinstance(result, dict):
-            raise ProviderTransportError("Structured completion was not an object.", retryable=False)
+            raise ProviderTransportError(
+                "Structured completion was not an object.", retryable=False
+            )
         return StructuredModelResult(
             payload=result,
             request_id=response.headers.get("x-request-id"),

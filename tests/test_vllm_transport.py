@@ -23,10 +23,7 @@ def test_vllm_transport_uses_guided_json_schema() -> None:
                 "choices": [
                     {
                         "message": {
-                            "content": (
-                                '{"answer":"ok","claims":[],'
-                                '"insufficient_evidence":false}'
-                            )
+                            "content": ('{"answer":"ok","claims":[],"insufficient_evidence":false}')
                         }
                     }
                 ],

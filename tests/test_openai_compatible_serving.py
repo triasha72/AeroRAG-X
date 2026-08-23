@@ -19,14 +19,15 @@ def test_compatible_engine_returns_structured_result(engine: str) -> None:
         return httpx.Response(
             200,
             json={
-                "choices": [{
-                    "message": {
-                        "content": (
-                            '{"answer":"Supported.","claims":[],'
-                            '"insufficient_evidence":false}'
-                        )
+                "choices": [
+                    {
+                        "message": {
+                            "content": (
+                                '{"answer":"Supported.","claims":[],"insufficient_evidence":false}'
+                            )
+                        }
                     }
-                }],
+                ],
                 "usage": {"prompt_tokens": 10, "completion_tokens": 6},
             },
         )

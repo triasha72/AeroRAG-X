@@ -50,11 +50,13 @@ def dataset(path: Path, *, tokenizer: Any, config: dict[str, Any]) -> TokenDatas
             provider_config=provider,
             max_sequence_tokens=int(config["max_sequence_tokens"]),
         )
-        rows.append({
-            "input_ids": encoded.input_ids,
-            "attention_mask": encoded.attention_mask,
-            "labels": encoded.labels,
-        })
+        rows.append(
+            {
+                "input_ids": encoded.input_ids,
+                "attention_mask": encoded.attention_mask,
+                "labels": encoded.labels,
+            }
+        )
     return TokenDataset(rows)
 
 

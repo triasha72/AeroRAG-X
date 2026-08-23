@@ -22,6 +22,8 @@ import torch.distributed as dist
 import yaml
 from torch.distributed.fsdp import (
     FullyShardedDataParallel as FSDP,
+)
+from torch.distributed.fsdp import (
     MixedPrecision,
     ShardedStateDictConfig,
     StateDictType,
@@ -97,11 +99,13 @@ def load_rows(config: dict[str, Any], tokenizer: Any, key: str) -> TokenDataset:
             provider_config=provider,
             max_sequence_tokens=int(config["max_sequence_tokens"]),
         )
-        rows.append({
-            "input_ids": encoded.input_ids,
-            "attention_mask": encoded.attention_mask,
-            "labels": encoded.labels,
-        })
+        rows.append(
+            {
+                "input_ids": encoded.input_ids,
+                "attention_mask": encoded.attention_mask,
+                "labels": encoded.labels,
+            }
+        )
     return TokenDataset(rows)
 
 
@@ -303,8 +307,7 @@ def main() -> None:
                 "step": step,
                 "epoch": epoch,
                 "training_loss": (
-                    reduce_sum(float(loss.detach()) * accumulation, context)
-                    / context.world_size
+                    reduce_sum(float(loss.detach()) * accumulation, context) / context.world_size
                 ),
                 "step_time_seconds": elapsed,
                 "tokens_per_second": reduce_sum(float(tokens), context) / elapsed,
@@ -341,16 +344,20 @@ def main() -> None:
     )
     if context.rank == 0:
         (output_dir / "summary.json").write_text(
-            json.dumps({
-                "configuration": "fsdp" if fsdp_enabled else "baseline",
-                "gpus": context.world_size,
-                "final_step": step,
-                "final_training_loss": final_training_loss,
-                "validation_loss": validation_loss,
-                "checkpoint_save_seconds": save_time,
-                "checkpoint_size_bytes": size,
-                "resume_validated": bool(resume),
-            }, indent=2) + "\n",
+            json.dumps(
+                {
+                    "configuration": "fsdp" if fsdp_enabled else "baseline",
+                    "gpus": context.world_size,
+                    "final_step": step,
+                    "final_training_loss": final_training_loss,
+                    "validation_loss": validation_loss,
+                    "checkpoint_save_seconds": save_time,
+                    "checkpoint_size_bytes": size,
+                    "resume_validated": bool(resume),
+                },
+                indent=2,
+            )
+            + "\n",
             encoding="utf-8",
         )
     if context.world_size > 1:
