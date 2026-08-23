@@ -2,7 +2,30 @@
 
 **An evaluation-first, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.**
 
-AeroRAG-X is an independent engineering project built around public NASA Technical Reports Server (NTRS) material. It treats corpus construction, retrieval, reranking, grounding, generation, citations, model adaptation, evaluation, and deployment as separately measurable engineering problems.
+AeroRAG-X is an independent engineering project built around public NASA Technical Reports Server (NTRS) material. It treats corpus construction, retrieval, reranking, grounding, generation, citations, model adaptation, distributed training, high-throughput serving, evaluation, and deployment as separately measurable engineering problems.
+
+---
+
+## Results at a glance
+
+| Question | Measured result |
+|---|---|
+| Can the corpus preserve source identity? | Built 3,233 citation-preserving chunks with document, page, URL, and checksum provenance |
+| Does grounding improve the reliability boundary? | Grounded Base and LoRA both reached 1.000 answerability, unsupported refusal, and citation coverage; closed-book answerability was 0.7812 and strict refusal was 0.4167 |
+| What did LoRA change? | Expected-concept coverage rose from 38.16% to 51.32% and answer-to-claim capture from 10.00% to 45.00%; claim support remained similar and three contradicted claims remained |
+| Did every policy help? | No. Adaptive retrieval reduced answerability from 91.67% to 83.33% and refusal from 83.33% to 66.67%, so the negative result was retained |
+| Could a narrower safeguard help? | On a separate held-out set, the scope-qualifier safeguard raised answerability from 50.00% to 92.86% and refusal from 40.00% to 100.00% |
+| Are the FSDP and vLLM studies complete? | The controlled trainers, serving transport, benchmark harnesses, and preregistered reports are implemented; CUDA measurements remain pending and are not presented as results |
+
+These results come from different frozen experiments and are not pooled into a
+single score. Their sample sizes, policies, and limitations remain in the
+linked evaluation reports.
+
+## System
+
+```text
+Hybrid retrieval → reranking → evidence gate → bounded agent → generation → validation
+```
 
 ---
 
@@ -65,11 +88,13 @@ flowchart TD
     L --> N["OpenAI"]
     L --> O["Qwen3-0.6B"]
     L --> P["Qwen3-0.6B + PEFT / LoRA"]
+    L --> PL["vLLM OpenAI-compatible server"]
 
     M --> Q["Structured grounded response"]
     N --> Q
     O --> Q
     P --> Q
+    PL --> Q
 
     Q --> R["Response validation"]
     R --> S["Evidence-ID validation"]
@@ -138,6 +163,9 @@ Supported application runtime modes:
 local
 openai
 transformers
+vllm
+sglang
+tensorrt-llm
 ```
 
 Current local model:
@@ -154,6 +182,67 @@ Qwen + PEFT / LoRA adapter
 ```
 
 An additional Apple-Silicon MLX-LM structured transport is available for controlled local low-bit experiments. It is intentionally separate from the application runtime selector until it has been compared against the established Transformers MPS baseline.
+
+The vLLM transport implements the same structured generation contract as the
+Transformers backend. Retrieval, RRF, cross-encoder reranking, evidence
+sufficiency, prompt hardening, and response validation remain fixed, allowing a
+controlled serving comparison instead of a different RAG pipeline. The serving
+study measures concurrency 1, 8, 16, and 32 under normal and repeated
+moderation-policy-prefix workloads. See
+[`reports/vllm_serving_v0_1.md`](reports/vllm_serving_v0_1.md).
+
+```bash
+vllm serve Qwen/Qwen3-4B-Instruct-2507 --enable-prefix-caching
+
+python scripts/benchmark_vllm_serving.py \
+  --input data/evaluation/vllm_policy_prefix_v0_1.jsonl \
+  --output artifacts/evaluation/vllm_serving_v0_1.json
+```
+
+## Distributed training
+
+The matched training study compares the same Qwen assistant-only objective on a
+single non-sharded GPU and two GPUs with PyTorch FSDP. It includes bf16 mixed
+precision, gradient checkpointing, deterministic distributed samplers,
+rank-aware seeds and metrics, full parameter/gradient/optimizer sharding,
+sharded checkpoints, and resume-from-checkpoint.
+
+```bash
+# One-GPU control
+python distributed_training/train_fsdp.py --no-fsdp
+
+# Two-GPU treatment
+torchrun --standalone --nproc_per_node=2 distributed_training/train_fsdp.py
+```
+
+The experiment records training and validation loss, tokens/s, samples/s, step
+time, peak GPU memory per rank, checkpoint size/save time, and restart status.
+Final parity means bounded protected-evaluation differences, not byte-identical
+weights. The study design and pending result table are in
+[`reports/fsdp_scaling_v0_1.md`](reports/fsdp_scaling_v0_1.md).
+
+### Additional controlled framework treatments
+
+DeepSpeed ZeRO-3 uses the same Transformers model, assistant-only tokenization,
+train/dev split, and optimizer settings:
+
+```bash
+deepspeed --num_gpus 2 distributed_training/train_deepspeed.py
+```
+
+The Megatron-LM launcher validates a pinned upstream checkout and emits the full
+tensor/sequence-parallel command before execution:
+
+```bash
+MEGATRON_LM_ROOT=/path/to/Megatron-LM \
+  python distributed_training/launch_megatron.py
+```
+
+SGLang and TensorRT-LLM use their OpenAI-compatible servers behind the same
+structured provider boundary as vLLM. Their configs live in `configs/`; the
+retrieval, evidence, and output-validation path is unchanged. The controlled
+comparison and hardware limits are recorded in
+[`reports/framework_comparison_v0_1.md`](reports/framework_comparison_v0_1.md).
 
 ## Serving and operations
 

@@ -1,0 +1,8 @@
+version: "0.1"
+endpoint_url: "http://127.0.0.1:8000/v1/chat/completions"
+api_key: null
+max_tokens: 512
+temperature: 0.0
+top_p: 1.0
+seed: 20260810
+enable_prefix_caching: true

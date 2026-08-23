@@ -1,0 +1,11 @@
+version: "0.1"
+provider: "vllm"
+model_name: "Qwen/Qwen3-4B-Instruct-2507"
+evidence_top_k: 5
+minimum_evidence_count: 1
+max_context_characters: 12000
+max_chunk_characters: 3000
+max_claims: 6
+require_citations: true
+allow_insufficient_evidence: true
+include_retrieval_metadata: true

@@ -1,0 +1,31 @@
+version: "0.1"
+experiment_name: "qwen3_4b_fsdp_v0_1"
+model_name: "Qwen/Qwen3-4B-Instruct-2507"
+train_input: "data/training/splits/aeroragx_lora_v0_1_train_eligible.jsonl"
+validation_input: "data/training/splits/aeroragx_lora_v0_1_dev.jsonl"
+provider_config: "configs/provider_v0_1.yaml"
+output_dir: "artifacts/training/fsdp_v0_1"
+seed: 20260810
+epochs: 1
+max_steps: null
+max_sequence_tokens: 4096
+per_device_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 0.0002
+weight_decay: 0.01
+gradient_clip_norm: 1.0
+mixed_precision: "bf16"
+gradient_checkpointing: true
+fsdp:
+  enabled: true
+  sharding_strategy: "full_shard"
+  use_orig_params: true
+  limit_all_gathers: true
+  forward_prefetch: false
+checkpoint:
+  every_steps: 100
+  keep_last: 2
+  resume_from: null
+logging:
+  every_steps: 1
+  metrics_file: "metrics.jsonl"
