@@ -14,6 +14,10 @@ from aeroragx.generation.http_transport import (
     load_http_transport_config,
 )
 from aeroragx.generation.model_adapter import OpenAIResponsesAdapter
+from aeroragx.generation.openai_compatible_serving import (
+    OpenAICompatibleStructuredTransport,
+    load_compatible_serving_config,
+)
 from aeroragx.generation.prompting import load_provider_hardening_config
 from aeroragx.generation.provider import (
     GenerationProvider,
@@ -25,6 +29,10 @@ from aeroragx.generation.structured_provider import (
 from aeroragx.generation.transformers_transport import (
     TransformersStructuredModelTransport,
     load_transformers_runtime_config,
+)
+from aeroragx.generation.vllm_transport import (
+    VLLMStructuredModelTransport,
+    load_vllm_runtime_config,
 )
 
 RemoteAdapterName = Literal["openai-responses"]
@@ -123,11 +131,49 @@ def create_configured_generation_provider(
             ),
         )
 
+    if normalized_provider == "vllm":
+        hardening_config = load_provider_hardening_config(
+            _require_path(provider_config, option_name="provider_config")
+        )
+
+    if normalized_provider in {"sglang", "tensorrt-llm"}:
+        hardening_config = load_provider_hardening_config(
+            _require_path(provider_config, option_name="provider_config")
+        )
+        runtime_config = load_compatible_serving_config(
+            _require_path(provider_runtime_config, option_name="provider_runtime_config")
+        )
+        if runtime_config.engine != normalized_provider:
+            raise ValueError("Serving provider and runtime engine must match.")
+        return StructuredGenerationProvider(
+            model_name=generation_config.model_name,
+            transport=OpenAICompatibleStructuredTransport(
+                model_name=generation_config.model_name,
+                config=runtime_config,
+            ),
+            config=hardening_config,
+            input_cost_per_million_tokens=0.0,
+            output_cost_per_million_tokens=0.0,
+        )
+        runtime_config = load_vllm_runtime_config(
+            _require_path(provider_runtime_config, option_name="provider_runtime_config")
+        )
+        return StructuredGenerationProvider(
+            model_name=generation_config.model_name,
+            transport=VLLMStructuredModelTransport(
+                model_name=generation_config.model_name,
+                config=runtime_config,
+            ),
+            config=hardening_config,
+            input_cost_per_million_tokens=0.0,
+            output_cost_per_million_tokens=0.0,
+        )
+
     raise ValueError(
         "Unsupported configured generation provider "
         f"{generation_config.provider!r}. "
         "Supported providers are: fake, deterministic, "
-        "extractive, openai-responses, transformers."
+        "extractive, openai-responses, transformers, vllm, sglang, tensorrt-llm."
     )
 
 

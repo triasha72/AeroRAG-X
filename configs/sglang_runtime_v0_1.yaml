@@ -1,0 +1,7 @@
+version: "0.1"
+engine: "sglang"
+endpoint_url: "http://127.0.0.1:30000/v1/chat/completions"
+api_key: null
+max_tokens: 512
+temperature: 0.0
+seed: 20260810

@@ -1,0 +1,17 @@
+version: "0.1"
+model_name: "Qwen/Qwen3-4B-Instruct-2507"
+tensor_parallel_size: 2
+pipeline_parallel_size: 1
+sequence_parallel: true
+micro_batch_size: 1
+global_batch_size: 16
+sequence_length: 4096
+train_steps: 100
+learning_rate: 0.0002
+min_learning_rate: 0.00002
+seed: 20260810
+bf16: true
+activation_checkpointing: true
+dataset_prefix: "artifacts/training/megatron/aeroragx_text_document"
+tokenizer_model: "artifacts/training/megatron/tokenizer.model"
+checkpoint_dir: "artifacts/training/megatron/checkpoints"

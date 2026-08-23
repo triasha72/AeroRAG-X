@@ -45,6 +45,26 @@ llm = [
   "torch>=2.4,<3.0",
 ]
 
+serving = [
+  "vllm>=0.11,<1.0; platform_system == 'Linux'",
+]
+
+serving-sglang = [
+  "sglang[all]>=0.4,<1.0; platform_system == 'Linux'",
+]
+
+serving-tensorrt = [
+  "tensorrt-llm>=0.20,<1.0; platform_system == 'Linux' and platform_machine == 'x86_64'",
+]
+
+training-deepspeed = [
+  "deepspeed>=0.17,<1.0; platform_system == 'Linux'",
+]
+
+training-megatron = [
+  "megatron-core>=0.13,<1.0; platform_system == 'Linux'",
+]
+
 mlx = [
   "mlx-lm>=0.31.3,<0.32; platform_system == 'Darwin' and platform_machine == 'arm64'",
 ]
