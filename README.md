@@ -1196,6 +1196,9 @@ experiment with 4-bit LoRA, saves resumable checkpoints, and writes a receipt
 with configuration and data hashes; see [the Kaggle runbook](docs/KAGGLE_GRPO.md).
 The checked-in training rows remain synthetic format fixtures, so no
 model-improvement claim is made without a real run and held-out evaluation.
+The [real-result protocol](docs/REAL_GRPO_RESULT.md) adds dataset-quality and
+near-duplicate leakage checks, frozen split manifests, required model/adapter
+metadata, and hash-bound measured reports.
 
 <!-- phase47-grpo-agent-ablation-v0_1 -->
 ## Base, LoRA/SFT, and GRPO comparison contract

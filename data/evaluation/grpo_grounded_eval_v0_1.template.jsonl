@@ -1,0 +1,2 @@
+{"case_id":"synthetic-eval-supported-001","query":"SYNTHETIC EVALUATION CASE: identify the documented calibration label.","answerable":true,"evidence":[{"evidence_id":"eval-e1","document_id":2,"text":"The synthetic calibration label is ALPHA.","citation_url":"https://example.invalid/eval/1"}],"reference_answer":"ALPHA","expected_citation_ids":["eval-e1"]}
+{"case_id":"synthetic-eval-unsupported-001","query":"SYNTHETIC EVALUATION CASE: determine a value omitted from all evidence.","answerable":false,"evidence":[],"reference_answer":null,"expected_citation_ids":[]}

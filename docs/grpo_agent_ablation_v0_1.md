@@ -9,3 +9,8 @@ output, tool efficiency, and latency are all reported.
 
 The checked-in report contains only `pending` placeholders. Replace them only
 with measured results from frozen evaluation artifacts.
+
+Use `scripts/freeze_grpo_evidence_v0_1.py` to produce the measured JSON and
+Markdown report. It requires identical held-out IDs plus model revision, seed,
+and adapter hashes, preventing a placeholder or incomplete observation file
+from being presented as final evidence.

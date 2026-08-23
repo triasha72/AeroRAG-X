@@ -16,3 +16,8 @@ aerospace training corpus and must not be used for a résumé performance claim.
 Validate locally first. Actual GRPO training should run only on a suitable
 training host after a real versioned training set is prepared and verified
 disjoint from the protected evaluation benchmark.
+
+For a genuine experiment, validate and hash both splits with
+`scripts/prepare_grpo_dataset_v0_1.py`, execute the Kaggle run, and follow
+`docs/REAL_GRPO_RESULT.md`. The validator also rejects inconsistent
+answer/evidence contracts and likely paraphrase leakage across the split.
