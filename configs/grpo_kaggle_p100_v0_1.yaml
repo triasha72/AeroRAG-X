@@ -1,0 +1,30 @@
+version: v0_1
+model_id: Qwen/Qwen3-0.6B
+seed: 42
+max_steps: 100
+num_generations: 2
+maximum_tool_calls: 6
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 4
+max_completion_length: 256
+learning_rate: 0.000005
+logging_steps: 1
+save_steps: 10
+save_total_limit: 2
+fp16: true
+bf16: false
+gradient_checkpointing: true
+optim: paged_adamw_8bit
+quantization_4bit: true
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules: [q_proj, k_proj, v_proj, o_proj]
+reward_weights:
+  supported_answer: 1.0
+  refusal_correctness: 1.0
+  citation_validity: 1.0
+  evidence_support: 1.0
+  structured_output: 0.25
+  tool_selection: 0.5
+  unnecessary_tool_penalty: 0.1
