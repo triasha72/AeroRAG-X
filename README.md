@@ -1192,7 +1192,7 @@ experiment harness only; no executed RL improvement result is claimed.
 A stateful TRL-compatible environment exposes bounded
 retrieve, sufficiency, submit, and refusal tools plus an explicit
 validation-only training command. A Kaggle P100 notebook now runs the bounded
-experiment with 4-bit LoRA, saves resumable checkpoints, and writes a receipt
+experiment with Pascal-compatible PyTorch and fp16 LoRA, saves resumable checkpoints, and writes a receipt
 with configuration and data hashes; see [the Kaggle runbook](docs/KAGGLE_GRPO.md).
 The checked-in training rows remain synthetic format fixtures, so no
 model-improvement claim is made without a real run and held-out evaluation.
