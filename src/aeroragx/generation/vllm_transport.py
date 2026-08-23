@@ -25,7 +25,7 @@ class VLLMRuntimeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     version: str = "0.1"
-    endpoint_url: HttpUrl = "http://127.0.0.1:8000/v1/chat/completions"
+    endpoint_url: HttpUrl
     api_key: str | None = None
     max_tokens: int = Field(default=512, ge=1)
     temperature: float = Field(default=0.0, ge=0.0)
