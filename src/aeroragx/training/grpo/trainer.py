@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any, cast
 
 from aeroragx.training.grpo.config import GRPOExperimentConfig
 from aeroragx.training.grpo.dataset import GroundedAgentTrainingCase
@@ -82,9 +83,8 @@ def run_grpo_training(
     except ImportError as exc:
         raise RuntimeError('TRL is required. Install with: pip install -e ".[rl]"') from exc
 
-    training_args = GRPOConfig(  # type: ignore[arg-type]
-        **training_argument_values(config, output_dir)
-    )
+    argument_values = cast(dict[str, Any], training_argument_values(config, output_dir))
+    training_args = GRPOConfig(**argument_values)
     quantization_config = None
     if config.quantization_4bit:
         quantization_config = BitsAndBytesConfig(  # type: ignore[no-untyped-call]
