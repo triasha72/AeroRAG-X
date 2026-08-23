@@ -77,14 +77,17 @@ def run_grpo_training(
         import torch
         from peft import LoraConfig
         from transformers import BitsAndBytesConfig
-        from trl import GRPOConfig, GRPOTrainer
+        from trl.trainer.grpo_config import GRPOConfig
+        from trl.trainer.grpo_trainer import GRPOTrainer
     except ImportError as exc:
         raise RuntimeError('TRL is required. Install with: pip install -e ".[rl]"') from exc
 
-    training_args = GRPOConfig(**training_argument_values(config, output_dir))
+    training_args = GRPOConfig(  # type: ignore[arg-type]
+        **training_argument_values(config, output_dir)
+    )
     quantization_config = None
     if config.quantization_4bit:
-        quantization_config = BitsAndBytesConfig(
+        quantization_config = BitsAndBytesConfig(  # type: ignore[no-untyped-call]
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
             bnb_4bit_compute_dtype=torch.float16,
