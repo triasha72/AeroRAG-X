@@ -27,30 +27,6 @@ linked evaluation reports.
 Hybrid retrieval → reranking → evidence gate → bounded agent → generation → validation
 ```
 
----
-
-## Results at a glance
-
-| Question | Measured result |
-|---|---|
-| Can the corpus preserve source identity? | Built 3,233 citation-preserving chunks with document, page, URL, and checksum provenance |
-| Does grounding improve the reliability boundary? | Grounded Base and LoRA both reached 1.000 answerability, unsupported refusal, and citation coverage; closed-book answerability was 0.7812 and strict refusal was 0.4167 |
-| What did LoRA change? | Expected-concept coverage rose from 38.16% to 51.32% and answer-to-claim capture from 10.00% to 45.00%; claim support remained similar and three contradicted claims remained |
-| Did every policy help? | No. Adaptive retrieval reduced answerability from 91.67% to 83.33% and refusal from 83.33% to 66.67%, so the negative result was retained |
-| Could a narrower safeguard help? | On a separate held-out set, the scope-qualifier safeguard raised answerability from 50.00% to 92.86% and refusal from 40.00% to 100.00% |
-
-These results come from different frozen experiments and are not pooled into a
-single score. Their sample sizes, policies, and limitations remain in the
-linked evaluation reports.
-
-## System
-
-```text
-Hybrid retrieval → reranking → evidence gate → bounded agent → generation → validation
-```
-
----
-
 ## Project origin
 
 The idea for AeroRAG-X grew out of questions I became interested in while working on **HERO**, a Georgia Tech Grand Challenge project sponsored by **Delta Air Lines**.
@@ -243,6 +219,8 @@ structured provider boundary as vLLM. Their configs live in `configs/`; the
 retrieval, evidence, and output-validation path is unchanged. The controlled
 comparison and hardware limits are recorded in
 [`reports/framework_comparison_v0_1.md`](reports/framework_comparison_v0_1.md).
+The remaining GPU, human-review, GRPO, and upstream steps are tracked with
+evidence gates in the [manual completion checklist](docs/manual-completion-checklist.md).
 
 ## Serving and operations
 
