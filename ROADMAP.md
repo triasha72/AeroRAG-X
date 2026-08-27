@@ -1,5 +1,7 @@
 # AeroRAG-X Roadmap
 
+[Project overview and measured results](README.md)
+
 AeroRAG-X is an independent, evaluation-first engineering project exploring evidence-grounded language-model systems for aerospace technical knowledge.
 
 The governing principle is:
