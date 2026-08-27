@@ -1,5 +1,7 @@
 # AeroRAG-X
 
+[Portfolio case study](https://triasha72.github.io/Portfolio/case-aerorag.html)
+
 **An evaluation-first, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.**
 
 AeroRAG-X is an independent engineering project built around public NASA Technical Reports Server (NTRS) material. It treats corpus construction, retrieval, reranking, grounding, generation, citations, model adaptation, distributed training, high-throughput serving, evaluation, and deployment as separately measurable engineering problems.
