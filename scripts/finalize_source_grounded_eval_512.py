@@ -45,9 +45,10 @@ def _validate_review(row: dict[str, Any], query_id: str) -> None:
             raise ValueError(f"{field} is not complete for {query_id}.")
     if row.get("decision") not in {"ACCEPT", "REJECT"}:
         raise ValueError(f"Invalid decision for {query_id}.")
-    expected = all(bool(row[field]) for field in (
-        "query_is_clear", "source_supports_query", "relevant_chunk_correct"
-    ))
+    expected = all(
+        bool(row[field])
+        for field in ("query_is_clear", "source_supports_query", "relevant_chunk_correct")
+    )
     if (row["decision"] == "ACCEPT") != expected:
         raise ValueError(f"Decision contradicts review fields for {query_id}.")
 
@@ -94,7 +95,8 @@ def main() -> None:
         )
     if len(accepted) < args.minimum_accepted:
         raise SystemExit(
-            f"Only {len(accepted)} cases were independently accepted; require {args.minimum_accepted}."
+            f"Only {len(accepted)} cases were independently accepted; "
+            f"require {args.minimum_accepted}."
         )
 
     args.protected_output.parent.mkdir(parents=True, exist_ok=True)
@@ -116,7 +118,9 @@ def main() -> None:
         "review_b_sha256": _sha(args.review_b),
         "protected_queries_sha256": _sha(args.protected_output),
     }
-    args.summary_output.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.summary_output.write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(summary, indent=2, sort_keys=True))
 
 

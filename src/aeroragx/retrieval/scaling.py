@@ -33,7 +33,7 @@ class RetrievalScaleConfig(BaseModel):
     max_chunk_tokens: int = Field(default=750, ge=1)
 
     @model_validator(mode="after")
-    def validate_funnel(self) -> "RetrievalScaleConfig":
+    def validate_funnel(self) -> RetrievalScaleConfig:
         if self.rerank_top_k > self.candidate_top_k:
             raise ValueError("rerank_top_k must not exceed candidate_top_k.")
         if self.evidence_top_k > self.rerank_top_k:
@@ -60,7 +60,7 @@ class ChunkFilter(BaseModel):
     report_families: set[str] | None = None
 
     @model_validator(mode="after")
-    def validate_pages(self) -> "ChunkFilter":
+    def validate_pages(self) -> ChunkFilter:
         if (
             self.page_start is not None
             and self.page_end is not None
@@ -92,14 +92,12 @@ def chunk_matches_filter(chunk: ChunkRecord, filters: ChunkFilter | None) -> boo
         return False
     if filters.page_end is not None and chunk.page_start > filters.page_end:
         return False
-    if (
-        filters.publication_year_min is not None
-        and (chunk.publication_year is None or chunk.publication_year < filters.publication_year_min)
+    if filters.publication_year_min is not None and (
+        chunk.publication_year is None or chunk.publication_year < filters.publication_year_min
     ):
         return False
-    if (
-        filters.publication_year_max is not None
-        and (chunk.publication_year is None or chunk.publication_year > filters.publication_year_max)
+    if filters.publication_year_max is not None and (
+        chunk.publication_year is None or chunk.publication_year > filters.publication_year_max
     ):
         return False
     if filters.subject_categories is not None and not (
@@ -107,11 +105,10 @@ def chunk_matches_filter(chunk: ChunkRecord, filters: ChunkFilter | None) -> boo
         & {value.casefold() for value in filters.subject_categories}
     ):
         return False
-    if (
-        filters.document_types is not None
-        and (chunk.document_type is None or chunk.document_type.casefold() not in {
-            value.casefold() for value in filters.document_types
-        })
+    if filters.document_types is not None and (
+        chunk.document_type is None
+        or chunk.document_type.casefold()
+        not in {value.casefold() for value in filters.document_types}
     ):
         return False
     if filters.programs is not None and not (
@@ -119,11 +116,10 @@ def chunk_matches_filter(chunk: ChunkRecord, filters: ChunkFilter | None) -> boo
         & {value.casefold() for value in filters.programs}
     ):
         return False
-    if (
-        filters.report_families is not None
-        and (chunk.report_family is None or chunk.report_family.casefold() not in {
-            value.casefold() for value in filters.report_families
-        })
+    if filters.report_families is not None and (
+        chunk.report_family is None
+        or chunk.report_family.casefold()
+        not in {value.casefold() for value in filters.report_families}
     ):
         return False
     return True
@@ -170,9 +166,7 @@ def select_hierarchical_evidence(
     """Select diverse child chunks after document-level grouping and deduplication."""
 
     eligible = [
-        hit
-        for hit in hits[: config.rerank_top_k]
-        if chunk_matches_filter(hit.chunk, filters)
+        hit for hit in hits[: config.rerank_top_k] if chunk_matches_filter(hit.chunk, filters)
     ]
     parent_collapsed: list[RerankedSearchHit] = []
     seen_parents: set[str] = set()
@@ -353,9 +347,7 @@ def benchmark_retriever(
         relevant = query.relevant_chunk_ids
         recalls.append(len(set(returned) & relevant) / len(relevant))
         gain = sum(
-            1.0 / math.log2(rank + 1)
-            for rank, item in enumerate(returned, 1)
-            if item in relevant
+            1.0 / math.log2(rank + 1) for rank, item in enumerate(returned, 1) if item in relevant
         )
         ideal = sum(1.0 / math.log2(rank + 1) for rank in range(1, min(len(relevant), top_k) + 1))
         ndcgs.append(gain / ideal if ideal else 0.0)

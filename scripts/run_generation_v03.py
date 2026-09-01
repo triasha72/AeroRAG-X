@@ -5,22 +5,12 @@ from __future__ import annotations
 
 import argparse
 import gc
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
-)
-from aeroragx.generation.telemetry_evaluation import (
-    evaluate_grounded_generation_with_telemetry,
-    write_generation_telemetry_evaluation_report,
-)
-from aeroragx.runtime import (
-    AeroRAGRuntime,
-    RuntimeConfig,
-    load_reranker_index,
-    load_grounded_runtime,
 )
 from aeroragx.generation.facet_retrieval import (
     FacetAwareEvidenceIndex,
@@ -36,7 +26,17 @@ from aeroragx.generation.sufficiency import (
     EvidenceSufficiencyAssessor,
     load_sufficiency_config,
 )
+from aeroragx.generation.telemetry_evaluation import (
+    evaluate_grounded_generation_with_telemetry,
+    write_generation_telemetry_evaluation_report,
+)
 from aeroragx.retrieval.reranker import RerankedSearchHit
+from aeroragx.runtime import (
+    AeroRAGRuntime,
+    RuntimeConfig,
+    load_grounded_runtime,
+    load_reranker_index,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -133,7 +133,9 @@ class _FrozenQueryIndex:
         try:
             hits = self._hits_by_query[query]
         except KeyError as exc:
-            raise KeyError(f"Query was not included in the frozen retrieval pass: {query!r}") from exc
+            raise KeyError(
+                f"Query was not included in the frozen retrieval pass: {query!r}"
+            ) from exc
         return hits[:top_k]
 
 
@@ -207,15 +209,15 @@ def main() -> None:
     queries = load_generation_evaluation_queries(args.queries_input)
 
     runtime_config = RuntimeConfig(
-            generation_config=(args.generation_config),
-            sufficiency_config=(args.sufficiency_config),
-            facet_retrieval_config=(args.facet_retrieval_config),
-            provider_config=(args.provider_config),
-            http_transport_config=(args.http_transport_config),
-            provider_runtime_config=(args.provider_runtime_config),
-            candidate_top_k=(args.candidate_top_k),
-            evidence_top_k=(args.evidence_top_k),
-        )
+        generation_config=(args.generation_config),
+        sufficiency_config=(args.sufficiency_config),
+        facet_retrieval_config=(args.facet_retrieval_config),
+        provider_config=(args.provider_config),
+        http_transport_config=(args.http_transport_config),
+        provider_runtime_config=(args.provider_runtime_config),
+        candidate_top_k=(args.candidate_top_k),
+        evidence_top_k=(args.evidence_top_k),
+    )
     runtime = (
         _load_memory_bounded_runtime(
             runtime_config,

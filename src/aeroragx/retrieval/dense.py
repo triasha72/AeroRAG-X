@@ -212,9 +212,7 @@ def update_dense_index_incrementally(
     summary = IncrementalDenseUpdate(
         reused_chunk_count=len(incoming_chunks) - len(changed),
         encoded_chunk_count=len(changed),
-        deleted_chunk_count=sum(
-            chunk.chunk_id not in incoming_ids for chunk in existing_chunks
-        ),
+        deleted_chunk_count=sum(chunk.chunk_id not in incoming_ids for chunk in existing_chunks),
     )
     return np.asarray(np.vstack(rows), dtype=np.float32), summary
 

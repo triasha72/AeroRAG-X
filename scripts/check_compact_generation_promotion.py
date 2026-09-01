@@ -31,9 +31,7 @@ def main() -> None:
         (args.baseline_report, args.candidate_report, args.paired_efficiency),
     )
     checks: dict[str, bool] = {
-        "same_complete_query_contract": (
-            baseline["query_count"] == candidate["query_count"] == 32
-        ),
+        "same_complete_query_contract": (baseline["query_count"] == candidate["query_count"] == 32),
         "failure_count_not_worse": (
             candidate["generation_failure_count"] <= baseline["generation_failure_count"]
         ),
@@ -49,8 +47,7 @@ def main() -> None:
         "structural_validity_rate",
     ):
         checks[f"{metric}_within_bound"] = (
-            float(candidate[metric])
-            >= float(baseline[metric]) - args.maximum_rate_regression
+            float(candidate[metric]) >= float(baseline[metric]) - args.maximum_rate_regression
         )
     relative_change = float(paired["relative_output_token_change"])
     checks["paired_output_token_reduction"] = relative_change <= -args.minimum_token_reduction

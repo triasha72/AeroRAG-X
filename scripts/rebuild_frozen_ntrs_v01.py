@@ -20,7 +20,6 @@ from aeroragx.processing.pdf import (
     write_page_records,
 )
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOWNLOAD_MANIFEST = REPO_ROOT / "data/manifests/ntrs_v0_1_downloads.jsonl"
 EXTRACTION_MANIFEST = REPO_ROOT / "data/manifests/ntrs_v0_1_extraction.jsonl"
@@ -61,7 +60,10 @@ def ensure_download(*, source_url: str, destination: Path, expected_sha256: str)
                 source_url,
                 headers={"User-Agent": "AeroRAG-X frozen-corpus rebuild/0.1"},
             )
-            with urllib.request.urlopen(request, timeout=120) as response, partial.open("wb") as out:
+            with (
+                urllib.request.urlopen(request, timeout=120) as response,
+                partial.open("wb") as out,
+            ):
                 while block := response.read(1024 * 1024):
                     out.write(block)
 

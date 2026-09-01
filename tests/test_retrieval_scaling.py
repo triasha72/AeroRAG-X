@@ -76,11 +76,14 @@ def test_metadata_filter_uses_authoritative_chunk_fields() -> None:
 
 def test_token_budget_uses_supplied_tokenizer_counter() -> None:
     counter = lambda text: len(text.split())  # noqa: E731
-    assert truncate_to_token_budget(
-        "one two three four five",
-        token_counter=counter,
-        max_tokens=3,
-    ) == "one two three"
+    assert (
+        truncate_to_token_budget(
+            "one two three four five",
+            token_counter=counter,
+            max_tokens=3,
+        )
+        == "one two three"
+    )
 
 
 def test_incremental_plan_uses_document_checksums() -> None:

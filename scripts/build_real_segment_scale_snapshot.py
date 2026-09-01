@@ -46,7 +46,9 @@ def main() -> None:
                     "page_end": parent.get("page_end"),
                     "text": " ".join(window),
                 }
-                encoded = (json.dumps(record, separators=(",", ":"), ensure_ascii=False) + "\n").encode()
+                encoded = (
+                    json.dumps(record, separators=(",", ":"), ensure_ascii=False) + "\n"
+                ).encode()
                 output.write(encoded)
                 digest.update(encoded)
                 count += 1
@@ -66,10 +68,14 @@ def main() -> None:
         "segment_words": args.segment_words,
         "overlap_words": args.overlap_words,
         "chunks_sha256": digest.hexdigest(),
-        "limitation": "Segments reuse real source chunks; this tests retrieval load, not corpus breadth.",
+        "limitation": (
+            "Segments reuse real source chunks; this tests retrieval load, not corpus breadth."
+        ),
     }
     manifest_path = args.output.with_suffix(".manifest.json")
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(manifest, indent=2, sort_keys=True))
 
 

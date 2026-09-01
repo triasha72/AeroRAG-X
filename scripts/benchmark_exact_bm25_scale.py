@@ -88,7 +88,9 @@ def main() -> None:
 
     queries = rows(args.queries)
     qrels = {str(row["query_id"]): set(row["relevant_chunk_ids"]) for row in rows(args.qrels)}
-    query_tokens = {str(row["query_id"]): TOKEN.findall(str(row["query"]).lower()) for row in queries}
+    query_tokens = {
+        str(row["query_id"]): TOKEN.findall(str(row["query"]).lower()) for row in queries
+    }
     indexed_terms = set().union(*map(set, query_tokens.values()))
     postings: dict[str, list[tuple[int, int]]] = defaultdict(list)
     chunk_ids: list[str] = []
@@ -130,10 +132,14 @@ def main() -> None:
             if not term_postings:
                 continue
             frequency_documents = len(term_postings)
-            inverse_frequency = math.log(1 + (document_count - frequency_documents + 0.5) / (frequency_documents + 0.5))
+            inverse_frequency = math.log(
+                1 + (document_count - frequency_documents + 0.5) / (frequency_documents + 0.5)
+            )
             for index, frequency in term_postings:
                 normalization = 1 - b + b * (lengths[index] / average_length)
-                scores[index] += inverse_frequency * frequency * (k1 + 1) / (frequency + k1 * normalization)
+                scores[index] += (
+                    inverse_frequency * frequency * (k1 + 1) / (frequency + k1 * normalization)
+                )
                 touched.add(index)
         ranked = heapq.nsmallest(10, touched, key=lambda index: (-scores[index], chunk_ids[index]))
         latencies.append((time.perf_counter() - started) * 1000)
@@ -177,11 +183,11 @@ def main() -> None:
         "recall_at_10": statistics.mean(collapsed_recalls),
         "ndcg_at_10": statistics.mean(collapsed_ndcgs),
         "p50_latency_ms": percentile(
-            [base + collapse for base, collapse in zip(latencies, collapse_latencies)],
+            [base + collapse for base, collapse in zip(latencies, collapse_latencies, strict=True)],
             0.50,
         ),
         "p95_latency_ms": percentile(
-            [base + collapse for base, collapse in zip(latencies, collapse_latencies)],
+            [base + collapse for base, collapse in zip(latencies, collapse_latencies, strict=True)],
             0.95,
         ),
         "p50_collapse_overhead_ms": percentile(collapse_latencies, 0.50),

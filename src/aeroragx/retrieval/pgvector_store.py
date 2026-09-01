@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 import psycopg
@@ -498,6 +498,7 @@ class PgVectorIndex:
             """
         ).format(table=sql.Identifier(self._config.table_name))
 
+        parameters: tuple[Any, ...]
         if self._config.collapse_parent_chunks:
             statement = sql.SQL(
                 """

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
@@ -556,11 +556,7 @@ def build_generation_evidence(
                     allowed_characters,
                     max(
                         1,
-                        int(
-                            len(hit.chunk.text)
-                            * allowed_tokens
-                            / hit.chunk.token_estimate
-                        ),
+                        int(len(hit.chunk.text) * allowed_tokens / hit.chunk.token_estimate),
                     ),
                 )
         text = hit.chunk.text[:allowed_characters].strip()
@@ -848,8 +844,7 @@ class GroundedAnswerGenerator:
         provider_counter = getattr(provider, "count_tokens", None)
         self._token_counter: Callable[[str], int] | None = (
             provider_counter
-            if callable(provider_counter)
-            and bool(getattr(provider, "supports_token_count", False))
+            if callable(provider_counter) and bool(getattr(provider, "supports_token_count", False))
             else None
         )
         self._adaptive_retrieval: (

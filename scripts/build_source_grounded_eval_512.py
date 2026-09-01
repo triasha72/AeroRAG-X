@@ -13,28 +13,79 @@ from pathlib import Path
 from typing import Any
 
 STOP = {
-    "about", "after", "also", "been", "between", "could", "from", "have",
-    "into", "more", "other", "results", "such", "system", "than", "that",
-    "their", "there", "these", "they", "this", "through", "using", "were",
-    "which", "with", "would", "figure", "table", "nasa", "report",
+    "about",
+    "after",
+    "also",
+    "been",
+    "between",
+    "could",
+    "from",
+    "have",
+    "into",
+    "more",
+    "other",
+    "results",
+    "such",
+    "system",
+    "than",
+    "that",
+    "their",
+    "there",
+    "these",
+    "they",
+    "this",
+    "through",
+    "using",
+    "were",
+    "which",
+    "with",
+    "would",
+    "figure",
+    "table",
+    "nasa",
+    "report",
 }
 TOKEN = re.compile(r"[a-z][a-z0-9-]{3,}")
 
 
 def args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--chunks", type=Path, default=Path("data/processed/ntrs/v0_1/chunks.jsonl"))
+    parser.add_argument(
+        "--chunks", type=Path, default=Path("data/processed/ntrs/v0_1/chunks.jsonl")
+    )
     parser.add_argument("--count", type=int, default=512)
-    parser.add_argument("--queries-output", type=Path, default=Path("data/evaluation/source_grounded_queries_v0_1_512.jsonl"))
-    parser.add_argument("--retrieval-queries-output", type=Path, default=Path("data/evaluation/source_grounded_retrieval_queries_v0_1_512.jsonl"))
-    parser.add_argument("--qrels-output", type=Path, default=Path("data/evaluation/source_grounded_qrels_v0_1_512.jsonl"))
-    parser.add_argument("--review-output", type=Path, default=Path("data/evaluation/source_grounded_review_v0_1_512.template.jsonl"))
-    parser.add_argument("--manifest-output", type=Path, default=Path("data/evaluation/source_grounded_eval_v0_1_512_manifest.json"))
+    parser.add_argument(
+        "--queries-output",
+        type=Path,
+        default=Path("data/evaluation/source_grounded_queries_v0_1_512.jsonl"),
+    )
+    parser.add_argument(
+        "--retrieval-queries-output",
+        type=Path,
+        default=Path("data/evaluation/source_grounded_retrieval_queries_v0_1_512.jsonl"),
+    )
+    parser.add_argument(
+        "--qrels-output",
+        type=Path,
+        default=Path("data/evaluation/source_grounded_qrels_v0_1_512.jsonl"),
+    )
+    parser.add_argument(
+        "--review-output",
+        type=Path,
+        default=Path("data/evaluation/source_grounded_review_v0_1_512.template.jsonl"),
+    )
+    parser.add_argument(
+        "--manifest-output",
+        type=Path,
+        default=Path("data/evaluation/source_grounded_eval_v0_1_512_manifest.json"),
+    )
     return parser.parse_args()
 
 
 def load_rows(path: Path) -> list[dict[str, Any]]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    return [
+        json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+    ]
 
 
 def terms(text: str) -> list[str]:
@@ -43,7 +94,9 @@ def terms(text: str) -> list[str]:
 
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
+    path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8"
+    )
 
 
 def sha(path: Path) -> str:
@@ -145,7 +198,9 @@ def main() -> None:
         "qrels_sha256": sha(config.qrels_output),
         "review_template_sha256": sha(config.review_output),
     }
-    config.manifest_output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    config.manifest_output.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(manifest, indent=2, sort_keys=True))
 
 

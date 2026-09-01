@@ -151,11 +151,15 @@ def chunk_pdf(
         text = " ".join(word for word, _ in window)
         pages = sorted({page for _, page in window})
         funding = record.get("fundingNumbers")
-        programs = [
-            str(item.get("number"))
-            for item in funding
-            if isinstance(item, dict) and item.get("number")
-        ] if isinstance(funding, list) else []
+        programs = (
+            [
+                str(item.get("number"))
+                for item in funding
+                if isinstance(item, dict) and item.get("number")
+            ]
+            if isinstance(funding, list)
+            else []
+        )
         chunks.append(
             ChunkRecord(
                 chunk_id=f"{document_id}:chunk:{chunk_index:05d}",
@@ -196,15 +200,22 @@ def main() -> None:
     pdf_directory.mkdir(parents=True, exist_ok=True)
     chunks_path = output / "chunks.jsonl"
     receipts_path = output / "receipts.jsonl"
-    completed = {
-        int(json.loads(line)["document_id"])
-        for line in receipts_path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    } if receipts_path.exists() else set()
+    completed = (
+        {
+            int(json.loads(line)["document_id"])
+            for line in receipts_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        }
+        if receipts_path.exists()
+        else set()
+    )
     existing_count = _line_count(chunks_path)
 
     with httpx.Client(base_url=NTRS, timeout=args.timeout_seconds, follow_redirects=True) as client:
-        with chunks_path.open("a", encoding="utf-8") as chunk_file, receipts_path.open("a", encoding="utf-8") as receipt_file:
+        with (
+            chunks_path.open("a", encoding="utf-8") as chunk_file,
+            receipts_path.open("a", encoding="utf-8") as receipt_file,
+        ):
             for record in iter_search_records(
                 client,
                 queries,
@@ -238,13 +249,30 @@ def main() -> None:
                         overlap_words=int(chunk_config["overlap_words"]),
                     )
                 except Exception as error:
-                    receipt_file.write(json.dumps({"document_id": document_id, "status": "failed", "error": str(error)}, sort_keys=True) + "\n")
+                    receipt_file.write(
+                        json.dumps(
+                            {"document_id": document_id, "status": "failed", "error": str(error)},
+                            sort_keys=True,
+                        )
+                        + "\n"
+                    )
                     receipt_file.flush()
                     continue
                 for chunk in chunks:
                     chunk_file.write(chunk.model_dump_json() + "\n")
                 chunk_file.flush()
-                receipt_file.write(json.dumps({"document_id": document_id, "status": "processed", "chunks": len(chunks), "sha256": checksum}, sort_keys=True) + "\n")
+                receipt_file.write(
+                    json.dumps(
+                        {
+                            "document_id": document_id,
+                            "status": "processed",
+                            "chunks": len(chunks),
+                            "sha256": checksum,
+                        },
+                        sort_keys=True,
+                    )
+                    + "\n"
+                )
                 receipt_file.flush()
                 existing_count += len(chunks)
                 print(f"document={document_id} chunks={len(chunks)} total={existing_count}")
@@ -259,7 +287,9 @@ def main() -> None:
         "complete": existing_count >= args.target_chunks,
         "chunks_sha256": _sha256(chunks_path),
     }
-    (output / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (output / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 if __name__ == "__main__":
