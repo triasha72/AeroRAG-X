@@ -2,9 +2,32 @@
 
 [Portfolio case study](https://triasha72.github.io/Portfolio/case-aerorag.html)
 
-**An evaluation-first, evidence-grounded retrieval-augmented generation system for aerospace technical knowledge.**
+AeroRAG-X helps a reader navigate public NASA technical reports while keeping
+the source trail visible. It is a retrieval-augmented generation system, but the
+main engineering question is broader: when should the system answer, when should
+it refuse, and can a reviewer trace each answer back to evidence?
 
-AeroRAG-X is an independent engineering project built around public NASA Technical Reports Server (NTRS) material. It treats corpus construction, retrieval, reranking, grounding, generation, citations, model adaptation, distributed training, high-throughput serving, evaluation, and deployment as separately measurable engineering problems.
+## Project story
+
+**Situation.** Aerospace reports are long, specialized, and spread across many
+documents. A language model can summarize them quickly, but fluent text is not
+useful if the evidence is missing or the citation points to the wrong source.
+
+**Task.** I wanted to build a research assistant whose retrieval, grounding,
+generation, adaptation, and serving choices could be evaluated separately.
+
+**Action.** I assembled 3,233 citation-preserving chunks from public NASA NTRS
+material, combined BM25 and dense retrieval, added reranking and an evidence
+sufficiency gate, and required structured source IDs before citations are
+resolved. I compared closed-book, grounded, Base, and LoRA conditions on frozen
+queries and retained policy changes that made performance worse.
+
+**Result.** Grounded Base and LoRA both reached `1.000` answerability,
+unsupported-query refusal, and citation coverage on the reported benchmark.
+LoRA increased expected-concept coverage from `38.16%` to `51.32%`, but three
+contradicted claims remained. Adaptive retrieval also produced a negative
+result, reducing answerability from `91.67%` to `83.33%`. CUDA serving and GRPO
+results remain pending and are not inferred from the implemented harnesses.
 
 ---
 
