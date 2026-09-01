@@ -109,13 +109,19 @@ class ProviderTransportError(StructuredProviderError):
         message: str,
         *,
         retryable: bool,
+        diagnostics: dict[str, object] | None = None,
     ) -> None:
         super().__init__(message)
         self.retryable = retryable
+        self.diagnostics = dict(diagnostics or {})
 
 
 class ProviderResponseValidationError(StructuredProviderError):
     """Model output failed the required response contract."""
+
+    def __init__(self, message: str, *, diagnostics: dict[str, object] | None = None) -> None:
+        super().__init__(message)
+        self.diagnostics = dict(diagnostics or {})
 
 
 class StructuredGenerationProvider(GenerationProvider):
@@ -258,7 +264,11 @@ class StructuredGenerationProvider(GenerationProvider):
                     usage=result.usage,
                 )
                 raise ProviderResponseValidationError(
-                    "Structured provider response failed validation."
+                    "Structured provider response failed validation.",
+                    diagnostics={
+                        "failure_stage": "response_schema",
+                        "validation_error_type": type(error).__name__,
+                    },
                 ) from error
 
             self._last_telemetry = ProviderTelemetry(

@@ -707,3 +707,24 @@ Corpus field completeness alone is not a relevance judgment. The current real
 corpus has complete document-level year, subject, type, and report-family
 metadata, while program metadata covers 66.64% of documents; missing program
 values must therefore be reported as exclusions.
+
+## Source-grounded 512-case candidate
+
+The source-grounded query and qrels files provide a 512-query lexical recovery
+diagnostic across all 94 frozen documents. Automatically constructed wording is
+not a protected natural-question set. Two reviewers must independently copy and
+complete `source_grounded_review_v0_1_512.template.jsonl`.
+
+```bash
+python scripts/finalize_source_grounded_eval_512.py \
+  --queries data/evaluation/source_grounded_queries_v0_1_512.jsonl \
+  --manifest data/evaluation/source_grounded_eval_v0_1_512_manifest.json \
+  --review-a artifacts/evaluation/source_grounded_review_a_v0_1_512.jsonl \
+  --review-b artifacts/evaluation/source_grounded_review_b_v0_1_512.jsonl \
+  --protected-output data/evaluation/source_grounded_queries_v0_2_512_protected.jsonl \
+  --summary-output artifacts/evaluation/source_grounded_review_summary_v0_2.json
+```
+
+The command rejects incomplete coverage, identical reviewer identities,
+contradictory fields, unresolved disagreements, checksum drift, or fewer than
+500 accepted cases. Human decisions must never be synthesized to satisfy it.

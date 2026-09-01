@@ -229,6 +229,11 @@ from the relevant chunks, this is honestly reported as a lexical retrieval/load
 diagnostic—not evidence of natural-question or generation quality. See
 [`reports/source_grounded_eval_512_v0_1.md`](reports/source_grounded_eval_512_v0_1.md).
 
+`scripts/finalize_source_grounded_eval_512.py` enforces promotion: two distinct
+reviewers must cover every case, all decisions must agree or be adjudicated,
+fields and decisions must be internally consistent, and at least 500 cases must
+be accepted. Until then, the manifest keeps the set labeled as a candidate.
+
 The pgvector path now supports HNSW for approximate search. Exact NumPy remains
 the small-corpus control. Checksum-based incremental updates reuse embeddings
 for unchanged chunks and encode only added or changed material. Overlapping
@@ -1278,6 +1283,18 @@ implemented prompt-budget result, not yet a generation-quality result. The full
 32-query Base/LoRA candidate is run with
 `scripts/run_compact_mps_claim4_validation.sh`; it writes new artifacts and
 cannot overwrite the historical checkpoint reports.
+
+The runner also compares compact LoRA directly with original LoRA on matched
+successful calls and invokes a fail-closed promotion gate. Promotion requires
+at least 15 paired calls, at least 15% output-token reduction, no additional
+generation failures, the same 32-query contract, and no quality-rate regression
+greater than one query out of 32. Saving tokens by failing or refusing more
+often is therefore rejected.
+
+Local failure telemetry is bounded but actionable. It records the failure
+stage, output-token count, whether the ceiling was reached, JSON error position,
+output character count, and a SHA-256 fingerprint. Raw generated text and
+prompts are not copied into telemetry, avoiding a new sensitive-data sink.
 
 ---
 

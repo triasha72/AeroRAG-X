@@ -7,6 +7,13 @@
   "base_mean_output_tokens": 140.89473684210526,
   "treatment_mean_output_tokens": 210.89473684210526,
   "mean_paired_output_token_delta": 70.0,
+  "mean_paired_output_token_delta_bootstrap_95_ci": [
+    39.31578947368421,
+    99.89605263157893
+  ],
+  "paired_effect_size_cohen_dz": 1.0048076925710145,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260901,
   "relative_output_token_change": 0.4968248038849458,
   "treatment_lower_token_query_count": 3,
   "equal_token_query_count": 0,

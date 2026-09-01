@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import random
 import statistics
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--treatment-telemetry", type=Path, required=True)
     parser.add_argument("--json-output", type=Path, required=True)
     parser.add_argument("--markdown-output", type=Path, required=True)
+    parser.add_argument("--bootstrap-samples", type=int, default=10_000)
     return parser.parse_args()
 
 
@@ -50,6 +52,25 @@ def _repeated_word_fraction(answer: str) -> float:
 
 def _mean(values: list[float]) -> float:
     return statistics.fmean(values) if values else 0.0
+
+
+def _percentile(values: list[float], fraction: float) -> float:
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * fraction
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    return ordered[lower] + (ordered[upper] - ordered[lower]) * (position - lower)
+
+
+def _bootstrap_mean_interval(values: list[float], samples: int) -> tuple[float, float]:
+    if not values or samples < 1:
+        raise ValueError("Bootstrap analysis requires values and at least one sample.")
+    rng = random.Random(20260901)
+    means = [
+        statistics.fmean(rng.choice(values) for _ in values)
+        for _ in range(samples)
+    ]
+    return _percentile(means, 0.025), _percentile(means, 0.975)
 
 
 def main() -> None:
@@ -110,6 +131,11 @@ def main() -> None:
     treatment_tokens = [float(row["treatment_output_tokens"]) for row in pairs]
     base_mean = _mean(base_tokens)
     treatment_mean = _mean(treatment_tokens)
+    delta_lower, delta_upper = _bootstrap_mean_interval(
+        token_deltas,
+        args.bootstrap_samples,
+    )
+    delta_sd = statistics.stdev(token_deltas) if len(token_deltas) > 1 else 0.0
     summary = {
         "version": "0.1",
         "status": "completed",
@@ -119,6 +145,12 @@ def main() -> None:
         "base_mean_output_tokens": base_mean,
         "treatment_mean_output_tokens": treatment_mean,
         "mean_paired_output_token_delta": _mean(token_deltas),
+        "mean_paired_output_token_delta_bootstrap_95_ci": [delta_lower, delta_upper],
+        "paired_effect_size_cohen_dz": (
+            _mean(token_deltas) / delta_sd if delta_sd else None
+        ),
+        "bootstrap_samples": args.bootstrap_samples,
+        "bootstrap_seed": 20260901,
         "relative_output_token_change": (
             (treatment_mean - base_mean) / base_mean if base_mean else None
         ),
@@ -171,6 +203,8 @@ def main() -> None:
         "",
         f"Paired completed queries: **{len(completed_ids)}**. Paired provider calls: **{len(provider_ids)}**.",
         f"Mean treatment-minus-Base output delta: **{summary['mean_paired_output_token_delta']:+.2f} tokens**.",
+        f"Paired bootstrap 95% interval: **[{delta_lower:+.2f}, {delta_upper:+.2f}] tokens** ({args.bootstrap_samples:,} deterministic resamples).",
+        f"Paired effect size (Cohen's dz): **{float(summary['paired_effect_size_cohen_dz'] or 0.0):+.3f}**.",
         f"Relative treatment output change: **{float(relative or 0.0):+.2%}**.",
         f"Treatment used fewer/equal/more tokens on **{summary['treatment_lower_token_query_count']} / {summary['equal_token_query_count']} / {summary['treatment_higher_token_query_count']}** paired calls.",
         "",

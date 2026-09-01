@@ -527,6 +527,11 @@ def test_transformers_failure_is_recorded_and_evaluation_continues() -> None:
             "broken": ProviderTransportError(
                 "invalid local-model JSON",
                 retryable=False,
+                diagnostics={
+                    "failure_stage": "json_decode",
+                    "output_tokens": 384,
+                    "output_reached_token_limit": True,
+                },
             ),
             "unsupported": refusal_answer(
                 "unsupported",
@@ -579,6 +584,12 @@ def test_transformers_failure_is_recorded_and_evaluation_continues() -> None:
     assert failed.provider_called is None
 
     assert failed.provider_call_policy_correct is None
+
+    assert failed.failure_diagnostics == {
+        "failure_stage": "json_decode",
+        "output_tokens": 384,
+        "output_reached_token_limit": True,
+    }
 
     summary = report.provider_summary
 

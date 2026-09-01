@@ -58,6 +58,20 @@ PYTHONPATH=src "$python_bin" scripts/analyze_paired_generation_efficiency.py \
   --json-output artifacts/evaluation/generation_claim4_compact_paired_efficiency_v0_1.json \
   --markdown-output reports/generation_claim4_compact_paired_efficiency_v0_1.md
 
+PYTHONPATH=src "$python_bin" scripts/analyze_paired_generation_efficiency.py \
+  --base-report artifacts/evaluation/generation_transformers_lora_claim4_v0_1.json \
+  --base-telemetry artifacts/evaluation/generation_transformers_lora_claim4_telemetry_v0_1.json \
+  --treatment-report "$lora_report" \
+  --treatment-telemetry "$lora_telemetry" \
+  --json-output artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json \
+  --markdown-output reports/generation_lora_compact_vs_v01_paired_v0_1.md
+
+PYTHONPATH=src "$python_bin" scripts/check_compact_generation_promotion.py \
+  --baseline-report artifacts/evaluation/generation_transformers_lora_claim4_v0_1.json \
+  --candidate-report "$lora_report" \
+  --paired-efficiency artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json \
+  --output artifacts/evaluation/generation_lora_compact_promotion_v0_1.json
+
 PYTHONPATH=src "$python_bin" - <<'PY'
 import hashlib
 import json

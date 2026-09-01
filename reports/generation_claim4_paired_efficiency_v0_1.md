@@ -11,6 +11,8 @@ Refusals and failures are not silently converted into zero-token observations.
 
 Paired completed queries: **29**. Paired provider calls: **19**.
 Mean treatment-minus-Base output delta: **+70.00 tokens**.
+Paired bootstrap 95% interval: **[+39.32, +99.90] tokens** (10,000 deterministic resamples).
+Paired effect size (Cohen's dz): **+1.005**.
 Relative treatment output change: **+49.68%**.
 Treatment used fewer/equal/more tokens on **3 / 0 / 16** paired calls.
 

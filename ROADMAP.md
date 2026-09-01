@@ -1180,9 +1180,13 @@ New infrastructure should follow a measured engineering requirement.
   substituted checkpoint was used
 - [x] run paired successful-query verbosity analysis: across 19 comparable calls,
   LoRA used +70 output tokens (+49.68%) and was longer on 16 calls
+- [x] add deterministic paired bootstrap inference: the mean output delta is
+  +70.00 tokens with a 95% interval of +39.32 to +99.90 and Cohen's dz 1.005
 - [x] implement a versioned compact response prompt and isolated full validation
   runner; exact tokenizer measurement saves 128 input tokens (8.02%) on the
   representative five-evidence prompt without reducing evidence
+- [x] add privacy-bounded malformed-output diagnostics, a compact promotion
+  gate, and a two-reviewer 500+ benchmark finalization gate
 - [ ] execute the full compact 32-query MPS candidate and promote it only if its
   paired token use improves without regression in completion, grounding,
   expected-term recall, or structural validity

@@ -80,6 +80,8 @@ class GenerationQueryProviderTelemetry(BaseModel):
 
     prompt_injection_safe: bool | None = None
 
+    failure_diagnostics: dict[str, object] | None = None
+
 
 class ProviderTelemetrySummary(BaseModel):
     """Aggregate provider telemetry for a run."""
@@ -189,6 +191,7 @@ class _CapturingGenerator:
         self._delegate = delegate
 
         self.answers: list[GroundedAnswer | None] = []
+        self.errors: list[Exception | None] = []
 
     def generate(
         self,
@@ -202,11 +205,13 @@ class _CapturingGenerator:
                 reranker_model=reranker_model,
             )
 
-        except Exception:
+        except Exception as error:
             self.answers.append(None)
+            self.errors.append(error)
             raise
 
         self.answers.append(answer)
+        self.errors.append(None)
 
         return answer
 
@@ -236,6 +241,9 @@ def evaluate_grounded_generation_with_telemetry(
     if len(capturing_generator.answers) != len(queries):
         raise RuntimeError("Generation telemetry capture count does not match query count.")
 
+    if len(capturing_generator.errors) != len(queries):
+        raise RuntimeError("Generation error capture count does not match query count.")
+
     if len(generation_report.query_results) != len(queries):
         raise RuntimeError("Generation evaluation result count does not match query count.")
 
@@ -248,16 +256,19 @@ def evaluate_grounded_generation_with_telemetry(
             query=query,
             answer=answer,
             evaluation=evaluation,
+            error=error,
             telemetry_expected=(telemetry_expected),
         )
         for (
             query,
             answer,
             evaluation,
+            error,
         ) in zip(
             queries,
             capturing_generator.answers,
             generation_report.query_results,
+            capturing_generator.errors,
             strict=True,
         )
     ]
@@ -297,9 +308,11 @@ def _build_query_telemetry(
     query: GenerationEvaluationQuery,
     answer: GroundedAnswer | None,
     evaluation: GenerationQueryEvaluation,
+    error: Exception | None,
     telemetry_expected: bool,
 ) -> GenerationQueryProviderTelemetry:
     if evaluation.generation_failed:
+        diagnostics = getattr(error, "diagnostics", None)
         return GenerationQueryProviderTelemetry(
             query_id=query.query_id,
             expected_answerable=(query.expected_answerable),
@@ -307,6 +320,7 @@ def _build_query_telemetry(
             failure_type=(evaluation.failure_type),
             provider_called=None,
             provider_call_policy_correct=None,
+            failure_diagnostics=(dict(diagnostics) if isinstance(diagnostics, dict) else None),
         )
 
     if answer is None:
