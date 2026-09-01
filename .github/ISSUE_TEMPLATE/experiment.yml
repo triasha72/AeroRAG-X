@@ -1,0 +1,21 @@
+name: RAG experiment proposal
+description: Freeze the query set, evidence boundary, and decision rule before a run.
+title: "experiment: "
+labels: ["experiment"]
+body:
+  - type: textarea
+    id: question
+    attributes: {label: "Question", description: "What product or research decision should this answer?"}
+    validations: {required: true}
+  - type: textarea
+    id: corpus
+    attributes: {label: "Corpus and split", description: "Name the NASA sources, manifest, frozen queries, and protected set."}
+    validations: {required: true}
+  - type: textarea
+    id: metrics
+    attributes: {label: "Measures", description: "Include retrieval, answerability, refusal, citation, claim support, latency, and cost where relevant."}
+    validations: {required: true}
+  - type: textarea
+    id: boundary
+    attributes: {label: "Compute and non-claims", description: "State hardware, seeds, stopping rule, and what this run cannot establish."}
+    validations: {required: true}
