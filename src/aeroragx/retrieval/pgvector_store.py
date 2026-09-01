@@ -51,6 +51,12 @@ class PgVectorConfig(BaseModel):
         ge=1,
         le=100,
     )
+    index_method: Literal["exact", "hnsw"] = "exact"
+    hnsw_m: int = Field(default=16, ge=2, le=100)
+    hnsw_ef_construction: int = Field(default=64, ge=4, le=1000)
+    hnsw_ef_search: int = Field(default=40, ge=1, le=1000)
+    collapse_parent_chunks: bool = True
+    parent_candidate_multiplier: int = Field(default=10, ge=1, le=100)
 
 
 def load_pgvector_config(
@@ -105,6 +111,7 @@ def initialize_pgvector_schema(
             """
             CREATE TABLE IF NOT EXISTS {table} (
                 chunk_id TEXT PRIMARY KEY,
+                parent_chunk_id TEXT,
                 document_id BIGINT NOT NULL,
                 chunk_index INTEGER NOT NULL,
 
@@ -121,6 +128,12 @@ def initialize_pgvector_schema(
                 citation_url TEXT NOT NULL,
                 source_url TEXT NOT NULL,
                 document_sha256 TEXT NOT NULL,
+                title TEXT,
+                publication_year INTEGER,
+                subject_categories JSONB NOT NULL DEFAULT '[]'::jsonb,
+                document_type TEXT,
+                programs JSONB NOT NULL DEFAULT '[]'::jsonb,
+                report_family TEXT,
 
                 embedding vector({dimension}) NOT NULL,
 
@@ -151,6 +164,43 @@ def initialize_pgvector_schema(
         with connection.cursor() as cursor:
             cursor.execute(create_chunks)
             cursor.execute(create_metadata)
+            cursor.execute(
+                sql.SQL(
+                    """
+                    ALTER TABLE {table}
+                    ADD COLUMN IF NOT EXISTS parent_chunk_id TEXT,
+                    ADD COLUMN IF NOT EXISTS title TEXT,
+                    ADD COLUMN IF NOT EXISTS publication_year INTEGER,
+                    ADD COLUMN IF NOT EXISTS subject_categories JSONB NOT NULL DEFAULT '[]'::jsonb,
+                    ADD COLUMN IF NOT EXISTS document_type TEXT,
+                    ADD COLUMN IF NOT EXISTS programs JSONB NOT NULL DEFAULT '[]'::jsonb,
+                    ADD COLUMN IF NOT EXISTS report_family TEXT
+                    """
+                ).format(table=sql.Identifier(config.table_name))
+            )
+            cursor.execute(
+                sql.SQL("CREATE INDEX IF NOT EXISTS {index} ON {table} (parent_chunk_id)").format(
+                    index=sql.Identifier(f"{config.table_name}_parent_chunk"),
+                    table=sql.Identifier(config.table_name),
+                )
+            )
+
+            if config.index_method == "hnsw":
+                index_name = f"{config.table_name}_embedding_hnsw"
+                create_hnsw = sql.SQL(
+                    """
+                    CREATE INDEX IF NOT EXISTS {index}
+                    ON {table}
+                    USING hnsw (embedding vector_cosine_ops)
+                    WITH (m = {m}, ef_construction = {ef_construction})
+                    """
+                ).format(
+                    index=sql.Identifier(index_name),
+                    table=sql.Identifier(config.table_name),
+                    m=sql.Literal(config.hnsw_m),
+                    ef_construction=sql.Literal(config.hnsw_ef_construction),
+                )
+                cursor.execute(create_hnsw)
 
         connection.commit()
 
@@ -187,6 +237,7 @@ def upsert_dense_index(
         """
         INSERT INTO {table} (
             chunk_id,
+            parent_chunk_id,
             document_id,
             chunk_index,
             page_start,
@@ -199,17 +250,25 @@ def upsert_dense_index(
             citation_url,
             source_url,
             document_sha256,
+            title,
+            publication_year,
+            subject_categories,
+            document_type,
+            programs,
+            report_family,
             embedding,
             embedding_model,
             index_version
         )
         VALUES (
             %s, %s, %s, %s, %s, %s, %s, %s,
-            %s, %s, %s, %s, %s, %s, %s, %s
+            %s, %s, %s, %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s, %s
         )
         ON CONFLICT (chunk_id)
         DO UPDATE SET
             document_id = EXCLUDED.document_id,
+            parent_chunk_id = EXCLUDED.parent_chunk_id,
             chunk_index = EXCLUDED.chunk_index,
             page_start = EXCLUDED.page_start,
             page_end = EXCLUDED.page_end,
@@ -221,6 +280,12 @@ def upsert_dense_index(
             citation_url = EXCLUDED.citation_url,
             source_url = EXCLUDED.source_url,
             document_sha256 = EXCLUDED.document_sha256,
+            title = EXCLUDED.title,
+            publication_year = EXCLUDED.publication_year,
+            subject_categories = EXCLUDED.subject_categories,
+            document_type = EXCLUDED.document_type,
+            programs = EXCLUDED.programs,
+            report_family = EXCLUDED.report_family,
             embedding = EXCLUDED.embedding,
             embedding_model = EXCLUDED.embedding_model,
             index_version = EXCLUDED.index_version,
@@ -238,6 +303,7 @@ def upsert_dense_index(
         rows.append(
             (
                 chunk.chunk_id,
+                chunk.parent_chunk_id,
                 chunk.document_id,
                 chunk.chunk_index,
                 chunk.page_start,
@@ -250,6 +316,12 @@ def upsert_dense_index(
                 chunk.citation_url,
                 chunk.source_url,
                 chunk.document_sha256,
+                chunk.title,
+                chunk.publication_year,
+                Jsonb(chunk.subject_categories),
+                chunk.document_type,
+                Jsonb(chunk.programs),
+                chunk.report_family,
                 np.asarray(
                     embedding,
                     dtype=np.float32,
@@ -398,10 +470,11 @@ class PgVectorIndex:
         if normalized_query.shape[0] != self.embedding_dimension:
             raise ValueError("Query and corpus embedding dimensions differ.")
 
-        statement = sql.SQL(
+        base_columns = sql.SQL(
             """
             SELECT
                 chunk_id,
+                parent_chunk_id,
                 document_id,
                 chunk_index,
                 page_start,
@@ -414,26 +487,64 @@ class PgVectorIndex:
                 citation_url,
                 source_url,
                 document_sha256,
+                title,
+                publication_year,
+                subject_categories,
+                document_type,
+                programs,
+                report_family,
                 1.0 - (embedding <=> %s) AS similarity
             FROM {table}
+            """
+        ).format(table=sql.Identifier(self._config.table_name))
+
+        if self._config.collapse_parent_chunks:
+            statement = sql.SQL(
+                """
+                WITH candidates AS (
+                    {base}
+                    ORDER BY embedding <=> %s, chunk_id
+                    LIMIT %s
+                ), best_children AS (
+                    SELECT DISTINCT ON (COALESCE(parent_chunk_id, chunk_id)) *
+                    FROM candidates
+                    ORDER BY COALESCE(parent_chunk_id, chunk_id), similarity DESC, chunk_id
+                )
+                SELECT * FROM best_children
+                ORDER BY similarity DESC, chunk_id
+                LIMIT %s
+                """
+            ).format(base=base_columns)
+            parameters = (
+                normalized_query,
+                normalized_query,
+                top_k * self._config.parent_candidate_multiplier,
+                top_k,
+            )
+        else:
+            statement = sql.SQL(
+                """
+                {base}
             ORDER BY
                 embedding <=> %s,
                 chunk_id
             LIMIT %s
             """
-        ).format(table=sql.Identifier(self._config.table_name))
+            ).format(base=base_columns)
+            parameters = (normalized_query, normalized_query, top_k)
 
         with psycopg.connect(self._database_url) as connection:
             register_vector(connection)
 
             with connection.cursor() as cursor:
+                if self._config.index_method == "hnsw":
+                    cursor.execute(
+                        "SET LOCAL hnsw.ef_search = %s",
+                        (self._config.hnsw_ef_search,),
+                    )
                 cursor.execute(
                     statement,
-                    (
-                        normalized_query,
-                        normalized_query,
-                        top_k,
-                    ),
+                    parameters,
                 )
 
                 rows = cursor.fetchall()
@@ -446,23 +557,30 @@ class PgVectorIndex:
         ):
             chunk = ChunkRecord(
                 chunk_id=row[0],
-                document_id=row[1],
-                chunk_index=row[2],
-                page_start=row[3],
-                page_end=row[4],
-                page_ids=row[5],
-                text=row[6],
-                word_count=row[7],
-                character_count=row[8],
-                token_estimate=row[9],
-                citation_url=row[10],
-                source_url=row[11],
-                document_sha256=row[12],
+                parent_chunk_id=row[1],
+                document_id=row[2],
+                chunk_index=row[3],
+                page_start=row[4],
+                page_end=row[5],
+                page_ids=row[6],
+                text=row[7],
+                word_count=row[8],
+                character_count=row[9],
+                token_estimate=row[10],
+                citation_url=row[11],
+                source_url=row[12],
+                document_sha256=row[13],
+                title=row[14],
+                publication_year=row[15],
+                subject_categories=row[16],
+                document_type=row[17],
+                programs=row[18],
+                report_family=row[19],
             )
 
             similarity = float(
                 np.clip(
-                    row[13],
+                    row[20],
                     -1.0,
                     1.0,
                 )

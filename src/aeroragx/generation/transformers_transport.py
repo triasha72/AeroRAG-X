@@ -352,6 +352,12 @@ class TransformersStructuredModelTransport:
 
         return str(self._config.adapter_path)
 
+    def count_tokens(self, text: str) -> int:
+        """Count text with the exact tokenizer used by this transport."""
+
+        encoded = self._tokenizer.encode(text, add_special_tokens=False)
+        return len(encoded)
+
     def complete(
         self,
         *,

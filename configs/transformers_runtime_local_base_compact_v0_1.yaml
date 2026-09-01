@@ -1,0 +1,15 @@
+version: "0.1"
+device: "mps"
+dtype: "float16"
+context_window_tokens: 32768
+max_input_tokens: 16000
+max_new_tokens: 384
+do_sample: false
+temperature: 0.7
+top_p: 0.8
+top_k: 20
+enable_thinking: false
+trust_remote_code: false
+local_files_only: true
+revision: null
+adapter_path: null

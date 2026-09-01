@@ -161,6 +161,23 @@ class StructuredGenerationProvider(GenerationProvider):
 
         return self._last_telemetry.model_copy(deep=True)
 
+    def count_tokens(self, text: str) -> int:
+        """Delegate exact token counting when the concrete transport supports it."""
+
+        counter = getattr(self._transport, "count_tokens", None)
+        if not callable(counter):
+            raise NotImplementedError("This model transport does not expose token counting.")
+        value = counter(text)
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Transport token counter returned an invalid value.")
+        return value
+
+    @property
+    def supports_token_count(self) -> bool:
+        """Return whether this provider can count with its runtime tokenizer."""
+
+        return callable(getattr(self._transport, "count_tokens", None))
+
     def generate(
         self,
         *,

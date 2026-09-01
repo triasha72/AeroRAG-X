@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import gc
 from pathlib import Path
+from typing import Sequence
 
 from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
@@ -15,9 +17,26 @@ from aeroragx.generation.telemetry_evaluation import (
     write_generation_telemetry_evaluation_report,
 )
 from aeroragx.runtime import (
+    AeroRAGRuntime,
     RuntimeConfig,
+    load_reranker_index,
     load_grounded_runtime,
 )
+from aeroragx.generation.facet_retrieval import (
+    FacetAwareEvidenceIndex,
+    load_facet_retrieval_config,
+)
+from aeroragx.generation.grounded import (
+    GroundedAnswerGenerator,
+    load_generation_config,
+    with_evidence_top_k,
+)
+from aeroragx.generation.provider_factory import create_configured_generation_provider
+from aeroragx.generation.sufficiency import (
+    EvidenceSufficiencyAssessor,
+    load_sufficiency_config,
+)
+from aeroragx.retrieval.reranker import RerankedSearchHit
 
 
 def parse_args() -> argparse.Namespace:
@@ -91,7 +110,95 @@ def parse_args() -> argparse.Namespace:
         required=True,
     )
 
+    parser.add_argument(
+        "--memory-bounded",
+        action="store_true",
+        help=(
+            "Precompute the complete evaluation query hit set, release retrieval "
+            "models, and then load the generation model. This preserves the "
+            "benchmark protocol while reducing peak unified-memory use."
+        ),
+    )
+
     return parser.parse_args()
+
+
+class _FrozenQueryIndex:
+    """Serve exact precomputed reranked hits for a closed evaluation query set."""
+
+    def __init__(self, hits_by_query: dict[str, list[RerankedSearchHit]]) -> None:
+        self._hits_by_query = hits_by_query
+
+    def search(self, query: str, top_k: int = 10) -> Sequence[RerankedSearchHit]:
+        try:
+            hits = self._hits_by_query[query]
+        except KeyError as exc:
+            raise KeyError(f"Query was not included in the frozen retrieval pass: {query!r}") from exc
+        return hits[:top_k]
+
+
+def _release_retrieval_models() -> None:
+    """Return Python and MPS caches before the generation model is constructed."""
+
+    gc.collect()
+    try:
+        import torch
+
+        if torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+    except (ImportError, RuntimeError):
+        pass
+
+
+def _load_memory_bounded_runtime(
+    config: RuntimeConfig,
+    query_texts: Sequence[str],
+) -> AeroRAGRuntime:
+    """Build an equivalent closed-set runtime without overlapping model families."""
+
+    reranker_index, reranker_settings = load_reranker_index(config)
+    retrieval_index = reranker_index
+    if config.facet_retrieval_config is not None:
+        retrieval_index = FacetAwareEvidenceIndex(
+            reranker_index,
+            load_facet_retrieval_config(config.facet_retrieval_config),
+        )
+
+    evidence_top_k = config.evidence_top_k or 5
+    hits_by_query: dict[str, list[RerankedSearchHit]] = {}
+    for position, query in enumerate(query_texts, start=1):
+        print(f"Retrieval prepass {position}/{len(query_texts)}", flush=True)
+        hits_by_query[query] = list(retrieval_index.search(query=query, top_k=evidence_top_k))
+
+    frozen_index = _FrozenQueryIndex(hits_by_query)
+    del retrieval_index
+    del reranker_index
+    _release_retrieval_models()
+    print("Retrieval models released; loading generation model.", flush=True)
+
+    generation_settings = with_evidence_top_k(
+        load_generation_config(config.generation_config),
+        config.evidence_top_k,
+    )
+    provider = create_configured_generation_provider(
+        generation_config=generation_settings,
+        provider_config=config.provider_config,
+        http_transport_config=config.http_transport_config,
+        provider_runtime_config=config.provider_runtime_config,
+    )
+    generator = GroundedAnswerGenerator(
+        index=frozen_index,
+        provider=provider,
+        config=generation_settings,
+        sufficiency_assessor=EvidenceSufficiencyAssessor(
+            load_sufficiency_config(config.sufficiency_config)
+        ),
+    )
+    return AeroRAGRuntime(
+        generator=generator,
+        reranker_settings=reranker_settings,
+        generation_settings=generation_settings,
+    )
 
 
 def main() -> None:
@@ -99,8 +206,7 @@ def main() -> None:
 
     queries = load_generation_evaluation_queries(args.queries_input)
 
-    runtime = load_grounded_runtime(
-        RuntimeConfig(
+    runtime_config = RuntimeConfig(
             generation_config=(args.generation_config),
             sufficiency_config=(args.sufficiency_config),
             facet_retrieval_config=(args.facet_retrieval_config),
@@ -110,6 +216,13 @@ def main() -> None:
             candidate_top_k=(args.candidate_top_k),
             evidence_top_k=(args.evidence_top_k),
         )
+    runtime = (
+        _load_memory_bounded_runtime(
+            runtime_config,
+            [query.query for query in queries],
+        )
+        if args.memory_bounded
+        else load_grounded_runtime(runtime_config)
     )
 
     generator = runtime.generator

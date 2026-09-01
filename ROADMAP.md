@@ -113,7 +113,8 @@ Future:
 
 - [ ] broader MLX API/CLI provider integration only if a separately scoped evaluation justifies it
 
-- [ ] larger protected evaluation set
+- [ ] independently review and freeze the 512-case candidate before promoting it
+  from retrieval-scale diagnostic to protected quality evaluation
 - [ ] conflicting and partial evidence studies
 - [ ] multiple human assessors and inter-annotator agreement
 - [ ] multimodal technical-report retrieval
@@ -1145,6 +1146,59 @@ New infrastructure should follow a measured engineering requirement.
 ---
 
 # Immediate next milestone
+
+## Retrieval-scale milestone — COMPLETE
+
+- [x] enforce a bounded 3,000-token context budget and four-claim output target
+- [x] add overlap removal and a two-passage-per-document diversity limit
+- [x] add metadata filters, hierarchical selection, incremental dense updates,
+  and configurable pgvector HNSW support
+- [x] build and freeze a 10,060-chunk real NASA snapshot
+- [x] build and freeze a 100,614-chunk real NASA breadth snapshot
+- [x] build a normalized 1,000,000-segment real-text load snapshot with parent
+  provenance, explicitly separated from corpus-breadth claims
+- [x] build a checksummed 512-case source-grounded retrieval diagnostic spanning
+  all 94 frozen documents and run the complete exact-BM25 benchmark
+- [x] run exact BM25 against the same eight frozen queries at all three scales
+- [x] implement and measure best-child-per-parent collapse at 1M; record the
+  quality improvement and reject the Python grouping path on latency grounds
+- [x] replace estimated evidence budgeting with exact Transformers/MLX runtime
+  tokenizers when available, retaining an auditable fallback for other providers
+- [x] extend metadata filters and measure field completeness on 101,622 chunks
+- [x] preserve hashes, construction limits, and measured results in
+  `reports/retrieval_scaling_v0_1.md`
+- [x] pin the exact local Qwen revision and add a fail-closed MPS checkpoint and
+  protected claim-four validation runner
+- [x] reproduce the original three-epoch treatment in an MPS-visible process,
+  select epoch 2, save the adapter, and verify exact loss parity after reload
+- [x] rebuild the frozen 3,233-chunk NTRS corpus and 384-dimensional dense index
+  from checksummed source receipts
+- [x] add a full 32-query memory-bounded validation schedule after the original
+  monolithic process was killed by 16-GB unified-memory pressure
+- [x] complete the protected 32-query Base-versus-LoRA claim-four reports with
+  the staged MPS runner and actual epoch-2 adapter; no reduced query set or
+  substituted checkpoint was used
+- [x] run paired successful-query verbosity analysis: across 19 comparable calls,
+  LoRA used +70 output tokens (+49.68%) and was longer on 16 calls
+- [x] implement a versioned compact response prompt and isolated full validation
+  runner; exact tokenizer measurement saves 128 input tokens (8.02%) on the
+  representative five-evidence prompt without reducing evidence
+- [ ] execute the full compact 32-query MPS candidate and promote it only if its
+  paired token use improves without regression in completion, grounding,
+  expected-term recall, or structural validity
+- [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
+  sandbox that blocks PostgreSQL System V shared memory at bootstrap
+
+The milestone rejected synthetic distractor replication as research evidence
+and rejected immediate HNSW promotion without a measured crossover. The 100K
+checkpoint showed a modest retrieval-quality decline; the 1M fine-segment
+checkpoint exposed severe top-rank crowding. Parent collapse improved 1M
+Recall@10 from 0.0467 to 0.0650, but its Python reference implementation added
+too much latency. The next retrieval experiment is therefore index-native
+collapse plus bounded reranking, followed by an exact-versus-HNSW comparison.
+It is not another unmeasured corpus expansion.
+
+---
 
 Phase 34 completed the controlled local comparison between the established Transformers MPS float16 baseline and a genuine MLX affine 4-bit Qwen artifact. It recorded valid structured JSON in every measured run, timing, throughput, artifact size, token totals, runtime versions, and explicit interpretation limits.
 
