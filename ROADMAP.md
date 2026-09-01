@@ -1159,6 +1159,8 @@ New infrastructure should follow a measured engineering requirement.
   provenance, explicitly separated from corpus-breadth claims
 - [x] build a checksummed 512-case source-grounded retrieval diagnostic spanning
   all 94 frozen documents and run the complete exact-BM25 benchmark
+- [x] run all 512 cases through dense, Hybrid RRF, and cross-encoder reranking;
+  record Recall/NDCG and 10,240-pair reranker latency without query sampling
 - [x] run exact BM25 against the same eight frozen queries at all three scales
 - [x] implement and measure best-child-per-parent collapse at 1M; record the
   quality improvement and reject the Python grouping path on latency grounds

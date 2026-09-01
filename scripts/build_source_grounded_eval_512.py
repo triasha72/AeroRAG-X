@@ -26,6 +26,7 @@ def args() -> argparse.Namespace:
     parser.add_argument("--chunks", type=Path, default=Path("data/processed/ntrs/v0_1/chunks.jsonl"))
     parser.add_argument("--count", type=int, default=512)
     parser.add_argument("--queries-output", type=Path, default=Path("data/evaluation/source_grounded_queries_v0_1_512.jsonl"))
+    parser.add_argument("--retrieval-queries-output", type=Path, default=Path("data/evaluation/source_grounded_retrieval_queries_v0_1_512.jsonl"))
     parser.add_argument("--qrels-output", type=Path, default=Path("data/evaluation/source_grounded_qrels_v0_1_512.jsonl"))
     parser.add_argument("--review-output", type=Path, default=Path("data/evaluation/source_grounded_review_v0_1_512.template.jsonl"))
     parser.add_argument("--manifest-output", type=Path, default=Path("data/evaluation/source_grounded_eval_v0_1_512_manifest.json"))
@@ -124,6 +125,10 @@ def main() -> None:
         )
 
     write_jsonl(config.queries_output, queries)
+    write_jsonl(
+        config.retrieval_queries_output,
+        [{"query_id": row["query_id"], "query": row["query"]} for row in queries],
+    )
     write_jsonl(config.qrels_output, qrels)
     write_jsonl(config.review_output, reviews)
     manifest = {
@@ -136,6 +141,7 @@ def main() -> None:
         "prohibited_claim": "independently validated generation quality benchmark",
         "chunks_sha256": sha(config.chunks),
         "queries_sha256": sha(config.queries_output),
+        "retrieval_queries_sha256": sha(config.retrieval_queries_output),
         "qrels_sha256": sha(config.qrels_output),
         "review_template_sha256": sha(config.review_output),
     }

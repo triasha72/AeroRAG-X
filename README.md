@@ -234,6 +234,12 @@ reviewers must cover every case, all decisions must agree or be adjudicated,
 fields and decisions must be internally consistent, and at least 500 cases must
 be accepted. Until then, the manifest keeps the set labeled as a candidate.
 
+All 512 cases have also completed the frozen neural retrieval stack. Dense
+retrieval reached Recall@10 0.3262/NDCG@10 0.2124; Hybrid RRF reached
+0.6523/0.4550; and the cross-encoder reranker reached 0.9355/0.8385 after
+scoring 10,240 pairs. These are complete source-recovery measurements, while the
+human-review limitation remains unchanged.
+
 The pgvector path now supports HNSW for approximate search. Exact NumPy remains
 the small-corpus control. Checksum-based incremental updates reuse embeddings
 for unchanged chunks and encode only added or changed material. Overlapping

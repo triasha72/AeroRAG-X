@@ -1,0 +1,11 @@
+{
+  "model_name": "cross-encoder/ms-marco-MiniLM-L6-v2",
+  "device": "cpu",
+  "candidate_top_k": 20,
+  "batch_size": 16,
+  "query_count": 512,
+  "pair_count": 10240,
+  "total_seconds": 188.757773,
+  "milliseconds_per_pair": 18.433376,
+  "hardware_note": "Apple Silicon local full 512-query run"
+}
