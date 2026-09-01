@@ -36,6 +36,7 @@ results remain pending and are not inferred from the implemented harnesses.
 | Question | Measured result |
 |---|---|
 | Can the corpus preserve source identity? | Built 3,233 citation-preserving chunks with document, page, URL, and checksum provenance |
+| Does retrieval preserve independently annotated evidence? | On 888 answerable QASPER validation questions, at least one human evidence paragraph appeared in the top 5 for 56.08% and top 20 for 90.99%; complete evidence retention was 30.18% and 67.68% |
 | Does grounding improve the reliability boundary? | Grounded Base and LoRA both reached 1.000 answerability, unsupported refusal, and citation coverage; closed-book answerability was 0.7812 and strict refusal was 0.4167 |
 | What did LoRA change? | Expected-concept coverage rose from 38.16% to 51.32% and answer-to-claim capture from 10.00% to 45.00%; claim support remained similar and three contradicted claims remained |
 | Did every policy help? | No. Adaptive retrieval reduced answerability from 91.67% to 83.33% and refusal from 83.33% to 66.67%, so the negative result was retained |
@@ -46,6 +47,20 @@ results remain pending and are not inferred from the implemented harnesses.
 These results come from different frozen experiments and are not pooled into a
 single score. Their sample sizes, policies, and limitations remain in the
 linked evaluation reports.
+
+### External human-evidence check
+
+QASPER adds a public CC-BY-4.0 evaluation whose questions are written by NLP
+practitioners and answered by separate practitioners with supporting evidence.
+The frozen within-paper TF-IDF baseline evaluated 888 answerable questions from
+281 validation papers, with 1.71 human annotations per question on average. Its
+mean reciprocal rank was `0.3605`; complete human-evidence recall was `30.18%`
+at 5, `47.86%` at 10, and `67.68%` at 20.
+
+This result validates and challenges the retrieval layer on scientific papers;
+it does not establish aerospace answer quality because QASPER covers NLP
+research. The text-free record is in
+`artifacts/evaluation/qasper_external_retrieval_v1.json`.
 
 ## System
 
