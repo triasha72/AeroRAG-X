@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Literal, cast
@@ -352,6 +353,12 @@ class TransformersStructuredModelTransport:
 
         return str(self._config.adapter_path)
 
+    def count_tokens(self, text: str) -> int:
+        """Count text with the exact tokenizer used by this transport."""
+
+        encoded = self._tokenizer.encode(text, add_special_tokens=False)
+        return len(encoded)
+
     def complete(
         self,
         *,
@@ -547,6 +554,18 @@ class TransformersStructuredModelTransport:
             raise ProviderTransportError(
                 "Transformers model output was not valid JSON.",
                 retryable=False,
+                diagnostics={
+                    "failure_stage": "json_decode",
+                    "generated_output_sha256": hashlib.sha256(
+                        generated_text.encode("utf-8")
+                    ).hexdigest(),
+                    "generated_output_characters": len(generated_text),
+                    "output_tokens": output_token_count,
+                    "output_reached_token_limit": (
+                        output_token_count >= self._config.max_new_tokens
+                    ),
+                    "json_error_position": exc.pos,
+                },
             ) from exc
 
         if not isinstance(
@@ -556,6 +575,17 @@ class TransformersStructuredModelTransport:
             raise ProviderTransportError(
                 "Transformers structured output must be a JSON object.",
                 retryable=False,
+                diagnostics={
+                    "failure_stage": "json_root_type",
+                    "generated_output_sha256": hashlib.sha256(
+                        generated_text.encode("utf-8")
+                    ).hexdigest(),
+                    "generated_output_characters": len(generated_text),
+                    "output_tokens": output_token_count,
+                    "output_reached_token_limit": (
+                        output_token_count >= self._config.max_new_tokens
+                    ),
+                },
             )
 
         payload = {str(key): value for key, value in parsed_payload.items()}

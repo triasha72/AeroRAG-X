@@ -13,6 +13,7 @@ from aeroragx.retrieval.dense import (
     encode_chunks,
     load_dense_config,
     load_dense_index,
+    update_dense_index_incrementally,
     write_dense_index,
     write_dense_search_results,
 )
@@ -114,6 +115,33 @@ def make_config() -> DenseConfig:
         default_top_k=10,
         device="cpu",
     )
+
+
+def test_incremental_update_reuses_unchanged_vectors() -> None:
+    existing = [
+        make_chunk("101:chunk:00000", 101, "battery cooling"),
+        make_chunk("102:chunk:00000", 102, "fuel cell propulsion"),
+    ]
+    encoder = FakeEncoder()
+    config = make_config()
+    embeddings = encode_chunks(existing, config, encoder)
+    changed = make_chunk("102:chunk:00000", 102, "airport operations").model_copy(
+        update={"document_sha256": "changed-checksum"}
+    )
+
+    updated, summary = update_dense_index_incrementally(
+        existing_embeddings=embeddings,
+        existing_chunks=existing,
+        incoming_chunks=[existing[0], changed],
+        config=config,
+        encoder=encoder,
+    )
+
+    assert summary.reused_chunk_count == 1
+    assert summary.encoded_chunk_count == 1
+    assert summary.deleted_chunk_count == 0
+    assert updated[0].tolist() == embeddings[0].tolist()
+    assert updated[1].tolist() == [0.0, 0.0, 1.0]
 
 
 def test_load_dense_config(

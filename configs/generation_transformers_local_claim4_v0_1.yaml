@@ -1,7 +1,7 @@
 version: "0.1"
 
 provider: "transformers"
-model_name: "Qwen/Qwen3-0.6B"
+model_name: "work/models/Qwen3-0.6B"
 
 evidence_top_k: 5
 minimum_evidence_count: 1

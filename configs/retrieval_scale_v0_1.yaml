@@ -1,0 +1,13 @@
+version: "0.1"
+target_chunk_counts: [10000, 100000, 1000000]
+candidate_top_k: 100
+rerank_top_k: 20
+evidence_top_k: 5
+max_chunks_per_document: 2
+collapse_parent_chunks: true
+duplicate_jaccard_threshold: 0.85
+shingle_words: 5
+max_context_tokens: 3000
+max_chunk_tokens: 750
+quality_metrics: [recall_at_10, ndcg_at_10]
+latency_percentiles: [50, 95]

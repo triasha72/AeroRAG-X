@@ -40,6 +40,7 @@ results remain pending and are not inferred from the implemented harnesses.
 | What did LoRA change? | Expected-concept coverage rose from 38.16% to 51.32% and answer-to-claim capture from 10.00% to 45.00%; claim support remained similar and three contradicted claims remained |
 | Did every policy help? | No. Adaptive retrieval reduced answerability from 91.67% to 83.33% and refusal from 83.33% to 66.67%, so the negative result was retained |
 | Could a narrower safeguard help? | On a separate held-out set, the scope-qualifier safeguard raised answerability from 50.00% to 92.86% and refusal from 40.00% to 100.00% |
+| What happened as retrieval grew? | Real NASA-text BM25 measured Recall@10/NDCG@10 of 0.2275/0.2793 at 10K, 0.2136/0.2476 at 100K, and 0.0467/0.0721 in a 1M fine-segment load snapshot; the 1M result exposed rank crowding and is not a corpus-breadth claim |
 | Are the FSDP and vLLM studies complete? | The controlled trainers, serving transport, benchmark harnesses, and preregistered reports are implemented; CUDA measurements remain pending and are not presented as results |
 
 These results come from different frozen experiments and are not pooled into a
@@ -59,6 +60,292 @@ The idea for AeroRAG-X grew out of questions I became interested in while workin
 AeroRAG-X developed from that interest as an independent project and is not a HERO or Delta Air Lines deliverable.
 
 > **Can a language-model system help navigate aerospace technical literature while making provenance, evidence sufficiency, citations, model behavior, adaptation effects, and failure modes measurable?**
+
+---
+
+# The engineering story
+
+## The project did not begin with a model
+
+AeroRAG-X began with a reliability problem, not a decision to use Qwen, LoRA,
+or a vector database. Aerospace reports contain exact measurements, operating
+conditions, qualifications, and conclusions whose meaning depends on their
+source. A fluent answer is not enough if the system cannot show which NASA
+document and page support it.
+
+The first engineering question was therefore not *Which LLM should be used?*
+It was *Can the source library be made reproducible and traceable?* The project
+started with a deliberately bounded NASA NTRS domain instead of downloading all
+of NTRS. A smaller corpus made it possible to inspect failures, annotate
+retrieval results, and freeze repeatable experiments. Downloading everything
+would have created more scale before there was evidence that the basic
+retrieval and citation design worked.
+
+The NTRS client collects document metadata and downloads available PDFs. Each
+download receives a SHA-256 checksum. Text is extracted page by page and split
+into overlapping chunks, but a chunk never becomes anonymous text: it retains
+its document ID, page range, NASA URL, source URL, and source-file checksum. The
+result was a reproducible library of 3,233 citation-preserving chunks. This
+decision later made application-controlled citations possible; without
+provenance at ingestion, citation repair at generation time would only be a
+guess.
+
+## Retrieval was built as a sequence of measured decisions
+
+The next question was how to find the right passage. BM25 was selected first
+because aerospace language contains exact identifiers and specialist terms
+such as *thermal runaway*, *state of charge*, and program names. BM25 is strong
+when the query and report use the same words, but it can miss paraphrases.
+
+Dense retrieval with `all-MiniLM-L6-v2` was added to recover passages with
+similar meaning but different wording. Dense retrieval alone was rejected as
+the only search method because semantic similarity can overlook an exact
+technical qualifier. The project therefore kept both and combined their ranks
+with Reciprocal Rank Fusion. Raw-score addition was rejected because BM25 and
+cosine-similarity scores do not share a meaningful numerical scale.
+
+Fast retrieval creates candidates; it does not prove that the first candidate
+is best. A cross-encoder was added to inspect the query and each candidate
+together. Running that cross-encoder across the entire corpus was rejected as
+unnecessarily expensive, so the design became a funnel: inexpensive retrieval
+first, expensive reranking over a bounded pool second.
+
+At 3,233 chunks, exact NumPy cosine search and pgvector returned identical top
+10 results for all eight measured queries. NumPy was faster locally—7.121 ms
+versus 20.517 ms—so NumPy remained the default. pgvector was retained because
+transactions, persistence, filtering, and approximate indexes become valuable
+as the corpus grows. This was a measured crossover decision, not a claim that
+one backend is always superior.
+
+## The system learned when not to call the LLM
+
+Finding related text does not mean the text contains enough information to
+answer. A retrieved passage might mention temperature without containing the
+requested measurement. Sending weak evidence to a language model invites a
+plausible completion.
+
+For that reason, AeroRAG-X placed an evidence-sufficiency gate before
+generation. The gate checks evidence amount, query coverage, anchors, numbers,
+and qualifiers. If the evidence is insufficient, the system returns a grounded
+refusal and does not call the model. This decision improved the reliability
+boundary while also avoiding unnecessary inference.
+
+A bounded adaptive-retrieval policy was tested as an alternative. The
+hypothesis was that a deterministic query rewrite and a second retrieval pass
+could recover missed evidence. The result was negative: answerability fell from
+91.67% to 83.33%, unsupported refusal fell from 83.33% to 66.67%, and latency
+increased. The policy was rejected and preserved as an `integrity_regression`
+rather than hidden. The failure suggested that some questions needed a clearer
+scope boundary, not more searching. A narrower scope-qualifier safeguard was
+then evaluated separately and improved its held-out boundary results.
+
+## Generation was intentionally made the last knowledge step
+
+Only after retrieval and sufficiency were working was Qwen3-0.6B added. The
+model is not expected to remember the NASA corpus. It receives the question and
+a bounded set of evidence and converts them into a structured answer. A small
+local model was chosen because retrieval supplies the facts, while local
+inference offers privacy, cost control, and a tractable adaptation experiment.
+A larger hosted model remains a valid alternative, but it would need to be
+compared on grounding, refusal, cost, and latency rather than assumed better.
+
+The model returns claims linked to evidence IDs such as `E1`; it does not write
+authoritative NASA citations. The application resolves each ID back to the
+trusted chunk record. Allowing the model to invent URLs, page numbers, or report
+identifiers was rejected because language models can produce convincing but
+nonexistent citations. Output JSON, evidence IDs, duplicates, and required
+fields are validated before the response is accepted.
+
+## LoRA answered a narrower research question
+
+LoRA was not introduced to store NASA facts in the model. It tested whether a
+small adapter could improve structured technical decomposition while the RAG
+pipeline continued to control factual reliability. The matched experiment used
+Qwen3-0.6B, 106 training examples, 12 development examples, and a rank-16 LoRA
+adapter; epoch 2 produced the selected checkpoint.
+
+Grounded Base and grounded LoRA both reached 1.000 answerability, unsupported
+refusal, citation coverage, citation validity, and structural validity on the
+protected 32-query study. LoRA's measurable effect was different: it produced
+53 formal claims compared with Base's 32. That added decomposition also raised
+output tokens from 3,314 to 5,182 and p50 provider latency from 8.88 seconds to
+14.87 seconds.
+
+The project therefore does not claim that LoRA made the system factual. The
+evidence supports a narrower conclusion: grounding supplied the measured
+reliability boundary, while LoRA changed answer structure and granularity.
+
+## Token reduction followed the measurements
+
+Base + RAG and LoRA + RAG used the same 51,289 input tokens in the protected
+comparison. The LoRA-specific cost increase was therefore not caused by
+retrieved context; it came from longer output. Reducing evidence from five
+passages to one was rejected as the first optimization because it would save
+input tokens by weakening the part of the system responsible for grounding.
+Sharply reducing `max_new_tokens` was also rejected because incomplete JSON had
+already been observed as a failure mode.
+
+The first controlled change reduced `max_claims` from six to four. It directly
+targeted measured verbosity while preserving retrieval coverage and enough
+generation space to close the structured response. The completed protected
+rerun showed that this constraint alone is not sufficient: LoRA still averaged
+212.25 output tokens per provider call versus 142.48 for Base and produced 44
+claims versus 26. It remains a safety bound, not the complete token solution.
+
+The context budget no longer has to rely on the stored character-derived token
+estimate when Transformers or MLX is the provider. The structured provider now
+exposes the exact runtime tokenizer, evidence is truncated against it, and
+each evidence record reports whether its count came from `runtime_tokenizer` or
+`stored_estimate`. The pinned Qwen weights are now local with SHA-256
+`f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b`,
+and the missing adapter has now been reconstructed by the full three-epoch MPS
+treatment. Epoch 2 was selected by development loss, the saved adapter reloaded
+with a zero loss difference, and its SHA-256 is
+`13df5eb8449d5b204c2d740b0c194b7712969f15258c42b26a336febeb27c717`.
+
+The first protected validation attempt revealed a different systems problem.
+The 16-GB Apple-Silicon host held the dense encoder, cross-encoder reranker, and
+Qwen generator in unified memory at once; macOS killed the process with signal
+9 (exit 137) after every artifact-integrity gate had passed. Reducing the query
+set, replacing the model, or lowering the scientific token limits was rejected
+because each would change the promised comparison. Moving the whole run to CPU
+was rejected for the same reason: this milestone is the original MPS treatment.
+
+The selected fix changes scheduling, not the experiment. The validation runner
+now retrieves and reranks all 32 frozen queries first, holds their exact top-five
+hits in a closed in-memory index, releases both retrieval models and the MPS
+cache, and only then loads Qwen. Base and LoRA still run in separate processes
+with the same corpus, queries, candidate top-k, evidence top-k, tokenizer,
+prompts, and generation limits. This lowers peak unified memory while making the
+retrieval boundary explicit and reproducible. The fail-closed
+`scripts/run_original_mps_claim4_validation_only.sh` performs this validation
+without retraining or accepting stale reports. It completed on August 31, 2026;
+the checksummed results are in
+[`reports/claim4_actual_checkpoint_validation_v0_1.md`](reports/claim4_actual_checkpoint_validation_v0_1.md).
+
+## Scaling preserves the same reliability boundary
+
+Growing the library must not mean sending thousands of passages to the model.
+The scaling design keeps corpus size and prompt size independent:
+
+```text
+10K / 100K / 1M indexed chunks
+          ↓
+100 retrieval candidates
+          ↓
+20 cross-encoder candidates
+          ↓
+overlap removal + document diversity
+          ↓
+at most 5 evidence passages
+          ↓
+bounded LoRA generation
+```
+
+Evaluation scale now has two deliberately separate layers. The 32-query set
+remains the protected generation-quality benchmark. A new source-grounded set
+contains 512 distinct chunk-recovery cases across all 94 frozen NASA documents,
+with source pages, qrels, checksums, and a 512-row independent-review template.
+Its actual exact-BM25 run achieved Recall@10 1.0000, NDCG@10 0.9764, 1.066 ms
+P50, and 1.330 ms P95 over 3,233 chunks. Because its query terms were selected
+from the relevant chunks, this is honestly reported as a lexical retrieval/load
+diagnostic—not evidence of natural-question or generation quality. See
+[`reports/source_grounded_eval_512_v0_1.md`](reports/source_grounded_eval_512_v0_1.md).
+
+`scripts/finalize_source_grounded_eval_512.py` enforces promotion: two distinct
+reviewers must cover every case, all decisions must agree or be adjudicated,
+fields and decisions must be internally consistent, and at least 500 cases must
+be accepted. Until then, the manifest keeps the set labeled as a candidate.
+
+All 512 cases have also completed the frozen neural retrieval stack. Dense
+retrieval reached Recall@10 0.3262/NDCG@10 0.2124; Hybrid RRF reached
+0.6523/0.4550; and the cross-encoder reranker reached 0.9355/0.8385 after
+scoring 10,240 pairs. These are complete source-recovery measurements, while the
+human-review limitation remains unchanged.
+
+The pgvector path now supports HNSW for approximate search. Exact NumPy remains
+the small-corpus control. Checksum-based incremental updates reuse embeddings
+for unchanged chunks and encode only added or changed material. Overlapping
+passages are removed before prompting, and no more than two final passages may
+come from one document. These choices reduce redundant computation without
+creating new evidence.
+
+The 10K, 100K, and 1M snapshot harness records Recall@10, NDCG@10, p50/p95
+latency, and a report checksum. Synthetic distractor replication was considered
+and rejected for the reported milestones: duplicated text could create a large
+file, but it would not establish behavior on real technical language. HNSW
+becomes the default only after a measured quality/latency crossover; its
+presence in configuration is not itself evidence that it is better.
+
+On the eight frozen retrieval queries and `qrels_v0_2`, exact BM25 produced the
+following real-text checkpoints:
+
+| Snapshot | Construction | Recall@10 | NDCG@10 | p50 | p95 |
+|---|---|---:|---:|---:|---:|
+| 10,060 | 358 unique NASA PDFs, page-linked chunks | 0.2275 | 0.2793 | 7.05 ms | 11.39 ms |
+| 100,614 | broader real NTRS collection, frozen prefix | 0.2136 | 0.2476 | 31.63 ms | 71.15 ms |
+| 1,000,000 | 32-word segments from the real 100K text snapshot | 0.0467 | 0.0721 | 32.93 ms | 106.15 ms |
+
+The 100K result is the corpus-breadth checkpoint. Its moderate quality decline
+and larger tail latency justify metadata filtering, bounded candidate pools,
+and reranking before adopting ANN as a default. The 1M result answers a
+different question: what happens when one million fine-grained, overlapping
+real-text segments compete for ten ranks? It is a load-scale experiment, not a
+claim of broader source coverage. Its sharp quality drop shows rank crowding:
+multiple fragments from the same parent passage consume the top ten. That
+failure makes parent-level deduplication and hierarchical retrieval measurable
+requirements rather than speculative features.
+
+That intervention has now been measured on the same 1M snapshot. Collapsing to
+the best child segment per parent before top-10 selection raised Recall@10 from
+0.0467 to 0.0650 and NDCG@10 from 0.0721 to 0.0903. The pure-Python exact
+implementation also raised p50 latency from 32.99 ms to 55.46 ms and p95 from
+108.12 ms to 170.78 ms. The policy is therefore enabled in hierarchical
+evidence selection, but the benchmark implementation is not presented as a
+production latency solution; index-native collapse remains necessary.
+
+The metadata-filter contract now covers publication-year bounds, subject
+categories, document type, program, and report family in addition to document,
+checksum, and page constraints. A real 101,622-row audit found 100% document
+coverage for year, subject category, document type, and report family, but only
+66.64% document coverage for program metadata. Program filtering therefore
+remains opt-in and must treat missing values as exclusion, not as evidence that
+a report is outside a program.
+
+The frozen hashes are `73dd8e735de70fcbb331bd63d2413391aef45ab60342ddaf2b5ef493b0a97efe`
+for 10K, `7744c8a8f217710acb5ab32afaea3fde4846c623c6a20a6706d518bee25be3a5`
+for the exact 100K prefix, and
+`c4fbe18f16f316f9d5f220eccbb3a063d198eb14e940a3043eb7b752987f158e`
+for the normalized 1M snapshot. These measurements do not claim dense, hybrid,
+reranker, or HNSW quality.
+
+Larger real snapshots are built with
+`scripts/build_real_ntrs_scale_corpus.py`. The builder paginates NASA search,
+deduplicates document IDs, downloads the authoritative PDF, records its SHA-256,
+extracts page text, attaches NTRS metadata, writes chunks incrementally, and can
+delete the local PDF after processing. Receipts make interrupted builds
+resumable. Stream-and-delete was chosen for the breadth build because the
+development machine had only 5.1 GiB free; retaining every source PDF and
+float32 embedding would exceed that limit. When external breadth expansion
+could not progress reliably, `scripts/build_real_segment_scale_snapshot.py`
+created the 1M load snapshot as compact segments with parent references instead
+of repeating full metadata. That preserved real source text and honest
+provenance while staying within the storage constraint.
+
+## What the project has established
+
+The research story is cumulative. Provenance made trustworthy citations
+possible. Hybrid retrieval improved the ways evidence could be found. Reranking
+made the candidate order more precise. The sufficiency gate created a refusal
+boundary. Application-side citation resolution removed citation authority from
+the model. The four-way Base/LoRA and closed-book/grounded comparison separated
+adaptation effects from system effects. Negative adaptive-retrieval results
+prevented an appealing but harmful policy from being shipped. The new scaling
+work preserves those decisions instead of replacing them with an unmeasured
+large-corpus architecture.
+
+The sections below provide the implementation details, commands, frozen
+results, and limitations behind that story.
 
 ---
 
@@ -181,6 +468,74 @@ Transformers generation can run as:
 Base Qwen
 Qwen + PEFT / LoRA adapter
 ```
+
+### Reducing LoRA + RAG token use
+
+The Transformers generation config sets `max_claims: 4`, reduced from 6 as the
+first controlled LoRA + RAG token optimization. The protected comparison showed
+that Base + RAG and LoRA + RAG consumed the same 51,289 input tokens, so
+retrieved context was not the source of the LoRA-specific increase. The
+difference was in generation: LoRA produced 5,182 output tokens and 53 formal
+claims, compared with 3,314 tokens and 32 claims for Base.
+
+Reducing the claim ceiling directly targets that measured output verbosity while
+preserving `evidence_top_k: 5`, the 12,000-character evidence budget, citation
+validation, and refusal behavior. It is safer as a first step than discarding
+retrieved evidence or sharply lowering `max_new_tokens`, which could weaken
+grounding or truncate the required JSON response.
+
+The protected 32-query rerun is complete. Four claims lowered LoRA aggregate
+output from the historical 5,182 tokens to 4,245, but Base used only 2,992 in
+the new run. Because Base completed 31 queries and LoRA completed 30, aggregate
+totals are not an equal-call comparison. Per provider call, Base generated
+142.48 output tokens and LoRA generated 212.25. Citation coverage and validity
+remained 1.0, while LoRA had more failures and lower answerability,
+expected-term recall, and structural validity. Four claims therefore remains an
+upper bound; the next optimization targets response-schema verbosity on matched
+successful queries rather than removing evidence.
+
+### Scaling to larger corpora
+
+Corpus growth is kept separate from prompt growth. The large-corpus funnel is
+configured in `configs/retrieval_scale_v0_1.yaml` as 100 retrieval candidates,
+20 reranked candidates, and at most 5 evidence passages. The final selection
+removes highly overlapping passages and permits at most two chunks from one
+document, preventing one long report from crowding out other relevant sources.
+The Transformers generation config additionally enforces a 3,000-token
+estimated context ceiling and a 750-token per-passage ceiling.
+
+`aeroragx.retrieval.scaling` provides the shared scaling controls:
+
+- authoritative document/checksum/page metadata filtering;
+- document-first, child-chunk evidence diversity;
+- word-shingle overlap deduplication before prompting;
+- exact-token truncation when supplied with the active tokenizer's counter;
+- checksum-based incremental index plans that re-embed only added or changed
+  documents and identify deleted documents;
+- frozen Recall@K, NDCG@K, p50, and p95 scale measurements with a report
+  checksum.
+
+The pgvector configuration now uses an HNSW cosine index (`m: 16`,
+`ef_construction: 64`, `ef_search: 40`) for approximate nearest-neighbor search.
+These values are starting points, not universal optima. Run the scale harness at
+10K, 100K, and 1M chunks and compare it with exact NumPy retrieval before
+choosing the crossover point:
+
+```bash
+python scripts/benchmark_retrieval_scale.py \
+  --queries data/evaluation/queries_v0_1.jsonl \
+  --qrels data/evaluation/qrels_v0_2.jsonl \
+  --results artifacts/evaluation/retrieval_results_100k.json \
+  --corpus-chunks 100000 \
+  --output artifacts/evaluation/retrieval_scale_100k.json
+```
+
+Scale acceptance requires retrieval quality to remain inside the frozen
+tolerance while latency and memory improve. Increasing the corpus must not
+increase the five-passage generation boundary. Subject, year, program, and
+document-type filters should be added to chunk metadata when those fields are
+available in the ingestion manifest; checksum and document/page filters work
+with the current corpus schema.
 
 An additional Apple-Silicon MLX-LM structured transport is available for controlled local low-bit experiments. It is intentionally separate from the application runtime selector until it has been compared against the established Transformers MPS baseline.
 
@@ -903,7 +1258,7 @@ The systems behave differently, yet the lexical metric cannot distinguish them.
 
 ---
 
-# Runtime trade-off
+# Original six-claim runtime trade-off (historical baseline)
 
 | Metric | Base + RAG | LoRA + RAG |
 |---|---:|---:|
@@ -917,6 +1272,58 @@ The systems behave differently, yet the lexical metric cannot distinguish them.
 The LoRA model produces more structured output but also requires more generation time.
 
 Longer output is not treated as automatically better.
+
+## Actual four-claim checkpoint validation
+
+| Metric | Base + RAG | LoRA + RAG |
+|---|---:|---:|
+| Frozen queries | 32 | 32 |
+| Completed queries | 31 | 30 |
+| Generation failures | 1 | 2 |
+| Answerability accuracy | 0.9063 | 0.8750 |
+| Expected-term recall | 0.8966 | 0.8448 |
+| Structural validity | 0.9688 | 0.9375 |
+| Citation coverage / validity | 1.0000 / 1.0000 | 1.0000 / 1.0000 |
+| Provider input tokens | 47,339 | 45,443 |
+| Provider output tokens | 2,992 | 4,245 |
+| Mean output tokens per call | 142.48 | 212.25 |
+| Total provider tokens | 50,331 | 49,688 |
+
+The 643-token aggregate difference is not evidence that LoRA is cheaper: LoRA
+made one fewer successful provider call and had one additional failure. On the
+fairer per-call output measure, LoRA used about 49.0% more output tokens.
+
+The follow-up paired analysis removes that failure-count confound. Among 19
+queries with token-observed provider calls in both conditions, LoRA averaged
+210.89 output tokens versus Base's 140.89: exactly +70 tokens, or +49.68%.
+LoRA was longer on 16 of 19 paired calls and its mean repeated-word fraction was
+0.2748 versus 0.1184. The checksummed analysis is generated by
+`scripts/analyze_paired_generation_efficiency.py` and recorded in
+[`reports/generation_claim4_paired_efficiency_v0_1.md`](reports/generation_claim4_paired_efficiency_v0_1.md).
+
+This evidence motivated `grounded-json-v0.3-compact`. The candidate removes the
+duplicated schema from the user payload, serializes evidence JSON compactly,
+requires a one-sentence answer and short non-overlapping claims, and lowers the
+generation safety ceiling from 512 to 384 tokens—still above the largest
+successful LoRA output observed in v0.1 (294 tokens). An exact pinned-Qwen
+tokenizer check on a representative five-evidence prompt reduced input from
+1,597 to 1,469 tokens (128 tokens, 8.02%) without dropping evidence. This is an
+implemented prompt-budget result, not yet a generation-quality result. The full
+32-query Base/LoRA candidate is run with
+`scripts/run_compact_mps_claim4_validation.sh`; it writes new artifacts and
+cannot overwrite the historical checkpoint reports.
+
+The runner also compares compact LoRA directly with original LoRA on matched
+successful calls and invokes a fail-closed promotion gate. Promotion requires
+at least 15 paired calls, at least 15% output-token reduction, no additional
+generation failures, the same 32-query contract, and no quality-rate regression
+greater than one query out of 32. Saving tokens by failing or refusing more
+often is therefore rejected.
+
+Local failure telemetry is bounded but actionable. It records the failure
+stage, output-token count, whether the ceiling was reached, JSON error position,
+output character count, and a SHA-256 fingerprint. Raw generated text and
+prompts are not copied into telemetry, avoiding a new sensitive-data sink.
 
 ---
 

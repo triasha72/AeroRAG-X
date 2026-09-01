@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
@@ -41,6 +41,7 @@ from aeroragx.retrieval.reranker import (
     RerankedSearchHit,
     RerankerSearchTimings,
 )
+from aeroragx.retrieval.scaling import deduplicate_overlapping_hits
 
 if TYPE_CHECKING:
     from aeroragx.orchestration.langgraph_adaptive import (
@@ -68,6 +69,10 @@ class GenerationConfig(BaseModel):
     minimum_evidence_count: int = Field(default=1, ge=1, le=100)
     max_context_characters: int = Field(default=12_000, ge=1)
     max_chunk_characters: int = Field(default=3_000, ge=1)
+    max_context_tokens: int | None = Field(default=None, ge=1)
+    max_chunk_tokens: int | None = Field(default=None, ge=1)
+    max_chunks_per_document: int = Field(default=100, ge=1, le=100)
+    duplicate_jaccard_threshold: float | None = Field(default=None, ge=0.0, le=1.0)
     max_claims: int = Field(default=6, ge=1, le=100)
     require_citations: bool = True
     allow_insufficient_evidence: bool = True
@@ -82,6 +87,13 @@ class GenerationConfig(BaseModel):
 
         if self.max_chunk_characters > self.max_context_characters:
             raise ValueError("max_chunk_characters must not exceed max_context_characters.")
+
+        if (
+            self.max_context_tokens is not None
+            and self.max_chunk_tokens is not None
+            and self.max_chunk_tokens > self.max_context_tokens
+        ):
+            raise ValueError("max_chunk_tokens must not exceed max_context_tokens.")
 
         return self
 
@@ -100,6 +112,8 @@ class GenerationEvidence(BaseModel):
     citation_url: str = Field(min_length=1)
     source_url: str = Field(min_length=1)
     document_sha256: str = Field(min_length=1)
+    token_count: int | None = Field(default=None, ge=1)
+    token_count_method: Literal["runtime_tokenizer", "stored_estimate"] | None = None
     reranker_rank: int = Field(ge=1)
     reranker_score: float
     hybrid_rank: int = Field(ge=1)
@@ -444,6 +458,8 @@ def _build_evidence_record(
     *,
     evidence_id: str,
     text: str,
+    token_count: int,
+    token_count_method: Literal["runtime_tokenizer", "stored_estimate"],
 ) -> GenerationEvidence:
     """Convert one reranked hit into authoritative generation evidence."""
 
@@ -459,6 +475,8 @@ def _build_evidence_record(
         citation_url=chunk.citation_url,
         source_url=chunk.source_url,
         document_sha256=chunk.document_sha256,
+        token_count=token_count,
+        token_count_method=token_count_method,
         reranker_rank=hit.rank,
         reranker_score=hit.score,
         hybrid_rank=hit.hybrid_rank,
@@ -474,10 +492,34 @@ def _build_evidence_record(
 def build_generation_evidence(
     hits: Sequence[RerankedSearchHit],
     config: GenerationConfig,
+    *,
+    token_counter: Callable[[str], int] | None = None,
 ) -> list[GenerationEvidence]:
     """Build bounded, deterministic evidence records from reranked hits."""
 
-    selected_hits = list(hits[: config.evidence_top_k])
+    candidate_hits = list(hits)
+
+    if config.duplicate_jaccard_threshold is not None:
+        candidate_hits = deduplicate_overlapping_hits(
+            candidate_hits,
+            threshold=config.duplicate_jaccard_threshold,
+        )
+
+    selected_hits: list[RerankedSearchHit] = []
+    per_document: dict[int, int] = {}
+
+    for hit in candidate_hits:
+        document_id = hit.chunk.document_id
+        count = per_document.get(document_id, 0)
+
+        if count >= config.max_chunks_per_document:
+            continue
+
+        selected_hits.append(hit)
+        per_document[document_id] = count + 1
+
+        if len(selected_hits) >= config.evidence_top_k:
+            break
     chunk_ids = [hit.chunk.chunk_id for hit in selected_hits]
 
     if len(chunk_ids) != len(set(chunk_ids)):
@@ -485,6 +527,7 @@ def build_generation_evidence(
 
     evidence: list[GenerationEvidence] = []
     used_characters = 0
+    used_tokens = 0
 
     for hit in selected_hits:
         remaining_characters = config.max_context_characters - used_characters
@@ -496,20 +539,71 @@ def build_generation_evidence(
             config.max_chunk_characters,
             remaining_characters,
         )
+
+        if config.max_context_tokens is not None:
+            remaining_tokens = config.max_context_tokens - used_tokens
+
+            if remaining_tokens <= 0:
+                break
+
+            allowed_tokens = remaining_tokens
+
+            if config.max_chunk_tokens is not None:
+                allowed_tokens = min(allowed_tokens, config.max_chunk_tokens)
+
+            if token_counter is None and hit.chunk.token_estimate > allowed_tokens:
+                allowed_characters = min(
+                    allowed_characters,
+                    max(
+                        1,
+                        int(len(hit.chunk.text) * allowed_tokens / hit.chunk.token_estimate),
+                    ),
+                )
         text = hit.chunk.text[:allowed_characters].strip()
+
+        if token_counter is not None and config.max_context_tokens is not None:
+            remaining_tokens = config.max_context_tokens - used_tokens
+            allowed_tokens = remaining_tokens
+            if config.max_chunk_tokens is not None:
+                allowed_tokens = min(allowed_tokens, config.max_chunk_tokens)
+            if allowed_tokens <= 0:
+                break
+            if token_counter(text) > allowed_tokens:
+                words = text.split()
+                low, high = 0, len(words)
+                while low < high:
+                    midpoint = (low + high + 1) // 2
+                    if token_counter(" ".join(words[:midpoint])) <= allowed_tokens:
+                        low = midpoint
+                    else:
+                        high = midpoint - 1
+                text = " ".join(words[:low]).strip()
 
         if not text:
             continue
 
+        evidence_token_count = (
+            token_counter(text)
+            if token_counter is not None
+            else max(
+                1,
+                math.ceil(hit.chunk.token_estimate * len(text) / len(hit.chunk.text)),
+            )
+        )
         evidence_id = f"E{len(evidence) + 1}"
         evidence.append(
             _build_evidence_record(
                 hit,
                 evidence_id=evidence_id,
                 text=text,
+                token_count=evidence_token_count,
+                token_count_method=(
+                    "runtime_tokenizer" if token_counter is not None else "stored_estimate"
+                ),
             )
         )
         used_characters += len(text)
+        used_tokens += evidence_token_count
 
     return evidence
 
@@ -747,6 +841,12 @@ class GroundedAnswerGenerator:
         self._sufficiency_assessor = sufficiency_assessor
         self._adaptive_retrieval_config = adaptive_retrieval_config
         self._adaptive_retrieval_orchestrator = adaptive_retrieval_orchestrator
+        provider_counter = getattr(provider, "count_tokens", None)
+        self._token_counter: Callable[[str], int] | None = (
+            provider_counter
+            if callable(provider_counter) and bool(getattr(provider, "supports_token_count", False))
+            else None
+        )
         self._adaptive_retrieval: (
             BoundedAdaptiveRetrievalController[
                 _RetrievedEvidenceAttempt,
@@ -872,6 +972,7 @@ class GroundedAnswerGenerator:
             evidence = build_generation_evidence(
                 hits,
                 self._config,
+                token_counter=self._token_counter,
             )
             evidence_build_ms = round(
                 (perf_counter() - evidence_started_at) * 1000.0,
@@ -1289,6 +1390,7 @@ class GroundedAnswerGenerator:
             evidence = build_generation_evidence(
                 hits,
                 self._config,
+                token_counter=self._token_counter,
             )
             evidence_build_ms = round(
                 (perf_counter() - evidence_started_at) * 1000.0,

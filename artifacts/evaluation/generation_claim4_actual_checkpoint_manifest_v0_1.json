@@ -1,0 +1,16 @@
+{
+  "adapter_path": "artifacts/training/adapters/aeroragx_lora_v0_1_reproduced_mps",
+  "adapter_sha256": "13df5eb8449d5b204c2d740b0c194b7712969f15258c42b26a336febeb27c717",
+  "base_model_sha256": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+  "base_report": "artifacts/evaluation/generation_transformers_base_claim4_v0_1.json",
+  "best_dev_token_loss": 1.1024050585923102,
+  "best_epoch": 2,
+  "chunks_path": "data/processed/ntrs/v0_1/chunks.jsonl",
+  "chunks_sha256": "67ce4f814db096a0d49117fde9c924c7ae8825ea3c631463255e4fde0e3706c2",
+  "embedding_manifest_sha256": "4481865ebc33a6350eb21d85400c63a4fd948006994c6f2f2897cf46b26e9df0",
+  "embedding_metadata_sha256": "67ce4f814db096a0d49117fde9c924c7ae8825ea3c631463255e4fde0e3706c2",
+  "embeddings_sha256": "5624f7ab741ca8f2fb1271355247f3b5e6b485ac0484fcba41b43d54ef342ac4",
+  "lora_report": "artifacts/evaluation/generation_transformers_lora_claim4_v0_1.json",
+  "status": "completed",
+  "version": "0.1"
+}

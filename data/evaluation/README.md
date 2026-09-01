@@ -663,3 +663,68 @@ aeroragx ntrs-evaluate-generation \
 - Preserve the v0.1 generation report as the pre-sufficiency baseline.
 - Preserve the v0.2 generation report as the sufficiency-gated baseline.
 - Expand generation queries under a new dataset version rather than silently modifying the existing ten-query benchmark.
+# Large-corpus retrieval evaluation
+
+Large-corpus runs should join the frozen query text in `queries_v0_1.jsonl` with
+the expanded relevance judgments in `qrels_v0_2.jsonl`, then serialize rows for
+the scale harness as:
+
+```json
+{"query_id":"q001","text":"...","relevant_chunk_ids":["document:chunk:00000"]}
+```
+
+Run identical queries at 10K, 100K, and 1M indexed chunks. Record Recall@10,
+NDCG@10, p50/p95 search latency, peak memory, ingestion time, index size, and
+the exact index configuration. Do not treat synthetic duplication as additional
+relevance evidence; new judgments require annotation and a new qrels version.
+
+## Completed real-text checkpoints
+
+The v0.1 scale study uses exact BM25 (`k1=1.5`, `b=0.75`) and the eight frozen
+queries above. The 10,060- and 100,614-chunk snapshots measure growing NTRS
+corpus breadth. The 1,000,000-chunk snapshot splits the real 100K text into
+32-word segments with 8-word overlap and retains `parent_chunk_id`; it measures
+load and rank crowding, not broader document coverage.
+
+| Chunks | Recall@10 | NDCG@10 | p50 ms | p95 ms |
+|---:|---:|---:|---:|---:|
+| 10,060 | 0.2275 | 0.2793 | 7.05 | 11.39 |
+| 100,614 | 0.2136 | 0.2476 | 31.63 | 71.15 |
+| 1,000,000 | 0.0467 | 0.0721 | 32.93 | 106.15 |
+
+The 1M evaluation maps each returned segment back to its judged parent chunk.
+Repeated segments can still occupy separate ranks; this intentionally exposes
+the need for parent-level result collapsing before final top-k selection.
+
+The follow-up parent-collapse ablation raised Recall@10 from 0.0467 to 0.0650
+and NDCG@10 from 0.0721 to 0.0903. Its reference Python implementation increased
+p50/p95 latency from 32.99/108.12 ms to 55.46/170.78 ms, so future comparisons
+must report collapse overhead separately and should implement grouping inside
+the retrieval backend.
+
+Metadata-filter experiments require independently annotated filter intent.
+Corpus field completeness alone is not a relevance judgment. The current real
+corpus has complete document-level year, subject, type, and report-family
+metadata, while program metadata covers 66.64% of documents; missing program
+values must therefore be reported as exclusions.
+
+## Source-grounded 512-case candidate
+
+The source-grounded query and qrels files provide a 512-query lexical recovery
+diagnostic across all 94 frozen documents. Automatically constructed wording is
+not a protected natural-question set. Two reviewers must independently copy and
+complete `source_grounded_review_v0_1_512.template.jsonl`.
+
+```bash
+python scripts/finalize_source_grounded_eval_512.py \
+  --queries data/evaluation/source_grounded_queries_v0_1_512.jsonl \
+  --manifest data/evaluation/source_grounded_eval_v0_1_512_manifest.json \
+  --review-a artifacts/evaluation/source_grounded_review_a_v0_1_512.jsonl \
+  --review-b artifacts/evaluation/source_grounded_review_b_v0_1_512.jsonl \
+  --protected-output data/evaluation/source_grounded_queries_v0_2_512_protected.jsonl \
+  --summary-output artifacts/evaluation/source_grounded_review_summary_v0_2.json
+```
+
+The command rejects incomplete coverage, identical reviewer identities,
+contradictory fields, unresolved disagreements, checksum drift, or fewer than
+500 accepted cases. Human decisions must never be synthesized to satisfy it.

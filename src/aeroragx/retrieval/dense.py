@@ -98,6 +98,16 @@ class DenseSearchHit(BaseModel):
     chunk: ChunkRecord
 
 
+class IncrementalDenseUpdate(BaseModel):
+    """Summary of reused and newly encoded vectors."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    reused_chunk_count: int = Field(ge=0)
+    encoded_chunk_count: int = Field(ge=0)
+    deleted_chunk_count: int = Field(ge=0)
+
+
 def load_dense_config(
     path: Path,
 ) -> DenseConfig:
@@ -155,6 +165,56 @@ def encode_chunks(
         raise ValueError("Embedding dimension must be positive.")
 
     return embeddings
+
+
+def update_dense_index_incrementally(
+    *,
+    existing_embeddings: FloatMatrix,
+    existing_chunks: Sequence[ChunkRecord],
+    incoming_chunks: Sequence[ChunkRecord],
+    config: DenseConfig,
+    encoder: DenseEncoder,
+) -> tuple[FloatMatrix, IncrementalDenseUpdate]:
+    """Reuse vectors for checksum-identical chunks and encode only changed chunks."""
+
+    if existing_embeddings.ndim != 2:
+        raise ValueError("Existing embeddings must be a two-dimensional matrix.")
+    if existing_embeddings.shape[0] != len(existing_chunks):
+        raise ValueError("Existing embedding and chunk counts differ.")
+    if not incoming_chunks:
+        raise ValueError("At least one incoming chunk is required.")
+
+    reusable: dict[str, tuple[ChunkRecord, npt.NDArray[np.float32]]] = {
+        chunk.chunk_id: (chunk, existing_embeddings[index])
+        for index, chunk in enumerate(existing_chunks)
+    }
+    changed = [
+        chunk
+        for chunk in incoming_chunks
+        if chunk.chunk_id not in reusable
+        or reusable[chunk.chunk_id][0].document_sha256 != chunk.document_sha256
+        or reusable[chunk.chunk_id][0].text != chunk.text
+    ]
+    encoded = encode_chunks(changed, config, encoder) if changed else None
+    encoded_by_id = (
+        {chunk.chunk_id: encoded[index] for index, chunk in enumerate(changed)}
+        if encoded is not None
+        else {}
+    )
+    rows: list[npt.NDArray[np.float32]] = []
+
+    for chunk in incoming_chunks:
+        if chunk.chunk_id in encoded_by_id:
+            rows.append(encoded_by_id[chunk.chunk_id])
+        else:
+            rows.append(reusable[chunk.chunk_id][1])
+    incoming_ids = {chunk.chunk_id for chunk in incoming_chunks}
+    summary = IncrementalDenseUpdate(
+        reused_chunk_count=len(incoming_chunks) - len(changed),
+        encoded_chunk_count=len(changed),
+        deleted_chunk_count=sum(chunk.chunk_id not in incoming_ids for chunk in existing_chunks),
+    )
+    return np.asarray(np.vstack(rows), dtype=np.float32), summary
 
 
 def write_dense_index(

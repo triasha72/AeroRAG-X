@@ -217,6 +217,16 @@ class MLXStructuredModelTransport:
 
         return self._model_name
 
+    def count_tokens(self, text: str) -> int:
+        """Count text with the exact tokenizer used by the MLX transport."""
+
+        encoded = self._tokenizer.encode(text, add_special_tokens=False)
+        if not isinstance(encoded, (list, tuple)) or any(
+            not isinstance(token, int) for token in encoded
+        ):
+            raise ValueError("MLX tokenizer returned invalid token IDs.")
+        return len(encoded)
+
     def complete(
         self,
         *,

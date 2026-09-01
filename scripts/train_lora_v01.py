@@ -63,6 +63,25 @@ def parse_args() -> argparse.Namespace:
         help=("Run one short end-to-end training-script validation."),
     )
 
+    parser.add_argument(
+        "--base-model",
+        type=Path,
+        default=None,
+        help="Use a checksum-pinned local base-model directory without changing the frozen config.",
+    )
+
+    parser.add_argument(
+        "--adapter-output",
+        type=Path,
+        default=None,
+    )
+
+    parser.add_argument(
+        "--report-output",
+        type=Path,
+        default=None,
+    )
+
     return parser.parse_args()
 
 
@@ -262,13 +281,13 @@ def evaluate_token_loss(
     total_negative_log_likelihood = 0.0
     total_tokens = 0
 
-    for _, tokenized in rows:
-        outputs = model(
-            **make_tensors(
-                tokenized,
-                device=device,
-            )
+    for position, (example_id, tokenized) in enumerate(rows, start=1):
+        batch = make_tensors(
+            tokenized,
+            device=device,
         )
+
+        outputs = model(**batch)
 
         loss_value = float(outputs.loss.detach().cpu())
 
@@ -281,7 +300,23 @@ def evaluate_token_loss(
 
         total_tokens += supervised_tokens
 
+        # MPS retains freed allocations in its caching allocator. Explicitly
+        # release each variable-length evaluation batch so a sequence of dev
+        # examples cannot accumulate enough cached memory for macOS jetsam to
+        # terminate the process. This changes only memory lifecycle, not the
+        # evaluated examples, token limit, precision, or loss calculation.
         del outputs
+        del batch
+
+        if device.type == "mps":
+            torch.mps.empty_cache()
+
+        print(
+            "evaluation",
+            f"example={position}/{len(rows)}",
+            f"id={example_id}",
+            f"loss={loss_value:.6f}",
+        )
 
     if total_tokens <= 0:
         raise RuntimeError("Evaluation had zero supervised tokens.")
@@ -334,7 +369,7 @@ def main() -> None:
     if training["device"] != "mps":
         raise RuntimeError("This experiment is configured for MPS.")
 
-    if not (torch.backends.mps.is_available()):
+    if not torch.backends.mps.is_available():
         raise RuntimeError("Apple MPS is unavailable.")
 
     seed = int(training["seed"])
@@ -346,7 +381,9 @@ def main() -> None:
 
     torch.mps.empty_cache()
 
-    base_model_name = str(config["base_model"])
+    base_model_name = str(
+        args.base_model.resolve() if args.base_model is not None else config["base_model"]
+    )
 
     train_path = repo_path(dataset["train_input"])
 
@@ -412,9 +449,17 @@ def main() -> None:
         report_path = REPO_ROOT / "artifacts/evaluation/aeroragx_lora_training_smoke_v0_1.json"
 
     else:
-        adapter_path = repo_path(outputs["best_adapter"])
+        adapter_path = (
+            args.adapter_output.resolve()
+            if args.adapter_output is not None
+            else repo_path(outputs["best_adapter"])
+        )
 
-        report_path = repo_path(outputs["report"])
+        report_path = (
+            args.report_output.resolve()
+            if args.report_output is not None
+            else repo_path(outputs["report"])
+        )
 
     if adapter_path.exists():
         shutil.rmtree(adapter_path)

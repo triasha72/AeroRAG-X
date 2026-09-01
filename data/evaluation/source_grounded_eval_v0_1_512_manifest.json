@@ -1,0 +1,14 @@
+{
+  "allowed_claim": "retrieval-scale diagnostic after reporting automatic construction",
+  "case_count": 512,
+  "chunks_sha256": "67ce4f814db096a0d49117fde9c924c7ae8825ea3c631463255e4fde0e3706c2",
+  "construction": "deterministic_source_keyword_v0.1",
+  "document_count": 94,
+  "prohibited_claim": "independently validated generation quality benchmark",
+  "qrels_sha256": "f6594781eccdf1b986828cf1f901ae70ec5533a3d7ecfa11a41157fa7e709126",
+  "queries_sha256": "34d71f260f6e3c76d15c0e967f39504f3d955ee09afb5ddff905b46de37dfb7f",
+  "retrieval_queries_sha256": "27191ba0d0058561ab46dadcd23fd9d078a3cab3a70c4578f0dd5e8211b14668",
+  "review_template_sha256": "29dc119fd5c9e05629db5c8f298b853098b1d05ca0cee5cb6cd7b9c4ba09b72c",
+  "status": "candidate_requires_independent_review",
+  "version": "0.1"
+}

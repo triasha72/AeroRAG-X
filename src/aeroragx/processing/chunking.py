@@ -57,6 +57,7 @@ class ChunkRecord(BaseModel):
     )
 
     chunk_id: str
+    parent_chunk_id: str | None = None
     document_id: int
     chunk_index: int = Field(ge=0)
     page_start: int = Field(ge=1)
@@ -69,6 +70,12 @@ class ChunkRecord(BaseModel):
     citation_url: str
     source_url: str
     document_sha256: str
+    title: str | None = None
+    publication_year: int | None = Field(default=None, ge=1900, le=2200)
+    subject_categories: list[str] = Field(default_factory=list)
+    document_type: str | None = None
+    programs: list[str] = Field(default_factory=list)
+    report_family: str | None = None
 
 
 class ChunkingReceipt(BaseModel):
