@@ -118,6 +118,7 @@ Future:
 - [ ] conflicting and partial evidence studies
 - [ ] multiple human assessors and inter-annotator agreement
 - [ ] multimodal technical-report retrieval
+- [x] external scientific-paper retrieval check against QASPER human evidence
 
 # Phase 1 — Repository foundation — COMPLETE
 

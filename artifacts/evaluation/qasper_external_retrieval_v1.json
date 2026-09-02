@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "allenai/qasper",
+  "dataset_version": "0.3.0",
+  "dataset_license": "CC-BY-4.0",
+  "split": "validation",
+  "source_sha256": "2ae7ee62a65b1c4225791c70de80c2aad4e8998cf1fd4f09a53103db4f21af93",
+  "retriever": "within-paper TF-IDF word 1-2 grams",
+  "papers": 281,
+  "evaluated_questions": 888,
+  "skipped_unanswerable_or_unmatched_questions": 117,
+  "mean_human_annotations_per_question": 1.7094594594594594,
+  "mean_reciprocal_rank": 0.3604519060068822,
+  "any_evidence_recall_at_k": {
+    "5": 0.5608108108108109,
+    "10": 0.7623873873873874,
+    "20": 0.9099099099099099
+  },
+  "complete_evidence_recall_at_k": {
+    "5": 0.30180180180180183,
+    "10": 0.4786036036036036,
+    "20": 0.6768018018018018
+  },
+  "contains_source_text": false,
+  "limitations": [
+    "QASPER covers NLP papers, not NASA aerospace reports.",
+    "This run evaluates within-paper evidence retrieval, not answer generation.",
+    "Evidence spans that could not be matched to a full-text paragraph are excluded and counted."
+  ]
+}
