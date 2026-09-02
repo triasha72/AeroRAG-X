@@ -23,6 +23,7 @@ from aeroragx.generation.evaluation import (
 from aeroragx.generation.grounded import (
     GroundedAnswer,
 )
+from aeroragx.generation.structured_provider import ProviderTelemetry
 
 type ProviderKind = Literal[
     "deterministic",
@@ -313,13 +314,35 @@ def _build_query_telemetry(
 ) -> GenerationQueryProviderTelemetry:
     if evaluation.generation_failed:
         diagnostics = getattr(error, "diagnostics", None)
+        telemetry = getattr(error, "telemetry", None)
+        usage = telemetry.usage if isinstance(telemetry, ProviderTelemetry) else None
+        provider_called = True if isinstance(telemetry, ProviderTelemetry) else None
         return GenerationQueryProviderTelemetry(
             query_id=query.query_id,
             expected_answerable=(query.expected_answerable),
             generation_failed=True,
             failure_type=(evaluation.failure_type),
-            provider_called=None,
-            provider_call_policy_correct=None,
+            provider_called=provider_called if telemetry_expected else None,
+            provider_call_policy_correct=(
+                (provider_called == query.expected_answerable)
+                if telemetry_expected and provider_called is not None
+                else None
+            ),
+            attempts=(telemetry.attempts if isinstance(telemetry, ProviderTelemetry) else None),
+            latency_seconds=(
+                telemetry.latency_seconds if isinstance(telemetry, ProviderTelemetry) else None
+            ),
+            input_tokens=(usage.input_tokens if usage is not None else None),
+            output_tokens=(usage.output_tokens if usage is not None else None),
+            total_tokens=(usage.total_tokens if usage is not None else None),
+            estimated_cost_usd=(
+                telemetry.estimated_cost_usd if isinstance(telemetry, ProviderTelemetry) else None
+            ),
+            prompt_injection_safe=(
+                telemetry.prompt_injection_safe
+                if isinstance(telemetry, ProviderTelemetry)
+                else None
+            ),
             failure_diagnostics=(dict(diagnostics) if isinstance(diagnostics, dict) else None),
         )
 

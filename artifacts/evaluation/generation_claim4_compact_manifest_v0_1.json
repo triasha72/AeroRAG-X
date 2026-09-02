@@ -1,0 +1,29 @@
+{
+  "artifacts": {
+    "base_report": {
+      "path": "artifacts/evaluation/generation_transformers_base_claim4_compact_v0_1.json",
+      "sha256": "a2fee2e3495dd2ed3aadf8289df573475ca40b31e6129dadd445a6a5f8f6d697"
+    },
+    "lora_report": {
+      "path": "artifacts/evaluation/generation_transformers_lora_claim4_compact_v0_1.json",
+      "sha256": "55d3b430bc7bc91511ee3f3d6ce4abbf6b5b4009fbaa803c2d65990681af2823"
+    },
+    "lora_vs_original": {
+      "path": "artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json",
+      "sha256": "f5de684c6ad0603e818a044a1ba75770b58449c3ce7f03cfbe59514a02b3f60c"
+    },
+    "paired_report": {
+      "path": "artifacts/evaluation/generation_claim4_compact_paired_efficiency_v0_1.json",
+      "sha256": "36b36954ab4535c7b2dbc377d7d9fa1b5df68bc319f9c6dddf11678ec55d7416"
+    },
+    "promotion": {
+      "path": "artifacts/evaluation/generation_lora_compact_promotion_v0_1.json",
+      "sha256": "0b7dce703dfed82a9dfc1a1a646350c3965e9098547c07520e2931757f523abe"
+    }
+  },
+  "max_new_tokens": 384,
+  "prompt_version": "grounded-json-v0.3-compact",
+  "query_count": 32,
+  "status": "completed_rejected",
+  "version": "0.1"
+}

@@ -325,7 +325,7 @@ def test_malformed_provider_payload_is_rejected() -> None:
     with pytest.raises(
         ProviderResponseValidationError,
         match=("Structured provider response failed validation"),
-    ):
+    ) as captured:
         provider.generate(
             query="Question",
             evidence=[evidence()],
@@ -337,6 +337,19 @@ def test_malformed_provider_payload_is_rejected() -> None:
     assert telemetry is not None
     assert telemetry.succeeded is False
     assert telemetry.error_type == "ProviderResponseValidationError"
+    assert captured.value.telemetry is not None
+    assert captured.value.diagnostics == {
+        "failure_stage": "response_schema",
+        "validation_error_type": "ValidationError",
+        "validation_error_count": 1,
+        "validation_errors_truncated": False,
+        "validation_errors": [
+            {
+                "location": "answer",
+                "error_type": "string_too_short",
+            }
+        ],
+    }
 
 
 def test_unknown_evidence_id_is_rejected() -> None:

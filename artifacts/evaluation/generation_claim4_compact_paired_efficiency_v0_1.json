@@ -1,0 +1,31 @@
+{
+  "version": "0.1",
+  "status": "insufficient_paired_observations",
+  "frozen_query_count": 32,
+  "paired_completed_query_count": 10,
+  "paired_provider_call_count": 0,
+  "base_mean_output_tokens": null,
+  "treatment_mean_output_tokens": null,
+  "mean_paired_output_token_delta": null,
+  "mean_paired_output_token_delta_bootstrap_95_ci": null,
+  "paired_effect_size_cohen_dz": null,
+  "bootstrap_samples": 0,
+  "bootstrap_seed": 20260901,
+  "relative_output_token_change": null,
+  "treatment_lower_token_query_count": 0,
+  "equal_token_query_count": 0,
+  "treatment_higher_token_query_count": 0,
+  "base_mean_claim_count": null,
+  "treatment_mean_claim_count": null,
+  "base_mean_answer_repeated_word_fraction": null,
+  "treatment_mean_answer_repeated_word_fraction": null,
+  "inputs": {
+    "base_report": "artifacts/evaluation/generation_transformers_base_claim4_compact_v0_1.json",
+    "base_report_sha256": "a2fee2e3495dd2ed3aadf8289df573475ca40b31e6129dadd445a6a5f8f6d697",
+    "base_telemetry_sha256": "1f736830760fd1b5e425752afdb560509944c724d5cc29db28371dabdf8280a9",
+    "treatment_report": "artifacts/evaluation/generation_transformers_lora_claim4_compact_v0_1.json",
+    "treatment_report_sha256": "55d3b430bc7bc91511ee3f3d6ce4abbf6b5b4009fbaa803c2d65990681af2823",
+    "treatment_telemetry_sha256": "e76f00d6b39d730f04652bf564c90d3b63b67cfc57650ffe89b6fa6294f6fd3d"
+  },
+  "query_pairs": []
+}

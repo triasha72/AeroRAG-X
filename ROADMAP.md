@@ -1189,9 +1189,14 @@ New infrastructure should follow a measured engineering requirement.
   representative five-evidence prompt without reducing evidence
 - [x] add privacy-bounded malformed-output diagnostics, a compact promotion
   gate, and a two-reviewer 500+ benchmark finalization gate
-- [ ] execute the full compact 32-query MPS candidate and promote it only if its
-  paired token use improves without regression in completion, grounding,
-  expected-term recall, or structural validity
+- [x] execute the full compact 32-query MPS candidate; reject it despite a
+  23.83% paired LoRA output-token reduction because failures rose from 2 to 10
+  and completion, expected-term recall, and structural validity regressed
+- [x] make zero-pair analysis emit an insufficient-observations artifact, retain
+  bounded schema-error locations and failed-call usage, and preserve rejected
+  experiments through manifest finalization
+- [x] add an explicit-schema compact v0.3.1 development-only prompt, eight-case
+  development set, and runner that makes no protected-set promotion claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE

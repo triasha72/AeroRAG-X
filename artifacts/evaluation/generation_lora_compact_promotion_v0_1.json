@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "answerability_accuracy_within_bound": false,
+    "answerable_completion_rate_within_bound": false,
+    "citation_reference_validity_rate_within_bound": true,
+    "claim_citation_coverage_rate_within_bound": true,
+    "expected_term_recall_within_bound": false,
+    "failure_count_not_worse": false,
+    "paired_output_token_reduction": true,
+    "paired_sample_present": false,
+    "same_complete_query_contract": true,
+    "source_document_coverage_rate_within_bound": true,
+    "structural_validity_rate_within_bound": false,
+    "unsupported_refusal_rate_within_bound": true
+  },
+  "maximum_rate_regression": 0.03125,
+  "minimum_token_reduction": 0.15,
+  "relative_output_token_change": -0.23826714801444043,
+  "status": "rejected",
+  "version": "0.1"
+}

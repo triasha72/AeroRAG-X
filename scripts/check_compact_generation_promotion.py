@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 def parse_args() -> argparse.Namespace:
@@ -21,7 +21,10 @@ def parse_args() -> argparse.Namespace:
 
 
 def _load(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    value: object = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError(f"Expected a JSON object: {path}")
+    return cast(dict[str, Any], value)
 
 
 def main() -> None:
@@ -49,8 +52,11 @@ def main() -> None:
         checks[f"{metric}_within_bound"] = (
             float(candidate[metric]) >= float(baseline[metric]) - args.maximum_rate_regression
         )
-    relative_change = float(paired["relative_output_token_change"])
-    checks["paired_output_token_reduction"] = relative_change <= -args.minimum_token_reduction
+    relative_value = paired.get("relative_output_token_change")
+    relative_change = float(relative_value) if relative_value is not None else None
+    checks["paired_output_token_reduction"] = (
+        relative_change is not None and relative_change <= -args.minimum_token_reduction
+    )
     checks["paired_sample_present"] = int(paired["paired_provider_call_count"]) >= 15
 
     promoted = all(checks.values())

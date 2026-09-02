@@ -10,7 +10,19 @@ import random
 import re
 import statistics
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
+
+
+class PairRow(TypedDict):
+    query_id: str
+    base_output_tokens: int
+    treatment_output_tokens: int
+    output_token_delta: int
+    base_claim_count: int
+    treatment_claim_count: int
+    claim_count_delta: int
+    base_answer_repeated_word_fraction: float
+    treatment_answer_repeated_word_fraction: float
 
 
 def parse_args() -> argparse.Namespace:
@@ -52,6 +64,10 @@ def _repeated_word_fraction(answer: str) -> float:
 
 def _mean(values: list[float]) -> float:
     return statistics.fmean(values) if values else 0.0
+
+
+def _mean_or_none(values: list[float]) -> float | None:
+    return statistics.fmean(values) if values else None
 
 
 def _percentile(values: list[float], fraction: float) -> float:
@@ -100,7 +116,7 @@ def main() -> None:
         and treatment_usage[query_id].get("output_tokens") is not None
     ]
 
-    pairs = []
+    pairs: list[PairRow] = []
     for query_id in provider_ids:
         base_output = int(base_usage[query_id]["output_tokens"])
         treatment_output = int(treatment_usage[query_id]["output_tokens"])
@@ -126,40 +142,48 @@ def main() -> None:
     token_deltas = [float(row["output_token_delta"]) for row in pairs]
     base_tokens = [float(row["base_output_tokens"]) for row in pairs]
     treatment_tokens = [float(row["treatment_output_tokens"]) for row in pairs]
-    base_mean = _mean(base_tokens)
-    treatment_mean = _mean(treatment_tokens)
-    delta_lower, delta_upper = _bootstrap_mean_interval(
-        token_deltas,
-        args.bootstrap_samples,
+    base_mean = _mean_or_none(base_tokens)
+    treatment_mean = _mean_or_none(treatment_tokens)
+    mean_delta = _mean_or_none(token_deltas)
+    base_claim_mean = _mean_or_none([float(row["base_claim_count"]) for row in pairs])
+    treatment_claim_mean = _mean_or_none([float(row["treatment_claim_count"]) for row in pairs])
+    base_repeat_mean = _mean_or_none([row["base_answer_repeated_word_fraction"] for row in pairs])
+    treatment_repeat_mean = _mean_or_none(
+        [row["treatment_answer_repeated_word_fraction"] for row in pairs]
+    )
+    interval = (
+        _bootstrap_mean_interval(token_deltas, args.bootstrap_samples) if token_deltas else None
     )
     delta_sd = statistics.stdev(token_deltas) if len(token_deltas) > 1 else 0.0
-    summary = {
+    effect_size = mean_delta / delta_sd if mean_delta is not None and delta_sd else None
+    relative_change = (
+        (treatment_mean - base_mean) / base_mean
+        if base_mean is not None and treatment_mean is not None and base_mean != 0.0
+        else None
+    )
+    summary: dict[str, Any] = {
         "version": "0.1",
-        "status": "completed",
+        "status": "completed" if pairs else "insufficient_paired_observations",
         "frozen_query_count": len(base_results),
         "paired_completed_query_count": len(completed_ids),
         "paired_provider_call_count": len(provider_ids),
         "base_mean_output_tokens": base_mean,
         "treatment_mean_output_tokens": treatment_mean,
-        "mean_paired_output_token_delta": _mean(token_deltas),
-        "mean_paired_output_token_delta_bootstrap_95_ci": [delta_lower, delta_upper],
-        "paired_effect_size_cohen_dz": (_mean(token_deltas) / delta_sd if delta_sd else None),
-        "bootstrap_samples": args.bootstrap_samples,
-        "bootstrap_seed": 20260901,
-        "relative_output_token_change": (
-            (treatment_mean - base_mean) / base_mean if base_mean else None
+        "mean_paired_output_token_delta": mean_delta,
+        "mean_paired_output_token_delta_bootstrap_95_ci": (
+            list(interval) if interval is not None else None
         ),
+        "paired_effect_size_cohen_dz": effect_size,
+        "bootstrap_samples": args.bootstrap_samples if pairs else 0,
+        "bootstrap_seed": 20260901,
+        "relative_output_token_change": relative_change,
         "treatment_lower_token_query_count": sum(row["output_token_delta"] < 0 for row in pairs),
         "equal_token_query_count": sum(row["output_token_delta"] == 0 for row in pairs),
         "treatment_higher_token_query_count": sum(row["output_token_delta"] > 0 for row in pairs),
-        "base_mean_claim_count": _mean([float(row["base_claim_count"]) for row in pairs]),
-        "treatment_mean_claim_count": _mean([float(row["treatment_claim_count"]) for row in pairs]),
-        "base_mean_answer_repeated_word_fraction": _mean(
-            [float(row["base_answer_repeated_word_fraction"]) for row in pairs]
-        ),
-        "treatment_mean_answer_repeated_word_fraction": _mean(
-            [float(row["treatment_answer_repeated_word_fraction"]) for row in pairs]
-        ),
+        "base_mean_claim_count": base_claim_mean,
+        "treatment_mean_claim_count": treatment_claim_mean,
+        "base_mean_answer_repeated_word_fraction": base_repeat_mean,
+        "treatment_mean_answer_repeated_word_fraction": treatment_repeat_mean,
         "inputs": {
             "base_report": str(args.base_report),
             "base_report_sha256": _sha256(args.base_report),
@@ -175,7 +199,6 @@ def main() -> None:
     args.markdown_output.parent.mkdir(parents=True, exist_ok=True)
     args.json_output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
-    relative = summary["relative_output_token_change"]
     lines = [
         "# Paired generation-efficiency analysis",
         "",
@@ -183,32 +206,50 @@ def main() -> None:
         "are compared.",
         "Refusals and failures are not silently converted into zero-token observations.",
         "",
-        "| Metric | Base | Treatment |",
-        "|---|---:|---:|",
-        f"| Mean output tokens | {base_mean:.2f} | {treatment_mean:.2f} |",
-        f"| Mean claims | {summary['base_mean_claim_count']:.2f} | "
-        f"{summary['treatment_mean_claim_count']:.2f} |",
-        "| Mean repeated-word fraction | "
-        f"{summary['base_mean_answer_repeated_word_fraction']:.4f} | "
-        f"{summary['treatment_mean_answer_repeated_word_fraction']:.4f} |",
-        "",
         f"Paired completed queries: **{len(completed_ids)}**. "
         f"Paired provider calls: **{len(provider_ids)}**.",
-        "Mean treatment-minus-Base output delta: "
-        f"**{summary['mean_paired_output_token_delta']:+.2f} tokens**.",
-        f"Paired bootstrap 95% interval: **[{delta_lower:+.2f}, {delta_upper:+.2f}] "
-        f"tokens** ({args.bootstrap_samples:,} deterministic resamples).",
-        "Paired effect size (Cohen's dz): "
-        f"**{float(summary['paired_effect_size_cohen_dz'] or 0.0):+.3f}**.",
-        f"Relative treatment output change: **{float(relative or 0.0):+.2%}**.",
-        "Treatment used fewer/equal/more tokens on "
-        f"**{summary['treatment_lower_token_query_count']} / "
-        f"{summary['equal_token_query_count']} / "
-        f"{summary['treatment_higher_token_query_count']}** paired calls.",
-        "",
-        "This is a descriptive paired analysis of the frozen sample, not a population-level "
-        "significance claim.",
     ]
+    if pairs and interval is not None:
+        assert base_mean is not None
+        assert treatment_mean is not None
+        assert mean_delta is not None
+        assert base_claim_mean is not None
+        assert treatment_claim_mean is not None
+        assert base_repeat_mean is not None
+        assert treatment_repeat_mean is not None
+        assert relative_change is not None
+        delta_lower, delta_upper = interval
+        lines.extend(
+            [
+                "",
+                "| Metric | Base | Treatment |",
+                "|---|---:|---:|",
+                f"| Mean output tokens | {base_mean:.2f} | {treatment_mean:.2f} |",
+                f"| Mean claims | {base_claim_mean:.2f} | {treatment_claim_mean:.2f} |",
+                "| Mean repeated-word fraction | "
+                f"{base_repeat_mean:.4f} | {treatment_repeat_mean:.4f} |",
+                "",
+                f"Mean treatment-minus-Base output delta: **{mean_delta:+.2f} tokens**.",
+                f"Paired bootstrap 95% interval: **[{delta_lower:+.2f}, {delta_upper:+.2f}] "
+                f"tokens** ({args.bootstrap_samples:,} deterministic resamples).",
+                f"Paired effect size (Cohen's dz): **{float(effect_size or 0.0):+.3f}**.",
+                f"Relative treatment output change: **{relative_change:+.2%}**.",
+                "Treatment used fewer/equal/more tokens on "
+                f"**{summary['treatment_lower_token_query_count']} / "
+                f"{summary['equal_token_query_count']} / "
+                f"{summary['treatment_higher_token_query_count']}** paired calls.",
+                "",
+                "This is a descriptive paired analysis of the frozen sample, not a "
+                "population-level significance claim.",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "No query had successful, token-observed provider calls in both conditions.",
+                "No means, confidence interval, effect size, or relative token claim is made.",
+            ]
+        )
     args.markdown_output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     print(

@@ -1,0 +1,8 @@
+{"query_id":"compact_dev_001","query":"How does thermal management affect electric-aircraft motor power density?","expected_answerable":true,"expected_terms":["thermal","motor","power"]}
+{"query_id":"compact_dev_002","query":"What electrical faults can cause partial or complete propulsion-power loss?","expected_answerable":true,"expected_terms":["fault","power","loss"]}
+{"query_id":"compact_dev_003","query":"Why are high-temperature sensors useful in electrified aircraft systems?","expected_answerable":true,"expected_terms":["sensor","temperature","aircraft"]}
+{"query_id":"compact_dev_004","query":"What role can magnetic gearing play in an electric propulsion drivetrain?","expected_answerable":true,"expected_terms":["magnetic","gear","electric"]}
+{"query_id":"compact_dev_005","query":"What certification considerations affect electrified aircraft powertrains?","expected_answerable":true,"expected_terms":["certification","aircraft","powertrain"]}
+{"query_id":"compact_dev_006","query":"How can battery energy density influence hybrid-electric aircraft performance?","expected_answerable":true,"expected_terms":["battery","energy","aircraft"]}
+{"query_id":"compact_dev_007","query":"Which NASA report proves that lunar cheese improves aircraft battery cooling?","expected_answerable":false,"expected_terms":[]}
+{"query_id":"compact_dev_008","query":"What evidence establishes teleportation as an FAA-certified propulsion method?","expected_answerable":false,"expected_terms":[]}

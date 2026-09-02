@@ -15,6 +15,7 @@ from aeroragx.generation.grounded import (
     SourceDocument,
 )
 from aeroragx.generation.structured_provider import (
+    ProviderResponseValidationError,
     ProviderTelemetry,
     ProviderTransportError,
     ProviderUsage,
@@ -160,6 +161,52 @@ def refusal_answer(
             provider_telemetry=None,
         ),
     )
+
+
+def test_failed_response_retains_bounded_provider_usage() -> None:
+    telemetry = ProviderTelemetry(
+        model_name="gpt-test",
+        prompt_version="prompt-v1",
+        attempts=1,
+        latency_seconds=2.5,
+        succeeded=False,
+        request_id="req-failed",
+        usage=ProviderUsage(input_tokens=120, output_tokens=30),
+        estimated_cost_usd=0.0,
+        prompt_injection_safe=True,
+        prompt_injection_findings=0,
+        error_type="ProviderResponseValidationError",
+    )
+    error = ProviderResponseValidationError(
+        "invalid response",
+        diagnostics={
+            "failure_stage": "response_schema",
+            "validation_errors": [{"location": "claims.0.evidence_ids", "error_type": "list_type"}],
+        },
+        telemetry=telemetry,
+    )
+    query = GenerationEvaluationQuery(
+        query_id="q-failed",
+        query="answerable",
+        expected_answerable=True,
+        expected_terms=["battery"],
+    )
+
+    report = evaluate_grounded_generation_with_telemetry(
+        generator=FakeGenerator({"answerable": error}),
+        queries=[query],
+        generation_provider="transformers-local",
+        generation_model="gpt-test",
+    )
+
+    row = report.query_telemetry[0]
+    assert row.provider_called is True
+    assert row.attempts == 1
+    assert row.input_tokens == 120
+    assert row.output_tokens == 30
+    assert row.total_tokens == 150
+    assert row.failure_diagnostics == error.diagnostics
+    assert report.provider_summary.provider_call_count == 1
 
 
 def test_remote_provider_telemetry_is_aggregated() -> None:

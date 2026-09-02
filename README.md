@@ -1322,12 +1322,15 @@ implemented prompt-budget result, not yet a generation-quality result. The full
 `scripts/run_compact_mps_claim4_validation.sh`; it writes new artifacts and
 cannot overwrite the historical checkpoint reports.
 
-The runner also compares compact LoRA directly with original LoRA on matched
-successful calls and invokes a fail-closed promotion gate. Promotion requires
-at least 15 paired calls, at least 15% output-token reduction, no additional
-generation failures, the same 32-query contract, and no quality-rate regression
-greater than one query out of 32. Saving tokens by failing or refusing more
-often is therefore rejected.
+The full compact MPS experiment is now complete and rejected. On 12 matched
+original-LoRA/compact-LoRA calls, compact output fell from 207.75 to 158.25
+tokens (-23.83%; bootstrap 95% interval -80.42 to -23.25), but compact LoRA
+failed 10 queries versus 2 originally. Base compact failed 22 queries. The
+candidate therefore failed completion, answerability, expected-term, structural,
+failure-count, and minimum-paired-sample gates. Saving tokens by producing
+invalid structure is not treated as efficiency. Exact artifacts, hashes, and
+the development-only v0.3.1 policy are recorded in
+[`reports/compact_generation_v0_3_rejected.md`](reports/compact_generation_v0_3_rejected.md).
 
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,

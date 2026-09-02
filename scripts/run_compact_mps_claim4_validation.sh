@@ -66,11 +66,15 @@ PYTHONPATH=src "$python_bin" scripts/analyze_paired_generation_efficiency.py \
   --json-output artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json \
   --markdown-output reports/generation_lora_compact_vs_v01_paired_v0_1.md
 
-PYTHONPATH=src "$python_bin" scripts/check_compact_generation_promotion.py \
+if PYTHONPATH=src "$python_bin" scripts/check_compact_generation_promotion.py \
   --baseline-report artifacts/evaluation/generation_transformers_lora_claim4_v0_1.json \
   --candidate-report "$lora_report" \
   --paired-efficiency artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json \
-  --output artifacts/evaluation/generation_lora_compact_promotion_v0_1.json
+  --output artifacts/evaluation/generation_lora_compact_promotion_v0_1.json; then
+  echo "Compact candidate passed every promotion gate."
+else
+  echo "Compact candidate was rejected; preserving the completed experiment."
+fi
 
 PYTHONPATH=src "$python_bin" - <<'PY'
 import hashlib
@@ -81,13 +85,16 @@ paths = {
     "base_report": Path("artifacts/evaluation/generation_transformers_base_claim4_compact_v0_1.json"),
     "lora_report": Path("artifacts/evaluation/generation_transformers_lora_claim4_compact_v0_1.json"),
     "paired_report": Path("artifacts/evaluation/generation_claim4_compact_paired_efficiency_v0_1.json"),
+    "lora_vs_original": Path("artifacts/evaluation/generation_lora_compact_vs_v01_paired_v0_1.json"),
+    "promotion": Path("artifacts/evaluation/generation_lora_compact_promotion_v0_1.json"),
 }
 for path in paths.values():
     if not path.is_file():
         raise SystemExit(f"Missing completed compact-validation artifact: {path}")
+promotion = json.loads(paths["promotion"].read_text(encoding="utf-8"))
 summary = {
     "version": "0.1",
-    "status": "completed",
+    "status": f"completed_{promotion['status']}",
     "prompt_version": "grounded-json-v0.3-compact",
     "max_new_tokens": 384,
     "query_count": 32,

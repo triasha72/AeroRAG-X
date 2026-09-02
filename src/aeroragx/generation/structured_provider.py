@@ -119,9 +119,52 @@ class ProviderTransportError(StructuredProviderError):
 class ProviderResponseValidationError(StructuredProviderError):
     """Model output failed the required response contract."""
 
-    def __init__(self, message: str, *, diagnostics: dict[str, object] | None = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        diagnostics: dict[str, object] | None = None,
+        telemetry: ProviderTelemetry | None = None,
+    ) -> None:
         super().__init__(message)
         self.diagnostics = dict(diagnostics or {})
+        self.telemetry = telemetry.model_copy(deep=True) if telemetry is not None else None
+
+
+def _bounded_validation_diagnostics(error: ValidationError | ValueError) -> dict[str, object]:
+    """Return schema diagnostics without retaining prompts or generated values."""
+
+    if isinstance(error, ValidationError):
+        errors = error.errors(
+            include_url=False,
+            include_context=False,
+            include_input=False,
+        )
+        bounded_errors = [
+            {
+                "location": ".".join(str(part) for part in item.get("loc", ())),
+                "error_type": str(item.get("type", "unknown")),
+            }
+            for item in errors[:20]
+        ]
+        return {
+            "validation_error_type": "ValidationError",
+            "validation_error_count": len(errors),
+            "validation_errors_truncated": len(errors) > len(bounded_errors),
+            "validation_errors": bounded_errors,
+        }
+
+    return {
+        "validation_error_type": "ValueError",
+        "validation_error_count": 1,
+        "validation_errors_truncated": False,
+        "validation_errors": [
+            {
+                "location": "claims.evidence_ids",
+                "error_type": "unknown_evidence_id",
+            }
+        ],
+    }
 
 
 class StructuredGenerationProvider(GenerationProvider):
@@ -263,12 +306,14 @@ class StructuredGenerationProvider(GenerationProvider):
                     request_id=result.request_id,
                     usage=result.usage,
                 )
+                diagnostics = {
+                    "failure_stage": "response_schema",
+                    **_bounded_validation_diagnostics(error),
+                }
                 raise ProviderResponseValidationError(
                     "Structured provider response failed validation.",
-                    diagnostics={
-                        "failure_stage": "response_schema",
-                        "validation_error_type": type(error).__name__,
-                    },
+                    diagnostics=diagnostics,
+                    telemetry=self.last_telemetry,
                 ) from error
 
             self._last_telemetry = ProviderTelemetry(
