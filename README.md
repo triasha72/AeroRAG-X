@@ -601,6 +601,15 @@ comparison and hardware limits are recorded in
 [`reports/framework_comparison_v0_1.md`](reports/framework_comparison_v0_1.md).
 The remaining GPU, human-review, GRPO, and upstream steps are tracked with
 evidence gates in the [manual completion checklist](docs/manual-completion-checklist.md).
+The post-merge research program now also pins two external NASA IMPACT
+benchmarks and separates their evidentiary roles: 219 expert queries can test
+independent NASA software-discovery generalization, while the 176,901-query SDE
+benchmark can test scale but remains model-generated evidence. Acquisition,
+reviewer alternatives, the pgvector execution receipt, claim audit, and release
+gate are documented in
+[`docs/post_merge_evidence_plan.md`](docs/post_merge_evidence_plan.md). Public
+numbers are mapped for independent verification in
+[`docs/public_claim_audit_v0_1.csv`](docs/public_claim_audit_v0_1.csv).
 
 ## Serving and operations
 

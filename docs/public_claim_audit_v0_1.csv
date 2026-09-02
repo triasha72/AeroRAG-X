@@ -1,0 +1,7 @@
+surface,claim,artifact,commit,scope_limitation,auditor,status
+README,Base versus LoRA four-claim checkpoint metrics,artifacts/evaluation/generation_claim4_paired_efficiency_v0_1.json,3f59ecd,19 paired token-observed calls,,pending_independent_review
+README,512-case neural retrieval metrics,artifacts/evaluation/source_grounded_reranker_v0_1_512.json,3f59ecd,automatic lexical source-recovery diagnostic,,pending_independent_review
+README,100K breadth benchmark,reports/retrieval_scaling_v0_1.md,3f59ecd,real NASA breadth snapshot,,pending_independent_review
+README,1M load benchmark,reports/retrieval_scaling_v0_1.md,3f59ecd,fine-segment load and crowding test not corpus breadth,,pending_independent_review
+portfolio,AeroRAG-X headline metrics,,,must match a frozen repository artifact,,pending_artifact_mapping
+CV,AeroRAG-X headline metrics,,,must match a frozen repository artifact,,pending_artifact_mapping

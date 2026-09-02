@@ -1194,6 +1194,14 @@ New infrastructure should follow a measured engineering requirement.
   expected-term recall, or structural validity
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
+- [x] register revision-pinned independent NASA SME and generated NASA SDE
+  external benchmarks, with licenses, download receipts, and evidence-class
+  boundaries that prevent synthetic questions being reported as human review
+- [x] add a public-claim audit ledger and post-merge evidence/release gates
+- [ ] obtain independent sign-off for every public numeric claim; repository
+  owner or model review does not satisfy this gate
+- [ ] publish a reproducibility release only after compact-prompt, reviewer,
+  default-branch CI, raw-artifact, and limitation gates all pass
 
 The milestone rejected synthetic distractor replication as research evidence
 and rejected immediate HNSW promotion without a measured crossover. The 100K

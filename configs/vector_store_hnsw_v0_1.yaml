@@ -1,0 +1,12 @@
+version: "0.1"
+backend: "pgvector"
+database_url_env: "AERORAGX_VECTOR_DATABASE_URL"
+table_name: "aerorag_chunks_hnsw"
+metric: "cosine"
+default_top_k: 10
+index_method: "hnsw"
+hnsw_m: 16
+hnsw_ef_construction: 64
+hnsw_ef_search: 40
+collapse_parent_chunks: true
+parent_candidate_multiplier: 10

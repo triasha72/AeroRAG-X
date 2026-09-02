@@ -1,0 +1,32 @@
+version: "0.1"
+
+benchmarks:
+  nasa_sme:
+    repository: "nasa-impact/nasa-science-repos-sme-benchmark"
+    revision: "f26b9c9a4060d759b0ae44354059b37387dd414e"
+    license: "Apache-2.0"
+    evidence_class: "independent_expert_queries"
+    expected_query_count: 219
+    files:
+      - corpus.jsonl
+      - queries.jsonl
+      - qrels/earth.tsv
+      - qrels/astro.tsv
+      - qrels/planetary.tsv
+  nasa_sde_scale:
+    repository: "nasa-impact/nasa-sde-IR-benchmark-20251024-v5"
+    revision: "e5405d4f873060bc615638d516bd09fbd777741d"
+    license: "CC-BY-4.0"
+    evidence_class: "model_generated_scale_diagnostic"
+    expected_query_count: 176901
+    files:
+      - corpus.jsonl
+      - queries.jsonl
+      - qrels/qa_pairs.tsv
+      - qrels/search_pairs.tsv
+
+policy:
+  expert_queries_may_support_independent_generalization: true
+  generated_queries_may_support_independent_generalization: false
+  generated_queries_may_support_scale_measurement: true
+  do_not_merge_metrics_across_corpora: true

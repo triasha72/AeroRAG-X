@@ -1,0 +1,40 @@
+{
+  "receipt_version": "0.1",
+  "benchmark": "nasa_sme",
+  "repository": "nasa-impact/nasa-science-repos-sme-benchmark",
+  "revision": "f26b9c9a4060d759b0ae44354059b37387dd414e",
+  "license": "Apache-2.0",
+  "evidence_class": "independent_expert_queries",
+  "files": [
+    {
+      "path": "work/external_benchmarks/nasa_sme/f26b9c9a4060d759b0ae44354059b37387dd414e/corpus.jsonl",
+      "bytes": 72155484,
+      "sha256": "71a4ef9604bf18db1d26a4157398385722275ca3fb1e3cf458e5d0b2ecf730b9",
+      "source_url": "https://huggingface.co/datasets/nasa-impact/nasa-science-repos-sme-benchmark/resolve/f26b9c9a4060d759b0ae44354059b37387dd414e/corpus.jsonl?download=true"
+    },
+    {
+      "path": "work/external_benchmarks/nasa_sme/f26b9c9a4060d759b0ae44354059b37387dd414e/queries.jsonl",
+      "bytes": 37924,
+      "sha256": "650607e351752ce6dac4332b559685e100f26bf649a4df25f93bea2a683e7c34",
+      "source_url": "https://huggingface.co/datasets/nasa-impact/nasa-science-repos-sme-benchmark/resolve/f26b9c9a4060d759b0ae44354059b37387dd414e/queries.jsonl?download=true"
+    },
+    {
+      "path": "work/external_benchmarks/nasa_sme/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/earth.tsv",
+      "bytes": 1556,
+      "sha256": "bfc015079220b380c2f12fd864adf4ff70a5ea30c43f4dbe7fbc7479f3118ff0",
+      "source_url": "https://huggingface.co/datasets/nasa-impact/nasa-science-repos-sme-benchmark/resolve/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/earth.tsv?download=true"
+    },
+    {
+      "path": "work/external_benchmarks/nasa_sme/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/astro.tsv",
+      "bytes": 532,
+      "sha256": "7a78b8883eec837bb52b8b498e7ff219d5c483a215fbcc8415b5e4c939a5c275",
+      "source_url": "https://huggingface.co/datasets/nasa-impact/nasa-science-repos-sme-benchmark/resolve/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/astro.tsv?download=true"
+    },
+    {
+      "path": "work/external_benchmarks/nasa_sme/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/planetary.tsv",
+      "bytes": 361,
+      "sha256": "c8e7b82e92f79c7810529ceb5f30ecdacd5922fd170c9e55d103113dceb1eba6",
+      "source_url": "https://huggingface.co/datasets/nasa-impact/nasa-science-repos-sme-benchmark/resolve/f26b9c9a4060d759b0ae44354059b37387dd414e/qrels/planetary.tsv?download=true"
+    }
+  ]
+}

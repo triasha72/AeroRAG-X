@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from time import perf_counter
@@ -29,6 +30,17 @@ TOP_K = 10
 WARMUP_QUERY = "aircraft battery thermal management"
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path, default=Path("configs/vector_store_v0_1.yaml"))
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/evaluation/vector_backend_comparison_v0_1.json"),
+    )
+    return parser.parse_args()
+
+
 def latency_summary(
     values: list[float],
 ) -> dict[str, float]:
@@ -47,9 +59,10 @@ def latency_summary(
 def main() -> None:
     """Benchmark NumPy and pgvector retrieval backends."""
 
+    args = parse_args()
     dense_config = load_dense_config(Path("configs/dense_v0_1.yaml"))
 
-    vector_config = load_pgvector_config(Path("configs/vector_store_v0_1.yaml"))
+    vector_config = load_pgvector_config(args.config)
 
     database_url = resolve_database_url(vector_config)
 
@@ -219,7 +232,7 @@ def main() -> None:
         "per_query": comparisons,
     }
 
-    output_path = Path("artifacts/evaluation/vector_backend_comparison_v0_1.json")
+    output_path = args.output
 
     output_path.parent.mkdir(
         parents=True,
