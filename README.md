@@ -1611,6 +1611,10 @@ It is an experiment in building and measuring **evidence-grounded technical know
 
 ## Review-evidence gate
 
+The [volunteer review guide](docs/UNPAID_REVIEW_STUDY.md) adds a deterministic
+25-case pilot drawn from the frozen 512-case set. It creates matching blank
+files for two reviewers without claiming that either review has happened.
+
 The multimodal foundation includes a strict complete-review
 evidence gate. The existing raw agreement helper remains available for
 shared-task analysis, but final review evidence requires both independent

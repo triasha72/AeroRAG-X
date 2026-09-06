@@ -1112,6 +1112,7 @@ Completed foundation:
 - [x] deterministic `PageRenderRecord` JSONL manifest and local runner
 - [x] deterministic independent-review task and response contracts
 - [x] versioned five-task multimodal annotation-task set
+- [x] reproducible 25-case volunteer pilot and no-budget recruitment guide
 
 Next:
 
