@@ -1,4 +1,4 @@
-version: "0.1"
+version: "0.2"
 
 baseline_manifest: "artifacts/evaluation/phase25_baseline_manifest_v0_1.json"
 
@@ -10,6 +10,12 @@ required_files:
   - "reports/grpo_agent_ablation_v0_1.md"
   - "reports/distributed_reliability_v0_1.md"
   - "reports/edge_runtime_benchmark_v0_1.json"
+  - "artifacts/evaluation/generation_claim4_compact_manifest_v0_1.json"
+  - "artifacts/evaluation/generation_lora_compact_promotion_v0_1.json"
+  - "reports/compact_generation_v0_3_rejected.md"
+  - "artifacts/evaluation/nasa_sme_exact_bm25_v0_1.json"
+  - "reports/nasa_sme_exact_bm25_v0_1.md"
+  - "docs/public_claim_audit_v0_1.csv"
   - "docs/release-readiness.md"
 
 forbidden_markers:
@@ -17,3 +23,6 @@ forbidden_markers:
     - "pending"
     - "measurement template"
     - "no fabricated results"
+  "docs/public_claim_audit_v0_1.csv":
+    - "pending_independent_review"
+    - "pending_artifact_mapping"

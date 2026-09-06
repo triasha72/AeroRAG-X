@@ -1202,7 +1202,11 @@ New infrastructure should follow a measured engineering requirement.
 - [x] register revision-pinned independent NASA SME and generated NASA SDE
   external benchmarks, with licenses, download receipts, and evidence-class
   boundaries that prevent synthetic questions being reported as human review
+- [x] fetch and hash the pinned 5,264-repository NASA SME corpus, then run exact
+  BM25 on all 212 judged expert queries (Recall@10 0.5889; NDCG@10 0.4725)
 - [x] add a public-claim audit ledger and post-merge evidence/release gates
+- [x] make release readiness require the compact decision, rejection report,
+  and a claim ledger with no pending review or artifact-mapping rows
 - [ ] obtain independent sign-off for every public numeric claim; repository
   owner or model review does not satisfy this gate
 - [ ] publish a reproducibility release only after compact-prompt, reviewer,

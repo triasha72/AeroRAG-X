@@ -1,0 +1,4272 @@
+{
+  "corpus_document_count": 5264,
+  "evidence_class": "independent_expert_queries",
+  "index_build_seconds": 1.2138470000063535,
+  "inputs": {
+    "corpus_sha256": "71a4ef9604bf18db1d26a4157398385722275ca3fb1e3cf458e5d0b2ecf730b9",
+    "qrels_sha256": {
+      "astro.tsv": "7a78b8883eec837bb52b8b498e7ff219d5c483a215fbcc8415b5e4c939a5c275",
+      "earth.tsv": "bfc015079220b380c2f12fd864adf4ff70a5ea30c43f4dbe7fbc7479f3118ff0",
+      "planetary.tsv": "c8e7b82e92f79c7810529ceb5f30ecdacd5922fd170c9e55d103113dceb1eba6"
+    },
+    "queries_sha256": "650607e351752ce6dac4332b559685e100f26bf649a4df25f93bea2a683e7c34",
+    "receipt_sha256": "1f35ac4e14b6862e1341f8c6303c22b0dfb74d4f060827aa8ae88c67e349f4e6"
+  },
+  "judged_query_count": 212,
+  "mean_ndcg_at_k": 0.47248708847947546,
+  "mean_recall_at_k": 0.5889150943396226,
+  "method": "exact BM25 k1=1.5 b=0.75",
+  "p50_latency_ms": 8.60408349399222,
+  "p95_latency_ms": 12.657982998644,
+  "qrel_row_count": 259,
+  "query_observations": [
+    {
+      "division": "Planetary",
+      "latency_ms": 4.34645899804309,
+      "ndcg_at_k": 0.6257049680303419,
+      "query_id": "1",
+      "recall_at_k": 0.6666666666666666,
+      "relevant_document_count": 3,
+      "retrieved_document_ids": [
+        "304",
+        "347",
+        "300",
+        "331",
+        "4679",
+        "297",
+        "286",
+        "343",
+        "2948",
+        "2988"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 8.47008399432525,
+      "ndcg_at_k": 0.48522855511632257,
+      "query_id": "2",
+      "recall_at_k": 0.4,
+      "relevant_document_count": 5,
+      "retrieved_document_ids": [
+        "56",
+        "1830",
+        "702",
+        "50",
+        "142",
+        "2680",
+        "681",
+        "757",
+        "825",
+        "5248"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 9.900167002342641,
+      "ndcg_at_k": 0.19342640361727081,
+      "query_id": "3",
+      "recall_at_k": 0.5,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "3475",
+        "4587",
+        "2835",
+        "4679",
+        "4593",
+        "2827",
+        "2948",
+        "294",
+        "340",
+        "321"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.969458009232767,
+      "ndcg_at_k": 1.0,
+      "query_id": "4",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "2",
+        "3",
+        "4",
+        "1187",
+        "1238",
+        "3776",
+        "1",
+        "4133",
+        "1036",
+        "3434"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.424083003774285,
+      "ndcg_at_k": 0.756096688619218,
+      "query_id": "5",
+      "recall_at_k": 0.75,
+      "relevant_document_count": 8,
+      "retrieved_document_ids": [
+        "4046",
+        "3754",
+        "5081",
+        "3814",
+        "508",
+        "4604",
+        "519",
+        "507",
+        "4172",
+        "3950"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 6.490166997537017,
+      "ndcg_at_k": 0.7751482523375256,
+      "query_id": "6",
+      "recall_at_k": 0.6666666666666666,
+      "relevant_document_count": 6,
+      "retrieved_document_ids": [
+        "442",
+        "508",
+        "5081",
+        "3814",
+        "4265",
+        "3118",
+        "4445",
+        "3583",
+        "3708",
+        "519"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 3.780500002903864,
+      "ndcg_at_k": 0.7860137352654724,
+      "query_id": "7",
+      "recall_at_k": 0.8,
+      "relevant_document_count": 5,
+      "retrieved_document_ids": [
+        "229",
+        "4297",
+        "231",
+        "228",
+        "230",
+        "1212",
+        "247",
+        "1096",
+        "1095",
+        "264"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 7.167083007516339,
+      "ndcg_at_k": 0.9325210919548239,
+      "query_id": "8",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 3,
+      "retrieved_document_ids": [
+        "11",
+        "7",
+        "2",
+        "3302",
+        "6",
+        "8",
+        "5",
+        "3776",
+        "1499",
+        "3"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.225917001254857,
+      "ndcg_at_k": 0.3391602052736161,
+      "query_id": "9",
+      "recall_at_k": 0.2,
+      "relevant_document_count": 5,
+      "retrieved_document_ids": [
+        "436",
+        "801",
+        "3779",
+        "5157",
+        "2695",
+        "3725",
+        "3934",
+        "4822",
+        "3917",
+        "4977"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 9.97983300476335,
+      "ndcg_at_k": 0.21398626473452756,
+      "query_id": "10",
+      "recall_at_k": 0.2,
+      "relevant_document_count": 5,
+      "retrieved_document_ids": [
+        "3717",
+        "1186",
+        "1190",
+        "3316",
+        "2839",
+        "4278",
+        "4329",
+        "3822",
+        "5163",
+        "2731"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 9.767542011104524,
+      "ndcg_at_k": 0.8772153153380493,
+      "query_id": "11",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "4564",
+        "3850",
+        "3088",
+        "404",
+        "3715",
+        "5060",
+        "4028",
+        "3961",
+        "4525",
+        "4631"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 5.882958008442074,
+      "ndcg_at_k": 1.0,
+      "query_id": "12",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "233",
+        "227",
+        "1562",
+        "667",
+        "1113",
+        "1222",
+        "919",
+        "1691",
+        "621",
+        "287"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.772708991775289,
+      "ndcg_at_k": 0.46927872602275644,
+      "query_id": "13",
+      "recall_at_k": 0.3333333333333333,
+      "relevant_document_count": 3,
+      "retrieved_document_ids": [
+        "659",
+        "2419",
+        "2442",
+        "2070",
+        "4089",
+        "1572",
+        "1804",
+        "1731",
+        "2128",
+        "3528"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 4.889042000286281,
+      "ndcg_at_k": 0.0,
+      "query_id": "14",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "1183",
+        "584",
+        "805",
+        "583",
+        "260",
+        "498",
+        "242",
+        "249",
+        "255",
+        "903"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.483208988560364,
+      "ndcg_at_k": 0.0,
+      "query_id": "16",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "189",
+        "619",
+        "199",
+        "621",
+        "132",
+        "613",
+        "627",
+        "610",
+        "5258",
+        "1353"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.776292007998563,
+      "ndcg_at_k": 0.0,
+      "query_id": "17",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "1672",
+        "611",
+        "482",
+        "624",
+        "1562",
+        "908",
+        "1047",
+        "909",
+        "1156",
+        "450"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 7.662915988476016,
+      "ndcg_at_k": 1.0,
+      "query_id": "18",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "12",
+        "46",
+        "389",
+        "3260",
+        "3225",
+        "1320",
+        "3813",
+        "4781",
+        "4455",
+        "72"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 7.430083001963794,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "19",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "672",
+        "18",
+        "671",
+        "670",
+        "665",
+        "1077",
+        "645",
+        "633",
+        "955",
+        "1352"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 7.341458011069335,
+      "ndcg_at_k": 1.0,
+      "query_id": "20",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "21",
+        "3346",
+        "2050",
+        "4115",
+        "1551",
+        "1873",
+        "531",
+        "1067",
+        "3977",
+        "2470"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 6.587125011719763,
+      "ndcg_at_k": 0.0,
+      "query_id": "21",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1623",
+        "5186",
+        "1708",
+        "1578",
+        "1561",
+        "2283",
+        "5260",
+        "5165",
+        "438",
+        "2182"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 17.221666988916695,
+      "ndcg_at_k": 0.0,
+      "query_id": "22",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5237",
+        "1648",
+        "1610",
+        "5236",
+        "946",
+        "768",
+        "1923",
+        "1352",
+        "4444",
+        "1268"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 9.79066600848455,
+      "ndcg_at_k": 1.0,
+      "query_id": "23",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "27",
+        "4438",
+        "4240",
+        "1317",
+        "26",
+        "3165",
+        "285",
+        "4150",
+        "31",
+        "4258"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 2.083915998809971,
+      "ndcg_at_k": 0.0,
+      "query_id": "24",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "621",
+        "2364",
+        "5236",
+        "768",
+        "1440",
+        "1171",
+        "3676",
+        "5052",
+        "2900",
+        "818"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 3.475292003713548,
+      "ndcg_at_k": 1.0,
+      "query_id": "25",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "31",
+        "1930",
+        "5160",
+        "648",
+        "706",
+        "167",
+        "4349",
+        "46",
+        "2574",
+        "1160"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 9.030667002662085,
+      "ndcg_at_k": 0.0,
+      "query_id": "26",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "29",
+        "36",
+        "710",
+        "4064",
+        "41",
+        "4681",
+        "955",
+        "191",
+        "3191",
+        "3248"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 8.246500001405366,
+      "ndcg_at_k": 0.0,
+      "query_id": "27",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "645",
+        "5237",
+        "5236",
+        "26",
+        "4030",
+        "946",
+        "5153",
+        "917",
+        "3656",
+        "3545"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 8.238374997745268,
+      "ndcg_at_k": 0.0,
+      "query_id": "28",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "7",
+        "1564",
+        "3131",
+        "1062",
+        "1831",
+        "949",
+        "1967",
+        "4349",
+        "360",
+        "1355"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 7.3444999870844185,
+      "ndcg_at_k": 0.0,
+      "query_id": "29",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5237",
+        "663",
+        "5236",
+        "1656",
+        "664",
+        "4378",
+        "677",
+        "5009",
+        "956",
+        "633"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 3.3740000071702525,
+      "ndcg_at_k": 0.0,
+      "query_id": "30",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1352",
+        "26",
+        "645",
+        "1412",
+        "3076",
+        "955",
+        "3165",
+        "5237",
+        "1554",
+        "946"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 8.103542000753805,
+      "ndcg_at_k": 0.0,
+      "query_id": "31",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2968",
+        "4876",
+        "27",
+        "1924",
+        "31",
+        "4030",
+        "4438",
+        "1235",
+        "444",
+        "3405"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 3.062541989493184,
+      "ndcg_at_k": 0.3333333333333333,
+      "query_id": "32",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5227",
+        "50",
+        "3306",
+        "49",
+        "939",
+        "4602",
+        "48",
+        "58",
+        "51",
+        "4004"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 1.7440829979022965,
+      "ndcg_at_k": 0.31546487678572877,
+      "query_id": "33",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "329",
+        "304",
+        "300",
+        "347",
+        "330",
+        "286",
+        "894",
+        "55",
+        "331",
+        "4679"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 3.2852919975994155,
+      "ndcg_at_k": 0.0,
+      "query_id": "34",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "741",
+        "332",
+        "368",
+        "4587",
+        "2835",
+        "314",
+        "3475",
+        "331",
+        "299",
+        "2948"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 9.432582999579608,
+      "ndcg_at_k": 0.0,
+      "query_id": "35",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5160",
+        "2894",
+        "368",
+        "3199",
+        "1022",
+        "29",
+        "4075",
+        "4541",
+        "4913",
+        "343"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 3.7202499952400103,
+      "ndcg_at_k": 0.3010299956639812,
+      "query_id": "36",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "640",
+        "362",
+        "56",
+        "49",
+        "5227",
+        "768",
+        "58",
+        "2826",
+        "306",
+        "353"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 10.68508300522808,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "38",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "3128",
+        "0",
+        "1197",
+        "774",
+        "5144",
+        "491",
+        "584",
+        "1334",
+        "3696",
+        "799"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 9.145083007751964,
+      "ndcg_at_k": 1.0,
+      "query_id": "39",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1",
+        "1235",
+        "1316",
+        "4030",
+        "3",
+        "4193",
+        "1236",
+        "4876",
+        "3855",
+        "3451"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 7.532709001679905,
+      "ndcg_at_k": 1.0,
+      "query_id": "40",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2",
+        "3",
+        "1187",
+        "1238",
+        "3776",
+        "1036",
+        "3434",
+        "3777",
+        "1329",
+        "3797"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.278458990389481,
+      "ndcg_at_k": 1.0,
+      "query_id": "42",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "4",
+        "3059",
+        "584",
+        "1334",
+        "1337",
+        "1262",
+        "4527",
+        "1335",
+        "4485",
+        "774"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 7.4226660071872175,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "43",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "8",
+        "5",
+        "584",
+        "4108",
+        "683",
+        "409",
+        "229",
+        "583",
+        "4666",
+        "4305"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 7.4010000098496675,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "44",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "8",
+        "6",
+        "5",
+        "7",
+        "584",
+        "11",
+        "3302",
+        "166",
+        "1786",
+        "341"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 9.006499996758066,
+      "ndcg_at_k": 1.0,
+      "query_id": "45",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "7",
+        "11",
+        "2",
+        "3302",
+        "8",
+        "6",
+        "5",
+        "3776",
+        "1499",
+        "3"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.173750000423752,
+      "ndcg_at_k": 1.0,
+      "query_id": "46",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "8",
+        "7",
+        "5",
+        "6",
+        "11",
+        "584",
+        "341",
+        "3302",
+        "265",
+        "583"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.671458999742754,
+      "ndcg_at_k": 1.0,
+      "query_id": "47",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "9",
+        "2812",
+        "3278",
+        "3204",
+        "4140",
+        "5135",
+        "3752",
+        "2946",
+        "4561",
+        "3418"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.8113749952754,
+      "ndcg_at_k": 1.0,
+      "query_id": "48",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "11",
+        "7",
+        "8",
+        "5",
+        "6",
+        "3302",
+        "3842",
+        "4876",
+        "2965",
+        "4529"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.408333000261337,
+      "ndcg_at_k": 1.0,
+      "query_id": "49",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "13",
+        "1341",
+        "1204",
+        "4048",
+        "3007",
+        "14",
+        "2985",
+        "4246",
+        "227",
+        "4730"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 6.444166006986052,
+      "ndcg_at_k": 1.0,
+      "query_id": "50",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "14",
+        "8",
+        "6",
+        "4305",
+        "7",
+        "5114",
+        "5",
+        "3784",
+        "3528",
+        "774"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 10.216249997029081,
+      "ndcg_at_k": 1.0,
+      "query_id": "51",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "16",
+        "4649",
+        "4098",
+        "5011",
+        "3730",
+        "5109",
+        "4059",
+        "3283",
+        "2727",
+        "4362"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 6.533083011163399,
+      "ndcg_at_k": 1.0,
+      "query_id": "52",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "227",
+        "3972",
+        "901",
+        "164",
+        "233",
+        "3478",
+        "1204",
+        "232",
+        "156",
+        "309"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 5.4688329983036965,
+      "ndcg_at_k": 0.0,
+      "query_id": "53",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "227",
+        "3972",
+        "233",
+        "1204",
+        "3478",
+        "1339",
+        "601",
+        "232",
+        "230",
+        "3693"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 5.148083990206942,
+      "ndcg_at_k": 0.5,
+      "query_id": "54",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1562",
+        "842",
+        "233",
+        "4657",
+        "1222",
+        "1113",
+        "935",
+        "1398",
+        "287",
+        "667"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 10.518457987927832,
+      "ndcg_at_k": 1.0,
+      "query_id": "55",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "404",
+        "4564",
+        "3175",
+        "3850",
+        "693",
+        "811",
+        "4178",
+        "4955",
+        "3669",
+        "5188"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 11.21837500249967,
+      "ndcg_at_k": 0.0,
+      "query_id": "56",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "3717",
+        "1186",
+        "5163",
+        "4329",
+        "3316",
+        "1201",
+        "2839",
+        "3246",
+        "1190",
+        "4278"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 5.678832996636629,
+      "ndcg_at_k": 1.0,
+      "query_id": "57",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "435",
+        "4",
+        "4212",
+        "4480",
+        "2256",
+        "5193",
+        "1210",
+        "795",
+        "4822",
+        "3917"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 8.116791999782436,
+      "ndcg_at_k": 1.0,
+      "query_id": "58",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "436",
+        "4822",
+        "4977",
+        "4705",
+        "5144",
+        "4676",
+        "4907",
+        "4612",
+        "2695",
+        "774"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 6.530124999699183,
+      "ndcg_at_k": 1.0,
+      "query_id": "59",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "442",
+        "508",
+        "5081",
+        "3814",
+        "4265",
+        "3118",
+        "4445",
+        "3583",
+        "3708",
+        "3770"
+      ]
+    },
+    {
+      "division": "Astro",
+      "latency_ms": 6.760916992789134,
+      "ndcg_at_k": 1.0,
+      "query_id": "60",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "507",
+        "3754",
+        "508",
+        "4046",
+        "3814",
+        "5081",
+        "2852",
+        "4604",
+        "3960",
+        "519"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.615708007710055,
+      "ndcg_at_k": 0.0,
+      "query_id": "62",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "114",
+        "97",
+        "3007",
+        "283",
+        "4305",
+        "885",
+        "174",
+        "4913",
+        "1158",
+        "221"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.45445899257902,
+      "ndcg_at_k": 1.0,
+      "query_id": "63",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "97",
+        "68",
+        "901",
+        "629",
+        "627",
+        "1129",
+        "613",
+        "631",
+        "126",
+        "130"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.51304100069683,
+      "ndcg_at_k": 0.0,
+      "query_id": "64",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "287",
+        "581",
+        "593",
+        "601",
+        "621",
+        "570",
+        "617",
+        "924",
+        "1115",
+        "1047"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.031416997662745,
+      "ndcg_at_k": 1.0,
+      "query_id": "65",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "100",
+        "224",
+        "186",
+        "267",
+        "257",
+        "1086",
+        "190",
+        "91",
+        "725",
+        "419"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 13.605083004222251,
+      "ndcg_at_k": 0.0,
+      "query_id": "66",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "4243",
+        "2090",
+        "5048",
+        "677",
+        "1068",
+        "201",
+        "3433",
+        "1203",
+        "627",
+        "190"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.303125006728806,
+      "ndcg_at_k": 0.0,
+      "query_id": "67",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5234",
+        "725",
+        "1086",
+        "1063",
+        "91",
+        "419",
+        "249",
+        "198",
+        "693",
+        "257"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.284249998629093,
+      "ndcg_at_k": 0.43067655807339306,
+      "query_id": "68",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2574",
+        "446",
+        "1064",
+        "103",
+        "1351",
+        "4958",
+        "1061",
+        "3850",
+        "989",
+        "1904"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.513082993682474,
+      "ndcg_at_k": 0.5,
+      "query_id": "69",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1367",
+        "4089",
+        "105",
+        "72",
+        "1706",
+        "1795",
+        "198",
+        "2036",
+        "191",
+        "5238"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.430957998731174,
+      "ndcg_at_k": 0.0,
+      "query_id": "70",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1370",
+        "1357",
+        "2411",
+        "5160",
+        "2784",
+        "3982",
+        "2563",
+        "1888",
+        "2981",
+        "2067"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.286333995987661,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "71",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "187",
+        "107",
+        "545",
+        "1166",
+        "4666",
+        "563",
+        "883",
+        "929",
+        "1129",
+        "550"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.680249997065403,
+      "ndcg_at_k": 1.0,
+      "query_id": "72",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "108",
+        "804",
+        "1411",
+        "2613",
+        "843",
+        "1137",
+        "2090",
+        "613",
+        "1395",
+        "1034"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.359708008356392,
+      "ndcg_at_k": 1.0,
+      "query_id": "73",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "109",
+        "5232",
+        "91",
+        "1861",
+        "2570",
+        "2162",
+        "198",
+        "2415",
+        "1496",
+        "578"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.158374995924532,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "74",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5247",
+        "110",
+        "255",
+        "498",
+        "1320",
+        "525",
+        "2672",
+        "3160",
+        "645",
+        "1117"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.731707995641045,
+      "ndcg_at_k": 0.0,
+      "query_id": "75",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "4673",
+        "1083",
+        "1085",
+        "393",
+        "5237",
+        "782",
+        "786",
+        "1081",
+        "2185",
+        "854"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.66237500263378,
+      "ndcg_at_k": 0.0,
+      "query_id": "76",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "125",
+        "1169",
+        "1974",
+        "1038",
+        "2069",
+        "2565",
+        "1149",
+        "1090",
+        "777",
+        "523"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.785000002011657,
+      "ndcg_at_k": 0.0,
+      "query_id": "77",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "883",
+        "204",
+        "903",
+        "428",
+        "2678",
+        "221",
+        "491",
+        "882",
+        "871",
+        "132"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.584166006883606,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "78",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "885",
+        "114",
+        "221",
+        "132",
+        "204",
+        "283",
+        "4305",
+        "196",
+        "935",
+        "927"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.198249993962236,
+      "ndcg_at_k": 0.0,
+      "query_id": "79",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "605",
+        "1497",
+        "804",
+        "627",
+        "613",
+        "621",
+        "1355",
+        "2294",
+        "174",
+        "610"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.693582989508286,
+      "ndcg_at_k": 0.0,
+      "query_id": "80",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2150",
+        "200",
+        "2206",
+        "72",
+        "2574",
+        "3712",
+        "412",
+        "217",
+        "1536",
+        "1385"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.426624998217449,
+      "ndcg_at_k": 1.0,
+      "query_id": "81",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "117",
+        "2089",
+        "61",
+        "68",
+        "1380",
+        "1873",
+        "2875",
+        "85",
+        "2019",
+        "2139"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.782917001051828,
+      "ndcg_at_k": 0.0,
+      "query_id": "82",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "581",
+        "1130",
+        "1672",
+        "3176",
+        "709",
+        "482",
+        "3753",
+        "4607",
+        "92",
+        "4030"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.285833002650179,
+      "ndcg_at_k": 0.0,
+      "query_id": "83",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "901",
+        "2089",
+        "610",
+        "2178",
+        "927",
+        "1129",
+        "612",
+        "843",
+        "162",
+        "2689"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.348125011660159,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "84",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "127",
+        "120",
+        "498",
+        "1651",
+        "212",
+        "1672",
+        "500",
+        "1882",
+        "679",
+        "1470"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.962166004697792,
+      "ndcg_at_k": 0.0,
+      "query_id": "85",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "701",
+        "760",
+        "50",
+        "1441",
+        "3199",
+        "2131",
+        "1130",
+        "1058",
+        "2894",
+        "604"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 14.077542000450194,
+      "ndcg_at_k": 0.0,
+      "query_id": "86",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "613",
+        "1115",
+        "621",
+        "29",
+        "415",
+        "619",
+        "5230",
+        "610",
+        "174",
+        "199"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.460625009727664,
+      "ndcg_at_k": 0.0,
+      "query_id": "87",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "209",
+        "182",
+        "130",
+        "116",
+        "206",
+        "126",
+        "207",
+        "208",
+        "205",
+        "701"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.83141700271517,
+      "ndcg_at_k": 0.43067655807339306,
+      "query_id": "88",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1682",
+        "4309",
+        "2420",
+        "124",
+        "2036",
+        "4844",
+        "713",
+        "2580",
+        "2423",
+        "2386"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.828957990161143,
+      "ndcg_at_k": 0.0,
+      "query_id": "89",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1800",
+        "1126",
+        "3787",
+        "1392",
+        "1090",
+        "2069",
+        "1038",
+        "1459",
+        "1357",
+        "2541"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.69958300224971,
+      "ndcg_at_k": 0.0,
+      "query_id": "90",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "201",
+        "604",
+        "612",
+        "1103",
+        "629",
+        "903",
+        "4027",
+        "630",
+        "622",
+        "2344"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.0037500041071326,
+      "ndcg_at_k": 0.0,
+      "query_id": "91",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1175",
+        "886",
+        "575",
+        "4657",
+        "500",
+        "924",
+        "1032",
+        "46",
+        "883",
+        "1158"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.091040999512188,
+      "ndcg_at_k": 0.0,
+      "query_id": "92",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1129",
+        "1115",
+        "927",
+        "627",
+        "611",
+        "409",
+        "614",
+        "949",
+        "628",
+        "788"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.593540994799696,
+      "ndcg_at_k": 0.0,
+      "query_id": "93",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "217",
+        "8",
+        "1536",
+        "2313",
+        "5",
+        "627",
+        "218",
+        "409",
+        "613",
+        "788"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.527791986125521,
+      "ndcg_at_k": 0.0,
+      "query_id": "94",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "860",
+        "1873",
+        "1367",
+        "629",
+        "598",
+        "628",
+        "613",
+        "72",
+        "5220",
+        "214"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.441208003205247,
+      "ndcg_at_k": 0.0,
+      "query_id": "95",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "187",
+        "107",
+        "265",
+        "134",
+        "896",
+        "904",
+        "1398",
+        "550",
+        "792",
+        "571"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.015207997639664,
+      "ndcg_at_k": 0.3562071871080222,
+      "query_id": "96",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "613",
+        "610",
+        "627",
+        "621",
+        "619",
+        "132",
+        "162",
+        "189",
+        "173",
+        "901"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.497749989852309,
+      "ndcg_at_k": 0.0,
+      "query_id": "97",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "168",
+        "475",
+        "3915",
+        "67",
+        "1845",
+        "2572",
+        "3333",
+        "62",
+        "153"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.807999998680316,
+      "ndcg_at_k": 0.0,
+      "query_id": "98",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "4462",
+        "481",
+        "610",
+        "2086",
+        "1364",
+        "42",
+        "3114",
+        "612",
+        "162",
+        "2468"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.145917007117532,
+      "ndcg_at_k": 1.0,
+      "query_id": "99",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "135",
+        "162",
+        "169",
+        "612",
+        "1625",
+        "1368",
+        "2875",
+        "492",
+        "610",
+        "4842"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.835750009282492,
+      "ndcg_at_k": 0.0,
+      "query_id": "100",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "727",
+        "2089",
+        "1985",
+        "2344",
+        "771",
+        "2410",
+        "793",
+        "2875",
+        "792",
+        "2572"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.03324999671895,
+      "ndcg_at_k": 0.5,
+      "query_id": "101",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1503",
+        "109",
+        "137",
+        "3982",
+        "106",
+        "2032",
+        "2396",
+        "5160",
+        "2784",
+        "1370"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.949250001227483,
+      "ndcg_at_k": 0.38685280723454163,
+      "query_id": "102",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "61",
+        "727",
+        "2524",
+        "154",
+        "792",
+        "152",
+        "136",
+        "771",
+        "168"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.5777500023832545,
+      "ndcg_at_k": 0.0,
+      "query_id": "103",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "153",
+        "162",
+        "142",
+        "113",
+        "146",
+        "102",
+        "186",
+        "163",
+        "157",
+        "148"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.729625009233132,
+      "ndcg_at_k": 0.0,
+      "query_id": "104",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1912",
+        "1545",
+        "2438",
+        "466",
+        "2020",
+        "1642",
+        "471",
+        "1947",
+        "2522",
+        "2235"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.395374999963678,
+      "ndcg_at_k": 0.0,
+      "query_id": "105",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "3069",
+        "1912",
+        "2020",
+        "5048",
+        "1836",
+        "1192",
+        "2987",
+        "1442",
+        "4541",
+        "1545"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.90762500744313,
+      "ndcg_at_k": 1.0,
+      "query_id": "106",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "158",
+        "1625",
+        "3910",
+        "1081",
+        "5236",
+        "403",
+        "72",
+        "771",
+        "1353",
+        "1519"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.67479199951049,
+      "ndcg_at_k": 0.0,
+      "query_id": "107",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "169",
+        "1167",
+        "1129",
+        "492",
+        "447",
+        "2344",
+        "495",
+        "2484",
+        "927"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.233084005652927,
+      "ndcg_at_k": 0.0,
+      "query_id": "108",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2689",
+        "164",
+        "162",
+        "1845",
+        "2484",
+        "168",
+        "146",
+        "615",
+        "69",
+        "1672"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.233832999598235,
+      "ndcg_at_k": 0.0,
+      "query_id": "109",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "224",
+        "267",
+        "1151",
+        "162",
+        "924",
+        "1136",
+        "182",
+        "491",
+        "309",
+        "612"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 13.101707998430356,
+      "ndcg_at_k": 1.0,
+      "query_id": "110",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "169",
+        "1845",
+        "697",
+        "252",
+        "1398",
+        "140",
+        "792",
+        "90",
+        "145"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.883583006332628,
+      "ndcg_at_k": 0.0,
+      "query_id": "111",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "792",
+        "2284",
+        "829",
+        "707",
+        "1398",
+        "1845",
+        "168",
+        "2484",
+        "1141"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.637458002544008,
+      "ndcg_at_k": 1.0,
+      "query_id": "112",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "164",
+        "142",
+        "1154",
+        "160",
+        "146",
+        "212",
+        "180",
+        "2284",
+        "162",
+        "916"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.226707992842421,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "113",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1672",
+        "165",
+        "142",
+        "162",
+        "164",
+        "2284",
+        "146",
+        "2689",
+        "2484",
+        "114"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.028332991874777,
+      "ndcg_at_k": 0.0,
+      "query_id": "114",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "661",
+        "4349",
+        "182",
+        "1767",
+        "5217",
+        "72",
+        "503",
+        "3311",
+        "1676",
+        "116"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.470833003637381,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "115",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "167",
+        "1182",
+        "922",
+        "4753",
+        "1157",
+        "492",
+        "1251",
+        "3935",
+        "1232"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.389584000222385,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "116",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "162",
+        "168",
+        "1782",
+        "1562",
+        "252",
+        "1744",
+        "169",
+        "1845",
+        "2036",
+        "1353"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.694834006135352,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "117",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "67",
+        "169",
+        "162",
+        "84",
+        "62",
+        "697",
+        "88",
+        "792",
+        "75",
+        "86"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.67304099665489,
+      "ndcg_at_k": 0.0,
+      "query_id": "118",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "67",
+        "169",
+        "697",
+        "79",
+        "901",
+        "2124",
+        "2900",
+        "1129",
+        "5229",
+        "117"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.278249995782971,
+      "ndcg_at_k": 0.0,
+      "query_id": "119",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2301",
+        "217",
+        "1497",
+        "4289",
+        "80",
+        "1725",
+        "1812",
+        "2894",
+        "4836",
+        "604"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.37845800560899,
+      "ndcg_at_k": 1.0,
+      "query_id": "120",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "172",
+        "1845",
+        "2089",
+        "150",
+        "162",
+        "140",
+        "1985",
+        "5024",
+        "685",
+        "2574"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.05191600031685,
+      "ndcg_at_k": 1.0,
+      "query_id": "121",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "173",
+        "2387",
+        "5240",
+        "416",
+        "982",
+        "739",
+        "2129",
+        "1782",
+        "91",
+        "1910"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.3079169960692525,
+      "ndcg_at_k": 1.0,
+      "query_id": "122",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "174",
+        "621",
+        "613",
+        "415",
+        "619",
+        "189",
+        "605",
+        "2747",
+        "610",
+        "126"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.466957999393344,
+      "ndcg_at_k": 1.0,
+      "query_id": "123",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "175",
+        "213",
+        "104",
+        "3160",
+        "276",
+        "1563",
+        "246",
+        "811",
+        "2333",
+        "5252"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.126166998408735,
+      "ndcg_at_k": 1.0,
+      "query_id": "124",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "176",
+        "3226",
+        "240",
+        "904",
+        "91",
+        "249",
+        "693",
+        "1041",
+        "104",
+        "4119"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.830750004970469,
+      "ndcg_at_k": 0.0,
+      "query_id": "125",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "214",
+        "5233",
+        "989",
+        "97",
+        "4968",
+        "1564",
+        "629",
+        "3611",
+        "613",
+        "4740"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.96900000225287,
+      "ndcg_at_k": 0.3562071871080222,
+      "query_id": "126",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5233",
+        "290",
+        "5243",
+        "177",
+        "5231",
+        "178",
+        "350",
+        "97",
+        "989",
+        "1564"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.521332994452678,
+      "ndcg_at_k": 0.5,
+      "query_id": "127",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "995",
+        "477",
+        "179",
+        "478",
+        "889",
+        "210",
+        "538",
+        "525",
+        "533",
+        "204"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.312875012052245,
+      "ndcg_at_k": 1.0,
+      "query_id": "128",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "180",
+        "122",
+        "128",
+        "779",
+        "528",
+        "209",
+        "503",
+        "121",
+        "179",
+        "504"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.739750002860092,
+      "ndcg_at_k": 0.0,
+      "query_id": "129",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "180",
+        "283",
+        "182",
+        "779",
+        "528",
+        "122",
+        "3007",
+        "296",
+        "128",
+        "209"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.390624996740371,
+      "ndcg_at_k": 0.38685280723454163,
+      "query_id": "130",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "130",
+        "901",
+        "72",
+        "126",
+        "182",
+        "610",
+        "927",
+        "705",
+        "604",
+        "613"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.21233400690835,
+      "ndcg_at_k": 1.0,
+      "query_id": "131",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "183",
+        "2592",
+        "5160",
+        "267",
+        "1168",
+        "864",
+        "1149",
+        "248",
+        "2574",
+        "234"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.020959005691111,
+      "ndcg_at_k": 0.0,
+      "query_id": "132",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "610",
+        "91",
+        "723",
+        "2256",
+        "72",
+        "901",
+        "725",
+        "5203",
+        "5240",
+        "1499"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.98137500998564,
+      "ndcg_at_k": 0.3333333333333333,
+      "query_id": "133",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "893",
+        "5258",
+        "640",
+        "1564",
+        "111",
+        "786",
+        "185",
+        "867",
+        "942",
+        "856"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.33941700309515,
+      "ndcg_at_k": 1.0,
+      "query_id": "134",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "186",
+        "102",
+        "146",
+        "90",
+        "105",
+        "145",
+        "198",
+        "5240",
+        "725",
+        "5234"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.185207996983081,
+      "ndcg_at_k": 1.0,
+      "query_id": "135",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "187",
+        "904",
+        "792",
+        "883",
+        "169",
+        "931",
+        "571",
+        "114",
+        "95",
+        "884"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.835625005303882,
+      "ndcg_at_k": 1.0,
+      "query_id": "136",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "188",
+        "927",
+        "209",
+        "871",
+        "2747",
+        "204",
+        "174",
+        "114",
+        "196",
+        "1038"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.785084002534859,
+      "ndcg_at_k": 1.0,
+      "query_id": "137",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "189",
+        "174",
+        "621",
+        "199",
+        "209",
+        "615",
+        "605",
+        "610",
+        "895",
+        "132"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.407624999061227,
+      "ndcg_at_k": 1.0,
+      "query_id": "138",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "190",
+        "733",
+        "91",
+        "224",
+        "105",
+        "144",
+        "732",
+        "1116",
+        "2036",
+        "959"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.302417013212107,
+      "ndcg_at_k": 0.0,
+      "query_id": "139",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "192",
+        "2944",
+        "3226",
+        "2914",
+        "1656",
+        "1556",
+        "1889",
+        "1603",
+        "1405",
+        "2077"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 4.809792008018121,
+      "ndcg_at_k": 1.0,
+      "query_id": "140",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "192",
+        "1077",
+        "2401",
+        "615",
+        "248",
+        "1047",
+        "91",
+        "2664",
+        "3390",
+        "207"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.443750001490116,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "141",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "979",
+        "194",
+        "2479",
+        "682",
+        "173",
+        "72",
+        "1961",
+        "91",
+        "2551",
+        "1734"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.738333988934755,
+      "ndcg_at_k": 0.2890648263178879,
+      "query_id": "142",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "114",
+        "885",
+        "204",
+        "1038",
+        "209",
+        "871",
+        "283",
+        "132",
+        "484",
+        "196"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.630417003994808,
+      "ndcg_at_k": 0.2890648263178879,
+      "query_id": "143",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2326",
+        "2060",
+        "2147",
+        "2632",
+        "2144",
+        "2188",
+        "1509",
+        "1964",
+        "1392",
+        "197"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.50362499174662,
+      "ndcg_at_k": 0.3010299956639812,
+      "query_id": "144",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "138",
+        "91",
+        "246",
+        "249",
+        "1086",
+        "693",
+        "240",
+        "277",
+        "198",
+        "242"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.602915990399197,
+      "ndcg_at_k": 0.3333333333333333,
+      "query_id": "145",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "189",
+        "1076",
+        "209",
+        "132",
+        "204",
+        "174",
+        "199",
+        "1929",
+        "114",
+        "283"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.071833006804809,
+      "ndcg_at_k": 0.0,
+      "query_id": "146",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1743",
+        "1676",
+        "808",
+        "3191",
+        "1814",
+        "1536",
+        "2045",
+        "2894",
+        "688",
+        "4762"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.808708993252367,
+      "ndcg_at_k": 1.0,
+      "query_id": "147",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "201",
+        "80",
+        "1884",
+        "2508",
+        "422",
+        "2336",
+        "2518",
+        "2670",
+        "1002",
+        "613"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.503458003862761,
+      "ndcg_at_k": 1.0,
+      "query_id": "148",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "202",
+        "204",
+        "113",
+        "196",
+        "1038",
+        "132",
+        "484",
+        "209",
+        "114",
+        "885"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.02412499312777,
+      "ndcg_at_k": 1.0,
+      "query_id": "149",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "203",
+        "1961",
+        "91",
+        "1688",
+        "1461",
+        "2116",
+        "723",
+        "1910",
+        "1706",
+        "1875"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 13.122792006470263,
+      "ndcg_at_k": 1.0,
+      "query_id": "150",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "204",
+        "885",
+        "132",
+        "927",
+        "114",
+        "138",
+        "614",
+        "621",
+        "619",
+        "209"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.600458997534588,
+      "ndcg_at_k": 1.0,
+      "query_id": "151",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "205",
+        "446",
+        "5233",
+        "1929",
+        "5243",
+        "1160",
+        "4501",
+        "123",
+        "129",
+        "7"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.860750011284836,
+      "ndcg_at_k": 0.0,
+      "query_id": "152",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "207",
+        "216",
+        "222",
+        "205",
+        "209",
+        "177",
+        "178",
+        "214",
+        "208",
+        "204"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.603082999703474,
+      "ndcg_at_k": 0.0,
+      "query_id": "153",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1084",
+        "704",
+        "771",
+        "72",
+        "3951",
+        "705",
+        "2616",
+        "1912",
+        "80",
+        "2012"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.867541993618943,
+      "ndcg_at_k": 0.0,
+      "query_id": "154",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "201",
+        "80",
+        "1888",
+        "2508",
+        "1884",
+        "2336",
+        "2518",
+        "2670",
+        "604",
+        "1953"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 15.063415994518436,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "155",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "238",
+        "236",
+        "284",
+        "237",
+        "770",
+        "805",
+        "243",
+        "246",
+        "260",
+        "498"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 14.814250011113472,
+      "ndcg_at_k": 1.0,
+      "query_id": "156",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "357",
+        "3973",
+        "1918",
+        "2299",
+        "1545",
+        "1075",
+        "2401",
+        "439",
+        "3630",
+        "3181"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.561624996829778,
+      "ndcg_at_k": 1.0,
+      "query_id": "157",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "397",
+        "1123",
+        "2574",
+        "1129",
+        "2134",
+        "2514",
+        "2247",
+        "1569",
+        "1707",
+        "2057"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.852833008859307,
+      "ndcg_at_k": 0.3562071871080222,
+      "query_id": "158",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1125",
+        "1701",
+        "1612",
+        "1796",
+        "401",
+        "398",
+        "2465",
+        "2448",
+        "873",
+        "2171"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.138375000678934,
+      "ndcg_at_k": 0.0,
+      "query_id": "159",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1038",
+        "2228",
+        "2651",
+        "975",
+        "98",
+        "3813",
+        "1110",
+        "778",
+        "1424",
+        "1085"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.866375002777204,
+      "ndcg_at_k": 0.5,
+      "query_id": "160",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1701",
+        "1169",
+        "400",
+        "398",
+        "1038",
+        "1083",
+        "1059",
+        "2402",
+        "1988",
+        "1125"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.356749996892177,
+      "ndcg_at_k": 0.0,
+      "query_id": "161",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "5133",
+        "1563",
+        "482",
+        "2584",
+        "4353",
+        "2763",
+        "3092",
+        "1735",
+        "4109",
+        "1246"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.341249999124557,
+      "ndcg_at_k": 1.0,
+      "query_id": "162",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "403",
+        "2291",
+        "400",
+        "1123",
+        "72",
+        "2763",
+        "1074",
+        "278",
+        "1580",
+        "3191"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.843250002129935,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "163",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "3957",
+        "406",
+        "389",
+        "5220",
+        "952",
+        "4822",
+        "50",
+        "1935",
+        "4151",
+        "963"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.814207988209091,
+      "ndcg_at_k": 1.0,
+      "query_id": "164",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "408",
+        "5217",
+        "952",
+        "56",
+        "4471",
+        "442",
+        "362",
+        "5114",
+        "3165",
+        "5174"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.796791003784165,
+      "ndcg_at_k": 1.0,
+      "query_id": "165",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "410",
+        "219",
+        "474",
+        "1601",
+        "80",
+        "218",
+        "1658",
+        "1002",
+        "108",
+        "1967"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.46295799035579,
+      "ndcg_at_k": 0.0,
+      "query_id": "166",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "217",
+        "613",
+        "37",
+        "218",
+        "625",
+        "3660",
+        "1904",
+        "97",
+        "611",
+        "5"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.761957996990532,
+      "ndcg_at_k": 1.0,
+      "query_id": "167",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "413",
+        "611",
+        "867",
+        "1564",
+        "613",
+        "1061",
+        "4836",
+        "1929",
+        "3191",
+        "412"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.607707990449853,
+      "ndcg_at_k": 1.0,
+      "query_id": "168",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "414",
+        "1016",
+        "413",
+        "768",
+        "29",
+        "1",
+        "693",
+        "2689",
+        "1929",
+        "36"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.354166002594866,
+      "ndcg_at_k": 0.38685280723454163,
+      "query_id": "169",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "418",
+        "1880",
+        "278",
+        "2129",
+        "420",
+        "1102",
+        "5240",
+        "724",
+        "2036",
+        "145"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.4663330091862,
+      "ndcg_at_k": 1.0,
+      "query_id": "170",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "421",
+        "2468",
+        "1355",
+        "1684",
+        "2676",
+        "1079",
+        "422",
+        "357",
+        "2180",
+        "2472"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 14.68554099847097,
+      "ndcg_at_k": 1.0,
+      "query_id": "171",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "422",
+        "2418",
+        "1506",
+        "2681",
+        "430",
+        "1953",
+        "2336",
+        "2518",
+        "2670",
+        "1798"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.377542003174312,
+      "ndcg_at_k": 1.0,
+      "query_id": "172",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "423",
+        "1097",
+        "760",
+        "251",
+        "87",
+        "80",
+        "792",
+        "1469",
+        "1427",
+        "805"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.33608300308697,
+      "ndcg_at_k": 1.0,
+      "query_id": "173",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "424",
+        "715",
+        "2129",
+        "459",
+        "417",
+        "1367",
+        "5240",
+        "739",
+        "660",
+        "69"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.228542006690986,
+      "ndcg_at_k": 1.0,
+      "query_id": "174",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "425",
+        "2401",
+        "227",
+        "959",
+        "2661",
+        "2435",
+        "709",
+        "3390",
+        "60",
+        "252"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.503250006469898,
+      "ndcg_at_k": 1.0,
+      "query_id": "175",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "426",
+        "427",
+        "2524",
+        "64",
+        "422",
+        "72",
+        "69",
+        "70",
+        "2252",
+        "1478"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.879540990572423,
+      "ndcg_at_k": 0.3333333333333333,
+      "query_id": "176",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "424",
+        "459",
+        "5240",
+        "439",
+        "715",
+        "1398",
+        "428",
+        "706",
+        "2129",
+        "2197"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.72508299734909,
+      "ndcg_at_k": 1.0,
+      "query_id": "177",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "429",
+        "419",
+        "422",
+        "425",
+        "2574",
+        "91",
+        "198",
+        "430",
+        "2875",
+        "2406"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 14.249957996071316,
+      "ndcg_at_k": 0.0,
+      "query_id": "178",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "424",
+        "2382",
+        "706",
+        "64",
+        "1511",
+        "2676",
+        "1691",
+        "739",
+        "418",
+        "1767"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.35650000651367,
+      "ndcg_at_k": 0.0,
+      "query_id": "179",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "190",
+        "278",
+        "2036",
+        "732",
+        "2178",
+        "959",
+        "720",
+        "2115",
+        "713",
+        "105"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.566125005017966,
+      "ndcg_at_k": 0.0,
+      "query_id": "180",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2328",
+        "1815",
+        "1907",
+        "4229",
+        "2206",
+        "1504",
+        "2414",
+        "1691",
+        "2022",
+        "2058"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.375416996888816,
+      "ndcg_at_k": 1.0,
+      "query_id": "181",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "438",
+        "2066",
+        "1894",
+        "1877",
+        "2279",
+        "437",
+        "2638",
+        "2236",
+        "2909",
+        "1834"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.427750002942048,
+      "ndcg_at_k": 0.0,
+      "query_id": "182",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "4229",
+        "1815",
+        "2058",
+        "2236",
+        "2414",
+        "1169",
+        "2328",
+        "1905",
+        "3381",
+        "1586"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.616333005600609,
+      "ndcg_at_k": 0.43067655807339306,
+      "query_id": "183",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "459",
+        "441",
+        "685",
+        "440",
+        "2320",
+        "474",
+        "72",
+        "1778",
+        "3862",
+        "1499"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.71287499810569,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "184",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1000",
+        "441",
+        "1905",
+        "1826",
+        "2076",
+        "1815",
+        "2484",
+        "685",
+        "2299",
+        "2548"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.434082995634526,
+      "ndcg_at_k": 0.0,
+      "query_id": "185",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "14",
+        "247",
+        "1047",
+        "601",
+        "1160",
+        "451",
+        "2985",
+        "466",
+        "1167",
+        "482"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.534708002931438,
+      "ndcg_at_k": 1.0,
+      "query_id": "186",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "444",
+        "474",
+        "2320",
+        "3862",
+        "459",
+        "2243",
+        "648",
+        "1436",
+        "2203",
+        "494"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.372959000756964,
+      "ndcg_at_k": 0.0,
+      "query_id": "187",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "470",
+        "466",
+        "92",
+        "977",
+        "48",
+        "2089",
+        "439",
+        "1480",
+        "471",
+        "5227"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.496999994851649,
+      "ndcg_at_k": 0.6309297535714575,
+      "query_id": "188",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "457",
+        "446",
+        "456",
+        "3921",
+        "249",
+        "742",
+        "307",
+        "415",
+        "2108",
+        "467"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.441916005220264,
+      "ndcg_at_k": 0.0,
+      "query_id": "189",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2320",
+        "474",
+        "4236",
+        "604",
+        "2095",
+        "1203",
+        "4537",
+        "2117",
+        "1205",
+        "1244"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.0730409934185445,
+      "ndcg_at_k": 0.2890648263178879,
+      "query_id": "190",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "491",
+        "475",
+        "279",
+        "447",
+        "454",
+        "474",
+        "1436",
+        "446",
+        "3862",
+        "448"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.038582990295254,
+      "ndcg_at_k": 0.43067655807339306,
+      "query_id": "191",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "491",
+        "485",
+        "475",
+        "449",
+        "447",
+        "480",
+        "468",
+        "1131",
+        "469",
+        "446"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 8.269166995887645,
+      "ndcg_at_k": 0.0,
+      "query_id": "192",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "466",
+        "494",
+        "428",
+        "424",
+        "485",
+        "444",
+        "2533",
+        "2004",
+        "473",
+        "1436"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.412667000200599,
+      "ndcg_at_k": 0.5,
+      "query_id": "193",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "446",
+        "457",
+        "451",
+        "452",
+        "444",
+        "453",
+        "447",
+        "454",
+        "474",
+        "2243"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.476541006122716,
+      "ndcg_at_k": 0.31546487678572877,
+      "query_id": "194",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "457",
+        "446",
+        "453",
+        "1911",
+        "2298",
+        "1436",
+        "3862",
+        "452",
+        "2021",
+        "451"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.733958002063446,
+      "ndcg_at_k": 0.43067655807339306,
+      "query_id": "195",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "454",
+        "457",
+        "446",
+        "453",
+        "451",
+        "2298",
+        "1511",
+        "2045",
+        "1436",
+        "452"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 3.7591250002151355,
+      "ndcg_at_k": 1.0,
+      "query_id": "196",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "454",
+        "446",
+        "457",
+        "453",
+        "452",
+        "451",
+        "2193",
+        "458",
+        "2298",
+        "460"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.702334005851299,
+      "ndcg_at_k": 1.0,
+      "query_id": "197",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "455",
+        "457",
+        "2298",
+        "2667",
+        "3678",
+        "623",
+        "648",
+        "1979",
+        "126",
+        "460"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 11.11108400800731,
+      "ndcg_at_k": 1.0,
+      "query_id": "198",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "456",
+        "156",
+        "460",
+        "455",
+        "1254",
+        "126",
+        "202",
+        "1347",
+        "661",
+        "130"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.419791007530876,
+      "ndcg_at_k": 0.0,
+      "query_id": "199",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "447",
+        "460",
+        "5160",
+        "446",
+        "3589",
+        "760",
+        "2574",
+        "452",
+        "3656",
+        "792"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 3.1561249925289303,
+      "ndcg_at_k": 0.0,
+      "query_id": "200",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "2320",
+        "648",
+        "5240",
+        "428",
+        "75",
+        "459",
+        "3820",
+        "2203",
+        "1436",
+        "3862"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.15174999681767,
+      "ndcg_at_k": 1.0,
+      "query_id": "201",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "459",
+        "1996",
+        "474",
+        "2320",
+        "2203",
+        "493",
+        "2882",
+        "2192",
+        "3177",
+        "4453"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 7.876457995735109,
+      "ndcg_at_k": 0.0,
+      "query_id": "205",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "613",
+        "1355",
+        "627",
+        "1564",
+        "610",
+        "189",
+        "2462",
+        "5258",
+        "621",
+        "1929"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.39824999962002,
+      "ndcg_at_k": 0.0,
+      "query_id": "206",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1734",
+        "424",
+        "475",
+        "5240",
+        "88",
+        "660",
+        "1367",
+        "441",
+        "843",
+        "193"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.193666992359795,
+      "ndcg_at_k": 0.31546487678572877,
+      "query_id": "207",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1996",
+        "474",
+        "459",
+        "2320",
+        "3494",
+        "1660",
+        "3862",
+        "462",
+        "4873",
+        "1701"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.671333991922438,
+      "ndcg_at_k": 0.0,
+      "query_id": "208",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "283",
+        "204",
+        "1047",
+        "2381",
+        "885",
+        "882",
+        "4248",
+        "14",
+        "1672",
+        "2985"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 9.999415997299366,
+      "ndcg_at_k": 0.0,
+      "query_id": "209",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "424",
+        "439",
+        "2413",
+        "88",
+        "79",
+        "84",
+        "5240",
+        "2129",
+        "1720",
+        "1384"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 6.082457999582402,
+      "ndcg_at_k": 0.0,
+      "query_id": "210",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "428",
+        "451",
+        "4752",
+        "555",
+        "220",
+        "4736",
+        "3333",
+        "1441",
+        "4603",
+        "1455"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 12.47575000161305,
+      "ndcg_at_k": 1.0,
+      "query_id": "211",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "466",
+        "471",
+        "450",
+        "470",
+        "446",
+        "451",
+        "1684",
+        "1672",
+        "1562",
+        "3689"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 10.609290999127552,
+      "ndcg_at_k": 1.0,
+      "query_id": "212",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "467",
+        "447",
+        "468",
+        "485",
+        "428",
+        "491",
+        "1594",
+        "3862",
+        "1436",
+        "494"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.763042005128227,
+      "ndcg_at_k": 0.38685280723454163,
+      "query_id": "213",
+      "recall_at_k": 1.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "467",
+        "447",
+        "3130",
+        "1436",
+        "468",
+        "1913",
+        "4229",
+        "3992",
+        "2622",
+        "3012"
+      ]
+    },
+    {
+      "division": "Earth",
+      "latency_ms": 5.5774170032236725,
+      "ndcg_at_k": 0.0,
+      "query_id": "214",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 1,
+      "retrieved_document_ids": [
+        "1594",
+        "3130",
+        "468",
+        "1442",
+        "243",
+        "1050",
+        "3012",
+        "2622",
+        "2800",
+        "3696"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 11.728792000212707,
+      "ndcg_at_k": 0.0,
+      "query_id": "215",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "31",
+        "2900",
+        "4213",
+        "72",
+        "3165",
+        "4332",
+        "5236",
+        "4",
+        "5032",
+        "4575"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 11.061833996791393,
+      "ndcg_at_k": 0.0,
+      "query_id": "216",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "4438",
+        "5236",
+        "2900",
+        "31",
+        "4575",
+        "4586",
+        "664",
+        "645",
+        "1038",
+        "3067"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 11.332917012623511,
+      "ndcg_at_k": 0.0,
+      "query_id": "217",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "5191",
+        "3277",
+        "5207",
+        "360",
+        "4994",
+        "3799",
+        "4236",
+        "1739",
+        "2938",
+        "3725"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 8.923542001866736,
+      "ndcg_at_k": 0.46927872602275644,
+      "query_id": "218",
+      "recall_at_k": 0.3333333333333333,
+      "relevant_document_count": 3,
+      "retrieved_document_ids": [
+        "56",
+        "1641",
+        "1861",
+        "771",
+        "2023",
+        "1616",
+        "2446",
+        "5073",
+        "2591",
+        "251"
+      ]
+    },
+    {
+      "division": "Planetary",
+      "latency_ms": 6.361124993418343,
+      "ndcg_at_k": 0.0,
+      "query_id": "219",
+      "recall_at_k": 0.0,
+      "relevant_document_count": 2,
+      "retrieved_document_ids": [
+        "459",
+        "1794",
+        "2502",
+        "4585",
+        "2667",
+        "4213",
+        "723",
+        "1739",
+        "359",
+        "2588"
+      ]
+    }
+  ],
+  "repository": "nasa-impact/nasa-science-repos-sme-benchmark",
+  "revision": "f26b9c9a4060d759b0ae44354059b37387dd414e",
+  "status": "completed",
+  "task": "NASA software-repository discovery; not NTRS passage retrieval",
+  "top_k": 10,
+  "total_query_count": 219,
+  "unjudged_query_count": 7,
+  "version": "0.1"
+}

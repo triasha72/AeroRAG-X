@@ -7,6 +7,8 @@ benchmarks:
     license: "Apache-2.0"
     evidence_class: "independent_expert_queries"
     expected_query_count: 219
+    expected_judged_query_count: 212
+    expected_qrel_row_count: 259
     files:
       - corpus.jsonl
       - queries.jsonl

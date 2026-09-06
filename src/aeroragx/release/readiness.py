@@ -61,7 +61,7 @@ class ReadinessReport:
         lines = [
             "# AeroRAG-X release readiness",
             "",
-            f"**Policy:** {self.policy_version}  ",
+            f"**Policy:** {self.policy_version}",
             f"**Result:** {status}",
             "",
             "## Checks",

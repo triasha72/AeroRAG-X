@@ -601,10 +601,16 @@ comparison and hardware limits are recorded in
 [`reports/framework_comparison_v0_1.md`](reports/framework_comparison_v0_1.md).
 The remaining GPU, human-review, GRPO, and upstream steps are tracked with
 evidence gates in the [manual completion checklist](docs/manual-completion-checklist.md).
-The post-merge research program now also pins two external NASA IMPACT
-benchmarks and separates their evidentiary roles: 219 expert queries can test
-independent NASA software-discovery generalization, while the 176,901-query SDE
-benchmark can test scale but remains model-generated evidence. Acquisition,
+The post-merge research program also pins two external NASA IMPACT benchmarks
+and separates their evidentiary roles. The expert benchmark has now been fetched
+and evaluated without changing its revision: exact BM25 over 5,264 repositories
+reached **0.5889 Recall@10** and **0.4725 NDCG@10** on the 212 judged queries
+among 219 expert questions. Seven unjudged questions were excluded explicitly.
+This is independent NASA software-discovery evidence, not an NTRS passage score.
+The 176,901-query SDE benchmark can test scale but remains model-generated
+evidence. The measured SME method and limitations are in
+[`reports/nasa_sme_exact_bm25_v0_1.md`](reports/nasa_sme_exact_bm25_v0_1.md).
+Acquisition,
 reviewer alternatives, the pgvector execution receipt, claim audit, and release
 gate are documented in
 [`docs/post_merge_evidence_plan.md`](docs/post_merge_evidence_plan.md). Public

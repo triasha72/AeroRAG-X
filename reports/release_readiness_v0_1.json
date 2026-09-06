@@ -1,5 +1,5 @@
 {
-  "policy_version": "0.1",
+  "policy_version": "0.2",
   "passed": false,
   "checks": [
     {
@@ -38,6 +38,36 @@
       "detail": "present and non-empty"
     },
     {
+      "name": "required:artifacts/evaluation/generation_claim4_compact_manifest_v0_1.json",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
+      "name": "required:artifacts/evaluation/generation_lora_compact_promotion_v0_1.json",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
+      "name": "required:reports/compact_generation_v0_3_rejected.md",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
+      "name": "required:artifacts/evaluation/nasa_sme_exact_bm25_v0_1.json",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
+      "name": "required:reports/nasa_sme_exact_bm25_v0_1.md",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
+      "name": "required:docs/public_claim_audit_v0_1.csv",
+      "passed": true,
+      "detail": "present and non-empty"
+    },
+    {
       "name": "required:docs/release-readiness.md",
       "passed": true,
       "detail": "present and non-empty"
@@ -45,7 +75,12 @@
     {
       "name": "finalized:reports/grpo_agent_ablation_v0_1.md",
       "passed": false,
-      "detail": "placeholder markers found: measurement template, no fabricated results, pending"
+      "detail": "placeholder markers found: pending"
+    },
+    {
+      "name": "finalized:docs/public_claim_audit_v0_1.csv",
+      "passed": false,
+      "detail": "placeholder markers found: pending_artifact_mapping, pending_independent_review"
     },
     {
       "name": "frozen-baseline-checksums",

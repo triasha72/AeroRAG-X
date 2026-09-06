@@ -8,6 +8,23 @@ python_bin="work/train-venv/bin/python"
 queries="data/evaluation/generation_queries_compact_dev_v0_1.jsonl"
 protected="data/evaluation/generation_queries_v0_3.jsonl"
 
+# Fail before retrieval/model loading when the launching process cannot access
+# Apple MPS. Codex-hosted shells may be sandboxed even when normal Terminal can
+# use MPS, so CPU fallback would silently change the experiment contract.
+PYTHONPATH=src "$python_bin" -c '
+import torch
+if not torch.backends.mps.is_built():
+    raise SystemExit("PyTorch was not built with Apple MPS support.")
+if not torch.backends.mps.is_available():
+    raise SystemExit(
+        "Apple MPS is unavailable in this process. Run this script from normal macOS "
+        "Terminal; CPU substitution is intentionally disabled."
+    )
+'
+
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+
 [ "$queries" != "$protected" ] || {
   echo "Development runner refuses the protected query set." >&2
   exit 1

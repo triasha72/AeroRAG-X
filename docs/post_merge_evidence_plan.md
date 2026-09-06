@@ -8,8 +8,8 @@ is complete merely because a runner exists.
 Two revision-pinned NASA IMPACT datasets are registered in
 `configs/external_benchmarks_v0_1.yaml`.
 
-1. `nasa-science-repos-sme-benchmark` supplies 219 expert queries, 253 relevance
-   judgments, and a 5,264-repository corpus. It is independent human-query
+1. `nasa-science-repos-sme-benchmark` supplies 219 expert queries, of which 212
+   have 259 relevance rows, and a 5,264-repository corpus. It is independent human-query
    evidence, but it evaluates NASA software discovery rather than NTRS passage
    retrieval and must be reported separately.
 2. `nasa-sde-IR-benchmark-20251024-v5` supplies 176,901 queries over an 82,608
