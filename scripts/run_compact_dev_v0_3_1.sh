@@ -30,29 +30,43 @@ export TRANSFORMERS_OFFLINE=1
   exit 1
 }
 
-for condition in base lora; do
-  runtime="configs/transformers_runtime_local_${condition}_compact_v0_1.yaml"
-  PYTHONPATH=src "$python_bin" scripts/run_generation_v03.py \
-    --queries-input "$queries" \
-    --memory-bounded \
-    --generation-config configs/generation_transformers_local_claim4_v0_1.yaml \
-    --sufficiency-config configs/sufficiency_v0_1.yaml \
-    --provider-config configs/provider_v0_3_1_compact_dev.yaml \
-    --provider-runtime-config "$runtime" \
-    --candidate-top-k 20 \
-    --evidence-top-k 5 \
-    --report-output "artifacts/evaluation/generation_${condition}_compact_dev_v0_3_1.json" \
-    --telemetry-output \
-      "artifacts/evaluation/generation_${condition}_compact_dev_v0_3_1_telemetry.json"
-done
+# Hold checkpoint, retrieval, and queries fixed. Comparing Base with LoRA would
+# confound prompt and model effects, so the control and treatment both use the
+# reproduced epoch-2 LoRA adapter.
+PYTHONPATH=src "$python_bin" scripts/run_generation_v03.py \
+  --queries-input "$queries" \
+  --memory-bounded \
+  --generation-config configs/generation_transformers_local_claim4_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_1.yaml \
+  --provider-config configs/provider_v0_1.yaml \
+  --provider-runtime-config configs/transformers_runtime_local_lora_reproduced_v0_1.yaml \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --report-output artifacts/evaluation/generation_lora_original_dev_v0_3_1_control.json \
+  --telemetry-output \
+    artifacts/evaluation/generation_lora_original_dev_v0_3_1_control_telemetry.json
+
+PYTHONPATH=src "$python_bin" scripts/run_generation_v03.py \
+  --queries-input "$queries" \
+  --memory-bounded \
+  --generation-config configs/generation_transformers_local_claim4_v0_1.yaml \
+  --sufficiency-config configs/sufficiency_v0_1.yaml \
+  --provider-config configs/provider_v0_3_1_compact_dev.yaml \
+  --provider-runtime-config configs/transformers_runtime_local_lora_compact_v0_1.yaml \
+  --candidate-top-k 20 \
+  --evidence-top-k 5 \
+  --report-output artifacts/evaluation/generation_lora_compact_dev_v0_3_1.json \
+  --telemetry-output \
+    artifacts/evaluation/generation_lora_compact_dev_v0_3_1_telemetry.json
 
 PYTHONPATH=src "$python_bin" scripts/analyze_paired_generation_efficiency.py \
-  --base-report artifacts/evaluation/generation_base_compact_dev_v0_3_1.json \
-  --base-telemetry artifacts/evaluation/generation_base_compact_dev_v0_3_1_telemetry.json \
+  --base-report artifacts/evaluation/generation_lora_original_dev_v0_3_1_control.json \
+  --base-telemetry \
+    artifacts/evaluation/generation_lora_original_dev_v0_3_1_control_telemetry.json \
   --treatment-report artifacts/evaluation/generation_lora_compact_dev_v0_3_1.json \
   --treatment-telemetry \
     artifacts/evaluation/generation_lora_compact_dev_v0_3_1_telemetry.json \
-  --json-output artifacts/evaluation/generation_compact_dev_v0_3_1_paired.json \
-  --markdown-output reports/generation_compact_dev_v0_3_1_paired.md
+  --json-output artifacts/evaluation/generation_lora_prompt_dev_v0_3_1_paired.json \
+  --markdown-output reports/generation_lora_prompt_dev_v0_3_1_paired.md
 
 echo "Development run complete. This is not protected-set promotion evidence."

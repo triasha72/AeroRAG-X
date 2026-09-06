@@ -1338,6 +1338,14 @@ invalid structure is not treated as efficiency. Exact artifacts, hashes, and
 the development-only v0.3.1 policy are recorded in
 [`reports/compact_generation_v0_3_rejected.md`](reports/compact_generation_v0_3_rejected.md).
 
+The first real v0.3.1 development run then completed all eight cases with LoRA,
+zero generation failures, perfect answerability/refusal/structural scores, and
+0.9444 expected-term recall. Its initial paired analysis changed Base to LoRA
+and therefore cannot measure prompt efficiency. That diagnostic was retained,
+and the runner was corrected to compare original and compact prompting while
+holding the epoch-2 LoRA checkpoint fixed. The decision and exact hashes are in
+[`reports/compact_generation_v0_3_1_dev_diagnostic.md`](reports/compact_generation_v0_3_1_dev_diagnostic.md).
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

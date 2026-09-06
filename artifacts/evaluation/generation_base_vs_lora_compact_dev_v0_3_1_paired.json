@@ -1,0 +1,79 @@
+{
+  "version": "0.1",
+  "status": "completed",
+  "frozen_query_count": 8,
+  "paired_completed_query_count": 5,
+  "paired_provider_call_count": 4,
+  "base_mean_output_tokens": 177.75,
+  "treatment_mean_output_tokens": 154.5,
+  "mean_paired_output_token_delta": -23.25,
+  "mean_paired_output_token_delta_bootstrap_95_ci": [
+    -61.25,
+    28.5
+  ],
+  "paired_effect_size_cohen_dz": -0.4478682616314089,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260901,
+  "relative_output_token_change": -0.1308016877637131,
+  "treatment_lower_token_query_count": 3,
+  "equal_token_query_count": 0,
+  "treatment_higher_token_query_count": 1,
+  "base_mean_claim_count": 3.25,
+  "treatment_mean_claim_count": 1.75,
+  "base_mean_answer_repeated_word_fraction": 0.09476061427280938,
+  "treatment_mean_answer_repeated_word_fraction": 0.13245296798831457,
+  "inputs": {
+    "base_report": "artifacts/evaluation/generation_base_compact_dev_v0_3_1.json",
+    "base_report_sha256": "553b513e6128c6e37d4f62504fcfd6585679bc2f68c7923ef95b8531c138f894",
+    "base_telemetry_sha256": "2c7b068b4087ea906ced4c2f22bf139437a9997e39057b2679d7992eed52e32d",
+    "treatment_report": "artifacts/evaluation/generation_lora_compact_dev_v0_3_1.json",
+    "treatment_report_sha256": "fd8eb5b63b047dcb445dd62b2629a5f64da647d38b2ad3214ea66def4285e0e2",
+    "treatment_telemetry_sha256": "ca978fb182fe982e922bd18a726f69634767ba9d10b80d112ce4812f10b61ca5"
+  },
+  "query_pairs": [
+    {
+      "query_id": "compact_dev_002",
+      "base_output_tokens": 178,
+      "treatment_output_tokens": 229,
+      "output_token_delta": 51,
+      "base_claim_count": 4,
+      "treatment_claim_count": 1,
+      "claim_count_delta": -3,
+      "base_answer_repeated_word_fraction": 0.09756097560975607,
+      "treatment_answer_repeated_word_fraction": 0.26595744680851063
+    },
+    {
+      "query_id": "compact_dev_003",
+      "base_output_tokens": 238,
+      "treatment_output_tokens": 168,
+      "output_token_delta": -70,
+      "base_claim_count": 4,
+      "treatment_claim_count": 3,
+      "claim_count_delta": -1,
+      "base_answer_repeated_word_fraction": 0.1333333333333333,
+      "treatment_answer_repeated_word_fraction": 0.10256410256410253
+    },
+    {
+      "query_id": "compact_dev_004",
+      "base_output_tokens": 237,
+      "treatment_output_tokens": 198,
+      "output_token_delta": -39,
+      "base_claim_count": 4,
+      "treatment_claim_count": 3,
+      "claim_count_delta": -1,
+      "base_answer_repeated_word_fraction": 0.14814814814814814,
+      "treatment_answer_repeated_word_fraction": 0.16129032258064513
+    },
+    {
+      "query_id": "compact_dev_007",
+      "base_output_tokens": 58,
+      "treatment_output_tokens": 23,
+      "output_token_delta": -35,
+      "base_claim_count": 1,
+      "treatment_claim_count": 0,
+      "claim_count_delta": -1,
+      "base_answer_repeated_word_fraction": 0.0,
+      "treatment_answer_repeated_word_fraction": 0.0
+    }
+  ]
+}

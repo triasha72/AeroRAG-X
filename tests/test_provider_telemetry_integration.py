@@ -32,6 +32,7 @@ def make_config(
     *,
     provider: str,
     model_name: str,
+    max_claims: int = 3,
 ) -> GenerationConfig:
     return GenerationConfig(
         version="0.1",
@@ -41,7 +42,7 @@ def make_config(
         minimum_evidence_count=1,
         max_context_characters=3_000,
         max_chunk_characters=3_000,
-        max_claims=3,
+        max_claims=max_claims,
         require_citations=True,
         allow_insufficient_evidence=True,
         include_retrieval_metadata=True,
@@ -130,6 +131,19 @@ class FakeClock:
 
     def __call__(self) -> float:
         return next(self._values)
+
+
+class TooManyClaimsTransport(FakeTransport):
+    def complete(
+        self,
+        *,
+        request: StructuredModelRequest,
+        timeout_seconds: float,
+    ) -> StructuredModelResult:
+        result = super().complete(request=request, timeout_seconds=timeout_seconds)
+        claim = result.payload["claims"][0]
+        result.payload["claims"] = [claim, claim]
+        return result
 
 
 def hardening_config() -> ProviderHardeningConfig:
@@ -221,3 +235,33 @@ def test_local_provider_has_no_remote_telemetry() -> None:
 
     assert metadata is not None
     assert metadata.provider_telemetry is None
+
+
+def test_post_provider_semantic_failure_preserves_usage_and_reason() -> None:
+    provider = StructuredGenerationProvider(
+        model_name="remote-test-model",
+        transport=TooManyClaimsTransport(),
+        config=hardening_config(),
+        clock=FakeClock([10.0, 10.4]),
+    )
+    generator = GroundedAnswerGenerator(
+        index=FakeIndex(),
+        provider=provider,
+        config=make_config(
+            provider="openai-responses",
+            model_name="remote-test-model",
+            max_claims=1,
+        ),
+    )
+
+    with pytest.raises(ValueError, match="more claims than max_claims") as captured:
+        generator.generate("How can thermal runaway propagate?")
+
+    telemetry = captured.value.telemetry  # type: ignore[attr-defined]
+    diagnostics = captured.value.diagnostics  # type: ignore[attr-defined]
+    assert telemetry.usage.total_tokens == 125
+    assert diagnostics == {
+        "failure_stage": "citation_resolution",
+        "error_type": "grounded_response_semantics",
+        "reason_code": "claim_limit_exceeded",
+    }

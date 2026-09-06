@@ -54,6 +54,38 @@ INSUFFICIENT_EVIDENCE_ANSWER = (
 )
 
 
+def _attach_grounded_failure_context(
+    error: ValueError, telemetry: ProviderTelemetry | None
+) -> None:
+    """Attach bounded diagnostics while preserving the original exception type."""
+
+    error.diagnostics = {  # type: ignore[attr-defined]
+        "failure_stage": "citation_resolution",
+        "error_type": "grounded_response_semantics",
+        "reason_code": _grounded_failure_reason(error),
+    }
+    error.telemetry = (  # type: ignore[attr-defined]
+        telemetry.model_copy(deep=True) if telemetry is not None else None
+    )
+
+
+def _grounded_failure_reason(error: ValueError) -> str:
+    """Map semantic failures to bounded codes without retaining generated text."""
+
+    message = str(error)
+    for fragment, code in (
+        ("more claims than max_claims", "claim_limit_exceeded"),
+        ("must not contain claims", "refusal_contains_claims"),
+        ("must contain at least one claim", "supported_answer_missing_claims"),
+        ("must cite at least one evidence ID", "claim_missing_evidence"),
+        ("duplicate evidence IDs", "duplicate_evidence_ids"),
+        ("unknown evidence ID", "unknown_evidence_id"),
+    ):
+        if fragment in message:
+            return code
+    return "invalid_grounded_response"
+
+
 class GenerationConfig(BaseModel):
     """Configuration for grounded answer construction and validation."""
 
@@ -1282,16 +1314,20 @@ class GroundedAnswerGenerator:
             "aeroragx.citation_resolution",
         ) as citation_span:
             resolution_started_at = perf_counter()
-            answer = self._resolve_response(
-                query=normalized_query,
-                response=response,
-                evidence=evidence,
-                returned_evidence_count=len(hits),
-                reranker_model=reranker_model,
-                evidence_sufficiency=assessment.evidence_sufficiency,
-                adaptive_retrieval=adaptive_trace,
-                provider_telemetry=provider_telemetry,
-            )
+            try:
+                answer = self._resolve_response(
+                    query=normalized_query,
+                    response=response,
+                    evidence=evidence,
+                    returned_evidence_count=len(hits),
+                    reranker_model=reranker_model,
+                    evidence_sufficiency=assessment.evidence_sufficiency,
+                    adaptive_retrieval=adaptive_trace,
+                    provider_telemetry=provider_telemetry,
+                )
+            except ValueError as error:
+                _attach_grounded_failure_context(error, provider_telemetry)
+                raise
             citation_resolution_ms = round(
                 (perf_counter() - resolution_started_at) * 1000.0,
                 3,
@@ -1565,15 +1601,19 @@ class GroundedAnswerGenerator:
             "aeroragx.citation_resolution",
         ) as citation_span:
             resolution_started_at = perf_counter()
-            answer = self._resolve_response(
-                query=normalized_query,
-                response=response,
-                evidence=evidence,
-                returned_evidence_count=len(hits),
-                reranker_model=reranker_model,
-                evidence_sufficiency=evidence_sufficiency,
-                provider_telemetry=provider_telemetry,
-            )
+            try:
+                answer = self._resolve_response(
+                    query=normalized_query,
+                    response=response,
+                    evidence=evidence,
+                    returned_evidence_count=len(hits),
+                    reranker_model=reranker_model,
+                    evidence_sufficiency=evidence_sufficiency,
+                    provider_telemetry=provider_telemetry,
+                )
+            except ValueError as error:
+                _attach_grounded_failure_context(error, provider_telemetry)
+                raise
             citation_resolution_ms = round(
                 (perf_counter() - resolution_started_at) * 1000.0,
                 3,

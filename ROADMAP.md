@@ -1197,6 +1197,12 @@ New infrastructure should follow a measured engineering requirement.
   experiments through manifest finalization
 - [x] add an explicit-schema compact v0.3.1 development-only prompt, eight-case
   development set, and runner that makes no protected-set promotion claim
+- [x] run the real eight-case Base/LoRA compact diagnostic; retain LoRA's 8/8
+  structural result but reject its confounded Base-versus-LoRA token comparison
+- [x] correct the development runner to hold the epoch-2 LoRA checkpoint fixed
+  while comparing original v0.1 against compact v0.3.1 response policies
+- [ ] execute the corrected eight-case LoRA prompt-control comparison and decide
+  whether the candidate merits a larger development set
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE
