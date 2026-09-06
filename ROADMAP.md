@@ -1201,8 +1201,14 @@ New infrastructure should follow a measured engineering requirement.
   structural result but reject its confounded Base-versus-LoRA token comparison
 - [x] correct the development runner to hold the epoch-2 LoRA checkpoint fixed
   while comparing original v0.1 against compact v0.3.1 response policies
-- [ ] execute the corrected eight-case LoRA prompt-control comparison and decide
-  whether the candidate merits a larger development set
+- [x] execute the corrected eight-case LoRA prompt-control comparison; reject
+  v0.3.1 because output fell only 1.63% despite equal-or-better quality
+- [x] extend paired analysis to input, output, and total tokens; v0.3.1 reduced
+  them by 3.97%, 1.63%, and 3.80%, respectively
+- [x] add a v0.3.2 development-only concise-answer policy, frozen-control
+  checksum gate, 256-token ceiling, and automatic fail-closed decision
+- [ ] execute v0.3.2 on the eight-case development set and advance it only if
+  quality is preserved and paired output falls at least 15%
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE

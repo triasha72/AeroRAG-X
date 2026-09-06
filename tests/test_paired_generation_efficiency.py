@@ -78,6 +78,10 @@ def test_zero_paired_calls_write_insufficient_report(
     assert summary["base_mean_output_tokens"] is None
     assert summary["treatment_mean_output_tokens"] is None
     assert summary["mean_paired_output_token_delta"] is None
+    assert summary["base_mean_input_tokens"] is None
+    assert summary["relative_input_token_change"] is None
+    assert summary["base_mean_total_tokens"] is None
+    assert summary["relative_total_token_change"] is None
     assert summary["mean_paired_output_token_delta_bootstrap_95_ci"] is None
     assert summary["relative_output_token_change"] is None
     assert "No query had successful" in paths["summary.md"].read_text(encoding="utf-8")

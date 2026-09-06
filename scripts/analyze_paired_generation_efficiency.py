@@ -15,9 +15,15 @@ from typing import Any, TypedDict
 
 class PairRow(TypedDict):
     query_id: str
+    base_input_tokens: int
+    treatment_input_tokens: int
+    input_token_delta: int
     base_output_tokens: int
     treatment_output_tokens: int
     output_token_delta: int
+    base_total_tokens: int
+    treatment_total_tokens: int
+    total_token_delta: int
     base_claim_count: int
     treatment_claim_count: int
     claim_count_delta: int
@@ -112,22 +118,35 @@ def main() -> None:
     provider_ids = [
         query_id
         for query_id in completed_ids
-        if base_usage[query_id].get("output_tokens") is not None
-        and treatment_usage[query_id].get("output_tokens") is not None
+        if all(
+            base_usage[query_id].get(field) is not None
+            and treatment_usage[query_id].get(field) is not None
+            for field in ("input_tokens", "output_tokens", "total_tokens")
+        )
     ]
 
     pairs: list[PairRow] = []
     for query_id in provider_ids:
+        base_input = int(base_usage[query_id]["input_tokens"])
+        treatment_input = int(treatment_usage[query_id]["input_tokens"])
         base_output = int(base_usage[query_id]["output_tokens"])
         treatment_output = int(treatment_usage[query_id]["output_tokens"])
+        base_total = int(base_usage[query_id]["total_tokens"])
+        treatment_total = int(treatment_usage[query_id]["total_tokens"])
         base_answer = str(base_results[query_id]["answer"] or "")
         treatment_answer = str(treatment_results[query_id]["answer"] or "")
         pairs.append(
             {
                 "query_id": query_id,
+                "base_input_tokens": base_input,
+                "treatment_input_tokens": treatment_input,
+                "input_token_delta": treatment_input - base_input,
                 "base_output_tokens": base_output,
                 "treatment_output_tokens": treatment_output,
                 "output_token_delta": treatment_output - base_output,
+                "base_total_tokens": base_total,
+                "treatment_total_tokens": treatment_total,
+                "total_token_delta": treatment_total - base_total,
                 "base_claim_count": int(base_results[query_id]["claim_count"]),
                 "treatment_claim_count": int(treatment_results[query_id]["claim_count"]),
                 "claim_count_delta": int(treatment_results[query_id]["claim_count"])
@@ -139,12 +158,18 @@ def main() -> None:
             }
         )
 
-    token_deltas = [float(row["output_token_delta"]) for row in pairs]
-    base_tokens = [float(row["base_output_tokens"]) for row in pairs]
-    treatment_tokens = [float(row["treatment_output_tokens"]) for row in pairs]
-    base_mean = _mean_or_none(base_tokens)
-    treatment_mean = _mean_or_none(treatment_tokens)
-    mean_delta = _mean_or_none(token_deltas)
+    input_deltas = [float(row["input_token_delta"]) for row in pairs]
+    output_deltas = [float(row["output_token_delta"]) for row in pairs]
+    total_deltas = [float(row["total_token_delta"]) for row in pairs]
+    base_input_mean = _mean_or_none([float(row["base_input_tokens"]) for row in pairs])
+    treatment_input_mean = _mean_or_none([float(row["treatment_input_tokens"]) for row in pairs])
+    base_output_mean = _mean_or_none([float(row["base_output_tokens"]) for row in pairs])
+    treatment_output_mean = _mean_or_none([float(row["treatment_output_tokens"]) for row in pairs])
+    base_total_mean = _mean_or_none([float(row["base_total_tokens"]) for row in pairs])
+    treatment_total_mean = _mean_or_none([float(row["treatment_total_tokens"]) for row in pairs])
+    mean_input_delta = _mean_or_none(input_deltas)
+    mean_output_delta = _mean_or_none(output_deltas)
+    mean_total_delta = _mean_or_none(total_deltas)
     base_claim_mean = _mean_or_none([float(row["base_claim_count"]) for row in pairs])
     treatment_claim_mean = _mean_or_none([float(row["treatment_claim_count"]) for row in pairs])
     base_repeat_mean = _mean_or_none([row["base_answer_repeated_word_fraction"] for row in pairs])
@@ -152,31 +177,57 @@ def main() -> None:
         [row["treatment_answer_repeated_word_fraction"] for row in pairs]
     )
     interval = (
-        _bootstrap_mean_interval(token_deltas, args.bootstrap_samples) if token_deltas else None
+        _bootstrap_mean_interval(output_deltas, args.bootstrap_samples) if output_deltas else None
     )
-    delta_sd = statistics.stdev(token_deltas) if len(token_deltas) > 1 else 0.0
-    effect_size = mean_delta / delta_sd if mean_delta is not None and delta_sd else None
-    relative_change = (
-        (treatment_mean - base_mean) / base_mean
-        if base_mean is not None and treatment_mean is not None and base_mean != 0.0
+    delta_sd = statistics.stdev(output_deltas) if len(output_deltas) > 1 else 0.0
+    effect_size = (
+        mean_output_delta / delta_sd if mean_output_delta is not None and delta_sd else None
+    )
+    relative_input_change = (
+        (treatment_input_mean - base_input_mean) / base_input_mean
+        if base_input_mean is not None
+        and treatment_input_mean is not None
+        and base_input_mean != 0.0
+        else None
+    )
+    relative_output_change = (
+        (treatment_output_mean - base_output_mean) / base_output_mean
+        if base_output_mean is not None
+        and treatment_output_mean is not None
+        and base_output_mean != 0.0
+        else None
+    )
+    relative_total_change = (
+        (treatment_total_mean - base_total_mean) / base_total_mean
+        if base_total_mean is not None
+        and treatment_total_mean is not None
+        and base_total_mean != 0.0
         else None
     )
     summary: dict[str, Any] = {
-        "version": "0.1",
+        "version": "0.2",
         "status": "completed" if pairs else "insufficient_paired_observations",
         "frozen_query_count": len(base_results),
         "paired_completed_query_count": len(completed_ids),
         "paired_provider_call_count": len(provider_ids),
-        "base_mean_output_tokens": base_mean,
-        "treatment_mean_output_tokens": treatment_mean,
-        "mean_paired_output_token_delta": mean_delta,
+        "base_mean_input_tokens": base_input_mean,
+        "treatment_mean_input_tokens": treatment_input_mean,
+        "mean_paired_input_token_delta": mean_input_delta,
+        "relative_input_token_change": relative_input_change,
+        "base_mean_output_tokens": base_output_mean,
+        "treatment_mean_output_tokens": treatment_output_mean,
+        "mean_paired_output_token_delta": mean_output_delta,
         "mean_paired_output_token_delta_bootstrap_95_ci": (
             list(interval) if interval is not None else None
         ),
         "paired_effect_size_cohen_dz": effect_size,
         "bootstrap_samples": args.bootstrap_samples if pairs else 0,
         "bootstrap_seed": 20260901,
-        "relative_output_token_change": relative_change,
+        "relative_output_token_change": relative_output_change,
+        "base_mean_total_tokens": base_total_mean,
+        "treatment_mean_total_tokens": treatment_total_mean,
+        "mean_paired_total_token_delta": mean_total_delta,
+        "relative_total_token_change": relative_total_change,
         "treatment_lower_token_query_count": sum(row["output_token_delta"] < 0 for row in pairs),
         "equal_token_query_count": sum(row["output_token_delta"] == 0 for row in pairs),
         "treatment_higher_token_query_count": sum(row["output_token_delta"] > 0 for row in pairs),
@@ -210,30 +261,44 @@ def main() -> None:
         f"Paired provider calls: **{len(provider_ids)}**.",
     ]
     if pairs and interval is not None:
-        assert base_mean is not None
-        assert treatment_mean is not None
-        assert mean_delta is not None
+        assert base_input_mean is not None
+        assert treatment_input_mean is not None
+        assert mean_input_delta is not None
+        assert relative_input_change is not None
+        assert base_output_mean is not None
+        assert treatment_output_mean is not None
+        assert mean_output_delta is not None
+        assert relative_output_change is not None
+        assert base_total_mean is not None
+        assert treatment_total_mean is not None
+        assert mean_total_delta is not None
+        assert relative_total_change is not None
         assert base_claim_mean is not None
         assert treatment_claim_mean is not None
         assert base_repeat_mean is not None
         assert treatment_repeat_mean is not None
-        assert relative_change is not None
         delta_lower, delta_upper = interval
         lines.extend(
             [
                 "",
                 "| Metric | Base | Treatment |",
                 "|---|---:|---:|",
-                f"| Mean output tokens | {base_mean:.2f} | {treatment_mean:.2f} |",
+                f"| Mean input tokens | {base_input_mean:.2f} | {treatment_input_mean:.2f} |",
+                f"| Mean output tokens | {base_output_mean:.2f} | {treatment_output_mean:.2f} |",
+                f"| Mean total tokens | {base_total_mean:.2f} | {treatment_total_mean:.2f} |",
                 f"| Mean claims | {base_claim_mean:.2f} | {treatment_claim_mean:.2f} |",
                 "| Mean repeated-word fraction | "
                 f"{base_repeat_mean:.4f} | {treatment_repeat_mean:.4f} |",
                 "",
-                f"Mean treatment-minus-Base output delta: **{mean_delta:+.2f} tokens**.",
+                f"Mean treatment-minus-Base input delta: **{mean_input_delta:+.2f} tokens** "
+                f"(**{relative_input_change:+.2%}**).",
+                f"Mean treatment-minus-Base output delta: **{mean_output_delta:+.2f} tokens**.",
                 f"Paired bootstrap 95% interval: **[{delta_lower:+.2f}, {delta_upper:+.2f}] "
                 f"tokens** ({args.bootstrap_samples:,} deterministic resamples).",
                 f"Paired effect size (Cohen's dz): **{float(effect_size or 0.0):+.3f}**.",
-                f"Relative treatment output change: **{relative_change:+.2%}**.",
+                f"Relative treatment output change: **{relative_output_change:+.2%}**.",
+                f"Mean treatment-minus-Base total delta: **{mean_total_delta:+.2f} tokens** "
+                f"(**{relative_total_change:+.2%}**).",
                 "Treatment used fewer/equal/more tokens on "
                 f"**{summary['treatment_lower_token_query_count']} / "
                 f"{summary['equal_token_query_count']} / "

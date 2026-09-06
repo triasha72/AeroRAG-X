@@ -17,6 +17,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--minimum-token-reduction", type=float, default=0.15)
     parser.add_argument("--maximum-rate-regression", type=float, default=0.03125)
+    parser.add_argument("--expected-query-count", type=int, default=32)
+    parser.add_argument("--minimum-paired-calls", type=int, default=15)
     return parser.parse_args()
 
 
@@ -34,7 +36,9 @@ def main() -> None:
         (args.baseline_report, args.candidate_report, args.paired_efficiency),
     )
     checks: dict[str, bool] = {
-        "same_complete_query_contract": (baseline["query_count"] == candidate["query_count"] == 32),
+        "same_complete_query_contract": (
+            baseline["query_count"] == candidate["query_count"] == args.expected_query_count
+        ),
         "failure_count_not_worse": (
             candidate["generation_failure_count"] <= baseline["generation_failure_count"]
         ),
@@ -57,7 +61,9 @@ def main() -> None:
     checks["paired_output_token_reduction"] = (
         relative_change is not None and relative_change <= -args.minimum_token_reduction
     )
-    checks["paired_sample_present"] = int(paired["paired_provider_call_count"]) >= 15
+    checks["paired_sample_present"] = (
+        int(paired["paired_provider_call_count"]) >= args.minimum_paired_calls
+    )
 
     promoted = all(checks.values())
     result = {
@@ -67,6 +73,8 @@ def main() -> None:
         "relative_output_token_change": relative_change,
         "minimum_token_reduction": args.minimum_token_reduction,
         "maximum_rate_regression": args.maximum_rate_regression,
+        "expected_query_count": args.expected_query_count,
+        "minimum_paired_calls": args.minimum_paired_calls,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")

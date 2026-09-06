@@ -53,3 +53,21 @@ def test_compact_dev_prompt_uses_explicit_minimal_json_skeleton() -> None:
     )
     payload_text = prompt.user_prompt.split("\n", 1)[1].rsplit("\n", 1)[0]
     assert "response_schema" not in json.loads(payload_text)
+
+
+def test_concise_dev_prompt_bounds_answer_and_claims() -> None:
+    prompt = build_grounded_prompt(
+        query="What affects motor power density?",
+        evidence=[ProviderEvidence(evidence_id="E1", text="Thermal limits affect power.")],
+        max_claims=4,
+        config=ProviderHardeningConfig(
+            version="0.3.2",
+            prompt_version="grounded-json-v0.3.2-concise-dev",
+        ),
+    )
+
+    assert "at most 80 words" in prompt.system_prompt
+    assert "at most 2 short" in prompt.system_prompt
+    assert "Prefer one claim" in prompt.system_prompt
+    payload_text = prompt.user_prompt.split("\n", 1)[1].rsplit("\n", 1)[0]
+    assert "response_schema" not in json.loads(payload_text)

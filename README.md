@@ -1346,6 +1346,13 @@ and the runner was corrected to compare original and compact prompting while
 holding the epoch-2 LoRA checkpoint fixed. The decision and exact hashes are in
 [`reports/compact_generation_v0_3_1_dev_diagnostic.md`](reports/compact_generation_v0_3_1_dev_diagnostic.md).
 
+The corrected same-LoRA comparison subsequently rejected v0.3.1: it preserved
+quality but reduced input, output, and total tokens by only 3.97%, 1.63%, and
+3.80%, respectively. Because the compact treatment produced more claims, the
+next development-only candidate bounds the answer to 80 words, prefers one
+claim, permits at most two, and uses a 256-token ceiling. It must preserve every
+quality rate and reduce paired output by at least 15% before advancing.
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and
