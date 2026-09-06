@@ -1212,8 +1212,19 @@ New infrastructure should follow a measured engineering requirement.
 - [x] add a v0.4 context-compression experiment that keeps reliable v0.3.1
   generation, reduces evidence from five passages to three, and gates on total
   tokens with unchanged quality
-- [ ] execute the eight-case v0.4 context treatment and advance it only if its
-  fail-closed development gate passes
+- [x] execute the eight-case v0.4 context treatment: 8/8 completed, every
+  quality rate remained 1.000, and paired total tokens fell 32.84%
+- [x] preserve the v0.4 reports, telemetry hashes, decision, engineering
+  rationale, rejected concise-prompt alternative, and development-only caveat
+- [x] build a deterministic 50-case second development gate with 38 answerable
+  and 12 unsupported cases, source hashes, and normalized ID/text separation
+  from all protected and held-out generation sets
+- [x] add the same-checkpoint, same-prompt top-5 versus top-3 MPS runner and a
+  fail-closed 50-case total-token/quality decision
+- [ ] execute the real 50-case v0.4.1 development comparison; do not access a
+  protected set unless this larger gate passes
+- [ ] if v0.4.1 passes, freeze a one-shot protected protocol before execution;
+  never tune the evidence budget after reading protected outcomes
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE

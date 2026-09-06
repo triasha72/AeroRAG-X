@@ -1,0 +1,26 @@
+{
+  "allowed_claim": "context-compaction development and robustness diagnostic",
+  "answerable_count": 38,
+  "inputs": {
+    "data/evaluation/adaptive_scope_challenge_v0_1.jsonl": "8264bd996e308c01cfa1277b3f45c2a6b797c84db5f448158ae7453efae4e185",
+    "data/evaluation/generation_queries_compact_dev_v0_1.jsonl": "8b71506aa8fa0bc8e34b4c21ffdabd6b30b8da0457401b00cbbf5d2902fb07cf",
+    "data/evaluation/generation_queries_v0_3.jsonl": "85d47e187ab4b3e8099a2ff70a1a11a4ed21a4811cf9e22b8f82159722e3be6e",
+    "data/evaluation/generation_queries_v0_4_heldout.jsonl": "ec444a265f5bf2d9435b01f3b73cf4263097745d5e6828f50d38299ece2e5a97",
+    "data/evaluation/scope_qualifier_heldout_v0_1.jsonl": "a1476d6f56227d6c6fd2bc79fe191052e0fa6f8868e3c8f613fe465d0ee4e991",
+    "data/evaluation/source_grounded_queries_v0_1_512.jsonl": "34d71f260f6e3c76d15c0e967f39504f3d955ee09afb5ddff905b46de37dfb7f"
+  },
+  "normalization": "casefold and replace non-alphanumeric runs with one space",
+  "output_sha256": "a3db3fd5adf98bf813958a86c1fdc2eeaef9af91f2d508cfb58ecdc8d3ac7882",
+  "prohibited_claim": "independently human-validated or protected generation quality",
+  "protected_overlap_count": 0,
+  "query_count": 50,
+  "selection": "all curated compact; all unique unsupported scope; first 32 unique source candidates",
+  "source_counts": {
+    "automatic_source_stress": 32,
+    "curated_compact": 8,
+    "scope_challenge": 10
+  },
+  "status": "development_only",
+  "unsupported_count": 12,
+  "version": "0.2"
+}

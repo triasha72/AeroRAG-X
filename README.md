@@ -1361,6 +1361,34 @@ the much larger input cost by selecting three evidence passages instead of five.
 Its gate uses total tokens and unchanged quality. See
 [`reports/compact_generation_v0_3_2_dev_rejected.md`](reports/compact_generation_v0_3_2_dev_rejected.md).
 
+That change produced the first strong token result. With the same epoch-2 LoRA
+checkpoint, reliable prompt, retrieval candidate pool, and eight development
+queries, reducing final evidence from five passages to three cut mean paired
+input tokens by 35.27% and total tokens by **32.84%**. All eight queries
+completed, all recorded quality rates remained 1.000, and the development gate
+passed. This was the best next step because prompt shortening had attacked the
+small output component and damaged structure, whereas evidence selection
+removed redundant input before generation without asking the model to become
+less reliable. The result, checksums, rejected alternative, and limitation are
+recorded in
+[`reports/context_compaction_v0_4_dev_promoted.md`](reports/context_compaction_v0_4_dev_promoted.md).
+
+The project still does not promote an eight-case result to a protected claim.
+The next gate is a deterministic 50-case development run: 8 curated compact
+cases, 10 unique unsupported-scope challenges, and 32 automatic source-grounded
+stress cases. A checked-in manifest proves normalized-text and ID disjointness
+from the protected and held-out generation sets. The automatic cases are useful
+for robustness and token measurement, but are explicitly not described as
+human-validated quality evidence. Run the same-LoRA, same-prompt top-5 versus
+top-3 comparison with:
+
+```bash
+./scripts/run_context_compact_dev_v0_4_1.sh
+```
+
+Only a passing 50-case decision should unlock a separately frozen protected
+evaluation; a failure is preserved and stops that progression.
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

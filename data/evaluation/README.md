@@ -298,6 +298,26 @@ expected_terms
 
 Unanswerable queries do not define expected terms.
 
+## Context-compaction development gate v0.2
+
+`generation_queries_context_dev_v0_2.jsonl` is a deterministic 50-case
+development set for the top-5 versus top-3 evidence-budget comparison. It
+contains 8 curated compact cases, 10 unsupported-scope challenges, and the
+first 32 eligible automatic source-grounded stress cases. The accompanying
+manifest records every input hash, output hash, class count, selection rule,
+and a zero-overlap check against the protected and held-out generation sets.
+
+Rebuild or verify it with:
+
+```bash
+python scripts/build_context_compaction_dev_v0_2.py
+python scripts/build_context_compaction_dev_v0_2.py --check
+```
+
+The 32 deterministic source cases have not received independent human review.
+They may support development robustness and token diagnostics only; they must
+not be reported as protected or independently validated generation quality.
+
 ---
 
 ## Generation metrics
