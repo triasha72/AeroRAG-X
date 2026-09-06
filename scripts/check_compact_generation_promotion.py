@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--maximum-rate-regression", type=float, default=0.03125)
     parser.add_argument("--expected-query-count", type=int, default=32)
     parser.add_argument("--minimum-paired-calls", type=int, default=15)
+    parser.add_argument(
+        "--token-metric",
+        choices=("output", "total"),
+        default="output",
+        help="Paired token metric used by the reduction gate.",
+    )
     return parser.parse_args()
 
 
@@ -56,9 +62,10 @@ def main() -> None:
         checks[f"{metric}_within_bound"] = (
             float(candidate[metric]) >= float(baseline[metric]) - args.maximum_rate_regression
         )
-    relative_value = paired.get("relative_output_token_change")
+    relative_key = f"relative_{args.token_metric}_token_change"
+    relative_value = paired.get(relative_key)
     relative_change = float(relative_value) if relative_value is not None else None
-    checks["paired_output_token_reduction"] = (
+    checks[f"paired_{args.token_metric}_token_reduction"] = (
         relative_change is not None and relative_change <= -args.minimum_token_reduction
     )
     checks["paired_sample_present"] = (
@@ -70,7 +77,8 @@ def main() -> None:
         "version": "0.1",
         "status": "promoted" if promoted else "rejected",
         "checks": checks,
-        "relative_output_token_change": relative_change,
+        "token_metric": args.token_metric,
+        relative_key: relative_change,
         "minimum_token_reduction": args.minimum_token_reduction,
         "maximum_rate_regression": args.maximum_rate_regression,
         "expected_query_count": args.expected_query_count,

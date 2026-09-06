@@ -1207,8 +1207,13 @@ New infrastructure should follow a measured engineering requirement.
   them by 3.97%, 1.63%, and 3.80%, respectively
 - [x] add a v0.3.2 development-only concise-answer policy, frozen-control
   checksum gate, 256-token ceiling, and automatic fail-closed decision
-- [ ] execute v0.3.2 on the eight-case development set and advance it only if
-  quality is preserved and paired output falls at least 15%
+- [x] execute and reject v0.3.2: one malformed response, expected-term recall
+  regression, 6.18% paired output reduction, and 2.96% total-token reduction
+- [x] add a v0.4 context-compression experiment that keeps reliable v0.3.1
+  generation, reduces evidence from five passages to three, and gates on total
+  tokens with unchanged quality
+- [ ] execute the eight-case v0.4 context treatment and advance it only if its
+  fail-closed development gate passes
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE

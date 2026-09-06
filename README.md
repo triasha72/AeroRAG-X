@@ -1353,6 +1353,14 @@ next development-only candidate bounds the answer to 80 words, prefers one
 claim, permits at most two, and uses a 256-token ceiling. It must preserve every
 quality rate and reduce paired output by at least 15% before advancing.
 
+That v0.3.2 experiment was also rejected: one of eight generations emitted
+malformed JSON after only 23 tokens, expected-term recall fell to 0.6667, and
+paired output fell only 6.18%. The project therefore stopped tightening prompt
+wording. The next candidate preserves reliable v0.3.1 generation and reduces
+the much larger input cost by selecting three evidence passages instead of five.
+Its gate uses total tokens and unchanged quality. See
+[`reports/compact_generation_v0_3_2_dev_rejected.md`](reports/compact_generation_v0_3_2_dev_rejected.md).
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and
