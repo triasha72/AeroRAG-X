@@ -1389,6 +1389,28 @@ top-3 comparison with:
 Only a passing 50-case decision should unlock a separately frozen protected
 evaluation; a failure is preserved and stops that progression.
 
+The 50-case run passed. Across 40 paired provider calls, top-3 context reduced
+mean input tokens by 33.88% and mean total tokens by **31.94%**. The treatment
+also completed one more query (48 versus 47), raised answerability from 0.88 to
+0.90, raised unsupported refusal from 0.75 to 0.8333, and retained perfect
+citation and source-document metrics. The complete result and hash ledger are
+in
+[`reports/context_compaction_v0_4_1_dev_promoted.md`](reports/context_compaction_v0_4_1_dev_promoted.md).
+
+No further policy tuning is planned from development results. The v0.4.2
+protocol freezes a one-shot 32-query final comparison, including query, corpus,
+dense-index, checkpoint, adapter, prompt, runtime, thresholds, and output names.
+This set was protected from LoRA training, but it has historical project
+evaluations and is therefore not described as a newly unseen benchmark. The
+runner refuses checksum drift and refuses to overwrite any prior output:
+
+```bash
+./scripts/run_context_compact_protected_v0_4_2.sh
+```
+
+Whether it passes or fails, the result must be preserved without retuning the
+three-passage policy against those outcomes.
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

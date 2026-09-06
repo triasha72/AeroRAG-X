@@ -1221,10 +1221,16 @@ New infrastructure should follow a measured engineering requirement.
   from all protected and held-out generation sets
 - [x] add the same-checkpoint, same-prompt top-5 versus top-3 MPS runner and a
   fail-closed 50-case total-token/quality decision
-- [ ] execute the real 50-case v0.4.1 development comparison; do not access a
-  protected set unless this larger gate passes
-- [ ] if v0.4.1 passes, freeze a one-shot protected protocol before execution;
-  never tune the evidence budget after reading protected outcomes
+- [x] execute the real 50-case v0.4.1 development comparison: 40 paired calls,
+  31.94% lower mean total tokens, one fewer failure, and every gate passed
+- [x] preserve v0.4.1 reports, telemetry, paired analysis, decision, hashes,
+  result interpretation, and automatic-source evidence limitation
+- [x] freeze the v0.4.2 one-shot final-validation protocol before execution,
+  including input hashes, outputs, thresholds, and non-overwrite behavior
+- [ ] execute v0.4.2 once on the historical training-protected 32-query set;
+  preserve pass or failure and do not retune against its outcomes
+- [ ] obtain a newly collected, independently reviewed held-out benchmark
+  before making an unseen-benchmark or broad semantic-quality claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the
   sandbox that blocks PostgreSQL System V shared memory at bootstrap
 - [x] register revision-pinned independent NASA SME and generated NASA SDE

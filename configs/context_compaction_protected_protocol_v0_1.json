@@ -1,0 +1,38 @@
+{
+  "version": "0.1",
+  "status": "frozen_before_execution",
+  "purpose": "one-shot final validation of LoRA evidence top-k 5 versus 3",
+  "evidence_boundary": "training-protected historical benchmark; not an unseen newly collected benchmark",
+  "query_count": 32,
+  "candidate_top_k": 20,
+  "control_evidence_top_k": 5,
+  "treatment_evidence_top_k": 3,
+  "token_metric": "total",
+  "minimum_token_reduction": 0.15,
+  "maximum_rate_regression": 0.03125,
+  "minimum_paired_calls": 15,
+  "inputs": {
+    "data/evaluation/generation_queries_v0_3.jsonl": "85d47e187ab4b3e8099a2ff70a1a11a4ed21a4811cf9e22b8f82159722e3be6e",
+    "data/processed/ntrs/v0_1/chunks.jsonl": "67ce4f814db096a0d49117fde9c924c7ae8825ea3c631463255e4fde0e3706c2",
+    "artifacts/embeddings/ntrs_v0_1.npy": "5624f7ab741ca8f2fb1271355247f3b5e6b485ac0484fcba41b43d54ef342ac4",
+    "artifacts/embeddings/ntrs_v0_1_metadata.jsonl": "67ce4f814db096a0d49117fde9c924c7ae8825ea3c631463255e4fde0e3706c2",
+    "artifacts/embeddings/ntrs_v0_1_manifest.json": "4481865ebc33a6350eb21d85400c63a4fd948006994c6f2f2897cf46b26e9df0",
+    "artifacts/training/adapters/aeroragx_lora_v0_1_reproduced_mps/adapter_model.safetensors": "13df5eb8449d5b204c2d740b0c194b7712969f15258c42b26a336febeb27c717",
+    "work/models/Qwen3-0.6B/model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "configs/generation_transformers_local_claim4_v0_1.yaml": "0357db7cc0b317e73624095bc5f778c53f8e226598f764dba3dc35a7ab3ceb72",
+    "configs/sufficiency_v0_1.yaml": "3ed6509f6fb87d839ddc1c3ca14908053edd14b82d71973505edbb64a23e8690",
+    "configs/provider_v0_3_1_compact_dev.yaml": "647b77b7228ad3f0437458a35dd6d99591e3edbf9abcf84217745016d3631346",
+    "configs/transformers_runtime_local_lora_compact_v0_1.yaml": "87019eaedb3f6e3dbeb131a3c15bf3e10ee9f33d85c8bfed8ea3ca850d667244"
+  },
+  "outputs": {
+    "control_report": "artifacts/evaluation/generation_lora_context5_protected_v0_4_2_control.json",
+    "control_telemetry": "artifacts/evaluation/generation_lora_context5_protected_v0_4_2_control_telemetry.json",
+    "treatment_report": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2.json",
+    "treatment_telemetry": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_telemetry.json",
+    "paired_analysis": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_paired.json",
+    "paired_markdown": "reports/generation_lora_context3_protected_v0_4_2_paired.md",
+    "decision": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_decision.json",
+    "manifest": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_manifest.json"
+  },
+  "decision_rule": "run once; preserve pass or failure; do not retune against these outcomes"
+}
