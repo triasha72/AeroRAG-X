@@ -1227,8 +1227,21 @@ New infrastructure should follow a measured engineering requirement.
   result interpretation, and automatic-source evidence limitation
 - [x] freeze the v0.4.2 one-shot final-validation protocol before execution,
   including input hashes, outputs, thresholds, and non-overwrite behavior
-- [ ] execute v0.4.2 once on the historical training-protected 32-query set;
-  preserve pass or failure and do not retune against its outcomes
+- [x] execute v0.4.2 once on the historical training-protected 32-query set;
+  preserve its rejection: 33.20% total-token savings did not compensate for
+  answerable completion, expected-term recall, and failure regressions
+- [x] retain fixed top-5 as the quality-safe default and fixed top-3 as a
+  measured rejected candidate
+- [x] implement a deterministic pre-generation adaptive 3→5 evidence selector
+  with hard five-passage bound, unsupported-signal blockers, and decision logs
+- [x] add focused tests for top-3 retention, recoverable expansion, unsupported
+  numeric/scope signals, bounded behavior, and defensive telemetry
+- [x] add a three-arm 50-case MPS development runner and fail-closed comparison
+  of adaptive 3→5 against fixed top-5
+- [ ] execute the real v0.5 development comparison; preserve the outcome and
+  keep fixed top-5 unless every frozen gate passes
+- [ ] if v0.5 passes, curate and freeze a new held-out adaptive-policy set
+  without reusing the completed v0.4.2 benchmark
 - [ ] obtain a newly collected, independently reviewed held-out benchmark
   before making an unseen-benchmark or broad semantic-quality claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the

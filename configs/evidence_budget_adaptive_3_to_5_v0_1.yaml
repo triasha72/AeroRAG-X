@@ -1,0 +1,14 @@
+version: "0.1"
+initial_top_k: 3
+maximum_top_k: 5
+expandable_reasons:
+  - insufficient_evidence_count
+  - insufficient_supported_terms
+  - low_query_term_coverage
+  - low_single_evidence_coverage
+blocking_reasons:
+  - no_informative_query_terms
+  - missing_numeric_support
+  - missing_named_anchor_support
+  - missing_claim_qualifier_support
+  - missing_scope_qualifier_support

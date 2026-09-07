@@ -1411,6 +1411,32 @@ runner refuses checksum drift and refuses to overwrite any prior output:
 Whether it passes or fails, the result must be preserved without retuning the
 three-passage policy against those outcomes.
 
+The frozen run completed and rejected fixed top-3. Paired total tokens fell
+**33.20%**, but answerable completion fell from 0.95 to 0.80, expected-term
+recall fell from 0.9138 to 0.7414, and one validation failure appeared. At the
+same time, unsupported refusal improved from 0.8333 to 1.0000. This is a useful
+negative result: the smaller context made the system cheaper and more
+conservative, but removed necessary evidence for several answerable questions.
+The complete decision is documented in
+[`reports/context_compaction_v0_4_2_protected_rejected.md`](reports/context_compaction_v0_4_2_protected_rejected.md).
+
+The next candidate therefore uses an adaptive evidence budget rather than a
+fixed compromise. It begins with three passages and expands to five only when a
+pre-generation deterministic sufficiency check finds a recoverable coverage
+gap. Missing numeric, named, claim, or universal-scope anchors block expansion,
+preventing additional topical passages from legitimizing an unsupported claim.
+The selector records every decision, never examines model output, and never
+exceeds five passages. Fixed top-5 remains the default while this candidate is
+unevaluated. The three-arm development command is:
+
+```bash
+./scripts/run_adaptive_context_dev_v0_5.sh
+```
+
+See
+[`docs/adaptive-evidence-budget-v0_5.md`](docs/adaptive-evidence-budget-v0_5.md)
+for the policy and evidence boundary.
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

@@ -35,6 +35,12 @@ from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
 )
+from aeroragx.generation.evidence_budget import (
+    AdaptiveEvidenceBudgetIndex,
+    EvidenceBudgetConfig,
+    EvidenceBudgetDecision,
+    load_evidence_budget_config,
+)
 from aeroragx.generation.grounded import (
     AnswerCitation,
     GenerationConfig,
@@ -117,6 +123,7 @@ from aeroragx.generation.transformers_transport import (
 
 __all__ = [
     "AdaptiveEvidenceAssessment",
+    "AdaptiveEvidenceBudgetIndex",
     "AdaptiveEvidenceProvenance",
     "AdaptiveRetrievalAttempt",
     "AdaptiveRetrievalConditionReport",
@@ -132,6 +139,8 @@ __all__ = [
     "BoundedAdaptiveRetrievalController",
     "DeterministicGenerationProvider",
     "DeterministicQueryRewriter",
+    "EvidenceBudgetConfig",
+    "EvidenceBudgetDecision",
     "EvidenceSufficiencyAssessor",
     "EvidenceSufficiencyResult",
     "GenerationConfig",
@@ -185,6 +194,7 @@ __all__ = [
     "evaluate_grounded_generation",
     "load_adaptive_retrieval_config",
     "load_adaptive_retrieval_evaluation_config",
+    "load_evidence_budget_config",
     "load_generation_config",
     "load_generation_evaluation_queries",
     "load_http_transport_config",

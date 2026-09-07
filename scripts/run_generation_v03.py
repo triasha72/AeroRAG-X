@@ -5,12 +5,17 @@ from __future__ import annotations
 
 import argparse
 import gc
+import json
 from collections.abc import Sequence
 from pathlib import Path
 
 from aeroragx.generation.evaluation import (
     load_generation_evaluation_queries,
     write_generation_evaluation_report,
+)
+from aeroragx.generation.evidence_budget import (
+    AdaptiveEvidenceBudgetIndex,
+    load_evidence_budget_config,
 )
 from aeroragx.generation.facet_retrieval import (
     FacetAwareEvidenceIndex,
@@ -99,6 +104,18 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--adaptive-evidence-budget-config",
+        type=Path,
+        default=None,
+    )
+
+    parser.add_argument(
+        "--evidence-budget-decisions-output",
+        type=Path,
+        default=None,
+    )
+
+    parser.add_argument(
         "--report-output",
         type=Path,
         required=True,
@@ -155,7 +172,9 @@ def _release_retrieval_models() -> None:
 def _load_memory_bounded_runtime(
     config: RuntimeConfig,
     query_texts: Sequence[str],
-) -> AeroRAGRuntime:
+    *,
+    evidence_budget_config: Path | None = None,
+) -> tuple[AeroRAGRuntime, AdaptiveEvidenceBudgetIndex | None]:
     """Build an equivalent closed-set runtime without overlapping model families."""
 
     reranker_index, reranker_settings = load_reranker_index(config)
@@ -188,18 +207,31 @@ def _load_memory_bounded_runtime(
         http_transport_config=config.http_transport_config,
         provider_runtime_config=config.provider_runtime_config,
     )
+    sufficiency_assessor = EvidenceSufficiencyAssessor(
+        load_sufficiency_config(config.sufficiency_config)
+    )
+    budget_index = (
+        AdaptiveEvidenceBudgetIndex(
+            frozen_index,
+            sufficiency_assessor,
+            load_evidence_budget_config(evidence_budget_config),
+        )
+        if evidence_budget_config is not None
+        else None
+    )
     generator = GroundedAnswerGenerator(
-        index=frozen_index,
+        index=budget_index or frozen_index,
         provider=provider,
         config=generation_settings,
-        sufficiency_assessor=EvidenceSufficiencyAssessor(
-            load_sufficiency_config(config.sufficiency_config)
-        ),
+        sufficiency_assessor=sufficiency_assessor,
     )
-    return AeroRAGRuntime(
-        generator=generator,
-        reranker_settings=reranker_settings,
-        generation_settings=generation_settings,
+    return (
+        AeroRAGRuntime(
+            generator=generator,
+            reranker_settings=reranker_settings,
+            generation_settings=generation_settings,
+        ),
+        budget_index,
     )
 
 
@@ -218,14 +250,24 @@ def main() -> None:
         candidate_top_k=(args.candidate_top_k),
         evidence_top_k=(args.evidence_top_k),
     )
-    runtime = (
-        _load_memory_bounded_runtime(
+    if args.adaptive_evidence_budget_config is not None and not args.memory_bounded:
+        raise SystemExit("Adaptive evidence budgeting currently requires --memory-bounded.")
+    if (args.adaptive_evidence_budget_config is None) != (
+        args.evidence_budget_decisions_output is None
+    ):
+        raise SystemExit(
+            "Adaptive evidence budget config and decisions output must be supplied together."
+        )
+
+    if args.memory_bounded:
+        runtime, budget_index = _load_memory_bounded_runtime(
             runtime_config,
             [query.query for query in queries],
+            evidence_budget_config=args.adaptive_evidence_budget_config,
         )
-        if args.memory_bounded
-        else load_grounded_runtime(runtime_config)
-    )
+    else:
+        runtime = load_grounded_runtime(runtime_config)
+        budget_index = None
 
     generator = runtime.generator
 
@@ -251,6 +293,27 @@ def main() -> None:
         args.telemetry_output,
         telemetry_report,
     )
+
+    if budget_index is not None and args.evidence_budget_decisions_output is not None:
+        decisions = budget_index.decisions
+        if len(decisions) != len(queries):
+            raise RuntimeError("Evidence-budget decision count does not match query count.")
+        args.evidence_budget_decisions_output.parent.mkdir(parents=True, exist_ok=True)
+        args.evidence_budget_decisions_output.write_text(
+            json.dumps(
+                {
+                    "version": "0.1",
+                    "query_count": len(decisions),
+                    "expanded_count": sum(decision.expanded for decision in decisions),
+                    "retained_top3_count": sum(not decision.expanded for decision in decisions),
+                    "decisions": [decision.model_dump(mode="json") for decision in decisions],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
 
     generation = telemetry_report.generation_report
 

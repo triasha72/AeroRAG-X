@@ -1,0 +1,37 @@
+{
+  "artifacts": {
+    "control_report": {
+      "path": "artifacts/evaluation/generation_lora_context5_protected_v0_4_2_control.json",
+      "sha256": "4adcc7d91a70071681ad1bf72dbdb41b195a03a830f94f46b3eea373a7492932"
+    },
+    "control_telemetry": {
+      "path": "artifacts/evaluation/generation_lora_context5_protected_v0_4_2_control_telemetry.json",
+      "sha256": "7f23edf6d6c6e11a0186bd8f1e0cf7a8016aa022ae4f01c3efa2c3fd5969e72a"
+    },
+    "decision": {
+      "path": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_decision.json",
+      "sha256": "ef8203f14035c4b68f9613952e9a81bcfedf412aad27294024ce4b6429d74d34"
+    },
+    "paired_analysis": {
+      "path": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_paired.json",
+      "sha256": "ca610514c2d2545d83f6390e370d5dfd90109fe250863d8d3fdb5d659693e973"
+    },
+    "paired_markdown": {
+      "path": "reports/generation_lora_context3_protected_v0_4_2_paired.md",
+      "sha256": "bdee020d3fa7215a074efd9a974b5a478105a21de6ca0f0d7fad8c41a44561ab"
+    },
+    "treatment_report": {
+      "path": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2.json",
+      "sha256": "0cdf22a8d74131d49428eef243de37775207b0cc44cfc7f8a536dc4f6235b3ab"
+    },
+    "treatment_telemetry": {
+      "path": "artifacts/evaluation/generation_lora_context3_protected_v0_4_2_telemetry.json",
+      "sha256": "46e3c69580038648a4dfa88d51947a7ae625d2d9ad7563aa1a067468227c977f"
+    }
+  },
+  "evidence_boundary": "training-protected historical benchmark; not an unseen newly collected benchmark",
+  "protocol": "configs/context_compaction_protected_protocol_v0_1.json",
+  "protocol_sha256": "9d17ee0f1ba8f84603fd9cb2cb6cea8b0ddc2ffb9a7f85b177ad764c48dab1e3",
+  "status": "completed_rejected",
+  "version": "0.1"
+}
