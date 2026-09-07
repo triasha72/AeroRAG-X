@@ -16,6 +16,8 @@ The demo verifies that the local system can:
 - respond successfully to `GET /ready`;
 - process `POST /v1/query`;
 - return structured claims and authoritative citations;
+- reject a demo result if a supported claim has no known citation, or if a
+  grounded refusal carries claims or citations;
 - shut down without leaving a background server process.
 
 ## Prerequisites
@@ -27,6 +29,8 @@ conda activate aeroragx-py312
 ```
 
 The demo uses deterministic local mode and does not require an OpenAI API key.
+It defaults to `python3`; set `AERORAGX_PYTHON_BIN` when the project is
+installed in a named virtual environment.
 
 ## Run the demo
 
@@ -47,6 +51,10 @@ A successful run ends with:
 ```text
 Demo completed successfully.
 ```
+
+The response check emits counts and an outcome only. It does not save retrieved
+text, so it can be used in a local operational run without copying source
+material into an artifact.
 
 ## Optional configuration
 
