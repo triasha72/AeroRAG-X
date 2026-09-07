@@ -39,6 +39,7 @@ data/results/
 # Generated and downloaded corpus data
 data/raw/
 data/processed/
+data/external/trec-rag-2024/
 
 # Local LoRA teacher-generation checkpoints
 data/training/work/

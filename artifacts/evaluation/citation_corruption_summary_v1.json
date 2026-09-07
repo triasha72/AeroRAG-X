@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "suite": "source-id-citation-corruption-v1",
+  "case_count": 200,
+  "detected": 200,
+  "detection_rate": 1.0,
+  "decision": "passed",
+  "claim_scope": "deterministic provenance guard, not semantic entailment",
+  "limitations": [
+    "The test detects wrong source IDs, not subtle unsupported wording.",
+    "Cases are derived from automatically constructed NASA queries."
+  ]
+}

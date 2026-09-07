@@ -122,6 +122,9 @@ Future:
 - [x] SciFact external-retrieval adapter and public-evidence assessment gate
 - [x] real SciFact validation run: 89.89% evidence-document recall at 10
 - [x] deterministic 50-case author-audit template with the reviewer role disclosed
+- [x] enrich the author-audit packet with queries, source pages, qrels, and retrieved chunks
+- [x] import and checksum official TREC 2024 RAG human-judgment metadata
+- [x] run 200 controlled NASA citation-ID corruptions through the provenance guard
 - [ ] complete the author audit and publish the error breakdown
 
 # Phase 1 — Repository foundation — COMPLETE
