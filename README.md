@@ -62,6 +62,15 @@ it does not establish aerospace answer quality because QASPER covers NLP
 research. The text-free record is in
 `artifacts/evaluation/qasper_external_retrieval_v1.json`.
 
+The [public evidence protocol](docs/PUBLIC_EVIDENCE_PROTOCOL.md) adds SciFact as
+a second human-annotated scientific retrieval test. On 188 evidence-bearing
+validation claims across 5,183 abstracts, the global TF-IDF baseline reached
+62.77% document recall at 1, 82.45% at 5, and 89.89% at 10, with mean reciprocal
+rank 0.7223. The SciFact check passes its frozen recall threshold. The combined
+assessment remains blocked because the deterministic 50-case author audit is
+unfinished. The author role is stored in the assessment, so this path cannot be
+reported as independent aerospace review.
+
 ## System
 
 ```text

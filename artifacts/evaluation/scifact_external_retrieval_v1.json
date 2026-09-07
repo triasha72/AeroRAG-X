@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "allenai/scifact",
+  "dataset_license": {
+    "claims_and_evidence": "CC-BY-4.0",
+    "corpus": "ODC-By-1.0"
+  },
+  "split": "validation",
+  "corpus_sha256": "b8d6c89624cb2ed74dee8938effc4f5d8bd2086887880af8110d64be4ceade62",
+  "claims_sha256": "86f0435d08fdb65d1aa41d1472684f57e6e71930626497bdf4d7a9ec1a632217",
+  "retriever": "global TF-IDF word 1-2 grams",
+  "documents": 5183,
+  "evaluated_claims": 188,
+  "mean_reciprocal_rank": 0.7223120844389486,
+  "any_evidence_document_recall_at_k": {
+    "1": 0.6276595744680851,
+    "5": 0.824468085106383,
+    "10": 0.898936170212766
+  },
+  "contains_source_text": false,
+  "limitations": [
+    "SciFact covers scientific abstracts, not NASA aerospace reports.",
+    "This run measures document retrieval, not generated-answer correctness."
+  ]
+}
