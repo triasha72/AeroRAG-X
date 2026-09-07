@@ -1256,6 +1256,8 @@ New infrastructure should follow a measured engineering requirement.
   total tokens 57.14% with 47 paired calls and passed every fail-closed gate
 - [ ] run a newly versioned, independently reviewed held-out evaluation of v0.6;
   fixed uncompressed top-5 remains the default until it passes
+- [x] add a fail-closed held-out readiness checker for query disjointness,
+  complete reviewer A/B coverage, and immutable response-file hashes
 - [ ] obtain a newly collected, independently reviewed held-out benchmark
   before making an unseen-benchmark or broad semantic-quality claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the

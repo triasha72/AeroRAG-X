@@ -1469,6 +1469,8 @@ not change the production default or establish a protected-set result. See
 [`reports/evidence_compression_v0_6_development_promoted.md`](reports/evidence_compression_v0_6_development_promoted.md)
 and the checksum manifest
 [`artifacts/evaluation/generation_lora_compressed5_dev_v0_6_manifest.json`](artifacts/evaluation/generation_lora_compressed5_dev_v0_6_manifest.json).
+The held-out protocol and fail-closed readiness checker are documented in
+[`docs/v0_6-heldout-evaluation.md`](docs/v0_6-heldout-evaluation.md).
 
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
