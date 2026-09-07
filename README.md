@@ -67,14 +67,50 @@ a second human-annotated scientific retrieval test. On 188 evidence-bearing
 validation claims across 5,183 abstracts, the global TF-IDF baseline reached
 62.77% document recall at 1, 82.45% at 5, and 89.89% at 10, with mean reciprocal
 rank 0.7223. The SciFact check passes its frozen recall threshold. The combined
-assessment remains blocked because the deterministic 50-case author audit is
-unfinished. The author role is stored in the assessment, so this path cannot be
-reported as independent aerospace review.
+assessment now also audits the official NIST TREC 2024 RAG release: 20,283
+retrieval judgments and 2,840 citation-support judgments. These labels were
+made outside this project, but they cover the MS MARCO corpus rather than NASA
+reports. The repository records their checksums and label counts without
+redistributing the source files.
+
+A separate 200-case failure suite replaces each correct NASA source ID with a
+retrieved but non-relevant source. The provenance guard rejected all 200. This
+shows that the system catches wrong source identifiers; it does not test subtle
+wording that overstates an otherwise relevant source.
+
+The combined assessment remains blocked because the 50-case author audit still
+needs real decisions. Its template now includes each question, expected terms,
+source pages, judged chunks, retrieved chunks, and retrieval rank, so the review
+can be completed directly instead of cross-referencing several artifacts. The
+reviewer is disclosed as the project author and is never described as an
+independent aerospace expert.
+
+Reproduce the public-label and corruption checks with:
+
+```bash
+bash scripts/download_trec_rag_2024.sh
+PYTHONPATH=src python scripts/audit_trec_rag_2024.py \
+  --topics data/external/trec-rag-2024/topics.rag24.test.txt \
+  --retrieval-qrels data/external/trec-rag-2024/2024-retrieval-qrels.txt \
+  --citation-judgments data/external/trec-rag-2024/final.citation_judgments_without_prediction.20241025.jsonl \
+  --output artifacts/evaluation/trec_rag_2024_judgment_audit_v1.json
+```
 
 ## System
 
-```text
-Hybrid retrieval → reranking → evidence gate → bounded agent → generation → validation
+```mermaid
+flowchart LR
+    A[NASA reports] --> B[Page-aware chunks]
+    B --> C[BM25 and dense retrieval]
+    C --> D[Hybrid ranking]
+    D --> E[Cross-encoder reranker]
+    E --> F[Evidence gate]
+    F -->|enough evidence| G[Bounded generation]
+    F -->|weak evidence| H[Grounded refusal]
+    G --> I[Claim and citation checks]
+    I --> J[API and CLI response]
+    K[QASPER, SciFact, TREC RAG] --> L[External evaluation]
+    M[Corruption and author audit] --> L
 ```
 
 ## Project origin

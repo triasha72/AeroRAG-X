@@ -6,6 +6,11 @@ def test_public_evidence_passes_without_claiming_independent_aerospace_review() 
         {"any_evidence_recall_at_k": {"20": 0.91}},
         {"any_evidence_document_recall_at_k": {"10": 0.75}},
         {"case_count": 50, "complete": True, "reviewer_role": "project_author"},
+        {
+            "retrieval": {"judgment_rows": 20_283},
+            "citations": {"judgment_rows": 2_840},
+        },
+        {"case_count": 200, "detection_rate": 1.0},
     )
     assert result["decision"] == "supported"
     assert "author-reviewed" in result["non_claims"][0]

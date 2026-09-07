@@ -19,12 +19,16 @@ def main() -> int:
     parser.add_argument("--qasper", type=Path, required=True)
     parser.add_argument("--scifact", type=Path, required=True)
     parser.add_argument("--author-audit", type=Path)
+    parser.add_argument("--trec-rag", type=Path)
+    parser.add_argument("--citation-corruption", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     result = assess_public_evidence(
         load(args.qasper),
         load(args.scifact),
         None if args.author_audit is None else load(args.author_audit),
+        None if args.trec_rag is None else load(args.trec_rag),
+        None if args.citation_corruption is None else load(args.citation_corruption),
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")

@@ -22,9 +22,31 @@
       "value": null,
       "required": "project_author",
       "passed": false
+    },
+    "trec_rag_public_judgments": {
+      "value": {
+        "retrieval": 20283,
+        "citation_support": 2840
+      },
+      "minimum": {
+        "retrieval": 20000,
+        "citation_support": 2000
+      },
+      "passed": true
+    },
+    "citation_provenance_corruption": {
+      "value": {
+        "cases": 200,
+        "detection_rate": 1.0
+      },
+      "minimum": {
+        "cases": 200,
+        "detection_rate": 1.0
+      },
+      "passed": true
     }
   },
-  "claim_scope": "offline retrieval against independently human-annotated public evidence",
+  "claim_scope": "offline retrieval against public human annotations plus deterministic citation-provenance failure tests",
   "non_claims": [
     "The aerospace error audit is author-reviewed, not independently reviewed.",
     "This does not establish production or safety-critical fitness."

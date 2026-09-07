@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "NIST/TREC-2024-RAG",
+  "evidence_role": "external_public_human_judgments",
+  "topics": 301,
+  "retrieval": {
+    "judged_topics": 86,
+    "judgment_rows": 20283,
+    "unique_documents": 20194,
+    "labels": {
+      "0": 7566,
+      "1": 6305,
+      "2": 4663,
+      "3": 1749
+    }
+  },
+  "citations": {
+    "judged_topics": 9,
+    "runs": 45,
+    "judgment_rows": 2840,
+    "support_labels": {
+      "0": 872,
+      "1": 731,
+      "2": 1237
+    }
+  },
+  "source_sha256": {
+    "topics": "6afcd66f957ddff0e5d71f8e3d82931e180a57933bc3772776c6a4ded381b2c1",
+    "retrieval_qrels": "92fcf7ca4943c7913eb28b66c91ac239eb58d80ce875842c42dd6fc1dd99ebc7",
+    "citation_judgments": "96a55934dfbfd5c2350d05f83faffe236976e9404931725f014b9107f4f5e373"
+  },
+  "contains_source_text": false,
+  "claim_scope": "benchmark readiness and judgment-distribution audit",
+  "limitations": [
+    "The MS MARCO passage corpus is not redistributed by this repository.",
+    "These public judgments are independent but are not aerospace-specific.",
+    "This artifact does not claim an AeroRAG-X score until a retrieval run uses the same corpus."
+  ]
+}
