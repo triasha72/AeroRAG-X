@@ -35,9 +35,7 @@ def summarize_trec_rag(
     retrieval_labels: Counter[int] = Counter()
     judged_topics: set[str] = set()
     judged_documents: set[str] = set()
-    for number, line in enumerate(
-        retrieval_qrels_path.read_text(encoding="utf-8").splitlines(), 1
-    ):
+    for number, line in enumerate(retrieval_qrels_path.read_text(encoding="utf-8").splitlines(), 1):
         if not line.strip():
             continue
         fields = line.split()

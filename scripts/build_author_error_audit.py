@@ -40,9 +40,7 @@ def main() -> None:
     rows.sort(key=lambda row: hashlib.sha256(row["query_id"].encode()).hexdigest())
     queries = {
         row["query_id"]: row
-        for row in (
-            json.loads(line) for line in args.queries.read_text().splitlines() if line
-        )
+        for row in (json.loads(line) for line in args.queries.read_text().splitlines() if line)
     }
     qrels = {
         row["query_id"]: row["relevant_chunk_ids"]
@@ -57,22 +55,22 @@ def main() -> None:
         ranking = rankings[query_id]
         output.append(
             {
-            "query_id": query_id,
-            "reviewer_role": "project_author",
-            "query": query["query"],
-            "expected_terms": query["expected_terms"],
-            "source_document_id": query["source_document_id"],
-            "source_page_start": query["source_page_start"],
-            "source_page_end": query["source_page_end"],
-            "judged_relevant_chunk_ids": qrels[query_id],
-            "retrieved_chunk_ids": ranking["retrieved_chunk_ids"],
-            "relevant_retrieved_ids": ranking["relevant_retrieved_ids"],
-            "reciprocal_rank_at_10": ranking["reciprocal_rank_at_10"],
-            "answer_supported": None,
-            "citation_correct": None,
-            "abstention_correct": None,
-            "error_category": None,
-            "notes": "",
+                "query_id": query_id,
+                "reviewer_role": "project_author",
+                "query": query["query"],
+                "expected_terms": query["expected_terms"],
+                "source_document_id": query["source_document_id"],
+                "source_page_start": query["source_page_start"],
+                "source_page_end": query["source_page_end"],
+                "judged_relevant_chunk_ids": qrels[query_id],
+                "retrieved_chunk_ids": ranking["retrieved_chunk_ids"],
+                "relevant_retrieved_ids": ranking["relevant_retrieved_ids"],
+                "reciprocal_rank_at_10": ranking["reciprocal_rank_at_10"],
+                "answer_supported": None,
+                "citation_correct": None,
+                "abstention_correct": None,
+                "error_category": None,
+                "notes": "",
             }
         )
     args.output.parent.mkdir(parents=True, exist_ok=True)

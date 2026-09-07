@@ -29,9 +29,7 @@ def main() -> int:
         "reviewer_role": "project_author",
         "case_count": len(rows),
         "complete": True,
-        "rates": {
-            field: sum(bool(row[field]) for row in rows) / len(rows) for field in required
-        },
+        "rates": {field: sum(bool(row[field]) for row in rows) / len(rows) for field in required},
         "error_categories": dict(sorted(categories.items())),
         "claim_scope": "disclosed project-author error audit",
         "non_claims": [

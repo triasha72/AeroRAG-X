@@ -15,9 +15,7 @@ def test_summarizes_official_judgment_shapes(tmp_path: Path) -> None:
             {
                 "topic_id": "q1",
                 "run_id": "run-a",
-                "sentences": [
-                    {"citations": [{"reference": "passage-a", "support": "2"}]}
-                ],
+                "sentences": [{"citations": [{"reference": "passage-a", "support": "2"}]}],
             }
         )
         + "\n"

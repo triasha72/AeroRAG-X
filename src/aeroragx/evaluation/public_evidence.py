@@ -69,9 +69,7 @@ def assess_public_evidence(
             "value": {"cases": corruption_cases, "detection_rate": corruption_rate},
             "minimum": {"cases": 200, "detection_rate": 1.0},
             "passed": (
-                corruption_cases is not None
-                and corruption_cases >= 200
-                and corruption_rate == 1.0
+                corruption_cases is not None and corruption_cases >= 200 and corruption_rate == 1.0
             ),
         },
     }
