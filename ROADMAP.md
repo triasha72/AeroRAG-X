@@ -1252,8 +1252,10 @@ New infrastructure should follow a measured engineering requirement.
   five hits, with character accounting and unchanged citation provenance
 - [x] add a 50-case v0.6 top-5 control versus compressed-top-5 runner and frozen
   total-token/quality gate
-- [ ] execute the real v0.6 development comparison; fixed uncompressed top-5
-  remains the default unless every gate passes
+- [x] execute the real v0.6 development comparison; compression reduced paired
+  total tokens 57.14% with 47 paired calls and passed every fail-closed gate
+- [ ] run a newly versioned, independently reviewed held-out evaluation of v0.6;
+  fixed uncompressed top-5 remains the default until it passes
 - [ ] obtain a newly collected, independently reviewed held-out benchmark
   before making an unseen-benchmark or broad semantic-quality claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the

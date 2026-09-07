@@ -19,6 +19,11 @@ their passage text. It must pass the paired 50-query development gate before
 any separate protected-set plan is considered. Fixed, uncompressed top-5
 remains the operational default until that happens.
 
+The v0.6 development gate has now passed: paired total tokens fell 57.14% on
+47 completed pairs, with no treatment failures and no measured quality-rate
+regression. This result is recorded as a candidate promotion only; the next
+required evidence is a fresh held-out set with independent review.
+
 ---
 
 ## Dataset families

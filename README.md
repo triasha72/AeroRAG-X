@@ -1461,6 +1461,15 @@ Fixed uncompressed top-5 remains the default. The v0.6 design and evidence
 boundary are documented in
 [`docs/evidence-compression-v0_6.md`](docs/evidence-compression-v0_6.md).
 
+The real v0.6 development run passed its fail-closed gate: 47 paired calls,
+57.14% lower total tokens, zero treatment failures versus three control
+failures, and no measured quality regression on the frozen development sample.
+This promotes compression only as a held-out-evaluation candidate. It does
+not change the production default or establish a protected-set result. See
+[`reports/evidence_compression_v0_6_development_promoted.md`](reports/evidence_compression_v0_6_development_promoted.md)
+and the checksum manifest
+[`artifacts/evaluation/generation_lora_compressed5_dev_v0_6_manifest.json`](artifacts/evaluation/generation_lora_compressed5_dev_v0_6_manifest.json).
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

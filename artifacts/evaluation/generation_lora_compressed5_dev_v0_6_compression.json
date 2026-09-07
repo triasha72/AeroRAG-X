@@ -1,0 +1,760 @@
+{
+  "compressed_characters": 150050,
+  "decisions": [
+    {
+      "compressed_characters": 3397,
+      "evidence_count": 5,
+      "original_characters": 9855,
+      "query": "How does thermal management affect electric-aircraft motor power density?",
+      "relative_character_reduction": 0.6553018772196855,
+      "removed_characters": 6458,
+      "source_chunk_ids": [
+        "20180004867:chunk:00005",
+        "20140017337:chunk:00001",
+        "20240016372:chunk:00001",
+        "20180004867:chunk:00004",
+        "20250006187:chunk:00071"
+      ]
+    },
+    {
+      "compressed_characters": 5176,
+      "evidence_count": 5,
+      "original_characters": 10295,
+      "query": "What electrical faults can cause partial or complete propulsion-power loss?",
+      "relative_character_reduction": 0.49723166585721223,
+      "removed_characters": 5119,
+      "source_chunk_ids": [
+        "20220004260:chunk:00002",
+        "20220005753:chunk:00001",
+        "20220004260:chunk:00001",
+        "20220005753:chunk:00002",
+        "20205004982:chunk:00003"
+      ]
+    },
+    {
+      "compressed_characters": 2740,
+      "evidence_count": 5,
+      "original_characters": 10347,
+      "query": "Why are high-temperature sensors useful in electrified aircraft systems?",
+      "relative_character_reduction": 0.7351889436551657,
+      "removed_characters": 7607,
+      "source_chunk_ids": [
+        "20240006706:chunk:00001",
+        "20205004982:chunk:00006",
+        "20190004971:chunk:00014",
+        "20090021990:chunk:00231",
+        "20205005005:chunk:00006"
+      ]
+    },
+    {
+      "compressed_characters": 2354,
+      "evidence_count": 5,
+      "original_characters": 10658,
+      "query": "What role can magnetic gearing play in an electric propulsion drivetrain?",
+      "relative_character_reduction": 0.7791330455995497,
+      "removed_characters": 8304,
+      "source_chunk_ids": [
+        "20180005333:chunk:00014",
+        "20180005333:chunk:00002",
+        "20180005333:chunk:00021",
+        "20180005561:chunk:00000",
+        "20180005333:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 3151,
+      "evidence_count": 5,
+      "original_characters": 10053,
+      "query": "What certification considerations affect electrified aircraft powertrains?",
+      "relative_character_reduction": 0.6865612255048245,
+      "removed_characters": 6902,
+      "source_chunk_ids": [
+        "20240010253:chunk:00002",
+        "20240010253:chunk:00001",
+        "20190031945:chunk:00034",
+        "20220013008:chunk:00001",
+        "20230009959:chunk:00005"
+      ]
+    },
+    {
+      "compressed_characters": 1886,
+      "evidence_count": 5,
+      "original_characters": 10635,
+      "query": "How can battery energy density influence hybrid-electric aircraft performance?",
+      "relative_character_reduction": 0.8226610249177245,
+      "removed_characters": 8749,
+      "source_chunk_ids": [
+        "20140011913:chunk:00036",
+        "20140011913:chunk:00035",
+        "20180004867:chunk:00003",
+        "20205004497:chunk:00000",
+        "20140011913:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 3035,
+      "evidence_count": 5,
+      "original_characters": 9477,
+      "query": "Which NASA report proves that lunar cheese improves aircraft battery cooling?",
+      "relative_character_reduction": 0.6797509760472723,
+      "removed_characters": 6442,
+      "source_chunk_ids": [
+        "20090021990:chunk:00010",
+        "20240014672:chunk:00001",
+        "20220012921:chunk:00000",
+        "20090021990:chunk:00088",
+        "20090021990:chunk:00089"
+      ]
+    },
+    {
+      "compressed_characters": 1842,
+      "evidence_count": 5,
+      "original_characters": 10153,
+      "query": "What evidence establishes teleportation as an FAA-certified propulsion method?",
+      "relative_character_reduction": 0.8185757904067763,
+      "removed_characters": 8311,
+      "source_chunk_ids": [
+        "20190033416:chunk:00014",
+        "20190033416:chunk:00009",
+        "20140011913:chunk:00017",
+        "20190033416:chunk:00020",
+        "20190033416:chunk:00004"
+      ]
+    },
+    {
+      "compressed_characters": 2028,
+      "evidence_count": 5,
+      "original_characters": 10314,
+      "query": "Which wind speed requires every electric aircraft to remain grounded worldwide?",
+      "relative_character_reduction": 0.8033740546829552,
+      "removed_characters": 8286,
+      "source_chunk_ids": [
+        "20250006187:chunk:00079",
+        "20220018208:chunk:00003",
+        "20250006187:chunk:00028",
+        "20220016701:chunk:00003",
+        "20230009959:chunk:00035"
+      ]
+    },
+    {
+      "compressed_characters": 3484,
+      "evidence_count": 5,
+      "original_characters": 10090,
+      "query": "What temperature universally makes all lithium-ion aviation batteries unsafe for flight?",
+      "relative_character_reduction": 0.6547076313181368,
+      "removed_characters": 6606,
+      "source_chunk_ids": [
+        "20220012921:chunk:00001",
+        "20220012921:chunk:00002",
+        "20220012921:chunk:00000",
+        "20210025384:chunk:00040",
+        "20090021990:chunk:00095"
+      ]
+    },
+    {
+      "compressed_characters": 3325,
+      "evidence_count": 5,
+      "original_characters": 10011,
+      "query": "Which single battery cooling architecture must every hybrid-electric aircraft use?",
+      "relative_character_reduction": 0.6678653481170712,
+      "removed_characters": 6686,
+      "source_chunk_ids": [
+        "20170006235:chunk:00004",
+        "20180004867:chunk:00014",
+        "20210018519:chunk:00000",
+        "20190004971:chunk:00008",
+        "20180004867:chunk:00005"
+      ]
+    },
+    {
+      "compressed_characters": 3950,
+      "evidence_count": 5,
+      "original_characters": 10222,
+      "query": "What FAA rule requires every electric aircraft to use an identical propulsion system?",
+      "relative_character_reduction": 0.6135785560555664,
+      "removed_characters": 6272,
+      "source_chunk_ids": [
+        "20140011913:chunk:00007",
+        "20220005753:chunk:00000",
+        "20190004971:chunk:00006",
+        "20240010253:chunk:00002",
+        "20140011913:chunk:00004"
+      ]
+    },
+    {
+      "compressed_characters": 3566,
+      "evidence_count": 5,
+      "original_characters": 10111,
+      "query": "Which certification regulation guarantees that hydrogen-powered aircraft will have zero operational risk?",
+      "relative_character_reduction": 0.647314805657205,
+      "removed_characters": 6545,
+      "source_chunk_ids": [
+        "20250010867:chunk:00002",
+        "20190033416:chunk:00016",
+        "20240010253:chunk:00012",
+        "20190033416:chunk:00014",
+        "20240003885:chunk:00010"
+      ]
+    },
+    {
+      "compressed_characters": 2076,
+      "evidence_count": 5,
+      "original_characters": 10174,
+      "query": "What date will all commercial aircraft permanently replace turbine engines with batteries?",
+      "relative_character_reduction": 0.7959504619618636,
+      "removed_characters": 8098,
+      "source_chunk_ids": [
+        "20140011913:chunk:00011",
+        "20240008067:chunk:00015",
+        "20170006235:chunk:00004",
+        "20220016701:chunk:00003",
+        "20190031945:chunk:00004"
+      ]
+    },
+    {
+      "compressed_characters": 1133,
+      "evidence_count": 5,
+      "original_characters": 11332,
+      "query": "What universal passenger capacity will every electric vertical-takeoff aircraft have in 2040?",
+      "relative_character_reduction": 0.9000176491351923,
+      "removed_characters": 10199,
+      "source_chunk_ids": [
+        "20230009959:chunk:00035",
+        "20230017796:chunk:00031",
+        "20220016701:chunk:00034",
+        "20205004080:chunk:00003",
+        "20240008067:chunk:00032"
+      ]
+    },
+    {
+      "compressed_characters": 3128,
+      "evidence_count": 5,
+      "original_characters": 8092,
+      "query": "Which future weather event will make every distributed-propulsion aircraft unable to fly?",
+      "relative_character_reduction": 0.6134453781512605,
+      "removed_characters": 4964,
+      "source_chunk_ids": [
+        "20220018226:chunk:00003",
+        "20230017521:chunk:00028",
+        "20260003867:chunk:00011",
+        "20170006235:chunk:00042",
+        "20060054003:chunk:00345"
+      ]
+    },
+    {
+      "compressed_characters": 1133,
+      "evidence_count": 5,
+      "original_characters": 9877,
+      "query": "What thermal-failure procedure was approved for the fictional AeroVolt Z9 aircraft?",
+      "relative_character_reduction": 0.8852890553811886,
+      "removed_characters": 8744,
+      "source_chunk_ids": [
+        "20205011477:chunk:00037",
+        "20205004982:chunk:00020",
+        "20240003350:chunk:00021",
+        "20240015505:chunk:00033",
+        "20240015017:chunk:00020"
+      ]
+    },
+    {
+      "compressed_characters": 2587,
+      "evidence_count": 5,
+      "original_characters": 11184,
+      "query": "Which NASA report certifies the fictional SkyCell Infinity battery for all flight conditions?",
+      "relative_character_reduction": 0.7686874105865522,
+      "removed_characters": 8597,
+      "source_chunk_ids": [
+        "20090021990:chunk:00078",
+        "20220012921:chunk:00000",
+        "20205004497:chunk:00000",
+        "20170006235:chunk:00032",
+        "20205007968:chunk:00007"
+      ]
+    },
+    {
+      "compressed_characters": 5828,
+      "evidence_count": 5,
+      "original_characters": 11520,
+      "query": "What does the NASA source report about university, junior, branch, senior, masters, division?",
+      "relative_character_reduction": 0.49409722222222224,
+      "removed_characters": 5692,
+      "source_chunk_ids": [
+        "20050186580:chunk:00001",
+        "20050186580:chunk:00000",
+        "20050186580:chunk:00067",
+        "20050186580:chunk:00032",
+        "20050186580:chunk:00033"
+      ]
+    },
+    {
+      "compressed_characters": 2060,
+      "evidence_count": 5,
+      "original_characters": 15039,
+      "query": "What does the NASA source report about names, national, contents, supersonic, nuclear, iiii?",
+      "relative_character_reduction": 0.8630228073675111,
+      "removed_characters": 12979,
+      "source_chunk_ids": [
+        "20240015511:chunk:00002",
+        "20160010440:chunk:00002",
+        "20240015511:chunk:00001",
+        "20260000697:chunk:00000",
+        "20230017796:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 2126,
+      "evidence_count": 5,
+      "original_characters": 10486,
+      "query": "What does the NASA source report about shuttle, desert, antenna, orbiter, space-suited, impact?",
+      "relative_character_reduction": 0.797253480831585,
+      "removed_characters": 8360,
+      "source_chunk_ids": [
+        "20060054003:chunk:00000",
+        "20060054003:chunk:00201",
+        "20260000697:chunk:00000",
+        "20060054003:chunk:00001",
+        "20250006187:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2137,
+      "evidence_count": 5,
+      "original_characters": 10655,
+      "query": "What does the NASA source report about technical, scienti, scientifi, papers, reports, publication?",
+      "relative_character_reduction": 0.7994368840919756,
+      "removed_characters": 8518,
+      "source_chunk_ids": [
+        "20230017796:chunk:00001",
+        "20090012238:chunk:00001",
+        "20160010440:chunk:00001",
+        "20190031945:chunk:00001",
+        "20230017796:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2513,
+      "evidence_count": 5,
+      "original_characters": 11072,
+      "query": "What does the NASA source report about rover, airfoil, ares, sorge, look, right?",
+      "relative_character_reduction": 0.7730310693641619,
+      "removed_characters": 8559,
+      "source_chunk_ids": [
+        "20090021990:chunk:00000",
+        "20090021990:chunk:00001",
+        "20090021990:chunk:00289",
+        "20260000697:chunk:00000",
+        "20240015511:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 3683,
+      "evidence_count": 5,
+      "original_characters": 10509,
+      "query": "What does the NASA source report about markets, propulsion, compete, approached, electric, technologies?",
+      "relative_character_reduction": 0.6495384908173946,
+      "removed_characters": 6826,
+      "source_chunk_ids": [
+        "20140011913:chunk:00000",
+        "20140011913:chunk:00003",
+        "20220015806:chunk:00002",
+        "20160010440:chunk:00005",
+        "20190004971:chunk:00004"
+      ]
+    },
+    {
+      "compressed_characters": 4672,
+      "evidence_count": 5,
+      "original_characters": 10205,
+      "query": "What does the NASA source report about turboelectric, electric, motor, non-prop, mgmt, superconducting?",
+      "relative_character_reduction": 0.5421852033317002,
+      "removed_characters": 5533,
+      "source_chunk_ids": [
+        "20140017337:chunk:00000",
+        "20170006235:chunk:00003",
+        "20210026284:chunk:00004",
+        "20205007968:chunk:00002",
+        "20170006235:chunk:00006"
+      ]
+    },
+    {
+      "compressed_characters": 3021,
+      "evidence_count": 5,
+      "original_characters": 10677,
+      "query": "What does the NASA source report about distributed, heist, turbo-electric, flight, edwards, testbed?",
+      "relative_character_reduction": 0.7170553526271425,
+      "removed_characters": 7656,
+      "source_chunk_ids": [
+        "20160009765:chunk:00032",
+        "20160009765:chunk:00000",
+        "20170006610:chunk:00000",
+        "20160009765:chunk:00004",
+        "20160009765:chunk:00010"
+      ]
+    },
+    {
+      "compressed_characters": 1889,
+      "evidence_count": 5,
+      "original_characters": 10554,
+      "query": "What does the NASA source report about invited, breakout, stol, nairus, austere, coffee?",
+      "relative_character_reduction": 0.8210157286336934,
+      "removed_characters": 8665,
+      "source_chunk_ids": [
+        "20240015511:chunk:00000",
+        "20230017796:chunk:00000",
+        "20210026284:chunk:00000",
+        "20250006187:chunk:00000",
+        "20160010440:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2116,
+      "evidence_count": 5,
+      "original_characters": 10545,
+      "query": "What does the NASA source report about technical, scienti, scientifi, papers, publication, signifi?",
+      "relative_character_reduction": 0.7993361782835467,
+      "removed_characters": 8429,
+      "source_chunk_ids": [
+        "20090012238:chunk:00001",
+        "20230017796:chunk:00001",
+        "20160010440:chunk:00001",
+        "20205011477:chunk:00000",
+        "20230009959:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 3838,
+      "evidence_count": 5,
+      "original_characters": 10510,
+      "query": "What does the NASA source report about aircraft, midterm, turboelectric, viable, investing, construction?",
+      "relative_character_reduction": 0.6348239771646051,
+      "removed_characters": 6672,
+      "source_chunk_ids": [
+        "20170006235:chunk:00000",
+        "20170006235:chunk:00001",
+        "20180000402:chunk:00000",
+        "20250006187:chunk:00001",
+        "20250006231:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2217,
+      "evidence_count": 5,
+      "original_characters": 9755,
+      "query": "What does the NASA source report about armstrong, safety, edwards, practices, testbeds, airworthiness?",
+      "relative_character_reduction": 0.7727319323423886,
+      "removed_characters": 7538,
+      "source_chunk_ids": [
+        "20170006610:chunk:00000",
+        "20190033416:chunk:00013",
+        "20170006610:chunk:00026",
+        "20230009959:chunk:00000",
+        "20170006610:chunk:00008"
+      ]
+    },
+    {
+      "compressed_characters": 1778,
+      "evidence_count": 5,
+      "original_characters": 9642,
+      "query": "What does the NASA source report about thermal, heat, ciency, x-57, traditional, demand-?",
+      "relative_character_reduction": 0.815598423563576,
+      "removed_characters": 7864,
+      "source_chunk_ids": [
+        "20170007959:chunk:00000",
+        "20170007959:chunk:00013",
+        "20205004497:chunk:00004",
+        "20240015511:chunk:00000",
+        "20205011477:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 3815,
+      "evidence_count": 5,
+      "original_characters": 10446,
+      "query": "What does the NASA source report about fuselage, advanced, transport, technologies, infrastructure, source?",
+      "relative_character_reduction": 0.6347884357648861,
+      "removed_characters": 6631,
+      "source_chunk_ids": [
+        "20180000402:chunk:00000",
+        "20180000402:chunk:00001",
+        "20170006235:chunk:00001",
+        "20180000402:chunk:00002",
+        "20250006187:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 3662,
+      "evidence_count": 5,
+      "original_characters": 11014,
+      "query": "What does the NASA source report about vehicle, notional, cooling, updated, diesel, identified?",
+      "relative_character_reduction": 0.6675140729980026,
+      "removed_characters": 7352,
+      "source_chunk_ids": [
+        "20180004867:chunk:00016",
+        "20180004867:chunk:00000",
+        "20240015511:chunk:00001",
+        "20250006187:chunk:00001",
+        "20205011477:chunk:00002"
+      ]
+    },
+    {
+      "compressed_characters": 2572,
+      "evidence_count": 5,
+      "original_characters": 10061,
+      "query": "What does the NASA source report about magnetic, electrified, aircraft, gearing, barriers, broad?",
+      "relative_character_reduction": 0.7443594076135573,
+      "removed_characters": 7489,
+      "source_chunk_ids": [
+        "20180005333:chunk:00000",
+        "20180005561:chunk:00000",
+        "20180005333:chunk:00022",
+        "20180005561:chunk:00006",
+        "20230009959:chunk:00035"
+      ]
+    },
+    {
+      "compressed_characters": 4050,
+      "evidence_count": 5,
+      "original_characters": 10275,
+      "query": "What does the NASA source report about gearing, magnetic, administration, motivation, pros, invented?",
+      "relative_character_reduction": 0.6058394160583942,
+      "removed_characters": 6225,
+      "source_chunk_ids": [
+        "20180005561:chunk:00000",
+        "20180005561:chunk:00001",
+        "20180005561:chunk:00004",
+        "20180005333:chunk:00004",
+        "20180005333:chunk:00022"
+      ]
+    },
+    {
+      "compressed_characters": 4357,
+      "evidence_count": 5,
+      "original_characters": 10503,
+      "query": "What does the NASA source report about utrc, teams, temp, administration, loop, spool?",
+      "relative_character_reduction": 0.58516614300676,
+      "removed_characters": 6146,
+      "source_chunk_ids": [
+        "20180007082:chunk:00000",
+        "20250006187:chunk:00001",
+        "20205011477:chunk:00001",
+        "20050228985:chunk:00404",
+        "20260000697:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 4104,
+      "evidence_count": 5,
+      "original_characters": 10094,
+      "query": "What does the NASA source report about solicitations, proposals, solicitation, sttr, business, stated?",
+      "relative_character_reduction": 0.5934218347533188,
+      "removed_characters": 5990,
+      "source_chunk_ids": [
+        "20190004971:chunk:00001",
+        "20190004971:chunk:00002",
+        "20190004971:chunk:00004",
+        "20190004971:chunk:00003",
+        "20160010440:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 1664,
+      "evidence_count": 5,
+      "original_characters": 9619,
+      "query": "What does the NASA source report about fueleap, stock, hazard, aircraft-level, p2006t, tecnam?",
+      "relative_character_reduction": 0.8270090445992306,
+      "removed_characters": 7955,
+      "source_chunk_ids": [
+        "20190033416:chunk:00006",
+        "20190033416:chunk:00014",
+        "20190033416:chunk:00012",
+        "20190033416:chunk:00008",
+        "20190033416:chunk:00023"
+      ]
+    },
+    {
+      "compressed_characters": 4207,
+      "evidence_count": 5,
+      "original_characters": 11274,
+      "query": "What does the NASA source report about transport, technologies, traffic, electrified, airspace, demonstrator?",
+      "relative_character_reduction": 0.6268405180060316,
+      "removed_characters": 7067,
+      "source_chunk_ids": [
+        "20200000362:chunk:00000",
+        "20180000402:chunk:00000",
+        "20210026284:chunk:00001",
+        "20210026284:chunk:00000",
+        "20220015806:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2783,
+      "evidence_count": 5,
+      "original_characters": 12381,
+      "query": "What does the NASA source report about cross-strappedpower, excitation, administration, voltage, field, national?",
+      "relative_character_reduction": 0.7752200953073257,
+      "removed_characters": 9598,
+      "source_chunk_ids": [
+        "20205003005:chunk:00000",
+        "20160010440:chunk:00002",
+        "20260000697:chunk:00000",
+        "20260000697:chunk:00001",
+        "20090021990:chunk:00323"
+      ]
+    },
+    {
+      "compressed_characters": 3873,
+      "evidence_count": 5,
+      "original_characters": 10693,
+      "query": "What does the NASA source report about takeoff, conventional, concepts, single-aisle, electrified, cooling?",
+      "relative_character_reduction": 0.6378004301879734,
+      "removed_characters": 6820,
+      "source_chunk_ids": [
+        "20205004080:chunk:00000",
+        "20205011477:chunk:00003",
+        "20205004080:chunk:00001",
+        "20205011477:chunk:00002",
+        "20230017796:chunk:00031"
+      ]
+    },
+    {
+      "compressed_characters": 2429,
+      "evidence_count": 5,
+      "original_characters": 9877,
+      "query": "What does the NASA source report about electric, vehicle, vtol, all-electric, weight, vehicles?",
+      "relative_character_reduction": 0.7540751240255138,
+      "removed_characters": 7448,
+      "source_chunk_ids": [
+        "20205004194:chunk:00000",
+        "20205007968:chunk:00008",
+        "20210017939:chunk:00020",
+        "20205007968:chunk:00005",
+        "20205004194:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 3227,
+      "evidence_count": 5,
+      "original_characters": 11626,
+      "query": "What does the NASA source report about battery, profiles, nominal, designers, better, aircraftstudiesmayassumea?",
+      "relative_character_reduction": 0.7224324789265439,
+      "removed_characters": 8399,
+      "source_chunk_ids": [
+        "20205004497:chunk:00000",
+        "20205005267:chunk:00000",
+        "20210026284:chunk:00000",
+        "20210026284:chunk:00001",
+        "20160010440:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 1940,
+      "evidence_count": 5,
+      "original_characters": 9574,
+      "query": "What does the NASA source report about heat, sensitivity, exchanger, transported, metrics, conventional?",
+      "relative_character_reduction": 0.7973678713181533,
+      "removed_characters": 7634,
+      "source_chunk_ids": [
+        "20205004871:chunk:00000",
+        "20205004080:chunk:00008",
+        "20210017939:chunk:00008",
+        "20050228985:chunk:00377",
+        "20205011477:chunk:00008"
+      ]
+    },
+    {
+      "compressed_characters": 3026,
+      "evidence_count": 5,
+      "original_characters": 9891,
+      "query": "What does the NASA source report about class, exergy, fault, gas-particle, tight, waste?",
+      "relative_character_reduction": 0.6940653118997068,
+      "removed_characters": 6865,
+      "source_chunk_ids": [
+        "20205004982:chunk:00000",
+        "20205005005:chunk:00000",
+        "20205004982:chunk:00001",
+        "20205005005:chunk:00012",
+        "20205005005:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 3374,
+      "evidence_count": 5,
+      "original_characters": 10004,
+      "query": "What does the NASA source report about exergy, waste, heat, recovery, trees, pipes?",
+      "relative_character_reduction": 0.662734906037585,
+      "removed_characters": 6630,
+      "source_chunk_ids": [
+        "20205005005:chunk:00010",
+        "20205005005:chunk:00000",
+        "20205005005:chunk:00007",
+        "20205005005:chunk:00009",
+        "20240016372:chunk:00001"
+      ]
+    },
+    {
+      "compressed_characters": 4031,
+      "evidence_count": 5,
+      "original_characters": 10415,
+      "query": "What does the NASA source report about battery, takeo, mass, battery89, cell-, designersneed?",
+      "relative_character_reduction": 0.6129620739318291,
+      "removed_characters": 6384,
+      "source_chunk_ids": [
+        "20205005267:chunk:00000",
+        "20090021990:chunk:00089",
+        "20220007525:chunk:00000",
+        "20050228985:chunk:00202",
+        "20090021990:chunk:00078"
+      ]
+    },
+    {
+      "compressed_characters": 1758,
+      "evidence_count": 5,
+      "original_characters": 11207,
+      "query": "What does the NASA source report about united, states, government, electrified, realize, transports?",
+      "relative_character_reduction": 0.843133755688409,
+      "removed_characters": 9449,
+      "source_chunk_ids": [
+        "20205006571:chunk:00000",
+        "20230010111:chunk:00000",
+        "20230013567:chunk:00000",
+        "20250005446:chunk:00000",
+        "20230017796:chunk:00031"
+      ]
+    },
+    {
+      "compressed_characters": 4878,
+      "evidence_count": 5,
+      "original_characters": 9124,
+      "query": "What does the NASA source report about tmapproach, heather, high-efficiency, heat, centercleveland, challengessydney?",
+      "relative_character_reduction": 0.46536606751424814,
+      "removed_characters": 4246,
+      "source_chunk_ids": [
+        "20205006797:chunk:00000",
+        "20210000751:chunk:00003",
+        "20210000751:chunk:00000",
+        "20205011477:chunk:00002",
+        "20205011477:chunk:00000"
+      ]
+    },
+    {
+      "compressed_characters": 2431,
+      "evidence_count": 5,
+      "original_characters": 10332,
+      "query": "What does the NASA source report about vertical, annual, virtual, display, society, forum?",
+      "relative_character_reduction": 0.7647115756871854,
+      "removed_characters": 7901,
+      "source_chunk_ids": [
+        "20205007968:chunk:00000",
+        "20205007968:chunk:00007",
+        "20205007968:chunk:00005",
+        "20205007968:chunk:00002",
+        "20205007968:chunk:00004"
+      ]
+    }
+  ],
+  "evidence_count": 250,
+  "original_characters": 522459,
+  "query_count": 50,
+  "relative_character_reduction": 0.7128004302729976,
+  "version": "0.1"
+}

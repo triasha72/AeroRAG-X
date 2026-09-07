@@ -1,0 +1,30 @@
+{
+  "version": "0.1",
+  "experiment": "source_preserving_evidence_compression_dev_v0_6",
+  "status": "development_promoted_protected_evaluation_pending",
+  "evidence_boundary": "Development evidence only. This result is not protected-set promotion evidence.",
+  "conclusion": "Query-aware extractive compression across five retrieved passages passed the frozen development gate and is the candidate for a newly versioned held-out evaluation. Fixed uncompressed top-5 remains the operational default until that evaluation is independently reviewed.",
+  "metrics": {
+    "query_count": 50,
+    "paired_completed_query_count": 47,
+    "relative_total_token_change": -0.5714301283867733,
+    "control_generation_failure_count": 3,
+    "treatment_generation_failure_count": 0,
+    "control_answerability_accuracy": 0.88,
+    "treatment_answerability_accuracy": 0.94,
+    "control_expected_term_recall": 0.4857142857142857,
+    "treatment_expected_term_recall": 0.5619047619047619,
+    "control_structural_validity_rate": 0.94,
+    "treatment_structural_validity_rate": 1.0
+  },
+  "artifacts": [
+    {"path": "artifacts/evaluation/generation_lora_uncompressed5_dev_v0_6_control.json", "sha256": "00b655a63eef765dae66848cf069b6d72c3da874c8c169951a77e9ac8ec2d466"},
+    {"path": "artifacts/evaluation/generation_lora_uncompressed5_dev_v0_6_control_telemetry.json", "sha256": "aaa86086b5c862d0ae37cedf0ef4c57fbced08810e6ddebd39e1d1da81274800"},
+    {"path": "artifacts/evaluation/generation_lora_compressed5_dev_v0_6.json", "sha256": "b20ee557f70f2b911e75ce2a9deb66efa04d48a5432a5f285867ef4c44cfc965"},
+    {"path": "artifacts/evaluation/generation_lora_compressed5_dev_v0_6_telemetry.json", "sha256": "83029dff10ee8dbe562b6f74721c1ae2211ac13badfe96a2dd4c0d5307eac3bd"},
+    {"path": "artifacts/evaluation/generation_lora_compressed5_dev_v0_6_compression.json", "sha256": "f46e82b265a7ecac5f0616191145ada84ef2a11957cf1a9b53f8fa5b96752981"},
+    {"path": "artifacts/evaluation/generation_lora_compressed5_dev_v0_6_paired.json", "sha256": "b7027a74775ed7bc9460303b80a8866aeed7709d9bb8ee218dd3820d770931a7"},
+    {"path": "artifacts/evaluation/generation_lora_compressed5_dev_v0_6_decision.json", "sha256": "03af58bdd43581b33a1b073f14e4661f84a7ffe08b55dd2e00b56aa7abdcf615"},
+    {"path": "reports/generation_lora_compressed5_dev_v0_6_paired.md", "sha256": "2b6542ed360a5bfbc66913926c038ccbada047617c9694f61d3d11d70c501d98"}
+  ]
+}
