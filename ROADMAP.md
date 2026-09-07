@@ -119,6 +119,10 @@ Future:
 - [ ] multiple human assessors and inter-annotator agreement
 - [ ] multimodal technical-report retrieval
 - [x] external scientific-paper retrieval check against QASPER human evidence
+- [x] SciFact external-retrieval adapter and public-evidence assessment gate
+- [x] real SciFact validation run: 89.89% evidence-document recall at 10
+- [x] deterministic 50-case author-audit template with the reviewer role disclosed
+- [ ] complete the author audit and publish the error breakdown
 
 # Phase 1 — Repository foundation — COMPLETE
 

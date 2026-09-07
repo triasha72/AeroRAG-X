@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "policy": "aeroragx-public-human-evidence-v1",
+  "decision": "blocked",
+  "checks": {
+    "qasper_any_evidence_recall_at_20": {
+      "value": 0.9099099099099099,
+      "minimum": 0.85,
+      "passed": true
+    },
+    "scifact_any_document_recall_at_10": {
+      "value": 0.898936170212766,
+      "minimum": 0.7,
+      "passed": true
+    },
+    "author_error_audit": {
+      "value": null,
+      "minimum": 50,
+      "passed": false
+    },
+    "author_role_disclosed": {
+      "value": null,
+      "required": "project_author",
+      "passed": false
+    }
+  },
+  "claim_scope": "offline retrieval against independently human-annotated public evidence",
+  "non_claims": [
+    "The aerospace error audit is author-reviewed, not independently reviewed.",
+    "This does not establish production or safety-critical fitness."
+  ]
+}
