@@ -29,6 +29,8 @@ conda activate aeroragx-py312
 ```
 
 The demo uses deterministic local mode and does not require an OpenAI API key.
+It defaults to `python3`; set `AERORAGX_PYTHON_BIN` when the project is
+installed in a named virtual environment.
 
 ## Run the demo
 
