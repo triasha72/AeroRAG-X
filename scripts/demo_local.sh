@@ -61,11 +61,18 @@ curl --silent --show-error --fail "${BASE_URL}/ready" | python -m json.tool
 
 echo
 echo "Grounded-query demonstration:"
+RESPONSE_FILE="$(mktemp "${TMPDIR:-/tmp}/aeroragx-response.XXXXXX")"
 curl --silent --show-error --fail \
   -X POST "${BASE_URL}/v1/query" \
   -H "Content-Type: application/json" \
   -d '{"query":"How can battery thermal runaway propagate in electric aircraft?"}' \
-  | python -m json.tool
+  >"${RESPONSE_FILE}"
+python -m json.tool <"${RESPONSE_FILE}"
+
+echo
+echo "Response-contract check:"
+python scripts/verify_demo_response.py --response "${RESPONSE_FILE}"
+rm -f "${RESPONSE_FILE}"
 
 echo
 echo "Demo completed successfully."
