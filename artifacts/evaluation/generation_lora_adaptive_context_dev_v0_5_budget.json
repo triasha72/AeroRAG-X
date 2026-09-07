@@ -1,0 +1,598 @@
+{
+  "decisions": [
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "How does thermal management affect electric-aircraft motor power density?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What electrical faults can cause partial or complete propulsion-power loss?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "Why are high-temperature sensors useful in electrified aircraft systems?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What role can magnetic gearing play in an electric propulsion drivetrain?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What certification considerations affect electrified aircraft powertrains?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "How can battery energy density influence hybrid-electric aircraft performance?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "Which NASA report proves that lunar cheese improves aircraft battery cooling?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_claim_qualifier_support",
+        "missing_named_anchor_support"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "What evidence establishes teleportation as an FAA-certified propulsion method?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_claim_qualifier_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "Which wind speed requires every electric aircraft to remain grounded worldwide?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_claim_qualifier_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What temperature universally makes all lithium-ion aviation batteries unsafe for flight?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_claim_qualifier_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "Which single battery cooling architecture must every hybrid-electric aircraft use?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_claim_qualifier_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What FAA rule requires every electric aircraft to use an identical propulsion system?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "Which certification regulation guarantees that hydrogen-powered aircraft will have zero operational risk?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What date will all commercial aircraft permanently replace turbine engines with batteries?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "low_query_term_coverage",
+        "missing_claim_qualifier_support",
+        "missing_numeric_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "What universal passenger capacity will every electric vertical-takeoff aircraft have in 2040?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "low_query_term_coverage",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "Which future weather event will make every distributed-propulsion aircraft unable to fly?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "low_query_term_coverage",
+        "missing_named_anchor_support"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "What thermal-failure procedure was approved for the fictional AeroVolt Z9 aircraft?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "low_query_term_coverage",
+        "missing_claim_qualifier_support",
+        "missing_named_anchor_support",
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "Which NASA report certifies the fictional SkyCell Infinity battery for all flight conditions?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about university, junior, branch, senior, masters, division?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about names, national, contents, supersonic, nuclear, iiii?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about shuttle, desert, antenna, orbiter, space-suited, impact?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about technical, scienti, scientifi, papers, reports, publication?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about rover, airfoil, ares, sorge, look, right?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about markets, propulsion, compete, approached, electric, technologies?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about turboelectric, electric, motor, non-prop, mgmt, superconducting?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about distributed, heist, turbo-electric, flight, edwards, testbed?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": true,
+      "expansion_reason": "recoverable_coverage_gap",
+      "initial_reasons": [
+        "low_query_term_coverage",
+        "low_single_evidence_coverage"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about invited, breakout, stol, nairus, austere, coffee?",
+      "requested_top_k": 5,
+      "selected_top_k": 5
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about technical, scienti, scientifi, papers, publication, signifi?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about aircraft, midterm, turboelectric, viable, investing, construction?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about armstrong, safety, edwards, practices, testbeds, airworthiness?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about thermal, heat, ciency, x-57, traditional, demand-?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about fuselage, advanced, transport, technologies, infrastructure, source?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about vehicle, notional, cooling, updated, diesel, identified?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about magnetic, electrified, aircraft, gearing, barriers, broad?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about gearing, magnetic, administration, motivation, pros, invented?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about utrc, teams, temp, administration, loop, spool?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about solicitations, proposals, solicitation, sttr, business, stated?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about fueleap, stock, hazard, aircraft-level, p2006t, tecnam?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about transport, technologies, traffic, electrified, airspace, demonstrator?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about cross-strappedpower, excitation, administration, voltage, field, national?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about takeoff, conventional, concepts, single-aisle, electrified, cooling?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "blocked_by_unsupported_signal",
+      "initial_reasons": [
+        "missing_scope_qualifier_support"
+      ],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about electric, vehicle, vtol, all-electric, weight, vehicles?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about battery, profiles, nominal, designers, better, aircraftstudiesmayassumea?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about heat, sensitivity, exchanger, transported, metrics, conventional?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about class, exergy, fault, gas-particle, tight, waste?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about exergy, waste, heat, recovery, trees, pipes?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about battery, takeo, mass, battery89, cell-, designersneed?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about united, states, government, electrified, realize, transports?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about tmapproach, heather, high-efficiency, heat, centercleveland, challengessydney?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    },
+    {
+      "available_hit_count": 5,
+      "expanded": false,
+      "expansion_reason": "initial_evidence_sufficient",
+      "initial_reasons": [],
+      "initial_sufficient": true,
+      "initial_top_k": 3,
+      "query": "What does the NASA source report about vertical, annual, virtual, display, society, forum?",
+      "requested_top_k": 5,
+      "selected_top_k": 3
+    }
+  ],
+  "expanded_count": 1,
+  "query_count": 50,
+  "retained_top3_count": 49,
+  "version": "0.1"
+}

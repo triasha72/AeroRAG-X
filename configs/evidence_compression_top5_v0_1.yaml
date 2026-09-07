@@ -1,0 +1,4 @@
+version: "0.1"
+max_sentences_per_evidence: 2
+max_characters_per_evidence: 1200
+minimum_sentence_characters: 20

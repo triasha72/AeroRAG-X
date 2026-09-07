@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "all_expansions_recover_sufficiency": false,
+    "expansion_changed_provider_input": false,
+    "mixed_policy_expanded_enough": false,
+    "mixed_policy_retained_top3_enough": true,
+    "quality_and_efficiency_gate_passed": true
+  },
+  "effective_higher_token_query_count": 0,
+  "expanded_count": 1,
+  "invalid_expansion_count": 1,
+  "minimum_expansions": 3,
+  "minimum_retained_top3": 3,
+  "retained_top3_count": 49,
+  "status": "rejected",
+  "version": "0.1"
+}

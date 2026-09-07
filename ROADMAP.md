@@ -1238,10 +1238,22 @@ New infrastructure should follow a measured engineering requirement.
   numeric/scope signals, bounded behavior, and defensive telemetry
 - [x] add a three-arm 50-case MPS development runner and fail-closed comparison
   of adaptive 3→5 against fixed top-5
-- [ ] execute the real v0.5 development comparison; preserve the outcome and
-  keep fixed top-5 unless every frozen gate passes
-- [ ] if v0.5 passes, curate and freeze a new held-out adaptive-policy set
-  without reusing the completed v0.4.2 benchmark
+- [x] execute the real v0.5 development comparison and preserve the apparent
+  generic-gate pass
+- [x] detect and reject v0.5 as an adaptive no-op: 1/50 expanded, the expansion
+  remained insufficient, and adaptive output was byte-identical to fixed top-3
+- [x] add an adaptive-specific activity gate requiring a genuine mixed policy,
+  effective provider-input changes, and sufficiency recovery for expansions
+- [x] scan 478 unused source candidates with the real retrieval stack; record
+  that only one qualified as top-3-insufficient/top-5-sufficient
+- [x] stop the adaptive passage-count path rather than fabricate recovery cases
+  or reuse the completed protected set
+- [x] implement source-preserving query-aware sentence compression across all
+  five hits, with character accounting and unchanged citation provenance
+- [x] add a 50-case v0.6 top-5 control versus compressed-top-5 runner and frozen
+  total-token/quality gate
+- [ ] execute the real v0.6 development comparison; fixed uncompressed top-5
+  remains the default unless every gate passes
 - [ ] obtain a newly collected, independently reviewed held-out benchmark
   before making an unseen-benchmark or broad semantic-quality claim
 - [ ] execute the installed PostgreSQL 17 / pgvector 0.8.6 crossover outside the

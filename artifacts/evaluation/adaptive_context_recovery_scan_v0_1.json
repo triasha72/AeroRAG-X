@@ -1,0 +1,28 @@
+{
+  "found_recovery_case_count": 1,
+  "recovery_decisions": [
+    {
+      "available_hit_count": 5,
+      "expanded": true,
+      "expansion_reason": "recoverable_coverage_gap",
+      "initial_reasons": [
+        "low_query_term_coverage"
+      ],
+      "initial_sufficient": false,
+      "initial_top_k": 3,
+      "maximum_reasons": [],
+      "maximum_sufficient": true,
+      "query": "What does the NASA source report about nanocomposite, thereof, films, preparation, f-bnns, f-bnnt?",
+      "requested_top_k": 5,
+      "selected_top_k": 5
+    }
+  ],
+  "recovery_query_ids": [
+    "src512_0261"
+  ],
+  "selection_rule": "top-3 insufficient, top-5 sufficient, no unsupported-signal blocker",
+  "source_candidates_scanned": 478,
+  "status": "insufficient_recovery_cases",
+  "target_recovery_case_count": 20,
+  "version": "0.1"
+}

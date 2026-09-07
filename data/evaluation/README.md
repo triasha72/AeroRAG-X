@@ -4,6 +4,21 @@ AeroRAG-X maintains separate but related retrieval and grounded-generation evalu
 
 The evaluation artifacts are versioned so that changes to relevance judgments, retrieval methods, generation behavior, or answerability policy do not silently overwrite prior baselines.
 
+## Token-efficiency development boundary
+
+The 50-query context-development set is used for ordinary token-efficiency
+experiments. Adaptive evidence budget v0.5 was rejected as a development no-op:
+only one of 50 queries expanded, and that expansion did not change the model
+input or recover sufficiency. A retrieval-backed scan of 478 unused automatic
+source candidates found only one valid top-3-insufficient/top-5-sufficient
+case. The repository therefore does not construct a synthetic challenge set
+or reuse the protected evaluation set to force a positive adaptive result.
+
+The next candidate, v0.6, keeps all five retrieved sources and compresses only
+their passage text. It must pass the paired 50-query development gate before
+any separate protected-set plan is considered. Fixed, uncompressed top-5
+remains the operational default until that happens.
+
 ---
 
 ## Dataset families

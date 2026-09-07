@@ -41,6 +41,13 @@ from aeroragx.generation.evidence_budget import (
     EvidenceBudgetDecision,
     load_evidence_budget_config,
 )
+from aeroragx.generation.evidence_compression import (
+    CompressedEvidenceIndex,
+    EvidenceCompressionConfig,
+    EvidenceCompressionDecision,
+    compress_evidence_text,
+    load_evidence_compression_config,
+)
 from aeroragx.generation.grounded import (
     AnswerCitation,
     GenerationConfig,
@@ -137,10 +144,13 @@ __all__ = [
     "AdaptiveRetrievalTrace",
     "AnswerCitation",
     "BoundedAdaptiveRetrievalController",
+    "CompressedEvidenceIndex",
     "DeterministicGenerationProvider",
     "DeterministicQueryRewriter",
     "EvidenceBudgetConfig",
     "EvidenceBudgetDecision",
+    "EvidenceCompressionConfig",
+    "EvidenceCompressionDecision",
     "EvidenceSufficiencyAssessor",
     "EvidenceSufficiencyResult",
     "GenerationConfig",
@@ -187,6 +197,7 @@ __all__ = [
     "build_generation_evidence",
     "build_grounded_prompt",
     "compare_protected_baseline",
+    "compress_evidence_text",
     "create_configured_generation_provider",
     "create_generation_provider",
     "enforce_prompt_injection_policy",
@@ -195,6 +206,7 @@ __all__ = [
     "load_adaptive_retrieval_config",
     "load_adaptive_retrieval_evaluation_config",
     "load_evidence_budget_config",
+    "load_evidence_compression_config",
     "load_generation_config",
     "load_generation_evaluation_queries",
     "load_http_transport_config",

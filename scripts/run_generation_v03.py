@@ -17,6 +17,10 @@ from aeroragx.generation.evidence_budget import (
     AdaptiveEvidenceBudgetIndex,
     load_evidence_budget_config,
 )
+from aeroragx.generation.evidence_compression import (
+    CompressedEvidenceIndex,
+    load_evidence_compression_config,
+)
 from aeroragx.generation.facet_retrieval import (
     FacetAwareEvidenceIndex,
     load_facet_retrieval_config,
@@ -115,6 +119,9 @@ def parse_args() -> argparse.Namespace:
         default=None,
     )
 
+    parser.add_argument("--evidence-compression-config", type=Path, default=None)
+    parser.add_argument("--evidence-compression-output", type=Path, default=None)
+
     parser.add_argument(
         "--report-output",
         type=Path,
@@ -174,7 +181,12 @@ def _load_memory_bounded_runtime(
     query_texts: Sequence[str],
     *,
     evidence_budget_config: Path | None = None,
-) -> tuple[AeroRAGRuntime, AdaptiveEvidenceBudgetIndex | None]:
+    evidence_compression_config: Path | None = None,
+) -> tuple[
+    AeroRAGRuntime,
+    AdaptiveEvidenceBudgetIndex | None,
+    CompressedEvidenceIndex | None,
+]:
     """Build an equivalent closed-set runtime without overlapping model families."""
 
     reranker_index, reranker_settings = load_reranker_index(config)
@@ -219,8 +231,16 @@ def _load_memory_bounded_runtime(
         if evidence_budget_config is not None
         else None
     )
+    compression_index = (
+        CompressedEvidenceIndex(
+            frozen_index,
+            load_evidence_compression_config(evidence_compression_config),
+        )
+        if evidence_compression_config is not None
+        else None
+    )
     generator = GroundedAnswerGenerator(
-        index=budget_index or frozen_index,
+        index=budget_index or compression_index or frozen_index,
         provider=provider,
         config=generation_settings,
         sufficiency_assessor=sufficiency_assessor,
@@ -232,6 +252,7 @@ def _load_memory_bounded_runtime(
             generation_settings=generation_settings,
         ),
         budget_index,
+        compression_index,
     )
 
 
@@ -258,16 +279,29 @@ def main() -> None:
         raise SystemExit(
             "Adaptive evidence budget config and decisions output must be supplied together."
         )
+    if (args.evidence_compression_config is None) != (args.evidence_compression_output is None):
+        raise SystemExit(
+            "Evidence compression config and decisions output must be supplied together."
+        )
+    if args.evidence_compression_config is not None and not args.memory_bounded:
+        raise SystemExit("Evidence compression currently requires --memory-bounded.")
+    if (
+        args.adaptive_evidence_budget_config is not None
+        and args.evidence_compression_config is not None
+    ):
+        raise SystemExit("Adaptive evidence budgeting and compression cannot be combined yet.")
 
     if args.memory_bounded:
-        runtime, budget_index = _load_memory_bounded_runtime(
+        runtime, budget_index, compression_index = _load_memory_bounded_runtime(
             runtime_config,
             [query.query for query in queries],
             evidence_budget_config=args.adaptive_evidence_budget_config,
+            evidence_compression_config=args.evidence_compression_config,
         )
     else:
         runtime = load_grounded_runtime(runtime_config)
         budget_index = None
+        compression_index = None
 
     generator = runtime.generator
 
@@ -306,6 +340,33 @@ def main() -> None:
                     "query_count": len(decisions),
                     "expanded_count": sum(decision.expanded for decision in decisions),
                     "retained_top3_count": sum(not decision.expanded for decision in decisions),
+                    "decisions": [decision.model_dump(mode="json") for decision in decisions],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    if compression_index is not None and args.evidence_compression_output is not None:
+        decisions = compression_index.decisions
+        if len(decisions) != len(queries):
+            raise RuntimeError("Evidence-compression decision count does not match query count.")
+        original = sum(decision.original_characters for decision in decisions)
+        compressed = sum(decision.compressed_characters for decision in decisions)
+        args.evidence_compression_output.parent.mkdir(parents=True, exist_ok=True)
+        args.evidence_compression_output.write_text(
+            json.dumps(
+                {
+                    "version": "0.1",
+                    "query_count": len(decisions),
+                    "evidence_count": sum(decision.evidence_count for decision in decisions),
+                    "original_characters": original,
+                    "compressed_characters": compressed,
+                    "relative_character_reduction": (
+                        (original - compressed) / original if original else 0.0
+                    ),
                     "decisions": [decision.model_dump(mode="json") for decision in decisions],
                 },
                 indent=2,

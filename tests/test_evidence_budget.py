@@ -69,6 +69,7 @@ def test_recoverable_coverage_gap_expands_once_to_five() -> None:
     result = adaptive.search("How is aircraft battery heat managed?", top_k=5)
     assert len(result) == 5
     assert adaptive.decisions[0].expanded is True
+    assert adaptive.decisions[0].maximum_sufficient is True
     assert adaptive.decisions[0].expansion_reason == "recoverable_coverage_gap"
 
 
@@ -86,6 +87,17 @@ def test_missing_numeric_support_blocks_expansion() -> None:
     assert len(result) == 3
     assert adaptive.decisions[0].expanded is False
     assert "missing_numeric_support" in adaptive.decisions[0].initial_reasons
+
+
+def test_does_not_expand_when_five_passages_remain_insufficient() -> None:
+    adaptive, _ = selector(
+        ["unrelated text", "another passage", "more text", "fourth text", "fifth text"]
+    )
+    result = adaptive.search("How is aircraft battery heat managed?", top_k=5)
+    assert len(result) == 3
+    assert adaptive.decisions[0].expanded is False
+    assert adaptive.decisions[0].maximum_sufficient is False
+    assert adaptive.decisions[0].expansion_reason == "maximum_evidence_still_insufficient"
 
 
 def test_missing_universal_scope_support_blocks_expansion() -> None:

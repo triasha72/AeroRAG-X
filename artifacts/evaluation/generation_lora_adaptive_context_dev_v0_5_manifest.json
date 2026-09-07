@@ -1,0 +1,73 @@
+{
+  "version": "0.1",
+  "experiment": "adaptive_context_dev_v0_5",
+  "status": "completed_rejected_noop",
+  "evidence_boundary": "Development evidence only. This experiment is not protected-set promotion evidence.",
+  "conclusion": "The adaptive arm was byte-identical to fixed top-3. Its only expansion did not recover evidence sufficiency or change provider input, so the adaptive policy was rejected despite passing the earlier generic efficiency gate.",
+  "observations": {
+    "query_count": 50,
+    "expanded_count": 1,
+    "retained_top3_count": 49,
+    "effective_higher_input_query_count": 0,
+    "unused_recovery_candidates_scanned": 478,
+    "recoverable_top3_to_top5_cases_found": 1
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/evaluation/generation_lora_context5_dev_v0_5_control.json",
+      "sha256": "00b655a63eef765dae66848cf069b6d72c3da874c8c169951a77e9ac8ec2d466"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_context5_dev_v0_5_control_telemetry.json",
+      "sha256": "e4d51e7527764f977ebae44e2444a44ef01a96e722b53d623002725458a596d7"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_context3_dev_v0_5_reference.json",
+      "sha256": "9f2c68c6432ef376eb3580a6215d11cd92fa003666c971cdcad0291eea361f61"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_context3_dev_v0_5_reference_telemetry.json",
+      "sha256": "e756587c865306b9628f3c26aecc03c3c938c32330e008d7929cfb2418425cbc"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_context_dev_v0_5.json",
+      "sha256": "9f2c68c6432ef376eb3580a6215d11cd92fa003666c971cdcad0291eea361f61"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_context_dev_v0_5_telemetry.json",
+      "sha256": "7473bdfcd30fffa89dbeaa78b03de03bd5002900f159429262b9331651557ff4"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_context_dev_v0_5_budget.json",
+      "sha256": "349b3201885e7de071701a595ca5dc504fd4eddaa59bdbcf4ac05783d74addaa"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_vs_context5_dev_v0_5_paired.json",
+      "sha256": "a953a73450f9d0db3b6b817b53d0d86d33511cc1b75f32f577c73da8950c29de"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_vs_context3_dev_v0_5_paired.json",
+      "sha256": "fc84c9fe6c2f58c1e56003a2d19314e80430740be22996c81921652a0766e811"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_context_dev_v0_5_decision.json",
+      "sha256": "49dc3d5bc86ddced58f9aa93a1fc5085e8782e2373cd49eea53d1626e2f6eac8"
+    },
+    {
+      "path": "artifacts/evaluation/generation_lora_adaptive_context_dev_v0_5_policy_decision.json",
+      "sha256": "598d1a7ae071862817def7faa2423bc59fa5ee7af46a8455abdd72486652784d"
+    },
+    {
+      "path": "artifacts/evaluation/adaptive_context_recovery_scan_v0_1.json",
+      "sha256": "932f2950b572ae127ae8450e9c18df38af1ad402738033639de3d65fa13d7e9c"
+    },
+    {
+      "path": "reports/generation_lora_adaptive_vs_context5_dev_v0_5_paired.md",
+      "sha256": "d1791123e9e630884c7da64ab3fad05f695292b2a9caa95b7cc0fafddb73945f"
+    },
+    {
+      "path": "reports/generation_lora_adaptive_vs_context3_dev_v0_5_paired.md",
+      "sha256": "8d23eb1262c4e834d218501d042e8d32c405fc1a1acd882666f77195b00ad7de"
+    }
+  ]
+}

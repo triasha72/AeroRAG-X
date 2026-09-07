@@ -1437,6 +1437,30 @@ See
 [`docs/adaptive-evidence-budget-v0_5.md`](docs/adaptive-evidence-budget-v0_5.md)
 for the policy and evidence boundary.
 
+The v0.5 run exposed a missing experimental guard. Although its generic gate
+printed `promoted`, the adaptive report was byte-identical to fixed top-3. Only
+one query expanded, and that expansion did not recover sufficiency or change
+provider tokens. A new policy-activity gate therefore classifies v0.5 as a
+development no-op rejection. A subsequent retrieval-backed scan found only one
+valid recovery opportunity among 478 unused automatic candidates, so the
+project rejected manufacturing a recovery benchmark or reusing protected
+questions. See
+[`reports/adaptive_evidence_budget_v0_5_rejected.md`](reports/adaptive_evidence_budget_v0_5_rejected.md).
+
+The next candidate preserves all five sources and compresses text within each
+passage. It retains query-relevant sentence segments in source order, keeps at
+least one excerpt per hit, preserves citation identity, and records compression
+decisions. This attacks redundant prompt text without repeating the source-loss
+failure of fixed top-3:
+
+```bash
+./scripts/run_evidence_compression_dev_v0_6.sh
+```
+
+Fixed uncompressed top-5 remains the default. The v0.6 design and evidence
+boundary are documented in
+[`docs/evidence-compression-v0_6.md`](docs/evidence-compression-v0_6.md).
+
 Local failure telemetry is bounded but actionable. It records the failure
 stage, output-token count, whether the ceiling was reached, JSON error position,
 output character count, and a SHA-256 fingerprint. Raw generated text and

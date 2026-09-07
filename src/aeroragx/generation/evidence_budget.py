@@ -66,6 +66,8 @@ class EvidenceBudgetDecision(BaseModel):
     expanded: bool
     initial_sufficient: bool
     initial_reasons: list[str]
+    maximum_sufficient: bool
+    maximum_reasons: list[str]
     expansion_reason: str
 
 
@@ -108,9 +110,19 @@ class AdaptiveEvidenceBudgetIndex:
             reasons.add("missing_claim_qualifier_support")
         if set(assessment.required_scope_qualifiers) != set(assessment.supported_scope_qualifiers):
             reasons.add("missing_scope_qualifier_support")
+        maximum_assessment = self._assessor.assess(
+            query=query,
+            evidence=[hit.chunk for hit in hits],
+        )
+        maximum_reasons = set(maximum_assessment.reasons)
         has_expandable_gap = bool(reasons & set(self._config.expandable_reasons))
         has_blocker = bool(reasons & set(self._config.blocking_reasons))
-        expanded = not assessment.sufficient and has_expandable_gap and not has_blocker
+        expanded = (
+            not assessment.sufficient
+            and maximum_assessment.sufficient
+            and has_expandable_gap
+            and not has_blocker
+        )
         selected = hits if expanded else initial
         if has_blocker:
             expansion_reason = "blocked_by_unsupported_signal"
@@ -118,6 +130,8 @@ class AdaptiveEvidenceBudgetIndex:
             expansion_reason = "initial_evidence_sufficient"
         elif expanded:
             expansion_reason = "recoverable_coverage_gap"
+        elif not maximum_assessment.sufficient:
+            expansion_reason = "maximum_evidence_still_insufficient"
         else:
             expansion_reason = "no_expandable_reason"
         self._decisions.append(
@@ -130,6 +144,8 @@ class AdaptiveEvidenceBudgetIndex:
                 expanded=expanded,
                 initial_sufficient=assessment.sufficient,
                 initial_reasons=sorted(reasons),
+                maximum_sufficient=maximum_assessment.sufficient,
+                maximum_reasons=sorted(maximum_reasons),
                 expansion_reason=expansion_reason,
             )
         )
