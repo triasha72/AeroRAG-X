@@ -905,6 +905,24 @@ class GroundedAnswerGenerator:
 
         return self._adaptive_retrieval_orchestrator
 
+    def retrieve_for_evaluation(
+        self,
+        query: str,
+    ) -> list[RerankedSearchHit]:
+        """Return the frozen first-pass evidence shown to an external evaluator."""
+
+        normalized_query = query.strip()
+
+        if not normalized_query:
+            raise ValueError("query must not be blank.")
+
+        return list(
+            self._index.search(
+                query=normalized_query,
+                top_k=self._config.evidence_top_k,
+            )
+        )
+
     def _retrieve_evidence_attempt(
         self,
         *,
