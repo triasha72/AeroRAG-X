@@ -7,7 +7,7 @@ the source trail visible. It is a retrieval-augmented generation system, but the
 main engineering question is broader: when should the system answer, when should
 it refuse, and can a reviewer trace each answer back to evidence?
 
-## Project story
+## Background
 
 **Situation.** Aerospace reports are long, specialized, and spread across many
 documents. A language model can summarize them quickly, but fluent text is not
