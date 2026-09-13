@@ -1774,3 +1774,9 @@ and latency without assuming GRPO wins.
 # License
 
 MIT
+
+## Where this stands
+
+I have the evaluation contracts and reproducibility checks in place. I still
+need one real held-out GRPO comparison, an independent author audit, and an
+external retrieval run before I make a model-quality claim.
