@@ -33,6 +33,12 @@ artifacts/embeddings/*_metadata.jsonl
 # Generated search demonstrations
 data/results/
 
+# Collaborator-owned hidden evaluation material and unrevealed outputs
+data/evaluation/external_v1/private/
+data/evaluation/external_holdout_v2/private/
+artifacts/evaluation/external_v1/private/
+artifacts/evaluation/external_holdout_v2/private/
+
 # Local editor configuration
 .vscode/
 
